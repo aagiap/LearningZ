@@ -1,0 +1,49 @@
+500<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error 500: Internal Server Error</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff; /* Màu xanh da trời nhạt */
+            color: #333; /* Màu chữ */
+        }
+        h1 {
+            color: #007acc; /* Màu xanh da trời đậm */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007acc; /* Màu xanh da trời đậm */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #005fa3; /* Màu xanh đậm hơn khi hover */
+        }
+    </style>
+</head>
+<body>
+<h1>Error 500: Internal Server Error</h1>
+<p>Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.</p>
+<a th:href="@{/home}" >Quay về trang chủ</a>
+</body>
+</html>
