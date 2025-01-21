@@ -34,7 +34,7 @@ public class User {
     private String password;
 
     @Size(max = 255)
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Size(max = 50)
@@ -48,5 +48,8 @@ public class User {
     @Size(max = 500)
     @Column(name = "google_id", length = 500)
     private String googleId;
+
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
 
 }
