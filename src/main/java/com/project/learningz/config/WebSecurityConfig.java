@@ -25,7 +25,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/home/**").permitAll()
                                 .requestMatchers("/forgot_password").permitAll()
                                 .requestMatchers("/reset_password").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 ).formLogin(
                         form -> form
                                 .loginPage("/auth/login")
