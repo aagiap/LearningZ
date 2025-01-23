@@ -18,11 +18,11 @@ public class Course {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "title", nullable = false, length = 100)
+    @Column(name = "title", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
     private String title;
 
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
     @NotNull
@@ -37,7 +37,7 @@ public class Course {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "subject", nullable = false, length = 100)
+    @Column(name = "subject", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
     private String subject;
 
 }

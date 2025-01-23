@@ -20,11 +20,11 @@ public class Grade {
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String name;
 
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "NVARCHAR(255)")
     private String description;
 
 }
