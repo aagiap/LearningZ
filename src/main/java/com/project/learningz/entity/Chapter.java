@@ -21,13 +21,12 @@ public class Chapter {
     private Course course;
 
     @Size(max = 255)
-    @Column(name = "chapter_title")
+    @Column(name = "chapter_title", columnDefinition = "NVARCHAR(255)")
     private String chapterTitle;
 
     @NotNull
-    @Lob
-    @Column(name = "discription", nullable = false)
-    private String discription;
+    @Column(name = "description", nullable = false, columnDefinition = "NVARCHAR(255)")
+    private String description;
 
     @Column(name = "chapter_order")
     private Integer chapterOrder;

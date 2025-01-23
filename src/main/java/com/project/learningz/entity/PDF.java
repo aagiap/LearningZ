@@ -24,7 +24,7 @@ public class PDF {
 
     @Size(max = 255)
     @Nationalized
-    @Column(name = "title")
+    @Column(name = "title", columnDefinition = "NVARCHAR(255)")
     private String title;
 
     @Size(max = 255)

@@ -26,7 +26,7 @@ public class UserMembership {
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "package_name", nullable = false)
+    @Column(name = "package_name", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String packageName;
 
     @NotNull

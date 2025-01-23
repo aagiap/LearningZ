@@ -25,7 +25,7 @@ public class Video {
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String title;
 
     @Size(max = 255)

@@ -23,7 +23,7 @@ public class Post {
     private User user;
 
     @Lob
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "NVARCHAR(MAX)")
     private String content;
 
     @NotNull

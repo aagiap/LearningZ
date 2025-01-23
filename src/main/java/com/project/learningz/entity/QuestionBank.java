@@ -22,37 +22,37 @@ public class QuestionBank {
 
     @Size(max = 255)
     @Nationalized
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "NVARCHAR(255)")
     private String content;
 
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "option_1", nullable = false)
+    @Column(name = "option_1", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String option1;
 
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "option_2", nullable = false)
+    @Column(name = "option_2", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String option2;
 
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "option_3", nullable = false)
+    @Column(name = "option_3", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String option3;
 
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "option_4", nullable = false)
+    @Column(name = "option_4", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String option4;
 
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "correct_option", nullable = false)
+    @Column(name = "correct_option", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String correctOption;
 
 }

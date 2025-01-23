@@ -29,7 +29,7 @@ public class UsersCourse {
     private Integer rating;
 
     @Lob
-    @Column(name = "comment")
+    @Column(name = "comment", columnDefinition = "NVARCHAR(MAX)")
     private String comment;
 
     @ColumnDefault("getdate()")

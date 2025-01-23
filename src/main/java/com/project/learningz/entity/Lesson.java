@@ -25,11 +25,11 @@ public class Lesson {
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String title;
 
     @Lob
-    @Column(name = "discription")
-    private String discription;
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
+    private String description;
 
 }
