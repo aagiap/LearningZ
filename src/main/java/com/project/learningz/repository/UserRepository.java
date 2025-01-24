@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     @Query("SELECT u FROM User u WHERE u.email = ?1")
-    public User findByEmail(String email);
-
+    User findByEmail(String email);
+    User findByUsername(String username);
     public User findByResetPasswordToken(String token);
 
 
-    User findByUsername(String username);
+
 
 }

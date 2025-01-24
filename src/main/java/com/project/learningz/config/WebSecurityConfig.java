@@ -33,11 +33,13 @@ public class WebSecurityConfig {
                                 .requestMatchers("/forgot_password").permitAll()
                                 .requestMatchers("/reset_password").permitAll()
                                 .anyRequest().permitAll()
-                ).formLogin(
-                        form -> form
-                                .loginPage("/auth/login")
-                                .loginProcessingUrl("/auth/login")
-                                .permitAll()
+                ).formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+
                 ).logout(
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
