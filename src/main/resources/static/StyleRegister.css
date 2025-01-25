@@ -6,6 +6,22 @@ body {
 
 
 /* ===== LOGIN PAGE ===== */
+body {
+    background-image: linear-gradient(to right, #5370D9 0%, #FFFFFF 100%);
+}
+.login-box {
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
+}
+.form-icon {
+    background-color: #4e63d7;
+}
+.social-btn {
+    background-color: #6893e1;
+    transition: background-color 0.3s ease;
+}
+.social-btn:hover {
+    background-color: #5370D9;
+}
 .login-box {
     -webkit-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);

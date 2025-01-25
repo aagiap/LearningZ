@@ -16,9 +16,6 @@ public class QuestionBank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @Column(name = "quiz_id", nullable = false)
-    private Integer quizId;
 
     @Size(max = 255)
     @Nationalized
