@@ -1,6 +1,7 @@
 package com.project.learningz.service;
 
 
+import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
 import jakarta.mail.MessagingException;
@@ -34,7 +35,7 @@ public class UserRegisterAccountService {
 
     public void register(User user) throws MessagingException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
+        user.setRole(Role.STUDENT);
         user.setAvtUrl("images/default-avatar.png");
         userRepository.save(user);
     }

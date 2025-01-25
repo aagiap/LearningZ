@@ -1,5 +1,6 @@
 package com.project.learningz.entity;
 
+import com.project.learningz.constant.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -41,9 +42,9 @@ public class User {
     @Column(name = "phoneNum", length = 50)
     private String phoneNum;
 
-    @Size(max = 50)
-    @Column(name = "Role", length = 50)
-    private String role;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Size(max = 500)
     @Column(name = "google_id", length = 500, unique = true)
