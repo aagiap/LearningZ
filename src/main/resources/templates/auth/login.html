@@ -46,7 +46,10 @@
                     <input type="password" name="password" placeholder="Password" required
                            class="pl-14 h-12 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="text-right">
+                <div class="text-right flex items-center justify-between">
+                    <span th:if="${error}" th:text="${error}"
+                          class="text-sm text-red-500 font-medium"></span>
+                    <span th:if="${error == null}" class="text-sm text-transparent font-medium">No error</span>
                     <a href="#" class="text-sm text-gray-600 hover:text-blue-500">Forgot password?</a>
                 </div>
                 <button type="submit" class="w-full h-12 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors">
@@ -66,17 +69,8 @@
             <div class="text-center space-y-4">
                 <h5 class="text-lg font-medium">Or Sign In With</h5>
                 <div class="flex gap-3 justify-center">
-                    <a href="#" class="social-btn w-12 h-12 rounded flex items-center justify-center text-white">
-                        <i class="zmdi zmdi-facebook text-xl"></i>
-                    </a>
-                    <a href="#" class="social-btn w-12 h-12 rounded flex items-center justify-center text-white">
-                        <i class="zmdi zmdi-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="social-btn w-12 h-12 rounded flex items-center justify-center text-white">
+                    <a href="/oauth2/authorization/google" class="social-btn w-20 h-12 rounded flex items-center justify-center text-white">
                         <i class="zmdi zmdi-google text-xl"></i>
-                    </a>
-                    <a href="#" class="social-btn w-12 h-12 rounded flex items-center justify-center text-white">
-                        <i class="zmdi zmdi-instagram text-xl"></i>
                     </a>
                 </div>
             </div>

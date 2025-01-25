@@ -46,7 +46,7 @@ public class User {
     private String role;
 
     @Size(max = 500)
-    @Column(name = "google_id", length = 500)
+    @Column(name = "google_id", length = 500, unique = true)
     private String googleId;
 
     @Column(name = "reset_password_token")
