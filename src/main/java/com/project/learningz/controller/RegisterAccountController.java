@@ -3,6 +3,8 @@ package com.project.learningz.controller;
 import com.project.learningz.entity.User;
 import com.project.learningz.service.UserRegisterAccountService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,7 @@ public class RegisterAccountController {
     public String registerUser(@ModelAttribute("user") User user,
                                @RequestParam("confirm_password") String confirmPassword ,
     Model model, HttpSession session) {
+        Logger logger = LoggerFactory.getLogger(RegisterAccountController.class);
         try {
             if (userService.checkExistUsername(user.getUsername())) {
                 model.addAttribute("message", "Username is exists!");
@@ -48,11 +51,11 @@ public class RegisterAccountController {
             session.setAttribute("user", user);
             return "redirect:/verify";
         } catch (Exception e) {
-
+            logger.error("Error during registration", e);
+            model.addAttribute("message", "Something went wrong! Please try again..");
+            return "/auth/RegisterAccount";
         }
-        model.addAttribute("message", "con cak");
 
-        return "/auth/RegisterAccount";
     }
 
     @GetMapping("/verify")
