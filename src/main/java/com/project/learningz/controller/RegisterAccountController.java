@@ -50,6 +50,8 @@ public class RegisterAccountController {
         } catch (Exception e) {
 
         }
+        model.addAttribute("message", "con cak");
+
         return "/auth/RegisterAccount";
     }
 
