@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Course List</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+            rel="stylesheet">
+
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{css/course_bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/course_style.css}" rel="stylesheet">
+    <link th:href="@{/css/paging.css}" rel="stylesheet"/>
+    <style>
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            background-color: #e8f4fb; /* Nền xanh nhạt */
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+        }
+
+        .search-form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #90caf9; /* Viền xanh nhạt */
+            border-radius: 5px;
+            font-size: 14px;
+            color: #1565c0; /* Chữ xanh đậm */
+            outline: none;
+        }
+
+        .search-form input[type="text"]::placeholder {
+            color: #90caf9; /* Placeholder xanh nhạt */
+        }
+
+        .search-form select {
+            padding: 10px;
+            border: 1px solid #90caf9;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #1565c0;
+            background-color: #ffffff; /* Nền trắng */
+            outline: none;
+        }
+
+        .search-form .btn-search,
+        .search-form .btn-clear {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-form .btn-search {
+            background-color: #42a5f5; /* Xanh da trời */
+            color: #ffffff; /* Chữ trắng */
+        }
+
+        .search-form .btn-search:hover {
+            background-color: #1e88e5; /* Xanh đậm hơn khi hover */
+        }
+
+        .search-form .btn-clear {
+            background-color: #ef9a9a; /* Đỏ nhạt */
+            color: #ffffff;
+        }
+
+        .search-form .btn-clear:hover {
+            background-color: #e57373; /* Đỏ đậm hơn khi hover */
+        }
+    </style>
+</head>
+<body>
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center">
+
+            <a th:href="@{/home}">
+                <h6 class="section-title bg-white text-center px-3">LearningZ</h6>
+            </a>
+            <h1 class="mb-5" style="color: #fb873f;">Khám phá hệ thống khóa học mới và hấp dẫn</h1>
+        </div>
+
+
+        <form th:action="@{/course}" method="get" class="search-form">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm khóa học..."/>
+            <select name="gradeId">
+                <option value="-1" th:selected="${gradeId == -1}">Tất cả cấp độ</option>
+                <option value="1" th:selected="${gradeId == 1}">Lớp 10</option>
+                <option value="2" th:selected="${gradeId == 2}">Lớp 11</option>
+                <option value="3" th:selected="${gradeId == 3}">Lớp 12</option>
+            </select>
+            <button type="submit" class="btn-search">Tìm kiếm</button>
+            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" class="btn-clear"/>
+        </form>
+
+        <br>
+
+        <div class="row g-4 py-2">
+            <!-- Lặp qua danh sách khóa học -->
+            <div class="col-lg-3 col-md-6" th:each="course : ${courses}">
+
+                <div class="course-item shadow">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <!--<img class="img-fluid" th:src="@{/image/learningz.png}" alt="Course Image">-->
+                        <div th:switch="${course.grade.id}">
+                            <!-- Nếu gradeId là 1 -->
+                            <img th:case="1" class="img-fluid" th:src="@{/image/grade10.jpg}" alt="Grade 1 Image">
+
+                            <!-- Nếu gradeId là 2 -->
+                            <img th:case="2" class="img-fluid" th:src="@{/image/grade11.jpg}" alt="Grade 2 Image">
+
+                            <!-- Nếu gradeId là 3 -->
+                            <img th:case="3" class="img-fluid" th:src="@{/image/grade12.png}" alt="Grade 2 Image">
+
+                            <!-- Mặc định (nếu gradeId không khớp với bất kỳ trường hợp nào) -->
+                            <img th:case="*" class="img-fluid" th:src="@{/image/learningz.png}"
+                                 alt="Default Course Image">
+                        </div>
+                        <div style="position:absolute;top: 15px;left: 16px; font-size:12px; border-radius:3px; background-color:#fb873f;"
+                             class="px-2 py-1 fw-bold text-uppercase">
+                            <span>PAID</span>
+                        </div>
+                    </div>
+
+
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1">
+                            <a th:href="@{/course/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course
+                                Title</a>
+                        </h5>
+                        <p th:text="${course.subject}">Course subject</p>
+                    </div>
+
+
+                    <div class="d-flex">
+
+                        <small class="flex-fill text-center py-1 px-2">
+                            <i class="fa fa-star text-warning me-2"></i>
+                            <span th:text="${averageRatings[course.id]} + ' star'">0 star</span>
+                        </small>
+
+
+                        <small class="flex-fill text-center py-1 px-2">
+                            <i class="fa fa-user-graduate me-2"></i>
+                            <span th:text="'GV: ' + ${course.createdBy.username}">Expert Name</span>
+                        </small>
+                    </div>
+
+
+                    <div class="d-flex">
+                        <small class="text-primary py-1 px-2 fw-bold fs-6" style="float:right;">
+                            <a th:href="@{/course/{id}(id=${course.id})}">View Details</a>
+                            <i class="fa fa-chevron-right me-2 fs-10"></i>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pagination Bar -->
+        <div class='pagination justify-content-center'>
+            <div class='pagination pagination-centered'>
+                <ul>
+                    <li th:class="${page.isFirstPage} ? 'disabled' : ''">
+                        <span th:if='${page.isFirstPage}'>← First</span>
+                        <a th:if='${not page.isFirstPage}' th:href='@{${page.getUrlFirstPage(keyword)}}'>← First</a>
+                    </li>
+                    <li th:class="${page.isHasPreviousPage}? '' : 'disabled'">
+                        <span th:if='${not page.isHasPreviousPage}'>«</span>
+                        <a th:if="${page.isHasPreviousPage}"
+                           th:href="@{${page.getUrl}(pageNum=${page.currentNumber - 1}, pageSize=${page.getSize}, keyword=${keyword})}"
+                           title="Go to previous page">«</a>
+                    </li>
+                    <li th:each='item : ${page.items}' th:class="${item.isCurrent}? 'active' : ''">
+                        <span th:if='${item.isCurrent}' th:text='${page.currentNumber}'>1</span>
+                        <a th:if="${not item.isCurrent}"
+                           th:href="@{${page.getUrl}(pageNum=${item.number}, pageSize=${page.getSize}, keyword = ${keyword})}">
+                            <span th:text="${item.number}">1</span>
+                        </a>
+                    </li>
+                    <li th:class="${page.isHasNextPage}? '' : 'disabled'">
+                        <span th:if='${not page.isHasNextPage}'>»</span>
+                        <a th:if="${page.isHasNextPage}"
+                           th:href="@{${page.getUrl}(pageNum=${page.currentNumber + 1}, pageSize=${page.getSize}, keyword=${keyword})}"
+                           title="Go to next page">»</a>
+                    </li>
+                    <li th:class="${page.isLastPage}? 'disabled' : ''">
+                        <span th:if='${page.isLastPage}'>Last →</span>
+                        <a th:if='${not page.isLastPage}' th:href='@{${page.getUrlLaststPage(keyword)}}'>Last →</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/course}]]";
+    }
+</script>
+
+</html>
