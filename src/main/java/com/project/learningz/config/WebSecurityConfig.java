@@ -38,7 +38,8 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(STATIC_RESOURCE).permitAll()
-                                .requestMatchers("/home/**").permitAll()
+                                .requestMatchers("/","/login").permitAll()
+                                .requestMatchers("/home/**").authenticated()
                                 .requestMatchers("/forgot_password").permitAll()
                                 .requestMatchers("/reset_password").permitAll()
                                 .anyRequest().permitAll()

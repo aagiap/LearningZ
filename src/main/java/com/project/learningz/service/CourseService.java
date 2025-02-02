@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CourseService {
@@ -34,6 +36,10 @@ public class CourseService {
             spec = spec.and(CourseSpecification.byKeywordSpec(keyword));
         }
         return courseRepository.findAll(spec, pageable);
+    }
+
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
     }
 
 }

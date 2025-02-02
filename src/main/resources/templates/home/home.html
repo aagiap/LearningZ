@@ -1,9 +1,560 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Landing Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #0072bc;
+            --primary-orange: #ff8c00;
+            --primary-red: #d81c1c;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+
+        /* Header Styles */
+        .top-header {
+            -webkit-box-shadow: 5px 0px 5px 0px rgba(0, 0, 0, 0.3);
+            box-shadow: 5px 0px 5px 0px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            position: fixed;
+            width: 100%;
+            z-index: 5;
+            height: 60px;
+            top: 0;
+        }
+
+        .header-top {
+            margin-top: 60px;
+        }
+
+        .logo.box-img {
+            height: 60px;
+            width: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 40px;
+            margin-left: 20px;
+
+        }
+
+        .logo.box-img img {
+            padding-bottom: 1px;
+            max-height: 127%;
+            max-width: 127%;
+        }
+
+        @media (min-width: 1400px) {
+            .top-header {
+                height: 64px;
+            }
+            .header-top {
+                margin-top: 64px;
+            }
+            .logo.box-img {
+                height: 64px;
+            }
+        }
+
+        .box-search .text_search {
+            background-color: #f2f3f5;
+            padding: 12px 80px 12px 12px;
+            width: 80%;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #444;
+        }
+
+        .box-search {
+            background-color: transparent;
+            padding: 9px 14px;
+            width: 100%;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .btn-search {
+            background-image: url("/image/bg-search.png");
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 20px;
+            height: 20px;
+            border: none;
+            cursor: pointer;
+            margin-left: -38px;
+            position: relative;
+            top: 5px;
+        }
+
+        .hotline {
+            color: orange;
+            border-left: 1px solid rgba(81, 87, 92, 0.3);
+            border-right: 1px solid rgba(81, 87, 92, 0.3);
+            padding: 16px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-right: 100px;
+            flex-grow: 1;
+
+        }
+
+        .hotline span i {
+            margin-right: 10px;
+            font-size: 19px;
+        }
+
+        .bottom-header {
+            background-color: #f7f8fa;
+            border-bottom: 1px solid #d7d7d7;
+            padding: 13px 0;
+        }
+
+        .bottom-header .top-menu {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 0;
+        }
+
+        .bottom-header .top-menu li {
+            list-style: none;
+        }
+
+        .bottom-header .top-menu li a {
+            color: #888;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .bottom-header .top-menu li a:hover {
+            color: #154992;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            justify-content: space-between;
+
+        }
+
+        .sidebar-title {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar-title, .course-category {
+            flex-grow: 1;
+        }
+
+
+        /* Thêm tam giác bên trái */
+        .course-category {
+            position: relative; /* Để cho phép đặt tam giác theo vị trí tuyệt đối */
+            padding: 35px 20px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .course-category:hover {
+            background-color: #cfcbcb;
+            color: var(--primary-blue);
+        }
+
+        /* Tam giác hướng vào bên trái */
+        .course-category::after {
+            content: '';
+            position: absolute;
+            right: 0px; /* Đưa tam giác ra ngoài bên phải */
+            top: 50%;
+            transform: translateY(-50%) rotate(180deg); /* Quay tam giác để đỉnh chỉ vào bên trái */
+            width: 0;
+            height: 0;
+            border-left: 20px solid #0072bc; /* Đổi từ border-right thành border-left */
+            border-top: 25px solid transparent;
+            border-bottom: 25px solid transparent;
+            opacity: 0; /* Ban đầu tam giác không hiển thị */
+            transition: opacity 0.3s ease; /* Hiệu ứng khi hover */
+        }
+
+        .course-category:hover::after {
+            opacity: 1; /* Hiển thị tam giác khi hover */
+        }
+
+        /* Banner1 */
+        .text-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: rgba(44, 37, 37, 0.6);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+        }
+
+        .text-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            animation: continuousScroll 24s linear infinite;
+        }
+
+        .text-slide {
+            height: 39px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            box-sizing: border-box;
+            color: white;
+        }
+
+
+        @keyframes continuousScroll {
+            0% {
+                transform: translateY(0);
+            }
+            20% {
+                transform: translateY(0);
+            }
+            25% {
+                transform: translateY(-39px);
+            }
+            45% {
+                transform: translateY(-39px);
+            }
+            50% {
+                transform: translateY(-78px);
+            }
+            70% {
+                transform: translateY(-78px);
+            }
+            75% {
+                transform: translateY(-117px);
+            }
+            95% {
+                transform: translateY(-117px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Banner Styles */
+        .main-banner {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 30px;
+            margin-top: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-height: 379px;
+        }
+
+        .main-banner img {
+            width: 100%;
+            height: 385px;
+            object-fit: cover;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(90deg, #0072bc, #00a0e9);
+            color: white;
+            padding: 40px 0;
+            margin-top: 30px;
+        }
+
+        .stats-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+
+            .stats-number {
+                font-size: 1.8rem;
+            }
+
+            .stats-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* Chỉnh nút banner */
+        .slick-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .slick-dots li button:before {
+            color: dimgray;
+            font-size: 9px;
+            opacity: 0.8;
+        }
+
+        .slick-dots li.slick-active button:before {
+            color: dodgerblue; /* Màu cam nổi bật */
+            opacity: 1;
+        }
+
+        /*Profile*/
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar {
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 24px;
+            right: -3px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            min-width: 200px;
+            top: 22px;
+            right: 10px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        /*Course-box*/
+        .tooltip-box {
+            display: none;
+            position: fixed;
+            left: 806px;
+            top: 379px;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            z-index: 10;
+            width: 761px;
+            height: 380px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 9px #0072bc solid;
+        }
+
+        .course-category:hover .tooltip-box {
+            display: block;
+        }
+
+        .tooltip-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+            border-bottom: 3px solid #0072bc;
+            padding-bottom: 10px;
+        }
+
+        .tooltip-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .tooltip-list li {
+            padding: 5px 0;
+            font-size: 16px;
+        }
+    </style>
 </head>
+
 <body>
-<h1>Welcome [[${username}]]!</h1>
+<header>
+    <div class="header-top">
+        <div class="top-header">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-between h-100">
+                    <div class="left-top-header w-40 d-flex align-items-center">
+                        <div class="logo box-img">
+                            <a href="/home">
+                                <img src="/image/learningz.png" alt=""/>
+                            </a>
+                        </div>
+                        <div class="box-search">
+                            <form action="http://www.google.com/cse" class="w-100">
+                                <input type="text" name="q" class="text_search" placeholder="Tìm kiếm khóa học" />
+                                <button type="submit" class="btn-search"></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="right-top-header w-60 d-flex align-items-center justify-content-end">
+                        <div class="hotline">
+                            <span>
+                                <i class="fas fa-phone"></i> 1900 6933
+                            </span>
+                        </div>
+                        <div class="info-member">
+                            <div class="avatar-container">
+                                <img th:src="${avatarUrl}" alt="Avatar" class="rounded-circle avatar" width="40"
+                                     height="40" style="margin-right: 10px;">
+                                <div class="dropdown">
+                                    <img src="/image/Arrow-dropdown-circle-02.png"
+                                         alt="dropdown" class="rounded-circle" width="15" height="15"
+                                         style="margin-right: 10px;">
+
+                                    <div class="dropdown-content">
+                                        <a href="#">Profile</a>
+                                        <a href="#">Đổi mật khẩu</a>
+                                        <a href="/logout">Log Out</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-header">
+            <div class="container">
+                <ul class="top-menu">
+                    <li><a href="/#" target="_blank">Giới thiệu</a></li>
+                    <li><a href="giao-vien-noi-tieng.html" target="_blank">Giáo viên</a></li>
+                    <li><a href="kiem-tra-thi-thu/index.html" target="_blank">Tự luyện</a></li>
+                    <li><a href="https://huongnghiep.hocmai.vn/" target="_blank">Hướng nghiệp</a></li>
+                    <li><a href="kho-tai-lieu/index.html" target="_blank">Thư viện</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container mt-4">
+    <div class="row" style="display: flex;align-items: stretch;">
+        <div class="col-lg-4 col-md-3">
+            <div class="sidebar">
+                <div class="sidebar-title">
+                    <i class="fas fa-bars mr-2"></i>
+                    Các khóa học
+                </div>
+                <div th:each="grade : ${grades}">
+                    <div class="course-category">
+                        <i class="fas fa-graduation-cap mr-2"></i>
+                        <span th:text="${grade.name}"></span>
+                        <div class="tooltip-box">
+                            <div class="tooltip-title" th:text="${grade.description}"></div>
+                            <ul class="tooltip-list">
+                                <li th:each="course : ${courses}" th:if="${course.grade.id == grade.id}" th:text="${course.subject}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-category">
+                    <i class="fas fa-university mr-2"></i>
+                    LUYỆN THI ĐẠI HỌC
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-md-7">
+            <div class="text-container">
+                <div class="text-wrapper">
+                    <div class="text-slide">Gieo quẻ ẤT TỴ - Điểm thi hết ý. GIEO NGAY!</div>
+                    <div class="text-slide">Đón đầu điểm thi Đánh giá năng lực đợt 1 với 1 bí kíp này. XEM NGAY</div>
+                    <div class="text-slide">Chinh phục kỳ thi với 5 bí quyết vàng! TÌM HIỂU NGAY</div>
+                    <div class="text-slide">Đăng ký học nhóm 3 người để nhận ưu đãi khủng. KHÁM PHÁ NGAY</div>
+                </div>
+            </div>
+
+            <div class="main-banner">
+                <div class="single-item" >
+                    <div><img src="/image/img_1.png" alt="Slide 1"></div>
+                    <div><img src="/image/img_2.png" alt="Slide 2"></div>
+                    <div><img src="image3.jpg" alt="Slide 3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="stats-section">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="stats-number">18 năm</div>
+                <div class="stats-text">Giáo dục trực tuyến</div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-number">7.307.516</div>
+                <div class="stats-text">Thành viên</div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-number">Nền tảng học trực tuyến</div>
+                <div class="stats-text">Số 1 Việt Nam</div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        var $slider = $('.single-item');
+        // Initialize slick slider
+        $slider.slick({
+            autoplay: true,          // Enable autoplay
+            autoplaySpeed: 1000,     // 2 seconds between slides
+            dots: true,              // Show navigation dots
+            arrows: true,            // Default arrows
+            infinite: true,          // Infinite loop
+        });
+    });
+</script>
 </body>
+
 </html>
+

@@ -23,7 +23,6 @@ public class Grade {
     @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String name;
 
-    @Lob
     @Column(name = "description", columnDefinition = "NVARCHAR(255)")
     private String description;
 
