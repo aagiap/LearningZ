@@ -1,0 +1,41 @@
+package com.project.learningz.service;
+
+
+import com.project.learningz.dto.QuizJoinToGradeDTO;
+import com.project.learningz.entity.Quiz;
+import com.project.learningz.repository.QuizRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class QuizService {
+
+    @Autowired
+private QuizRepository quizRepository;
+
+    public Quiz getQuizById(Integer quizId) {
+        return quizRepository.findById(quizId).orElse(null);
+    }
+
+    public QuizJoinToGradeDTO getQuizJoinToGradeDTOById(Integer quizId) {
+        return quizRepository.findByQuizId(quizId);
+    }
+
+
+
+    public List<QuizJoinToGradeDTO> getQuizzesWithFilter(String subject, String grade) {
+        if (subject != null && grade != null) {
+            return quizRepository.findByCourseSubjectAndGradeDescription(subject, grade);
+        } else if (subject != null) {
+            return quizRepository.findByCourseSubject(subject);
+        } else if (grade != null) {
+            return quizRepository.findByGrade(grade);
+        } else {
+            return null;
+        }
+    }
+
+
+}
