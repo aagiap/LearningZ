@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/DoQuiz.css">
+</head>
+<body>
+<div class="container">
+    <div class="result-container">
+        <div class="result-header">
+            <h2>Quiz Result</h2>
+        </div>
+        <div class="result-details">
+            <p><strong>Score:</strong> <span th:text="${score}"></span></p>
+            <p><strong>Correct Answers:</strong> <span th:text="${correctAnswers}"></span></p>
+            <p><strong>Total Questions:</strong> <span th:text="${totalQuestions}"></span></p>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     th:style="'width: ' + ${(correctAnswers / totalQuestions) * 100} + '%'"
+                     th:attr="aria-valuenow=${(correctAnswers / totalQuestions) * 100}"
+                     aria-valuemin="0" aria-valuemax="100">
+                    <span th:text="${#numbers.formatDecimal((correctAnswers / totalQuestions) * 100, 0, 2)} + '%'"></span>
+                </div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <a href="/review-quiz" class="btn btn-primary">Review Quiz</a>
+            <a href="/redo-exam" class="btn btn-secondary">Redo Exam</a>
+        </div>
+    </div>
+</div>
+
+</body>
+<style>
+    .result-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .result-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .result-details {
+        margin-bottom: 20px;
+    }
+    .result-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+</html>

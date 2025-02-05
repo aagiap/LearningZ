@@ -15,4 +15,8 @@ public class GradeService {
     public List<Grade> getAllGrades() {
         return gradeRepository.findAll();
     }
+
+    public List<String> findDistinctGradeName() {
+        return gradeRepository.findDistinctGradeName();
+    }
 }
