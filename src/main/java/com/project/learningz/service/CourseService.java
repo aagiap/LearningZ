@@ -42,4 +42,8 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<String> findDistinctSubject() {
+        return courseRepository.findDistinctSubject();
+    }
+
 }
