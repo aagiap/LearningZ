@@ -4,6 +4,7 @@ public class QuizSubmitionDTO {
     private Integer questionId;
     private String selectedOption;
     private String correctAnswer;
+    private String wrongSelection;
 
     public QuizSubmitionDTO() {
     }
@@ -12,6 +13,14 @@ public class QuizSubmitionDTO {
         this.questionId = questionId;
         this.selectedOption = selectedOption;
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getWrongSelection() {
+        return wrongSelection;
+    }
+
+    public void setWrongSelection(String wrongSelection) {
+        this.wrongSelection = wrongSelection;
     }
 
     public Integer getQuestionId() {

@@ -27,8 +27,8 @@
             </div>
         </div>
         <div class="result-actions">
-            <a href="/review-quiz" class="btn btn-primary">Review Quiz</a>
-            <a href="/redo-exam" class="btn btn-secondary">Redo Exam</a>
+            <a href="/Exam/QuizReview" class="btn btn-primary">Review Quiz</a>
+            <a th:href="@{/Exam/StartQuiz(quizId=${session.quiz.getId()})}" class="btn btn-secondary">Redo Exam</a>
         </div>
     </div>
 </div>

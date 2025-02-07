@@ -52,4 +52,9 @@ public class QuestionBank {
     @Column(name = "correct_option", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String correctOption;
 
+    @Size(max = 255)
+    @Nationalized
+    @Column(name = "image_quiz_url")
+    private String imageQuizUrl;
+
 }
