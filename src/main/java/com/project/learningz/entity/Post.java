@@ -22,7 +22,7 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Lob
+
     @Column(name = "content", columnDefinition = "NVARCHAR(MAX)")
     private String content;
 

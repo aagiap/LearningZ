@@ -33,7 +33,7 @@ public class Lesson {
     @Column(name = "quiz_type", nullable = false, columnDefinition = "varchar(255) default 'PRACTICE'")
     private QuizType quizType;
 
-    @Lob
+
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 

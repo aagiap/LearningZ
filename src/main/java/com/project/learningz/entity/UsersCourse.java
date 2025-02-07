@@ -28,12 +28,11 @@ public class UsersCourse {
     @Column(name = "rating")
     private Integer rating;
 
-    @Lob
+
     @Column(name = "comment", columnDefinition = "NVARCHAR(MAX)")
     private String comment;
 
-    @ColumnDefault("getdate()")
     @Column(name = "\"date\"")
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
 }

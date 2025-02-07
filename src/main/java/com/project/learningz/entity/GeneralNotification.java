@@ -22,7 +22,6 @@ public class GeneralNotification {
     private String title;
 
     @NotNull
-    @Lob
     @Column(name = "content", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String content;
 

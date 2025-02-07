@@ -28,7 +28,6 @@ public class Comment {
     private User user;
 
     @NotNull
-    @Lob
     @Column(name = "content", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String content;
 

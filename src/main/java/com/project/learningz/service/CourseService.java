@@ -46,4 +46,11 @@ public class CourseService {
         return courseRepository.findDistinctSubject();
     }
 
+    public Course getCourseById(int id) {
+        return courseRepository.findById(id).orElse(null);
+    }
+
+    public int getLessonCountByCourseId(int courseId) {
+        return courseRepository.countLessonByCourseId(courseId);
+    }
 }

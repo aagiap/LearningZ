@@ -21,7 +21,7 @@ public class Course {
     @Column(name = "title", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
     private String title;
 
-    @Lob
+
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
