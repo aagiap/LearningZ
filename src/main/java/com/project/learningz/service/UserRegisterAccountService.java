@@ -36,7 +36,7 @@ public class UserRegisterAccountService {
     public void register(User user) throws MessagingException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.STUDENT);
-        user.setAvtUrl("images/default-avatar.png");
+        user.setAvtUrl("/image/AvartaDefault.jpg");
         userRepository.save(user);
     }
 

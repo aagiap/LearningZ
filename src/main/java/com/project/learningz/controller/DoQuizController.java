@@ -1,6 +1,7 @@
 package com.project.learningz.controller;
 
 import com.project.learningz.dto.QuizJoinToGradeDTO;
+import com.project.learningz.dto.QuizSubmitionDTO;
 import com.project.learningz.dto.QuizSubmitionListDTO;
 import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
@@ -30,9 +31,11 @@ public class DoQuizController {
     private QuizReviewService quizReviewService;
 
     @GetMapping("/StartQuiz")
-    public String startQuiz(@RequestParam("quizId") Integer quizId, Model model) {
+    public String startQuiz(@RequestParam("quizId") Integer quizId, Model model,HttpSession session) {
         QuizJoinToGradeDTO quizJoinToGradeDTO = quizService.getQuizJoinToGradeDTOById(quizId);
         model.addAttribute("quiz", quizJoinToGradeDTO);
+        Quiz quiz = quizService.getQuizById(quizId);
+        session.setAttribute("quiz", quiz);
         return "/quiz/StartQuiz";
     }
 
@@ -42,26 +45,55 @@ public class DoQuizController {
         List<QuestionBank> questionBankList = quizQuestionBankService.findQuestionBankByQuizId(quizId);
         int timeLimitSeconds = quiz.getTimeLimit() * 60;
         model.addAttribute("quiz", quiz);
-        session.setAttribute("startQuizTimme", LocalDateTime.now());
         model.addAttribute("timeLimitSeconds", timeLimitSeconds);
         session.setAttribute("quiz", quiz);
         model.addAttribute("questionBankList", questionBankList);
-
-
         return "/quiz/DoQuiz";
     }
 
+    @PostMapping("/CheckProgress")
+    public String checkProgress(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO, Model model,HttpSession session){
+        int answeredQuestions = quizReviewService.countAnsweredQuestions(quizSubmitionListDTO.getAnswers());
+        int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
+        if(answeredQuestions == totalQuestions){
+            session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+            model.addAttribute("warningTitle", "Score Exam ?");
+            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" /" + totalQuestions);
+            return "/quiz/QuizProgressWarning";
+        }else if (answeredQuestions < totalQuestions){
+            session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+            model.addAttribute("warningTitle", "Score Exam ?");
+            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" /" + totalQuestions);
+            return "/quiz/QuizProgressWarning";
+        }else {
+            session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+            model.addAttribute("warningTitle", "Score Exam ?");
+            model.addAttribute("warningMessage", "You have not answered any question");
+            return "/quiz/QuizProgressWarning";
+        }
+    }
+
     @PostMapping("/SubmitQuiz")
-    public String submitQuiz(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO, Model model, HttpSession session) {
+    public String submitQuiz(Model model, HttpSession session) {
+        QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
-
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
         model.addAttribute("totalQuestions", totalQuestions);
         session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
         return "/quiz/QuizResult";
+    }
+
+    @GetMapping("/QuizReview")
+    public String quizReview(Model model, HttpSession session) {
+        QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
+        List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
+        List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
+        model.addAttribute("resultQuestions", resultQuestions);
+        model.addAttribute("quizSubmitionList", quizSubmitionList);
+        return "/quiz/QuizReview";
     }
 
 

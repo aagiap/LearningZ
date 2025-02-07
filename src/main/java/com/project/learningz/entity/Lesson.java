@@ -1,5 +1,6 @@
 package com.project.learningz.entity;
 
+import com.project.learningz.constant.QuizType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -28,8 +29,13 @@ public class Lesson {
     @Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String title;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "quiz_type", nullable = false, columnDefinition = "varchar(255) default 'PRACTICE'")
+    private QuizType quizType;
+
     @Lob
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
+
 
 }

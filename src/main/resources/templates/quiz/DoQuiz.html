@@ -26,7 +26,7 @@
         </div>
     </div>
 </div>
-<form action="/Exam/SubmitQuiz" method="post">
+<form action="/Exam/CheckProgress" method="post">
     <div>
         <th:block th:each="question, questionStat : ${questionBankList}">
             <div class="container mt-sm-5 my-1">
@@ -36,46 +36,54 @@
                     <div class="pt-3" id="options">
                         <label class="options">
                             <span th:text="${question.getOption1()}"></span>
-                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'" th:value="${question.getOption1()}">
+                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'"
+                                   th:value="${question.getOption1()}">
                             <span class="checkmark"></span>
                         </label>
                         <label class="options">
                             <span th:text="${question.getOption2()}"></span>
-                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'" th:value="${question.getOption2()}">
+                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'"
+                                   th:value="${question.getOption2()}">
                             <span class="checkmark"></span>
                         </label>
                         <label class="options">
                             <span th:text="${question.getOption3()}"></span>
-                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'" th:value="${question.getOption3()}">
+                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'"
+                                   th:value="${question.getOption3()}">
                             <span class="checkmark"></span>
                         </label>
                         <label class="options">
                             <span th:text="${question.getOption4()}"></span>
-                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'" th:value="${question.getOption4()}">
+                            <input type="radio" th:name="'answers[' + ${questionStat.index} + '].selectedOption'"
+                                   th:value="${question.getOption4()}">
                             <span class="checkmark"></span>
                         </label>
                     </div>
-                    <input type="hidden" th:name="'answers[' + ${questionStat.index} + '].questionId'" th:value="${questionStat.index}">
-                    <input type="hidden" th:name="'answers[' + ${questionStat.index} + '].correctAnswer'" th:value="${question.getCorrectOption()}">
+                    <input type="hidden" th:name="'answers[' + ${questionStat.index} + '].questionId'"
+                           th:value="${questionStat.index}">
+                    <input type="hidden" th:name="'answers[' + ${questionStat.index} + '].correctAnswer'"
+                           th:value="${question.getCorrectOption()}">
                 </div>
             </div>
         </th:block>
     </div>
     <div class="d-flex justify-content-center align-items-center pt-3">
         <div class="d-flex ">
-            <button class="btn btn-success">Start</button>
+            <button class="btn btn-success">Submit</button>
         </div>
     </div>
 </form>
-
 <input type="hidden" id="timeLimitInput" th:value="${timeLimitSeconds}">
+
+
+
 <script>
     let timeLeft;
     let countdownElement = document.getElementById('countdown');
 
     function startTimer() {
-        // Initialize timeLeft when starting the timer
-        timeLeft = parseInt(document.getElementById('timeLimitInput').value) || 0;
+        // Retrieve the remaining time from localStorage or initialize it
+        timeLeft = parseInt(localStorage.getItem('timeLeft')) || parseInt(document.getElementById('timeLimitInput').value) || 0;
         updateCountdown();
     }
 
@@ -89,11 +97,13 @@
 
         if (timeLeft > 0) {
             timeLeft--;
+            localStorage.setItem('timeLeft', timeLeft); // Store the remaining time in localStorage
             setTimeout(updateCountdown, 1000);
         } else {
             countdownElement.textContent = "00:00";
-            // If you have a form to submit
-            // document.forms[0].submit();
+            localStorage.removeItem('timeLeft'); // Clear the stored time when the timer ends
+            document.forms[0].action = '/Exam/SubmitQuiz';
+            document.forms[0].submit();
         }
     }
 

@@ -1,6 +1,8 @@
 package com.project.learningz.dto;
 
-public class QuizJoinToGradeDTO {
+import java.io.Serializable;
+
+public class QuizJoinToGradeDTO implements Serializable {
     private Integer quizId;
     private Integer totalQuestions;
     private Integer timeLimit;

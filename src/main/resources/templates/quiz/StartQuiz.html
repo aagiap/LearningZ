@@ -14,6 +14,10 @@
         <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
             <label class="options">
                 <i class="fas fa-tag"></i>
+                <span th:text="${session.quiz.lesson.getDiscription()}"></span>
+            </label>
+            <label class="options">
+                <i class="fas fa-tag"></i>
                 <span th:text="${quiz.getSubject()}"></span>
             </label>
             <label class="options">
@@ -26,7 +30,7 @@
             </label>
         </div>
     </div>
-    <form method="get" action="/Exam/DoQuiz">
+    <form method="get" action="/Exam/DoQuiz" onsubmit="removeTimeLimit()">
         <input type="hidden" name="quizId" th:value="${quiz.getQuizId()}">
         <div class="d-flex justify-content-center align-items-center pt-3">
             <div class="d-flex ">
@@ -34,6 +38,13 @@
             </div>
         </div>
     </form>
+
+    <script>
+        function removeTimeLimit() {
+            localStorage.removeItem('timeLeft');
+        }
+    </script>
+
 </div>
 </body>
 </html>
