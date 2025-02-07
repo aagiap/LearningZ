@@ -43,6 +43,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public String getAvtByUsername(String username) {
+        return userRepository.findAvatarUrlByUsername(username);
+    }
+
 
     }
 

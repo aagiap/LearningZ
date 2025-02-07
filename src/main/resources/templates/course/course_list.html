@@ -10,9 +10,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-            href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 
 
     <!-- Icon Font Stylesheet -->
@@ -147,7 +145,7 @@
 
                     <div class="p-2 pb-0">
                         <h5 class="mb-1">
-                            <a th:href="@{/course/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course
+                            <a th:href="@{/course/details/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course
                                 Title</a>
                         </h5>
                         <p th:text="${course.subject}">Course subject</p>
@@ -171,7 +169,7 @@
 
                     <div class="d-flex">
                         <small class="text-primary py-1 px-2 fw-bold fs-6" style="float:right;">
-                            <a th:href="@{/course/{id}(id=${course.id})}">View Details</a>
+                            <a th:href="@{/course/details/{id}(id=${course.id})}">View Details</a>
                             <i class="fa fa-chevron-right me-2 fs-10"></i>
                         </small>
                     </div>

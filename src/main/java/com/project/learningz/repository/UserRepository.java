@@ -10,6 +10,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByResetPasswordToken(String token);
     User findByGoogleId(String googleId);
 
+    @Query("SELECT u.avtUrl FROM User u WHERE u.username = ?1")
+    String findAvatarUrlByUsername(String username);
 
 
 }
