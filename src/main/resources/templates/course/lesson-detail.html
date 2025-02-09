@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/lesson_detail.css">
+</head>
+<body>
+
+
+<div class="container">
+    <aside class="sidebar">
+        <h2 class="sidebar-title" th:text="'Chapter lesson: '+ ${chapter.getChapterTitle()}"></h2>
+        <ul class="sidebar-menu" th:each="lesson : ${chapter.getLessons()}">
+            <li><a th:href="@{/course/lesson(lessonId=${lesson.id}, chapterId=${chapter.id})}" th:text="${lesson.getTitle()}"></a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <h1 class="lesson-title" th:text="'Lesson: '+${lesson.getTitle()}"></h1>
+
+        <div class="content-grid">
+            <section class="section">
+                <h3 class="section-title">Document</h3>
+                <ul class="section-links" th:each="pdf : ${lesson.getPdfs()}">
+                    <li><a href="#" th:text="${pdf.getTitle()}"><i class="icon">📄</i></a></li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title">Video</h3>
+                <ul class="section-links" th:each="video : ${lesson.getVideos()}">
+                    <li><a href="#" th:text="${video.getTitle()}"><i class="icon"></i></a></li>
+
+                </ul>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title">Quiz</h3>
+                <ul class="section-links" th:each="quiz : ${lesson.getQuizzes()}">
+                    <li><a href="#" th:text="${quiz.lesson.getTitle()} +' quiz number ' +${quizStat.index +1}"><i class="icon">📋</i></a></li>
+                </ul>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>
