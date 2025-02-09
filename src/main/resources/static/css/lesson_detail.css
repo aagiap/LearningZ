@@ -1,0 +1,119 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.breadcrumb {
+    padding: 10px 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.breadcrumb a {
+    color: #666;
+    text-decoration: none;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 300px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 1px solid #dee2e6;
+}
+
+.sidebar-title {
+    color: #495057;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin-bottom: 15px;
+}
+
+.sidebar-menu a {
+    color: #666;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+}
+
+.sidebar-menu a:hover {
+    color: #4666E5;
+}
+
+.active {
+    color: #4666E5 !important;
+    font-weight: 500;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.lesson-title {
+    font-size: 24px;
+    color: #212529;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.section {
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    color: #212529;
+    margin-bottom: 20px;
+}
+
+.section-links {
+    list-style: none;
+}
+
+.section-links li {
+    margin-bottom: 15px;
+}
+
+.section-links a {
+    color: #4666E5;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-links a:hover {
+    text-decoration: underline;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    color: #4666E5;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <link rel="stylesheet" href="/css/QuizList.css">
+</head>
+<body>
+<div class="container" >
+    <div id="content" class="my-5" >
+        <div id="filterbar" class="col-lg-12">
+            <div class="box border-bottom">
+                <form method="get"  class="form-group text-center">
+                    <button type="submit" class="btn btn-success">Apply</button>
+                    <div class="box border-bottom">
+                        <div class="box-label text-uppercase d-flex align-items-center">Chapter
+                            <button class="btn ml-auto" type="button" data-target="#inner-box"
+                                    aria-expanded="false" aria-controls="inner-box">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </div>
+                        <div id="inner-box" class="mt-2 mr-1">
+                            <div class="my-1">
+                                <label class="tick">
+                                    <span th:text="${course.getTitle()}"></span>
+                                    <input type="radio" name="subject" th:value="${course.getDescription()}">
+                                    <span class="check"> </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+        <div id="products">
+            <div class="row mx-0" >
+                <div class="col-lg-12"th:each="chapter : ${chapters}" >
+                    <div class="test-item" style="margin-bottom: 10px">
+                        <a class="test-title">
+                            <i class="fas fa-file-alt" style="color: #5252ff"></i>
+                            <span th:text="${'Chapter: '+chapter.getChapterTitle()}" style="font-size: larger; color: #5252ff"></span>
+                        </a>
+                        <div class="test-info" th:each="lesson : ${chapter.getLessons()}">
+                            <form method="get" action="/course/lesson">
+                                <button type="submit" class="subject btn btn-link" style="color: black">
+                                    <i class="fas fa-tag"></i>
+                                    <span th:text="${lesson.getTitle()}"></span>
+                                    <input type="hidden" name="lessonId" th:value="${lesson.getId()}">
+                                    <input type="hidden" name="chapterId" th:value="${chapter.getId()}">>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
