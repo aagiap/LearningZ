@@ -14,5 +14,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     @Query("SELECT u.avtUrl FROM User u WHERE u.username = ?1")
     String findAvatarUrlByUsername(String username);
 
+    @Query("SELECT u FROM User u WHERE u.id=?1")
+    User findById(int id);
 
+    @Query("SELECT u FROM User u WHERE u.phoneNum=?1")
+    User findByPhoneNumber(String phoneNumber);
 }

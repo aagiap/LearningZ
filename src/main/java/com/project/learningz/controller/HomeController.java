@@ -7,6 +7,7 @@ import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.repository.UserRepository;
 import com.project.learningz.service.GradeService;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,10 +30,10 @@ public class HomeController {
     private CourseRepository courseRepository;
 
     @GetMapping("/home")
-    public String homePage(Model model) {
+    public String homePage(Model model, HttpSession session) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = null;
-        String avatarUrl = "/default-avatar.png";
+        String avatarUrl = "/static/image/AvartaDefault.jpg";
 
         if (principal instanceof OAuth2User) {
             OAuth2User oAuth2User = (OAuth2User) principal;
@@ -51,6 +52,17 @@ public class HomeController {
             if (user != null) {
                 avatarUrl = user.getAvtUrl() != null ? user.getAvtUrl() : avatarUrl;
             }
+        }
+
+        Integer countUpdate = (Integer) session.getAttribute("countUpdate");
+        Integer idReload = (Integer) session.getAttribute("idReload");
+        if (countUpdate != null && idReload != null) {
+            User user = userRepository.findById(idReload).orElse(null);
+            if (user != null) {
+                model.addAttribute("username", user.getUsername());
+                model.addAttribute("avatarUrl", user.getAvtUrl());
+            }
+            session.invalidate();
         }
 
         List<Grade> grades = gradeService.getAllGrades();

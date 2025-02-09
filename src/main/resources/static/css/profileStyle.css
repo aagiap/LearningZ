@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+}
+.navbar {
+    display: flex;
+    background-color: #4a90e2;
+    overflow: hidden;
+    justify-content: center ;
+}
+.navbar a {
+    float: left;
+    display: block;
+    color: #333;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+.navbar a:hover {
+    background-color: #d4e4e7;
+}
+.content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.profile {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.profile-avatar {
+    margin-right: 20px;
+    text-align: center;
+    flex: 1;
+}
+.profile-avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.profile-info {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    flex: 1;
+}
+.edit-profile-btn {
+    background-color: #00acc1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.edit-profile-btn:hover {
+    background-color: #007c91;
+}
+.course-list {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 100%;
+}
+.course-list h2 {
+    text-align: center;
+}
+.course-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+.course-list ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.course-list ul li:last-child {
+    border-bottom: none;
+}
+.course-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+.course-description {
+    color: #777;
+}

@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eef5ff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    display: flex;
+    background-color: #4a90e2;
+    padding: 10px 0;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    background-color: #357ABD;
+    border-radius: 5px;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 25px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.actions button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#saveChanges {
+    background-color: #28a745;
+    color: white;
+}
+
+#saveChanges:hover {
+    background-color: #218838;
+}
+
+#cancel {
+    background-color: #dc3545;
+    color: white;
+}
+
+#cancel:hover {
+    background-color: #c82333;
+}
+
+#avatarPreview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: block;
+    margin: 10px auto;
+    border: 3px solid #4a90e2;
+    object-fit: cover;
+}
+
+.error-messages {
+    color: red;
+    background: #ffe6e6;
+    border: 1px solid red;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.success-message {
+    color: green;
+    background: #e6ffe6;
+    border: 1px solid green;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.form-group label {
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+}
+
+.form-group input {
+    width: 80%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+    <link rel="stylesheet" th:href="@{/css/profileStyle.css}" />
+
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="/home">Home</a>
+        <a href="#learn">Courses</a>
+        <a href="#ask">Forum</a>
+        <a href="#test">Practice</a>
+        <a href="#help">Help</a>
+        <a href="#about">About us</a>
+    </div>
+
+    <div class="content">
+        <div class="profile">
+            <div class="profile-avatar">
+                <img th:src="@{${avatarUrl}}" alt="Avatar">
+                <h3 id="username" th:text="${username}"></h3>
+                <p id="role" th:text="${role}"></p>
+            </div>
+            <div class="profile-info">
+                <h2>Thông tin cá nhân</h2>
+                <p id="email" th:text="'Email:' + ${email}"></p>
+                <p id="phoneNumber" th:text="'Phone number:' + (${phoneNumber != null} ? ${phoneNumber} : 'Not uploaded')"></p>
+                <p id="vip_status">VIP: Còn lại 1 ngày</p>
+                <button class="edit-profile-btn" onclick="location.href='/home/profile/profile_edit'">Edit Profile</button>
+            </div>
+        </div>
+        <div class="course-list">
+            <h2>Khóa học đã đăng ký</h2>
+            <ul>
+                <li>
+                    <div class="course-title">Khóa học 1</div>
+                    <div class="course-description">Mô tả khóa học 1</div>
+                </li>
+                <li>
+                    <div class="course-title">Khóa học 2</div>
+                    <div class="course-description">Mô tả khóa học 2</div>
+                </li>
+                <li>
+                    <div class="course-title">Khóa học 3</div>
+                    <div class="course-description">Mô tả khóa học 3</div>
+                </li>
+                <!-- Thêm các khóa học khác tại đây -->
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
