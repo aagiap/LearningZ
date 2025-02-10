@@ -31,14 +31,13 @@
                 <h3 class="section-title">Video</h3>
                 <ul class="section-links" th:each="video : ${lesson.getVideos()}">
                     <li><a href="#" th:text="${video.getTitle()}"><i class="icon"></i></a></li>
-
                 </ul>
             </section>
 
             <section class="section">
                 <h3 class="section-title">Quiz</h3>
                 <ul class="section-links" th:each="quiz : ${lesson.getQuizzes()}">
-                    <li><a href="#" th:text="${quiz.lesson.getTitle()} +' quiz number ' +${quizStat.index +1}"><i class="icon">📋</i></a></li>
+                    <li><a th:href="@{/Exam/StartQuiz(quizId=${quiz.getId()})}" th:text="${quiz.lesson.getTitle()} +' quiz number ' +${quizStat.index +1}"><i class="icon">📋</i></a></li>
                 </ul>
             </section>
         </div>

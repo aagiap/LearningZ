@@ -48,6 +48,8 @@ public class DoQuizController {
         model.addAttribute("timeLimitSeconds", timeLimitSeconds);
         session.setAttribute("quiz", quiz);
         model.addAttribute("questionBankList", questionBankList);
+        session.setAttribute("questionBankList", questionBankList);
+
         return "/quiz/DoQuiz";
     }
 
@@ -82,7 +84,7 @@ public class DoQuizController {
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
         model.addAttribute("totalQuestions", totalQuestions);
-        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+//        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
         return "/quiz/QuizResult";
     }
 
@@ -95,6 +97,5 @@ public class DoQuizController {
         model.addAttribute("quizSubmitionList", quizSubmitionList);
         return "/quiz/QuizReview";
     }
-
 
 }
