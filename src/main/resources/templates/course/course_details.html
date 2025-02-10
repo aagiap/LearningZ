@@ -295,6 +295,14 @@
                         <button class="btn btn-success btn-lg w-100 mb-2" disabled>ĐÃ ĐĂNG KÝ</button>
                     </div>
                 </div>
+                <form action="/course/chapterLessonList" method="get">
+                <div class="buttons">
+                    <div>
+                        <button class="btn btn-success btn-lg w-100 mb-2" >Học</button>
+                        <input type="hidden" name="courseId" th:value="${course.getId()}">
+                    </div>
+                </div>
+                </form>
 
                 <div class="list mt-2">
                     <div class="list1 d-flex justify-content-between pt-2 border-bottom">

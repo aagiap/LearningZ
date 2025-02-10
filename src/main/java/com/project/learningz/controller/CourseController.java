@@ -1,12 +1,13 @@
 package com.project.learningz.controller;
 
 import com.project.learningz.dto.CourseReviewDTO;
+import com.project.learningz.entity.Chapter;
 import com.project.learningz.entity.Course;
-import com.project.learningz.service.CourseService;
-import com.project.learningz.service.UserService;
-import com.project.learningz.service.UsersCourseService;
+import com.project.learningz.entity.Lesson;
+import com.project.learningz.service.*;
 import com.project.learningz.utils.PageWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,13 @@ public class CourseController {
     private final CourseService courseService;
     private final UsersCourseService usersCourseService;
     private final UserService userService;
+
+    @Autowired
+    private ChapterService chapterService;
+
+    @Autowired
+    private LessonService lessonService;
+
 
     @GetMapping("")
     public String viewCourse(Model model,
@@ -107,6 +115,24 @@ public class CourseController {
         }
 
         return "redirect:/course/details/" + courseId;
+    }
+
+    @GetMapping("chapterLessonList")
+    public String viewChapterLesson(@RequestParam int courseId,Model model){
+        List<Chapter> chapters = lessonService.getChaptersByCourseId(courseId);
+        Course course = courseService.getCourseById(courseId);
+        model.addAttribute("course",course);
+        model.addAttribute("chapters",chapters);
+        return "/course/chapter-lesson-list";
+    }
+
+    @GetMapping("/lesson")
+    public String viewLessonInChapter(@RequestParam int lessonId,@RequestParam int chapterId,Model model){
+        Chapter chapter = chapterService.getChapterById(chapterId);
+        Lesson lesson = lessonService.getLessonById(lessonId);
+        model.addAttribute("lesson",lesson);
+        model.addAttribute("chapter",chapter);
+        return "/course/lesson-detail";
     }
 
 }
