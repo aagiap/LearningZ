@@ -110,7 +110,6 @@ public class ProfileController {
         }
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
-        model.addAttribute("email", email);
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("userId", userId);
         return "profile/profile_edit";
@@ -121,15 +120,13 @@ public class ProfileController {
                                 @RequestParam("userId") int id,
                                 @RequestParam("avatarUrl") MultipartFile avatarFile,
                                 @RequestParam("username") String username,
-                                @RequestParam("email") String email,
                                 @RequestParam("phoneNumber") String phoneNumber,
                                 HttpSession session) throws GeneralSecurityException, IOException {
         List<String> errors = new ArrayList<String>();
-                errors = userService.userCheck(id, username, email, phoneNumber);
+                errors = userService.userCheck(id, username, phoneNumber);
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
             model.addAttribute("username", username);
-            model.addAttribute("email", email);
             model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
             if(avatarFile != null){
@@ -147,7 +144,6 @@ public class ProfileController {
                     model.addAttribute("errors", List.of("Failed to upload file"));
                     model.addAttribute("errors", errors);
                     model.addAttribute("username", username);
-                    model.addAttribute("email", email);
                     model.addAttribute("phoneNumber", phoneNumber);
                     model.addAttribute("userId", id);
                     model.addAttribute("avatarUrl", avatarUrl);
@@ -167,10 +163,9 @@ public class ProfileController {
                 googleDriveService.deleteFile(oldAvtId[1]);
             }
 
-            userService.updateUser(id, username, email, phoneNumber, avatarUrl);
+            userService.updateUser(id, username, phoneNumber, avatarUrl);
             model.addAttribute("notification","Update success");
             model.addAttribute("username", username);
-            model.addAttribute("email", email);
             model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
             model.addAttribute("avatarUrl", avatarUrl);

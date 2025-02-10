@@ -51,7 +51,7 @@ public class UserService {
         return userRepository.findAvatarUrlByUsername(username);
     }
 
-    public List<String> userCheck(int id, String username, String email, String phoneNumber){
+    public List<String> userCheck(int id, String username, String phoneNumber){
         User user = userRepository.findById(id);
         List<String> errorList = new ArrayList<>();
         if(user == null) {
@@ -65,14 +65,6 @@ public class UserService {
                     errorList.add("username already exist");
                 }
             }
-            if(email.trim().length() == 0){
-                errorList.add("email is empty");
-            }else{
-                User userCheck = userRepository.findByEmail(email);
-                if(userCheck != null && userCheck.getId() != user.getId()) {
-                    errorList.add("email already exist");
-                }
-            }
             if(phoneNumber.trim().length() != 0){
                 User userCheck = userRepository.findByPhoneNumber(phoneNumber);
                 if(userCheck != null && userCheck.getId() != user.getId()) {
@@ -84,18 +76,10 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(int id, String username, String email, String phoneNumber, String avatarUrl) {
+    public void updateUser(int id, String username, String phoneNumber, String avatarUrl) {
         User user = userRepository.findById(id);
         if(user != null && !username.equals(user.getUsername()) && username.length() > 0) {
             user.setUsername(username);
-        }
-        if(user != null && !email.equals(user.getEmail()) && email.length() > 0) {
-            User userCheck = userRepository.findByEmail(email);
-            if(userCheck != null) {
-                throw new IllegalStateException("email already exist");
-            }else{
-                user.setEmail(email);
-            }
         }
         if(user != null && !phoneNumber.equals(user.getPhoneNum()) && phoneNumber.length() > 0) {
             User userCheck = userRepository.findByPhoneNumber(phoneNumber);

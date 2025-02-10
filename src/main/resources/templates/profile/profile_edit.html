@@ -29,10 +29,6 @@
                 <input name="username" type="text" id="username" th:value="${username}">
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
-                <input name="email" type="email" id="email" th:value="${email}">
-            </div>
-            <div class="form-group">
                 <label for="phoneNum">Phone number</label>
                 <input name="phoneNumber" type="tel" id="phoneNum" th:value="${phoneNumber != null} ? ${phoneNumber} : '' "
                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" >
