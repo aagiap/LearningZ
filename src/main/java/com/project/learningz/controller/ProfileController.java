@@ -139,7 +139,7 @@ public class ProfileController {
             String avatarUrl = null;
             if(!avatarFile.isEmpty()){
                 try{
-                    avatarUrl = googleDriveService.uploadFile(avatarFile);
+                    avatarUrl = googleDriveService.uploadFileAvatar(avatarFile);
                 }catch(IOException | GeneralSecurityException e){
                     model.addAttribute("errors", List.of("Failed to upload file"));
                     model.addAttribute("errors", errors);

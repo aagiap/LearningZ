@@ -22,7 +22,7 @@ import java.util.Collections;
 public class GoogleDriveService {
     private static final String APPLICATION_NAME = "LearningZ";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final String FOLDER_ID = "1b5O9tgkC5ZfJqFdqXbPJKUIazf303rFp";
+    private static final String AVATAR_FOLDER_ID = "1aU0PQpMUjlAraFb4hCu7MWkKB7tL9CUB";
 
     private Drive getDriveService() throws GeneralSecurityException, IOException {
         InputStream in = getClass().getResourceAsStream("/learningz-450206-bee3f9a78097.json");
@@ -38,11 +38,11 @@ public class GoogleDriveService {
                 .build();
     }
 
-    public String uploadFile(MultipartFile file) throws IOException, GeneralSecurityException {
+    public String uploadFileAvatar(MultipartFile file) throws IOException, GeneralSecurityException {
         Drive driveService = getDriveService();
         File fileMetadata = new File();
         fileMetadata.setName(file.getOriginalFilename());
-        fileMetadata.setParents(Collections.singletonList(FOLDER_ID));
+        fileMetadata.setParents(Collections.singletonList(AVATAR_FOLDER_ID));
 
         InputStreamContent content = new InputStreamContent(file.getContentType(), file.getInputStream());
         File uploadedFile = driveService.files().create(fileMetadata, content)
