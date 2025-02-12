@@ -94,4 +94,12 @@ public class UserService {
         }
         userRepository.save(user);
     }
+
+    public User getUserById(Integer userId) {
+        return userRepository.findUserById(userId);
+    }
+
+    public Integer getUserIdByUsername(String username) {
+        return userRepository.findIdByUserName(username);
+    }
 }

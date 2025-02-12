@@ -1,12 +1,16 @@
 package com.project.learningz.service;
 
 import com.project.learningz.dto.CourseReviewDTO;
+import com.project.learningz.entity.QuizResult;
 import com.project.learningz.entity.User;
 import com.project.learningz.entity.UsersCourse;
 import com.project.learningz.entity.UsersCourseId;
+import com.project.learningz.repository.QuizRepository;
+import com.project.learningz.repository.QuizResultRepository;
 import com.project.learningz.repository.UserCourseRepository;
 import com.project.learningz.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,6 +23,12 @@ import java.util.Map;
 public class UsersCourseService {
     private final UserCourseRepository userCourseRepository;
     private final UserRepository userRepository;
+
+    @Autowired
+    private QuizResultRepository quizResultRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
 
     public Map<Integer, Double> getAverageRatingByCourse() {
         List<Object[]> results = userCourseRepository.findAverageRatingByCourse();
@@ -61,4 +71,36 @@ public class UsersCourseService {
         usersCourse.setDate(LocalDate.now());
         userCourseRepository.save(usersCourse);
     }
+
+
+    public boolean checkConditionFeedback(Integer userId, Integer courseId) {
+        Integer numberOfQuiz = quizRepository.countNumberOfQuizInCourse(courseId);
+        int count = 0;
+        List<QuizResult> quizResults = quizResults(userId);
+        for (QuizResult quizResult : quizResults) {
+            if (quizResult.getMaxScore() >= 8) {
+                count++;
+            }
+        }
+        if (count == numberOfQuiz) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIsFeeback(Integer userId, Integer courseId) {
+        UsersCourse usersCourse = userCourseRepository.findUsersCourseBy(userId, courseId);
+        if(usersCourse == null){
+            return false;
+        }
+        if (usersCourse.getRating() != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public List<QuizResult> quizResults(Integer userId) {
+        return quizResultRepository.findQuizResultsByUserId(userId);
+    }
+
 }

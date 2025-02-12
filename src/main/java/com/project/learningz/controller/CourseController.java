@@ -4,6 +4,7 @@ import com.project.learningz.dto.CourseReviewDTO;
 import com.project.learningz.entity.Chapter;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.Lesson;
+import com.project.learningz.entity.Quiz;
 import com.project.learningz.service.*;
 import com.project.learningz.utils.PageWrapper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,8 @@ public class CourseController {
 
     @Autowired
     private LessonService lessonService;
+    @Autowired
+    private QuizResultService quizResultService;
 
 
     @GetMapping("")
@@ -90,6 +94,16 @@ public class CourseController {
         }
 
         boolean isEnrolled = (username != null) && usersCourseService.checkUserEnrolled(username, id);
+        Integer userId = userService.getUserIdByUsername(username);
+        boolean checkConditionFeedBack = usersCourseService.checkConditionFeedback(userId, course.getId());
+
+            boolean checkIsFeeback = usersCourseService.checkIsFeeback(userId, course.getId());
+            model.addAttribute("checkIsFeeback", checkIsFeeback);
+
+            model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
+
+
+
         model.addAttribute("isEnrolled", isEnrolled);
         model.addAttribute("username", username);
 
@@ -118,20 +132,39 @@ public class CourseController {
     }
 
     @GetMapping("chapterLessonList")
-    public String viewChapterLesson(@RequestParam int courseId,Model model){
+    public String viewChapterLesson(@RequestParam int courseId, Model model) {
         List<Chapter> chapters = lessonService.getChaptersByCourseId(courseId);
         Course course = courseService.getCourseById(courseId);
-        model.addAttribute("course",course);
-        model.addAttribute("chapters",chapters);
+        model.addAttribute("course", course);
+        model.addAttribute("chapters", chapters);
         return "/course/chapter-lesson-list";
     }
 
     @GetMapping("/lesson")
-    public String viewLessonInChapter(@RequestParam int lessonId,@RequestParam int chapterId,Model model){
+    public String viewLessonInChapter(@RequestParam int lessonId, @RequestParam int chapterId, Model model,
+                                      @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                      @AuthenticationPrincipal OAuth2User userOAuth2) {
+        String username = null;
+
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            username = userOAuth2.getAttribute("name");
+            model.addAttribute("user", userOAuth2);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+
         Chapter chapter = chapterService.getChapterById(chapterId);
         Lesson lesson = lessonService.getLessonById(lessonId);
-        model.addAttribute("lesson",lesson);
-        model.addAttribute("chapter",chapter);
+        List<Quiz> quizzes = lesson.getQuizzes();
+        HashMap<Quiz,String> quizInfores = new HashMap<>();
+        for (Quiz quiz : quizzes) {
+            quizInfores.put(quiz, quizResultService.isPass(userId, quiz.getId()));
+        }
+        model.addAttribute("quizInfores", quizInfores);
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("chapter", chapter);
         return "/course/lesson-detail";
     }
 

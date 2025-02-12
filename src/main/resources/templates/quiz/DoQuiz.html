@@ -78,16 +78,28 @@
 
 
 <script>
-    let timeLeft;
     let countdownElement = document.getElementById('countdown');
+    let startTime, endTime;
 
     function startTimer() {
-        // Retrieve the remaining time from localStorage or initialize it
-        timeLeft = parseInt(localStorage.getItem('timeLeft')) || parseInt(document.getElementById('timeLimitInput').value) || 0;
+        let storedEndTime = localStorage.getItem('endTime');
+
+        if (storedEndTime) {
+            endTime = parseInt(storedEndTime);
+        } else {
+            let timeLimit = parseInt(document.getElementById('timeLimitInput').value) || 0;
+            startTime = Date.now();
+            endTime = startTime + timeLimit * 1000;
+            localStorage.setItem('endTime', endTime);
+        }
+
         updateCountdown();
     }
 
     function updateCountdown() {
+        let now = Date.now();
+        let timeLeft = Math.max(0, Math.floor((endTime - now) / 1000));
+
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
 
@@ -96,18 +108,15 @@
             seconds.toString().padStart(2, '0');
 
         if (timeLeft > 0) {
-            timeLeft--;
-            localStorage.setItem('timeLeft', timeLeft); // Store the remaining time in localStorage
-            setTimeout(updateCountdown, 1000);
+            setTimeout(updateCountdown, 100);
         } else {
             countdownElement.textContent = "00:00";
-            localStorage.removeItem('timeLeft'); // Clear the stored time when the timer ends
-            document.forms[0].action = '/Exam/SubmitQuiz';
+            localStorage.removeItem('endTime'); // Xóa bộ đếm khi hết giờ
+            document.forms[0].action = '/Exam/SubmitQuizByTime';
             document.forms[0].submit();
         }
     }
 
-    // Start the timer immediately when the page loads
     window.onload = startTimer;
 </script>
 </body>
