@@ -1,9 +1,11 @@
 package com.project.learningz.service;
 
+import com.project.learningz.dto.CourseDetailsDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.repository.UserRepository;
 import com.project.learningz.specification.CourseSpecification;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final GradeService gradeService;
 
     public Page<Course> getCoursesPagingByKeyword(String keyword, Pageable pageable) {
         Specification<Course> spec = CourseSpecification.getAllSpec();
@@ -52,5 +55,27 @@ public class CourseService {
 
     public int getLessonCountByCourseId(int courseId) {
         return courseRepository.countLessonByCourseId(courseId);
+    }
+
+    public List<CourseDetailsDTO> allCoursesByUserID(int userId) {
+        return courseRepository.allCoursesByUserID(userId);
+    }
+
+    public List<CourseDetailsDTO> findCourses(int userId, String subject, String courseSearchKey) {
+        return courseRepository.findCourses(userId, subject, courseSearchKey);
+    }
+
+    public Course findByCourseId(int courseId) {
+        return courseRepository.findById(courseId).orElse(null);
+    }
+
+    @Transactional
+    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, String subject, int gradeId, String description) {
+        Course course = courseRepository.findById(courseId).orElse(null);
+        course.setTitle(title);
+        course.setSubject(subject);
+        course.setGrade(gradeService.findById(gradeId));
+        course.setDescription(description);
+        courseRepository.save(course);
     }
 }

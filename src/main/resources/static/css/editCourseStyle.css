@@ -1,0 +1,95 @@
+/* Container Form */
+.container {
+    width: 70%; /* Tăng độ rộng */
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 30px; /* Tăng padding để form rộng rãi hơn */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    border-top: 6px solid #007bff;
+}
+
+/* Title */
+h2 {
+    text-align: center;
+    font-size: 24px; /* Tăng font tiêu đề */
+    color: #007bff;
+    margin-bottom: 25px;
+}
+
+/* Input fields & Select */
+input, select, textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Viền mềm hơn */
+    font-size: 16px; /* Tăng font chữ */
+    padding: 10px; /* Tăng padding */
+    margin-bottom: 20px; /* Khoảng cách lớn hơn */
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Buttons */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    width: 48%;
+    padding: 12px; /* Tăng kích thước nút */
+    font-size: 18px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+/* Save Button - Blue */
+.save-btn {
+    background: #007bff;
+    color: white;
+}
+
+.save-btn:hover {
+    background: #0056b3;
+}
+
+/* Cancel Button - Red */
+.cancel-btn {
+    background: #f44336;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: #d32f2f;
+}
+
+.error-messages {
+    color: red;
+    background: #ffe6e6;
+    border: 1px solid red;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.success-message {
+    color: green;
+    background: #e6ffe6;
+    border: 1px solid green;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+}
