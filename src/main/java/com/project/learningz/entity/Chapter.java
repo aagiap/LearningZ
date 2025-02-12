@@ -37,4 +37,6 @@ public class Chapter {
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lesson> lessons = new ArrayList<>();
 
+    @Column(name = "chapter_drive_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String chapterDriveLink;
 }

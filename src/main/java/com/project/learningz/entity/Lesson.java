@@ -49,5 +49,6 @@ public class Lesson {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Quiz> quizzes = new ArrayList<>();
 
-
+    @Column(name = "lesson_drive_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String LessonDriveLink;
 }

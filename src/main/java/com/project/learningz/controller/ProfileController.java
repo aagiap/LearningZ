@@ -29,9 +29,6 @@ public class ProfileController {
     private UserService userService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private GoogleDriveService googleDriveService;
     @GetMapping(path = "/home/profile")
     public String profile(Model model) {
@@ -45,13 +42,13 @@ public class ProfileController {
             username = ((OAuth2User) principal).getAttribute("name");
             avatarUrl = ((OAuth2User) principal).getAttribute("picture");
             email = ((OAuth2User) principal).getAttribute("email");
-            User user = userRepository.findByEmail(email);
+            User user = userService.findByEmail(email);
             if (user != null) {
                 role = user.getRole();
             }
         }else{
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userRepository.findByUsername(username);
+            User user = userService.findByUsername(username);
             if (user != null) {
                 avatarUrl = user.getAvtUrl();
                 email = user.getEmail();
@@ -60,7 +57,7 @@ public class ProfileController {
             }
         }
         if(countUpdate != 0 && idReload != 0){
-            User user = userRepository.findById(idReload);
+            User user = userService.findById(idReload);
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
             email = user.getEmail();
@@ -86,13 +83,13 @@ public class ProfileController {
             username = ((OAuth2User) principal).getAttribute("name");
             avatarUrl = ((OAuth2User) principal).getAttribute("picture");
             email = ((OAuth2User) principal).getAttribute("email");
-            User user = userRepository.findByEmail(email);
+            User user = userService.findByEmail(email);
             if (user != null) {
                 userId = user.getId();
             }
         }else{
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userRepository.findByUsername(username);
+            User user = userService.findByUsername(username);
             if (user != null) {
                 userId = user.getId();
                 avatarUrl = user.getAvtUrl();
@@ -101,7 +98,7 @@ public class ProfileController {
             }
         }
         if(countUpdate != 0 && idReload != 0){
-            User user = userRepository.findById(idReload);
+            User user = userService.findById(idReload);
             userId = user.getId();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
@@ -132,7 +129,7 @@ public class ProfileController {
             if(avatarFile != null){
                 model.addAttribute("avatarUrl", avatarFile.getOriginalFilename());
             }else{
-                User user = userRepository.findById(id);
+                User user = userService.findById(id);
                 model.addAttribute("avatarUrl", user.getAvtUrl());
             }
         }else{
@@ -157,7 +154,7 @@ public class ProfileController {
             session.setAttribute("idReload", idReload);
 
 
-            User user = userRepository.findById(id);
+            User user = userService.findById(id);
             if(user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")){
                 String[] oldAvtId = user.getAvtUrl().split("https://lh3.googleusercontent.com/d/");
                 googleDriveService.deleteFile(oldAvtId[1]);
