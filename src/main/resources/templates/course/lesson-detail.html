@@ -36,8 +36,11 @@
 
             <section class="section">
                 <h3 class="section-title">Quiz</h3>
-                <ul class="section-links" th:each="quiz : ${lesson.getQuizzes()}">
-                    <li><a th:href="@{/Exam/StartQuiz(quizId=${quiz.getId()})}" th:text="${quiz.lesson.getTitle()} +' quiz number ' +${quizStat.index +1}"><i class="icon">📋</i></a></li>
+                <ul class="section-links" th:each="quizInfor : ${quizInfores}" style="display: flex">
+                    <li><a th:href="@{/Exam/StartQuiz(quizId=${quizInfor.key.getId()})}" th:text="${quizInfor.key.lesson.getTitle()}"><i class="icon">📋</i></a></li>
+                    <li th:classappend="${quizInfor.value.equals('Pass') ? 'text-success' : 'text-danger'}">
+                        <span th:text="${quizInfor.value}" style="margin-left: 35px;border: 1px solid;border-radius: 5px"></span>
+                    </li>
                 </ul>
             </section>
         </div>

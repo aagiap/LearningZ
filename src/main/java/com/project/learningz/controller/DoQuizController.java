@@ -5,11 +5,12 @@ import com.project.learningz.dto.QuizSubmitionDTO;
 import com.project.learningz.dto.QuizSubmitionListDTO;
 import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
-import com.project.learningz.service.QuizQuestionBankService;
-import com.project.learningz.service.QuizReviewService;
-import com.project.learningz.service.QuizService;
+import com.project.learningz.entity.QuizResult;
+import com.project.learningz.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,29 @@ public class DoQuizController {
     @Autowired
     private QuizReviewService quizReviewService;
 
+    @Autowired
+    private QuizResultService quizResultService;
+
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/StartQuiz")
-    public String startQuiz(@RequestParam("quizId") Integer quizId, Model model,HttpSession session) {
+    public String startQuiz(@RequestParam("quizId") Integer quizId, Model model,HttpSession session,
+                            @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                            @AuthenticationPrincipal OAuth2User userOAuth2) {
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            username = userOAuth2.getAttribute("name");
+            model.addAttribute("user", userOAuth2);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+
         QuizJoinToGradeDTO quizJoinToGradeDTO = quizService.getQuizJoinToGradeDTOById(quizId);
+        QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId,quizId);
+        model.addAttribute("quizResult", quizResult);
         model.addAttribute("quiz", quizJoinToGradeDTO);
         Quiz quiz = quizService.getQuizById(quizId);
         session.setAttribute("quiz", quiz);
@@ -76,15 +97,59 @@ public class DoQuizController {
     }
 
     @PostMapping("/SubmitQuiz")
-    public String submitQuiz(Model model, HttpSession session) {
+    public String submitQuiz(Model model, HttpSession session,
+                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                             @AuthenticationPrincipal OAuth2User userOAuth2) {
         QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
+        Quiz quiz = (Quiz) session.getAttribute("quiz");
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
+
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            username = userOAuth2.getAttribute("name");
+            model.addAttribute("user", userOAuth2);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+
+        quizResultService.saveResult(userId, quiz.getId(), score);
+
+        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
         model.addAttribute("totalQuestions", totalQuestions);
-//        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+        return "/quiz/QuizResult";
+    }
+
+    @PostMapping("/SubmitQuizByTime")
+    public String submitQuizByTime(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO,Model model, HttpSession session,
+                                   @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                   @AuthenticationPrincipal OAuth2User userOAuth2) {
+        Quiz quiz = (Quiz) session.getAttribute("quiz");
+        int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
+        int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
+        float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
+
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            username = userOAuth2.getAttribute("name");
+            model.addAttribute("user", userOAuth2);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+        quizResultService.saveResult(userId, quiz.getId(), score);
+
+
+        model.addAttribute("score", score);
+        model.addAttribute("correctAnswers", correctAnswers);
+        model.addAttribute("totalQuestions", totalQuestions);
+        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
         return "/quiz/QuizResult";
     }
 

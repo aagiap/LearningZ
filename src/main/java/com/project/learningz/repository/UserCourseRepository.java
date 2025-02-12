@@ -45,4 +45,8 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
            """)
    boolean isUserEnrolled(@Param("userName") String userName, @Param("courseId") int courseId);
 
+
+   @Query("SELECT uc FROM UsersCourse uc WHERE uc.user.id = :userId AND uc.course.id = :courseId")
+   UsersCourse findUsersCourseBy(@Param("userId") Integer userId, @Param("courseId") Integer courseId);
+
 }
