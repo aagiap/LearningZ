@@ -39,7 +39,7 @@ public class User {
     private String email;
 
     @Size(max = 50)
-    @Column(name = "phoneNum", length = 50)
+    @Column(name = "phone_num", length = 50)
     private String phoneNum;
 
     @Column(name = "role")

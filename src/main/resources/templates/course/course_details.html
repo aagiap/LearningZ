@@ -338,7 +338,7 @@
     <!-- Course Review Start -->
     <div th:if="${user != null}">
         <h3>Bình luận của bạn</h3>
-        <th:block th:if="${isEnrolled}">
+        <th:block th:if="${isEnrolled && !checkIsFeeback && checkConditionFeedBack}">
             <div class="card">
                 <div class="row">
                     <div class="col-1"></div>
@@ -385,6 +385,12 @@
                 </div>
             </div>
         </th:block>
+    </div>
+    <div th:if="${user != null && !checkConditionFeedBack && !checkIsFeeback && isEnrolled}">
+        <p>You must complete this course to take the assessment</p>
+    </div>
+    <div th:if="${user != null && checkIsFeeback}">
+        <p>You've already reviewed this course</p>
     </div>
 
     <div th:if="${user == null}">

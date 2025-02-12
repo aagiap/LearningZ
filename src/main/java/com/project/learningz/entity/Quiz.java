@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -27,5 +30,8 @@ public class Quiz {
     @NotNull
     @Column(name = "time_limit", nullable = false)
     private Integer timeLimit;
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<QuizResult> quizResults = new ArrayList<>();
 
 }

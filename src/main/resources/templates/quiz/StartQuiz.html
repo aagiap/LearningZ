@@ -12,9 +12,10 @@
     <div class="question ml-sm-5 pl-sm-5 pt-2">
         <div class="py-2 h5"><b th:text="${quiz.getTitle()}"></b></div>
         <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-            <label class="options">
+            <label class="options" th:if="${quizResult != null}">
                 <i class="fas fa-tag"></i>
-                <span th:text="${quiz.getTitle()}"></span>
+                <span th:classappend="${quizResult.getMaxScore() >=8 ? 'text-success' : 'text-danger'}"
+                      th:text="${'Highest score: '+ quizResult.getMaxScore()}"></span>
             </label>
             <label class="options">
                 <i class="fas fa-tag"></i>
@@ -42,6 +43,7 @@
     <script>
         function removeTimeLimit() {
             localStorage.removeItem('timeLeft');
+            localStorage.removeItem('endTime');
         }
     </script>
 
