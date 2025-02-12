@@ -40,4 +40,6 @@ public class Course {
     @Column(name = "subject", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
     private String subject;
 
+    @Column(name = "course_drive_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String courseDriveLink;
 }
