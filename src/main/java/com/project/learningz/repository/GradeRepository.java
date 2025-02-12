@@ -12,5 +12,8 @@ public interface GradeRepository extends JpaRepository<Grade, Integer>, JpaSpeci
 
     @Query("SELECT DISTINCT g.name FROM Grade g")
     List<String> findDistinctGradeName();
+
+    @Query("SELECT g FROM Grade g WHERE g.id=?1")
+    Grade findById(int gradeId);
 }
 
