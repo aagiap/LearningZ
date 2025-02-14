@@ -465,11 +465,8 @@
         <div class="bottom-header">
             <div class="container">
                 <ul class="top-menu">
-                    <li><a href="/#" target="_blank">Giới thiệu</a></li>
-                    <li><a href="giao-vien-noi-tieng.html" target="_blank">Giáo viên</a></li>
-                    <li><a href="kiem-tra-thi-thu/index.html" target="_blank">Tự luyện</a></li>
-                    <li><a href="https://huongnghiep.hocmai.vn/" target="_blank">Hướng nghiệp</a></li>
-                    <li><a href="kho-tai-lieu/index.html" target="_blank">Thư viện</a></li>
+                    <li><a href="/QuizList" target="_blank">Quiz</a></li>
+                    <li><a href="/course" target="_blank">Course</a></li>
                 </ul>
             </div>
         </div>
@@ -491,7 +488,9 @@
                         <div class="tooltip-box">
                             <div class="tooltip-title" th:text="${grade.description}"></div>
                             <ul class="tooltip-list">
-                                <li th:each="course : ${courses}" th:if="${course.grade.id == grade.id}" th:text="${course.subject}"></li>
+                                <li th:each="course : ${courses}" th:if="${course.grade.id == grade.id}">
+                                    <a th:href="@{/course/details/{id}(id=${course.id})}" th:text="${course.subject}"></a>
+                                </li>
                             </ul>
                         </div>
                     </div>
