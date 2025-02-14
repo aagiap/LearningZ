@@ -37,6 +37,7 @@ public class LoginService implements UserDetailsService {
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         User user = userRepository.findByEmail(email);
+
         if (user == null) {
             user = new User();
             user.setUsername(name);
@@ -46,17 +47,22 @@ public class LoginService implements UserDetailsService {
             user.setRole(Role.STUDENT);
             userRepository.save(user);
         } else if (user.getGoogleId() == null) {
+            // Nếu chưa liên kết tài khoản Google, gán GoogleId và avatar
             user.setGoogleId(googleId);
             userRepository.save(user);
         }
 
-        updateProfilePicture(user, oAuth2User.getAttribute("picture"));
+        // Chỉ lưu avatar Google khi người dùng chưa có avatar
+        if (user.getAvtUrl() == null || user.getAvtUrl().isEmpty()) {
+            updateProfilePicture(user, oAuth2User.getAttribute("picture"));
+        }
 
         UserDetails userDetails = createOAuthUserDetails(user);
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities())
         );
     }
+
 
     private User findUserByUsernameOrEmail(String usernameOrEmail) {
         User user = userRepository.findByUsername(usernameOrEmail);
