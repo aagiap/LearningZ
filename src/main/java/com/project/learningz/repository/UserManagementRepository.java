@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface UserManagementRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     @Query("SELECT u FROM User u WHERE u.email = ?1")
-    public User findByEmail(String email);
 
     public User findByResetPasswordToken(String token);
 
@@ -26,4 +25,5 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
 
     boolean existsByEmail(String email);
     boolean existsByPhoneNum(String phoneNum);
+    User findByEmail(String email);
 }

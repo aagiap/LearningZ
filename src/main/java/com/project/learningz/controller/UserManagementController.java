@@ -39,8 +39,13 @@ public class UserManagementController {
     }
 
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam(value = "id") Integer id) {
-        userManagementService.deleteUserById(id);
+    public String deleteUser(@RequestParam(value = "id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            userManagementService.deleteUserById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "User has deleted successfully!");
+        } catch (Exception e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/admin/users";
     }
 
@@ -53,7 +58,7 @@ public class UserManagementController {
                              RedirectAttributes redirectAttributes) {
         try {
             userManagementService.createUser(username, email, password, phone, role);
-            redirectAttributes.addFlashAttribute("successMessage", "User created successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "User has created successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -62,7 +67,7 @@ public class UserManagementController {
 
 
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user) {
+    public String updateUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
         Optional<User> userOpt = userManagementService.getUserById(user.getId());
         if (userOpt.isPresent()) {
             User updatedUser = userOpt.get();
@@ -71,6 +76,10 @@ public class UserManagementController {
             updatedUser.setPhoneNum(user.getPhoneNum());
             updatedUser.setRole(user.getRole());
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                if (user.getPassword().length() < 6) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Password must be at least 6 characters");
+                    return "redirect:/admin/users/" + user.getId();
+                }
                 updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
             } else {
                 updatedUser.setPassword(userOpt.get().getPassword());
