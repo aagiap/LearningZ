@@ -51,17 +51,19 @@ public class WebSecurityConfig {
                         .permitAll()
 
                 ).oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login") // Trang login cho OAuth2
+                        .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(oauth2UserService())) // Xử lý OAuth2User
-                        .defaultSuccessUrl("/home", true) // Chuyển hướng sau khi login Google thành công
+                                .userService(oauth2UserService()))
+                        .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
-                .logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .permitAll()
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
                 );
         return http.build();
     }

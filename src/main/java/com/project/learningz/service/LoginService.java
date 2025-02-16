@@ -47,12 +47,10 @@ public class LoginService implements UserDetailsService {
             user.setRole(Role.STUDENT);
             userRepository.save(user);
         } else if (user.getGoogleId() == null) {
-            // Nếu chưa liên kết tài khoản Google, gán GoogleId và avatar
             user.setGoogleId(googleId);
             userRepository.save(user);
         }
 
-        // Chỉ lưu avatar Google khi người dùng chưa có avatar
         if (user.getAvtUrl() == null || user.getAvtUrl().isEmpty()) {
             updateProfilePicture(user, oAuth2User.getAttribute("picture"));
         }
