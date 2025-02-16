@@ -5,6 +5,7 @@ import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,6 @@ public class UserManagementService {
 
     private final UserManagementRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public User getByResetPasswordToken(String token) {
-        return  userRepository.findByResetPasswordToken(token);
-    }
 
     public void updatePassword(User user, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
@@ -67,10 +64,17 @@ public class UserManagementService {
     }
 
     public void deleteUserById(Integer id) {
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Cannot delete this user due to data integrity constraints.");
+        }
     }
 
     public void createUser(String username, String email, String password, String phoneNum, String role) {
+        if (password.length() < 6) {
+            throw new RuntimeException("Password must be at least 6 digits");
+        }
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists: " + email);
         }
@@ -80,12 +84,12 @@ public class UserManagementService {
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        // Tạo user mới
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(encodedPassword);
         user.setPhoneNum(phoneNum);
+        user.setAvtUrl("AvartaDefault.jpg");
 
         try {
             user.setRole(Role.valueOf(role.toUpperCase()));
@@ -106,7 +110,6 @@ public class UserManagementService {
             User updatedUser = userOptional.get();
             updatedUser.setUsername(user.getUsername());
             updatedUser.setEmail(user.getEmail());
-            updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
             updatedUser.setPhoneNum(user.getPhoneNum());
             updatedUser.setRole(user.getRole());
             userRepository.save(updatedUser);
