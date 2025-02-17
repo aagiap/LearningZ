@@ -1,4 +1,4 @@
-500<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Error 500: Internal Server Error</title>
@@ -14,7 +14,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f0f8ff; /* Màu xanh da trời nhạt */
+            background-image: linear-gradient(to right, #5370D9 0%, #FFFFFF 100%);
             color: #333; /* Màu chữ */
         }
         h1 {
@@ -43,7 +43,7 @@
 </head>
 <body>
 <h1>Error 500: Internal Server Error</h1>
-<p>Đã xảy ra lỗi trên máy chủ. Vui lòng thử lại sau.</p>
-<a th:href="@{/home}" >Quay về trang chủ</a>
+<p>An error occurred on the server. Please try again later.</p>
+<a th:href="@{/home}" >Back to the home page</a>
 </body>
 </html>

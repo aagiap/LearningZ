@@ -25,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     @Query("SELECT u FROM User u WHERE u.phoneNum=?1")
     User findByPhoneNumber(String phoneNumber);
+    @Query("SELECT u.username FROM User u where u.email=?1")
+    String findUserNameByEmail(String email);
 }

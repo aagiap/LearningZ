@@ -46,7 +46,8 @@ public class DoQuizController {
             username = user.getUsername();
             model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
-            username = userOAuth2.getAttribute("name");
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
             model.addAttribute("user", userOAuth2);
         }
         Integer userId = userService.getUserIdByUsername(username);
@@ -111,7 +112,8 @@ public class DoQuizController {
             username = user.getUsername();
             model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
-            username = userOAuth2.getAttribute("name");
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
             model.addAttribute("user", userOAuth2);
         }
         Integer userId = userService.getUserIdByUsername(username);
@@ -139,7 +141,8 @@ public class DoQuizController {
             username = user.getUsername();
             model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
-            username = userOAuth2.getAttribute("name");
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
             model.addAttribute("user", userOAuth2);
         }
         Integer userId = userService.getUserIdByUsername(username);
