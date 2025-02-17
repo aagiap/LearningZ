@@ -102,4 +102,20 @@ public class UserService {
     public Integer getUserIdByUsername(String username) {
         return userRepository.findIdByUserName(username);
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public User findById(int id) {
+        return userRepository.findById(id);
+    }
+
+    public String findUserNameByEmail(String email){
+        return  userRepository.findUserNameByEmail(email);
+    }
 }

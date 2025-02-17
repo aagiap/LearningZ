@@ -97,19 +97,19 @@
             <a th:href="@{/home}">
                 <h6 class="section-title bg-white text-center px-3">LearningZ</h6>
             </a>
-            <h1 class="mb-5" style="color: #fb873f;">Khám phá hệ thống khóa học mới và hấp dẫn</h1>
+            <h1 class="mb-5" style="color: #426dce;">Explore our new and exciting course</h1>
         </div>
 
 
         <form th:action="@{/course}" method="get" class="search-form">
-            <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm khóa học..."/>
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Find courses..."/>
             <select name="gradeId">
-                <option value="-1" th:selected="${gradeId == -1}">Tất cả cấp độ</option>
-                <option value="1" th:selected="${gradeId == 1}">Lớp 10</option>
-                <option value="2" th:selected="${gradeId == 2}">Lớp 11</option>
-                <option value="3" th:selected="${gradeId == 3}">Lớp 12</option>
+                <option value="-1" th:selected="${gradeId == -1}">All grade</option>
+                <option value="1" th:selected="${gradeId == 1}">Grade 10</option>
+                <option value="2" th:selected="${gradeId == 2}">Grade 11</option>
+                <option value="3" th:selected="${gradeId == 3}">Grade 12</option>
             </select>
-            <button type="submit" class="btn-search">Tìm kiếm</button>
+            <button type="submit" class="btn-search">Search</button>
             <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" class="btn-clear"/>
         </form>
 

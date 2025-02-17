@@ -9,6 +9,7 @@ import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.QuizResultRepository;
 import com.project.learningz.repository.UserCourseRepository;
 import com.project.learningz.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +92,7 @@ public class UsersCourseService {
 
     public boolean checkIsFeeback(Integer userId, Integer courseId) {
         UsersCourse usersCourse = userCourseRepository.findUsersCourseBy(userId, courseId);
-        if(usersCourse == null){
+        if (usersCourse == null) {
             return false;
         }
         if (usersCourse.getRating() != null) {
@@ -103,4 +105,34 @@ public class UsersCourseService {
         return quizResultRepository.findQuizResultsByUserId(userId);
     }
 
+
+    public CourseReviewDTO getUserFeedback(Integer userId, Integer courseId) {
+        return userCourseRepository.findReviewByUserIdAndCourseId(userId, courseId).orElse(null);
+    }
+
+    @Transactional
+    public boolean clearFeedback(Integer userId, Integer courseId) {
+        Optional<UsersCourse> usersCourseOpt = userCourseRepository.findReviewByUserIdAndCourseIdReturnEntity(userId, courseId);
+
+        if (usersCourseOpt.isPresent()) {
+            UsersCourse usersCourse = usersCourseOpt.get();
+            usersCourse.setRating(null);
+            usersCourse.setComment(null);
+            userCourseRepository.save(usersCourse);
+            return true;
+        }
+        return false;
+    }
+
+
+    public void updateFeedback(Integer userId, Integer courseId, Integer rating, String comment) {
+        UsersCourse usersCourse = userCourseRepository.findReviewByUserIdAndCourseIdReturnEntity(userId, courseId)
+                .orElseThrow(() -> new RuntimeException("Cannot find User feedback!"));
+
+        usersCourse.setRating(rating);
+        usersCourse.setComment(comment);
+        usersCourse.setDate(LocalDate.now());
+
+        userCourseRepository.save(usersCourse);
+    }
 }

@@ -19,4 +19,8 @@ public class GradeService {
     public List<String> findDistinctGradeName() {
         return gradeRepository.findDistinctGradeName();
     }
+
+    public Grade findById(int gradeId){
+        return gradeRepository.findById(gradeId);
+    }
 }

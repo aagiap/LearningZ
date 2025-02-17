@@ -14,7 +14,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f0f8ff; /* Màu xanh da trời nhạt */
+            background-image: linear-gradient(to right, #5370D9 0%, #FFFFFF 100%);
             color: #333; /* Màu chữ */
         }
         h1 {
@@ -43,7 +43,7 @@
 </head>
 <body>
 <h1>Error 403: Forbidden</h1>
-<p>Xin lỗi, bạn không được phép truy cập tài nguyên này.</p>
-<a th:href="@{/home}" >Quay về trang chủ</a>
+<p>Sorry, you are not authorized to access this resource.</p>
+<a th:href="@{/home}" >Back to the home page</a>
 </body>
 </html>

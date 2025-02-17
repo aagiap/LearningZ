@@ -34,33 +34,45 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, CustomSuccessHandler customSuccessHandler) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(STATIC_RESOURCE).permitAll()
                                 .requestMatchers("/","/login").permitAll()
                                 .requestMatchers("/home/**").authenticated()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/marketing/**").hasRole("MARKETING_TEAM")
+                                .requestMatchers("/expert/**").hasRole("EXPERT")
                                 .requestMatchers("/forgot_password").permitAll()
                                 .requestMatchers("/reset_password").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/register").permitAll()
+                                .requestMatchers("/verify").permitAll()
+                                .requestMatchers("/resend").permitAll()
+                                .requestMatchers("/course/**").permitAll()
+                                .requestMatchers("/course/lesson").authenticated()
+                                .requestMatchers("/course/chapterLessonList").authenticated()
+                                .anyRequest().authenticated()
                 ).formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler(customSuccessHandler)
                         .failureUrl("/login?error=true")
                         .permitAll()
 
                 ).oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login") // Trang login cho OAuth2
+                        .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(oauth2UserService())) // Xử lý OAuth2User
-                        .defaultSuccessUrl("/home", true) // Chuyển hướng sau khi login Google thành công
+                                .userService(oauth2UserService()))
+                        .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .logoutSuccessUrl("/")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID")
                                 .permitAll()
                 );
         return http.build();

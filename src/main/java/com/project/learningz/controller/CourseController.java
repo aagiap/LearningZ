@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -20,6 +22,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.HashMap;
@@ -64,22 +67,22 @@ public class CourseController {
     }
 
     @GetMapping("/details/{id}")
-    public String viewCourseDetails(@PathVariable("id") Integer id, Model model,
+    public String viewCourseDetails(@PathVariable("id") Integer courseId, Model model,
                                     @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                     @AuthenticationPrincipal OAuth2User userOAuth2) {
-        Course course = courseService.getCourseById(id);
+        Course course = courseService.getCourseById(courseId);
         model.addAttribute("course", course);
 
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
         model.addAttribute("averageRatings", averageRatings);
 
-        int numberOfStudents = usersCourseService.numberOfStudentsInCourse(id);
+        int numberOfStudents = usersCourseService.numberOfStudentsInCourse(courseId);
         model.addAttribute("numberOfStudents", numberOfStudents);
 
-        int lessonCount = courseService.getLessonCountByCourseId(id);
+        int lessonCount = courseService.getLessonCountByCourseId(courseId);
         model.addAttribute("lessonCount", lessonCount);
 
-        List<CourseReviewDTO> reviews = usersCourseService.getCourseReviews(id);
+        List<CourseReviewDTO> reviews = usersCourseService.getCourseReviews(courseId);
         model.addAttribute("reviews", reviews);
 
         // Kiểm tra user và userOAuth2
@@ -89,20 +92,22 @@ public class CourseController {
             username = user.getUsername();
             model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
-            username = userOAuth2.getAttribute("name");
-            model.addAttribute("user", userOAuth2);
+           String email = userOAuth2.getAttribute("email");
+           username = userService.findUserNameByEmail(email);
+           model.addAttribute("user", userOAuth2);
         }
 
-        boolean isEnrolled = (username != null) && usersCourseService.checkUserEnrolled(username, id);
+        boolean isEnrolled = (username != null) && usersCourseService.checkUserEnrolled(username, courseId);
         Integer userId = userService.getUserIdByUsername(username);
         boolean checkConditionFeedBack = usersCourseService.checkConditionFeedback(userId, course.getId());
 
-            boolean checkIsFeeback = usersCourseService.checkIsFeeback(userId, course.getId());
-            model.addAttribute("checkIsFeeback", checkIsFeeback);
+        boolean checkIsFeeback = usersCourseService.checkIsFeeback(userId, course.getId());
+        model.addAttribute("checkIsFeeback", checkIsFeeback);
 
-            model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
+        model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
 
-
+        CourseReviewDTO userFeedback = usersCourseService.getUserFeedback(userId, courseId);
+        model.addAttribute("userFeedback", userFeedback);
 
         model.addAttribute("isEnrolled", isEnrolled);
         model.addAttribute("username", username);
@@ -122,7 +127,8 @@ public class CourseController {
         if (user != null) {
             username = user.getUsername();
         } else if (userOAuth2 != null) {
-            username = userOAuth2.getAttribute("name");
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
         }
         if (username != null) {
             usersCourseService.addOrUpdateReview(username, courseId, rating, comment);
@@ -150,7 +156,8 @@ public class CourseController {
             username = user.getUsername();
             model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
-            username = userOAuth2.getAttribute("name");
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
             model.addAttribute("user", userOAuth2);
         }
         Integer userId = userService.getUserIdByUsername(username);
@@ -158,7 +165,7 @@ public class CourseController {
         Chapter chapter = chapterService.getChapterById(chapterId);
         Lesson lesson = lessonService.getLessonById(lessonId);
         List<Quiz> quizzes = lesson.getQuizzes();
-        HashMap<Quiz,String> quizInfores = new HashMap<>();
+        HashMap<Quiz, String> quizInfores = new HashMap<>();
         for (Quiz quiz : quizzes) {
             quizInfores.put(quiz, quizResultService.isPass(userId, quiz.getId()));
         }
@@ -166,6 +173,45 @@ public class CourseController {
         model.addAttribute("lesson", lesson);
         model.addAttribute("chapter", chapter);
         return "/course/lesson-detail";
+    }
+
+
+
+
+
+    @PutMapping("/feedback/clear")
+    public ResponseEntity<String> clearFeedback(@RequestParam("userId") Integer userId,
+                                                @RequestParam("courseId") Integer courseId) {
+        boolean cleared = usersCourseService.clearFeedback(userId, courseId);
+        if (cleared) {
+            return ResponseEntity.ok("Feedback deleted successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot clear feedback!");
+        }
+    }
+
+
+    @PostMapping("/comment/edit")
+    public String updateFeedback(@RequestParam("courseId") Integer courseId,
+                                 @RequestParam(value = "rating", required = false) Integer rating,
+                                 @RequestParam(value = "comment", required = false) String comment,
+                                 @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                 @AuthenticationPrincipal OAuth2User userOAuth2,
+                                 RedirectAttributes redirectAttributes) {
+
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+
+        usersCourseService.updateFeedback(userId, courseId, rating, comment);
+
+
+        return "redirect:/course/details/" + courseId;
     }
 
 }

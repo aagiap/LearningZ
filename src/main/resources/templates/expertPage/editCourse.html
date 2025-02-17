@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course</title>
+    <link rel="stylesheet" th:href="@{/css/editCourseStyle.css}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Edit Course</h2>
+
+    <form action="/expert/edit/update" method="post">
+        <input type="hidden" name="id" th:value="${course.getId()}">
+        <input type="hidden" name="createdByUserId" th:value="${course.getCreatedBy().getId()}">
+        <input type="hidden" name="courseDriveLink" th:value="${course.getCourseDriveLink()}"/>
+        <label>Title:</label>
+        <input type="text" name="title" th:value="${course.title}" required>
+
+        <label>Subject:</label>
+        <select id="subject" name="subject">
+            <option value="Mathematics" th:selected="${course.subject == 'Mathematics'}">Mathematics</option>
+            <option value="Physics" th:selected="${course.subject == 'Physics'}">Physics</option>
+            <option value="Chemistry" th:selected="${course.subject == 'Chemistry'}">Chemistry</option>
+            <option value="Biology" th:selected="${course.subject == 'Biology'}">Biology</option>
+            <option value="Literature" th:selected="${course.subject == 'Literature'}">Literature</option>
+            <option value="History" th:selected="${course.subject == 'History'}">History</option>
+            <option value="Geography" th:selected="${course.subject == 'Geography'}">Geography</option>
+            <option value="Civic Education" th:selected="${course.subject == 'Civic Education'}">Civic Education</option>
+            <option value="English" th:selected="${course.subject == 'English'}">English</option>
+            <option value="Informatics" th:selected="${course.subject == 'Informatics'}">Informatics</option>
+            <option value="Technology" th:selected="${course.subject == 'Technology'}">Technology</option>
+            <option value="Physical Education" th:selected="${course.subject == 'Physical Education'}">Physical Education</option>
+        </select>
+
+        <label>Grade:</label>
+        <select name="gradeId" required>
+            <option value="1" th:selected="${course.getGrade().getId() == 1}">Grade 10</option>
+            <option value="2" th:selected="${course.getGrade().getId() == 2}">Grade 11</option>
+            <option value="3" th:selected="${course.getGrade().getId() == 3}">Grade 12</option>
+        </select>
+
+        <label>Description:</label>
+        <textarea name="description" rows="3" th:text="${course.description}"></textarea>
+
+        <div class="btn-group">
+            <button type="submit" class="save-btn">Save</button>
+            <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+        </div>
+
+        <a href="/expert" id="returnCourseList" hidden></a>
+    </form>
+    <!-- Hiển thị lỗi -->
+    <div th:if="${error}" class="error-messages">
+        <p th:text="${error}">
+    </div>
+
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${notification}" class="success-message">
+        <p th:text="${notification}"></p>
+    </div>
+</div>
+
+<script>
+    function closeEditForm() {
+        document.querySelector('#returnCourseList').click();
+    }
+</script>
+
+</body>
+</html>

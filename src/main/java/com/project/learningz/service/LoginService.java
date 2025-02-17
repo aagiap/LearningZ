@@ -37,6 +37,7 @@ public class LoginService implements UserDetailsService {
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         User user = userRepository.findByEmail(email);
+
         if (user == null) {
             user = new User();
             user.setUsername(name);
@@ -50,13 +51,16 @@ public class LoginService implements UserDetailsService {
             userRepository.save(user);
         }
 
-        updateProfilePicture(user, oAuth2User.getAttribute("picture"));
+        if (user.getAvtUrl() == null || user.getAvtUrl().isEmpty()) {
+            updateProfilePicture(user, oAuth2User.getAttribute("picture"));
+        }
 
         UserDetails userDetails = createOAuthUserDetails(user);
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities())
         );
     }
+
 
     private User findUserByUsernameOrEmail(String usernameOrEmail) {
         User user = userRepository.findByUsername(usernameOrEmail);

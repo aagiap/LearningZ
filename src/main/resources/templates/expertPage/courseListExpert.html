@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course List</title>
+    <link rel="stylesheet" th:href="@{/css/courseListExpertStyle.css}">
+</head>
+
+<body>
+<div class="container">
+    <h2>Course List</h2>
+
+    <div class="filter-section">
+        <form action="/expert/search">
+            <input name="courseSearchKey" type="text" id="searchInput" placeholder="Search course by name">
+            <select id="subjectFilter" name="subject">
+                <option value="">All Subjects</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Literature">Literature</option>
+                <option value="History">History</option>
+                <option value="Geography">Geography</option>
+                <option value="Civic Education">Civic Education</option>
+                <option value="English">English</option>
+                <option value="Informatics">Informatics</option>
+                <option value="Technology">Technology</option>
+                <option value="Physical Education">Physical Education</option>
+            </select>
+            <input type="submit" value="Search">
+        </form>
+
+        <button id="addCourse" >+ Add New Course</button>
+        <a href="/expert/add_course" hidden id="addCourseRequest">Add Course</a>
+    </div>
+
+    <table th:if="${notification}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Chapters</th>
+            <th>Lessons</th>
+            <th>Owner</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${notification}" colspan="9" style="text-align: center;"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table th:if="${courseList}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Chapters</th>
+            <th>Lessons</th>
+            <th>Owner</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="course:${courseList}">
+            <td th:text="${course.getId()}"></td>
+            <td th:text="${course.getTitle()}"></td>
+            <td th:text="${course.getSubject()}"></td>
+            <td th:text="${course.getGradeName()}"></td>
+            <td th:text="${course.getNumberOfChapters()}"></td>
+            <td th:text="${course.getNumberOfLessons()}"></td>
+            <td th:text="${course.getCreatedByUsername()}"></td>
+            <td>
+                <button class="desc-btn" onclick="showPopup(this)">...</button>
+                <span class="description-text" hidden th:text="${course.getDescription()}"></span>
+            </td>
+            <td class="actions">
+                <div class="top-actions">
+                    <form action="/expert/edit" method="POST" style="display: inline">
+                        <input type="hidden" name="courseId" th:value="${course.getId()}" />
+                        <button type="submit" class="edit-btn">Edit</button>
+                    </form>
+                    <form action="#" method="POST" style="display: inline">
+                        <input type="hidden" name="id" th:value="${course.getId()}"/>
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+                <div class="bottom-action">
+                    <form action="#">
+                        <input type="hidden" name="id" th:value="${course.getId()}" />
+                        <button type="submit" class="view-btn">View Chapters</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="descPopup" class="popup hidden">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <p id="popupText"></p>
+        </div>
+    </div>
+</div>
+<script>
+    function showPopup(button) {
+         // Lấy nội dung mô tả từ phần tử span
+        document.getElementById("popupText").textContent = button.nextElementSibling.textContent; // Gán nội dung vào popup
+        document.getElementById("descPopup").classList.remove("hidden"); // Hiện popup
+    }
+
+    function closePopup() {
+        document.getElementById("descPopup").classList.add("hidden"); // Ẩn popup khi bấm nút đóng
+    }
+    function addCourseRequest(e){
+        document.querySelector('#addCourseRequest').click();
+    }
+</script>
+</body>
+
+</html>
