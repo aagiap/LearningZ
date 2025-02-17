@@ -1,559 +1,1317 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Landing Form</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <!--====== Required meta tags ======-->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--====== Title ======-->
+    <title>Edubin - LMS Education HTML Template</title>
+
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="/image/learningz.png" type="image/png">
+
+    <!--====== Slick css ======-->
+    <link rel="stylesheet" href="/css/slick.css">
+
+    <!--====== Animate css ======-->
+    <link rel="stylesheet" href="/css/animate.css">
+
+    <!--====== Nice Select css ======-->
+    <link rel="stylesheet" href="/css/nice-select.css">
+
+    <!--====== Nice Number css ======-->
+    <link rel="stylesheet" href="/css/jquery.nice-number.min.css">
+
+    <!--====== Magnific Popup css ======-->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+
+    <!--====== Bootstrap css ======-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!--====== Fontawesome css ======-->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!--====== Default css ======-->
+    <link rel="stylesheet" href="/css/default.css">
+
+    <!--====== Style css ======-->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!--====== Responsive css ======-->
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        :root {
-            --primary-blue: #0072bc;
-            --primary-orange: #ff8c00;
-            --primary-red: #d81c1c;
-        }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-
-
-        /* Header Styles */
-        .top-header {
-            -webkit-box-shadow: 5px 0px 5px 0px rgba(0, 0, 0, 0.3);
-            box-shadow: 5px 0px 5px 0px rgba(0, 0, 0, 0.3);
-            background-color: white;
-            position: fixed;
-            width: 100%;
-            z-index: 5;
-            height: 60px;
-            top: 0;
-        }
-
-        .header-top {
-            margin-top: 60px;
-        }
-
-        .logo.box-img {
-            height: 60px;
-            width: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 40px;
-            margin-left: 20px;
-
-        }
-
-        .logo.box-img img {
-            padding-bottom: 1px;
-            max-height: 127%;
-            max-width: 127%;
-        }
-
-        @media (min-width: 1400px) {
-            .top-header {
-                height: 64px;
-            }
-            .header-top {
-                margin-top: 64px;
-            }
-            .logo.box-img {
-                height: 64px;
-            }
-        }
-
-        .box-search .text_search {
-            background-color: #f2f3f5;
-            padding: 12px 80px 12px 12px;
-            width: 80%;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            color: #444;
-        }
-
-        .box-search {
-            background-color: transparent;
-            padding: 9px 14px;
-            width: 100%;
-            font-size: 15px;
-            color: #444;
-        }
-
-        .btn-search {
-            background-image: url("/image/bg-search.png");
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 20px;
-            height: 20px;
-            border: none;
+        .avatar-container {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
             cursor: pointer;
-            margin-left: -38px;
-            position: relative;
-            top: 5px;
+            margin-left: 40px;
+            z-index: 10;
         }
 
-        .hotline {
-            color: orange;
-            border-left: 1px solid rgba(81, 87, 92, 0.3);
-            border-right: 1px solid rgba(81, 87, 92, 0.3);
-            padding: 16px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            margin-right: 100px;
-            flex-grow: 1;
-
+        .user-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .hotline span i {
-            margin-right: 10px;
-            font-size: 19px;
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
         }
-
-        .bottom-header {
-            background-color: #f7f8fa;
-            border-bottom: 1px solid #d7d7d7;
-            padding: 13px 0;
-        }
-
-        .bottom-header .top-menu {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 0;
-        }
-
-        .bottom-header .top-menu li {
+        .user-menu ul {
             list-style: none;
+            margin: 0;
+            padding: 10px;
         }
 
-        .bottom-header .top-menu li a {
-            color: #888;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .bottom-header .top-menu li a:hover {
-            color: #154992;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            justify-content: space-between;
-
-        }
-
-        .sidebar-title {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        .sidebar-title, .course-category {
-            flex-grow: 1;
-        }
-
-
-        /* Thêm tam giác bên trái */
-        .course-category {
-            position: relative; /* Để cho phép đặt tam giác theo vị trí tuyệt đối */
-            padding: 35px 20px;
-            border-bottom: 1px solid #eee;
-            color: #333;
-            display: flex;
-            align-items: center;
+        .user-menu ul li {
+            padding: 8px 10px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
-        .course-category:hover {
-            background-color: #cfcbcb;
-            color: var(--primary-blue);
+        .user-menu ul li:hover {
+            background-color: #f0f0f0;
         }
 
-        /* Tam giác hướng vào bên trái */
-        .course-category::after {
-            content: '';
-            position: absolute;
-            right: 0px; /* Đưa tam giác ra ngoài bên phải */
-            top: 50%;
-            transform: translateY(-50%) rotate(180deg); /* Quay tam giác để đỉnh chỉ vào bên trái */
-            width: 0;
-            height: 0;
-            border-left: 20px solid #0072bc; /* Đổi từ border-right thành border-left */
-            border-top: 25px solid transparent;
-            border-bottom: 25px solid transparent;
-            opacity: 0; /* Ban đầu tam giác không hiển thị */
-            transition: opacity 0.3s ease; /* Hiệu ứng khi hover */
+        .user-menu ul li a:hover {
+            color: #007bff;
         }
 
-        .course-category:hover::after {
-            opacity: 1; /* Hiển thị tam giác khi hover */
-        }
-
-        /* Banner1 */
-        .text-container {
-            position: relative;
-            width: 100%;
-            height: 40px;
-            overflow: hidden;
-            border-radius: 5px;
-            background: rgba(44, 37, 37, 0.6);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-
-        }
-
-        .text-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            animation: continuousScroll 24s linear infinite;
-        }
-
-        .text-slide {
-            height: 39px;
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-            box-sizing: border-box;
-            color: white;
+        .user-menu ul li:nth-child(2):hover {
+            background-color: #e0e0e0;/
         }
 
 
-        @keyframes continuousScroll {
-            0% {
-                transform: translateY(0);
-            }
-            20% {
-                transform: translateY(0);
-            }
-            25% {
-                transform: translateY(-39px);
-            }
-            45% {
-                transform: translateY(-39px);
-            }
-            50% {
-                transform: translateY(-78px);
-            }
-            70% {
-                transform: translateY(-78px);
-            }
-            75% {
-                transform: translateY(-117px);
-            }
-            95% {
-                transform: translateY(-117px);
-            }
-            100% {
-                transform: translateY(0);
-            }
+        .user-menu ul li:first-child {
+            cursor: default;
+            background-color: transparent;
         }
 
-        /* Banner Styles */
-        .main-banner {
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 30px;
-            margin-top: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            max-height: 379px;
-        }
-
-        .main-banner img {
-            width: 100%;
-            height: 385px;
-            object-fit: cover;
-        }
-
-        /* Stats Section */
-        .stats-section {
-            background: linear-gradient(90deg, #0072bc, #00a0e9);
-            color: white;
-            padding: 40px 0;
-            margin-top: 30px;
-        }
-
-        .stats-number {
-            font-size: 2.2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+        .user-menu ul li:first-child:hover {
+            background-color: transparent;
         }
 
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-
-            .stats-number {
-                font-size: 1.8rem;
-            }
-
-            .stats-text {
-                font-size: 1rem;
-            }
-        }
-
-        /* Chỉnh nút banner */
-        .slick-dots {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .slick-dots li button:before {
-            color: dimgray;
-            font-size: 9px;
-            opacity: 0.8;
-        }
-
-        .slick-dots li.slick-active button:before {
-            color: dodgerblue; /* Màu cam nổi bật */
-            opacity: 1;
-        }
-
-        /*Profile*/
-
-        .avatar-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .avatar {
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .dropdown {
-            position: absolute;
-            top: 24px;
-            right: -3px;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 5px;
-            min-width: 200px;
-            top: 22px;
-            right: 10px;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            border-radius: 4px;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
-            color: #000;
-        }
-
-        /*Course-box*/
-        .tooltip-box {
-            display: none;
-            position: fixed;
-            left: 806px;
-            top: 379px;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            z-index: 10;
-            width: 761px;
-            height: 380px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-left: 9px #0072bc solid;
-        }
-
-        .course-category:hover .tooltip-box {
-            display: block;
-        }
-
-        .tooltip-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
-            border-bottom: 3px solid #0072bc;
-            padding-bottom: 10px;
-        }
-
-        .tooltip-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .tooltip-list li {
-            padding: 5px 0;
-            font-size: 16px;
-        }
     </style>
 </head>
 
-<body>
-<header>
-    <div class="header-top">
-        <div class="top-header">
-            <div class="container h-100">
-                <div class="row d-flex justify-content-between h-100">
-                    <div class="left-top-header w-40 d-flex align-items-center">
-                        <div class="logo box-img">
-                            <a href="/home">
-                                <img src="/image/learningz.png" alt=""/>
-                            </a>
-                        </div>
-                        <div class="box-search">
-                            <form action="http://www.google.com/cse" class="w-100">
-                                <input type="text" name="q" class="text_search" placeholder="Tìm kiếm khóa học" />
-                                <button type="submit" class="btn-search"></button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="right-top-header w-60 d-flex align-items-center justify-content-end">
-                        <div class="hotline">
-                            <span>
-                                <i class="fas fa-phone"></i> 1900 6933
-                            </span>
-                        </div>
-                        <div class="info-member">
-                            <div class="avatar-container">
-                                <img th:src="${avatarUrl}" alt="Avatar" class="rounded-circle avatar" width="40"
-                                     height="40" style="margin-right: 10px;">
-                                <div class="dropdown">
-                                    <img src="/image/Arrow-dropdown-circle-02.png"
-                                         alt="dropdown" class="rounded-circle" width="15" height="15"
-                                         style="margin-right: 10px;">
 
-                                    <div class="dropdown-content">
-                                        <a href="/home/profile">Profile</a>
-                                        <a href="/home/change_password">Đổi mật khẩu</a>
-                                        <a href="/logout">Log Out</a>
-                                    </div>
-                                </div>
+<body>
+<!--====== HEADER PART START ======-->
+<script>
+    function toggleUserMenu() {
+        const userMenu = document.getElementById('userMenu');
+        userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+</script>
+
+<header id="header-part">
+    <div class="header-top d-none d-lg-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="header-contact">
+                        <ul>
+                            <li><i class="fa fa-envelope"></i><a href="#">khanhlghe186844@fpt.edu.vn</a></li>
+                            <li><i class="fa fa-phone"></i><span>0985104969</span></li>
+                        </ul>
+                    </div> <!-- header contact -->
+                </div>
+                <div class="col-md-6">
+                    <div class="header-right d-flex justify-content-end">
+                        <div class="social d-flex">
+                            <span class="follow-us">Follow Us :</span>
+                            <ul>
+                                <li><a href="https://www.facebook.com/sun.dark.566790"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="https://www.youtube.com/@HOCMAITHPT"><i class="fab fa-youtube"></i></a></li>
+                            </ul>
+                        </div> <!-- social -->
+                        <div class="col-md-2 ">
+                            <div class="avatar-container ">
+                                <ul>
+                                    <li><img th:src="@{${avatarUrl}}" alt="User Avatar" class="user-avatar" onclick="toggleUserMenu()" /></li>
+                                </ul>
+                            </div>
+                            <div class="user-menu" id="userMenu">
+                                <ul>
+                                    <li>Hello, <span id="username" th:text="${username}"></span></li>
+                                    <li><a href="/home/profile">Profile</a></li>
+                                    <li><a href="/home/change_password">Change Password</a></li>
+                                    <li><a href="/logout">Sign Out</a></li>
+                                </ul>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bottom-header">
-            <div class="container">
-                <ul class="top-menu">
-                    <li><a href="/QuizList" target="_blank">Quiz</a></li>
-                    <li><a href="/course" target="_blank">Course</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</header>
 
-<div class="container mt-4">
-    <div class="row" style="display: flex;align-items: stretch;">
-        <div class="col-lg-4 col-md-3">
-            <div class="sidebar">
-                <div class="sidebar-title">
-                    <i class="fas fa-bars mr-2"></i>
-                    Các khóa học
+
+                    </div> <!-- header right -->
                 </div>
-                <div th:each="grade : ${grades}">
-                    <div class="course-category">
-                        <i class="fas fa-graduation-cap mr-2"></i>
-                        <span th:text="${grade.name}"></span>
-                        <div class="tooltip-box">
-                            <div class="tooltip-title" th:text="${grade.description}"></div>
-                            <ul class="tooltip-list">
-                                <li th:each="course : ${courses}" th:if="${course.grade.id == grade.id}">
-                                    <a th:href="@{/course/details/{id}(id=${course.id})}" th:text="${course.subject}"></a>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- header top -->
+
+    <div class="navigation">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg">
+                        <a class="navbar-brand" href="index-4.html">
+                            <img src="/image/learningz.png" alt="Logo" width="100px">
+                            <a style="font-size: 24px; font-weight: bold;">
+                                Learning<span style="font-size: 30px; color: blue;">Z</span>
+                            </a>
+                        </a>
+                        <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a href="#">Pages</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="about.html">About Us</a></li>
+                                        <li><a href="gallery.html">Gallery</a></li>
+                                        <li><a href="policy.html">Privacy Policy</a></li>
+                                        <li><a href="faq.html">FAQ</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/courses">Courses</a>
+                                    <ul class="sub-menu">
+                                        <li><a th:href="@{/course?keyword=Lớp+10&gradeId=-1}">Lớp 10</a></li>
+                                        <li><a th:href="@{/course?keyword=Lớp+11&gradeId=-1}">Lớp 11</a></li>
+                                        <li><a th:href="@{/course?keyword=Lớp+12&gradeId=-1}">Lớp 12</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="teachers.html">Teachers</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="teachers.html">teachers</a></li>
+                                        <li><a href="teachers-2.html">teachers 2</a></li>
+                                        <li><a href="teachers-single.html">teacher Single</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="blog.html">Post</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="contact.html">Contact</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.facebook.com/sun.dark.566790">Khánh</a></li>
+                                        <li><a href="https://www.facebook.com/giap.ngo.399488">Giáp</a></li>
+                                        <li><a href="https://www.facebook.com/profile.php?id=100028274191902">Lộc</a></li>
+                                        <li><a href="http://facebook.com/yyttk.yslf">Trường</a></li>
+                                        <li><a href="https://www.facebook.com/maichi.maris">Chi</a></li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
+                        <div class="right-icon text-right">
+                            <ul>
+                                <li><a href="javascript:void(0)" id="search"><i class="fa fa-search"></i></a></li>
+                            </ul>
+                        </div> <!-- right icon -->
+                    </nav> <!-- nav -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div>
+</header>
+
+<!--====== HEADER PART ENDS ======-->
+
+<!--====== SEARCH BOX PART START ======-->
+
+<div class="search-box">
+    <div class="search-form">
+        <div class="closebtn">
+            <span></span>
+            <span></span>
+        </div>
+        <form action="#">
+            <label>
+                <input type="text" placeholder="Search by keyword">
+            </label>
+            <button><i class="fa fa-search"></i></button>
+        </form>
+    </div> <!-- search form -->
+</div>
+
+<!--====== SEARCH BOX PART ENDS ======-->
+
+<!--====== SLIDER PART START ======-->
+
+<section id="slider-part" class="slider-active ">
+    <div class="single-slider bg_cover pt-150" style="background-image: url(/image/slider/s-1.jpg)" data-overlay="4">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-9">
+                    <div class="slider-cont">
+                        <h1 data-animation="fadeInLeft" data-delay="1s">Choose the right theme for education</h1>
+                        <p data-animation="fadeInUp" data-delay="1.3s">Donec vitae sapien ut libearo venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt  Sed fringilla mauri amet nibh.</p>
+                        <ul>
+                            <li><a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" href="#">Read More</a></li>
+                            <li><a data-animation="fadeInUp" data-delay="1.9s" class="main-btn" href="#">Get Started</a></li>
+                        </ul>
                     </div>
                 </div>
-                <div class="course-category">
-                    <i class="fas fa-university mr-2"></i>
-                    LUYỆN THI ĐẠI HỌC
-                </div>
-            </div>
-        </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- single slider -->
 
-        <div class="col-lg-8 col-md-7">
-            <div class="text-container">
-                <div class="text-wrapper">
-                    <div class="text-slide">Gieo quẻ ẤT TỴ - Điểm thi hết ý. GIEO NGAY!</div>
-                    <div class="text-slide">Đón đầu điểm thi Đánh giá năng lực đợt 1 với 1 bí kíp này. XEM NGAY</div>
-                    <div class="text-slide">Chinh phục kỳ thi với 5 bí quyết vàng! TÌM HIỂU NGAY</div>
-                    <div class="text-slide">Đăng ký học nhóm 3 người để nhận ưu đãi khủng. KHÁM PHÁ NGAY</div>
+    <div class="single-slider bg_cover pt-150" style="background-image: url(/image/slider/s-3.jpg)" data-overlay="4">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-9">
+                    <div class="slider-cont">
+                        <h1 data-animation="fadeInLeft" data-delay="1s">Choose the right theme for education</h1>
+                        <p data-animation="fadeInUp" data-delay="1.3s">Donec vitae sapien ut libearo venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt  Sed fringilla mauri amet nibh.</p>
+                        <ul>
+                            <li><a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" href="#">Read More</a></li>
+                            <li><a data-animation="fadeInUp" data-delay="1.9s" class="main-btn" href="#">Get Started</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- single slider -->
+    <div class="single-slider bg_cover pt-150" style="background-image: url(/image/slider/s-2.jpg)" data-overlay="4">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-9">
+                    <div class="slider-cont">
+                        <h1 data-animation="fadeInLeft" data-delay="1s">Choose the right theme for education</h1>
+                        <p data-animation="fadeInUp" data-delay="1.3s">Donec vitae sapien ut libearo venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt  Sed fringilla mauri amet nibh.</p>
+                        <ul>
+                            <li><a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" href="#">Read More</a></li>
+                            <li><a data-animation="fadeInUp" data-delay="1.9s" class="main-btn" href="#">Get Started</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- single slider -->
+</section>
 
-            <div class="main-banner">
-                <div class="single-item" >
-                    <div><img src="/image/img_1.png" alt="Slide 1"></div>
-                    <div><img src="/image/img_2.png" alt="Slide 2"></div>
-                    <div><img src="image3.jpg" alt="Slide 3"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<section class="stats-section">
+<!--====== SLIDER PART ENDS ======-->
+
+<!--====== CATEGORY PART START ======-->
+
+<section id="category-part">
     <div class="container">
-        <div class="row text-center">
-            <div class="col-md-4">
-                <div class="stats-number">18 năm</div>
-                <div class="stats-text">Giáo dục trực tuyến</div>
+        <div class="category pt-40 pb-80">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="category-text pt-40">
+                        <h2>Best platform to learn everything</h2>
+                    </div>
+                </div>
+                <div class="col-lg-6 offset-lg-1 col-md-8 offset-md-2 col-sm-8 offset-sm-2 col-8 offset-2">
+                    <div class="row category-slide mt-40">
+                        <div class="col-lg-4">
+                            <a href="#">
+                                    <span class="single-category text-center color-1">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-1.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Language</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="#">
+                                    <span class="single-category text-center color-2">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-2.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Business</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="#">
+                                    <span class="single-category text-center color-3">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-3.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Literature</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="#">
+                                    <span class="single-category text-center color-1">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-1.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Language</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="#">
+                                    <span class="single-category text-center color-2">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-2.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Business</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="#">
+                                    <span class="single-category text-center color-3">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-3.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Literature</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                    </div> <!-- category slide -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- category -->
+    </div> <!-- container -->
+</section>
+
+<!--====== CATEGORY PART ENDS ======-->
+
+<!--====== ABOUT PART START ======-->
+
+<section id="about-part" class="pt-65">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="section-title mt-50">
+                    <h5>About us</h5>
+                    <h2>Welcome to LearningZ </h2>
+                </div> <!-- section title -->
+                <div class="about-cont">
+                    <p>Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt  mauris. <br> <br> auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt  mauris</p>
+                    <a href="#" class="main-btn mt-55">Learn More</a>
+                </div>
+            </div> <!-- about cont -->
+            <div class="col-lg-6 offset-lg-1">
+                <div class="about-event mt-50">
+                    <div class="event-title">
+                        <h3>Upcoming events</h3>
+                    </div> <!-- event title -->
+                    <ul>
+                        <li>
+                            <div class="single-event">
+                                <span><i class="fa fa-calendar"></i> 2 December 2018</span>
+                                <a href="events-single.html"><h4>Campus clean workshop</h4></a>
+                                <span><i class="fa fa-clock-o"></i> 10:00 Am - 3:00 Pm</span>
+                                <span><i class="fa fa-map-marker"></i> Rc Auditorim</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="single-event">
+                                <span><i class="fa fa-calendar"></i> 2 December 2018</span>
+                                <a href="events-single.html"><h4>Tech Summit</h4></a>
+                                <span><i class="fa fa-clock-o"></i> 10:00 Am - 3:00 Pm</span>
+                                <span><i class="fa fa-map-marker"></i> Rc Auditorim</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="single-event">
+                                <span><i class="fa fa-calendar"></i> 2 December 2018</span>
+                                <a href="events-single.html"><h4>Environment conference</h4></a>
+                                <span><i class="fa fa-clock-o"></i> 10:00 Am - 3:00 Pm</span>
+                                <span><i class="fa fa-map-marker"></i> Rc Auditorim</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div> <!-- about event -->
             </div>
-            <div class="col-md-4">
-                <div class="stats-number">7.307.516</div>
-                <div class="stats-text">Thành viên</div>
-            </div>
-            <div class="col-md-4">
-                <div class="stats-number">Nền tảng học trực tuyến</div>
-                <div class="stats-text">Số 1 Việt Nam</div>
-            </div>
-        </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+    <div class="about-bg">
+        <img src="/image/about/bg-1.png" alt="About">
     </div>
 </section>
-<script>
-    $(document).ready(function(){
-        var $slider = $('.single-item');
-        // Initialize slick slider
-        $slider.slick({
-            autoplay: true,          // Enable autoplay
-            autoplaySpeed: 1000,     // 2 seconds between slides
-            dots: true,              // Show navigation dots
-            arrows: true,            // Default arrows
-            infinite: true,          // Infinite loop
-        });
-    });
-</script>
+
+<!--====== ABOUT PART ENDS ======-->
+
+<!--====== APPLY PART START ======-->
+
+<section id="apply-aprt" class="pb-120">
+    <div class="container">
+        <div class="apply">
+            <div class="row no-gutters">
+                <div class="col-lg-6">
+                    <div class="apply-cont apply-color-1">
+                        <h3>Apply for fall 2019</h3>
+                        <p>Gravida nibh vel velit auctor aliquetn sollicitudirem sem quibibendum auci elit cons equat ipsutis sem nibh id elituis sed odio sit amet nibh vulputate cursus equat ipsutis.</p>
+                        <a href="#" class="main-btn">Apply Now</a>
+                    </div> <!-- apply cont -->
+                </div>
+                <div class="col-lg-6">
+                    <div class="apply-cont apply-color-2">
+                        <h3>Apply for scholarship</h3>
+                        <p>Gravida nibh vel velit auctor aliquetn sollicitudirem sem quibibendum auci elit cons equat ipsutis sem nibh id elituis sed odio sit amet nibh vulputate cursus equat ipsutis.</p>
+                        <a href="#" class="main-btn">Apply Now</a>
+                    </div> <!-- apply cont -->
+                </div>
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== APPLY PART ENDS ======-->
+
+<!--====== COURSE PART START ======-->
+
+<section id="course-part" class="pt-115 pb-120 gray-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-title pb-45">
+                    <h5>Our course</h5>
+                    <h2>Featured courses </h2>
+                </div> <!-- section title -->
+            </div>
+        </div> <!-- row -->
+        <div class="row course-slide mt-30">
+            <div class="col-lg-4">
+                <div class="single-course">
+                    <div class="thum">
+                        <div class="image">
+                            <img src="/image/course/cu-1.jpg" alt="Course">
+                        </div>
+                        <div class="price">
+                            <span>Free</span>
+                        </div>
+                    </div>
+                    <div class="cont">
+                        <ul>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                        <span>(20 Reviews)</span>
+                        <a href="courses-single.html"><h4>Learn basic javascript from start for beginner</h4></a>
+                        <div class="course-teacher">
+                            <div class="thum">
+                                <a href="#"><img src="/image/course/teacher/t-1.jpg" alt="teacher"></a>
+                            </div>
+                            <div class="name">
+                                <a href="#"><h6>Mark anthem</h6></a>
+                            </div>
+                            <div class="admin">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-user"></i><span>31</span></a></li>
+                                    <li><a href="#"><i class="fa fa-heart"></i><span>10</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single course -->
+            </div>
+            <div class="col-lg-4">
+                <div class="single-course">
+                    <div class="thum">
+                        <div class="image">
+                            <img src="/image/course/cu-2.jpg" alt="Course">
+                        </div>
+                        <div class="price">
+                            <span>Free</span>
+                        </div>
+                    </div>
+                    <div class="cont">
+                        <ul>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                        <span>(20 Reviews)</span>
+                        <a href="courses-single.html"><h4>Learn basic javascript from start for beginner</h4></a>
+                        <div class="course-teacher">
+                            <div class="thum">
+                                <a href="#"><img src="/image/course/teacher/t-2.jpg" alt="teacher"></a>
+                            </div>
+                            <div class="name">
+                                <a href="#"><h6>Mark anthem</h6></a>
+                            </div>
+                            <div class="admin">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-user"></i><span>31</span></a></li>
+                                    <li><a href="#"><i class="fa fa-heart"></i><span>10</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single course -->
+            </div>
+            <div class="col-lg-4">
+                <div class="single-course">
+                    <div class="thum">
+                        <div class="image">
+                            <img src="/image/course/cu-3.jpg" alt="Course">
+                        </div>
+                        <div class="price">
+                            <span>Free</span>
+                        </div>
+                    </div>
+                    <div class="cont">
+                        <ul>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                        <span>(20 Reviews)</span>
+                        <a href="courses-single.html"><h4>Learn basic javascript from start for beginner</h4></a>
+                        <div class="course-teacher">
+                            <div class="thum">
+                                <a href="#"><img src="/image/course/teacher/t-3.jpg" alt="teacher"></a>
+                            </div>
+                            <div class="name">
+                                <a href="#"><h6>Mark anthem</h6></a>
+                            </div>
+                            <div class="admin">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-user"></i><span>31</span></a></li>
+                                    <li><a href="#"><i class="fa fa-heart"></i><span>10</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single course -->
+            </div>
+            <div class="col-lg-4">
+                <div class="single-course">
+                    <div class="thum">
+                        <div class="image">
+                            <img src="/image/course/cu-4.jpg" alt="Course">
+                        </div>
+                        <div class="price">
+                            <span>Free</span>
+                        </div>
+                    </div>
+                    <div class="cont">
+                        <ul>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                        <span>(20 Reviews)</span>
+                        <a href="courses-single.html"><h4>Learn basic javascript from start for beginner</h4></a>
+                        <div class="course-teacher">
+                            <div class="thum">
+                                <a href="#"><img src="/image/course/teacher/t-4.jpg" alt="teacher"></a>
+                            </div>
+                            <div class="name">
+                                <a href="#"><h6>Mark anthem</h6></a>
+                            </div>
+                            <div class="admin">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-user"></i><span>31</span></a></li>
+                                    <li><a href="#"><i class="fa fa-heart"></i><span>10</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single course -->
+            </div>
+            <div class="col-lg-4">
+                <div class="single-course">
+                    <div class="thum">
+                        <div class="image">
+                            <img src="/image/course/cu-5.jpg" alt="Course">
+                        </div>
+                        <div class="price">
+                            <span>Free</span>
+                        </div>
+                    </div>
+                    <div class="cont">
+                        <ul>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                        <span>(20 Reviews)</span>
+                        <a href="courses-single.html"><h4>Learn basic javascript from start for beginner</h4></a>
+                        <div class="course-teacher">
+                            <div class="thum">
+                                <a href="#"><img src="/image/course/teacher/t-5.jpg" alt="teacher"></a>
+                            </div>
+                            <div class="name">
+                                <a href="#"><h6>Mark anthem</h6></a>
+                            </div>
+                            <div class="admin">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-user"></i><span>31</span></a></li>
+                                    <li><a href="#"><i class="fa fa-heart"></i><span>10</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single course -->
+            </div>
+        </div> <!-- course slide -->
+    </div> <!-- container -->
+</section>
+
+<!--====== COURSE PART ENDS ======-->
+
+<!--====== VIDEO FEATURE PART START ======-->
+
+<section id="video-feature" class="bg_cover pt-60 pb-110" style="background-image: url(/image/bg-1.jpg)">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-last order-lg-first">
+                <div class="video text-lg-left text-center pt-50">
+                    <a class="Video-popup" href="https://www.youtube.com/watch?v=bRRtdzJH1oE"><i class="fa fa-play"></i></a>
+                </div> <!-- row -->
+            </div>
+            <div class="col-lg-5 offset-lg-1 order-first order-lg-last">
+                <div class="feature pt-50">
+                    <div class="feature-title">
+                        <h3>Our Facilities</h3>
+                    </div>
+                    <ul>
+                        <li>
+                            <div class="single-feature">
+                                <div class="icon">
+                                    <img src="/image/all-icon/f-1.png" alt="icon">
+                                </div>
+                                <div class="cont">
+                                    <h4>Global Certificate</h4>
+                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem quibibendum sem nibhutis.</p>
+                                </div>
+                            </div> <!-- single feature -->
+                        </li>
+                        <li>
+                            <div class="single-feature">
+                                <div class="icon">
+                                    <img src="/image/all-icon/f-2.png" alt="icon">
+                                </div>
+                                <div class="cont">
+                                    <h4>Alumni Support</h4>
+                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem quibibendum sem nibhutis.</p>
+                                </div>
+                            </div> <!-- single feature -->
+                        </li>
+                        <li>
+                            <div class="single-feature">
+                                <div class="icon">
+                                    <img src="/image/all-icon/f-3.png" alt="icon">
+                                </div>
+                                <div class="cont">
+                                    <h4>Books & Library</h4>
+                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem quibibendum sem nibhutis.</p>
+                                </div>
+                            </div> <!-- single feature -->
+                        </li>
+                    </ul>
+                </div> <!-- feature -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+    <div class="feature-bg"></div> <!-- feature bg -->
+</section>
+
+<!--====== VIDEO FEATURE PART ENDS ======-->
+
+<!--====== TEACHERS PART START ======-->
+
+<section id="teachers-part" class="pt-70 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="section-title mt-50">
+                    <h5>Featured Teachers</h5>
+                    <h2>Meet Our teachers</h2>
+                </div> <!-- section title -->
+                <div class="teachers-cont">
+                    <p>Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt  mauris. <br> <br> auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt  mauris</p>
+                    <a href="#" class="main-btn mt-55">Career with us</a>
+                </div> <!-- teachers cont -->
+            </div>
+            <div class="col-lg-6 offset-lg-1">
+                <div class="teachers mt-20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="single-teachers mt-30 text-center">
+                                <div class="image">
+                                    <img src="/image/teachers/t-1.jpg" alt="Teachers">
+                                </div>
+                                <div class="cont">
+                                    <a href="teachers-single.html"><h6>Mark Alen</h6></a>
+                                    <span>Vice Chancellor</span>
+                                </div>
+                            </div> <!-- single teachers -->
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="single-teachers mt-30 text-center">
+                                <div class="image">
+                                    <img src="/image/teachers/t-2.jpg" alt="Teachers">
+                                </div>
+                                <div class="cont">
+                                    <a href="teachers-single.html"><h6>David card</h6></a>
+                                    <span>Pro Chancellor</span>
+                                </div>
+                            </div> <!-- single teachers -->
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="single-teachers mt-30 text-center">
+                                <div class="image">
+                                    <img src="/image/teachers/t-3.jpg" alt="Teachers">
+                                </div>
+                                <div class="cont">
+                                    <a href="teachers-single.html"><h6>Rebeka Alig</h6></a>
+                                    <span>Pro Chancellor</span>
+                                </div>
+                            </div> <!-- single teachers -->
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="single-teachers mt-30 text-center">
+                                <div class="image">
+                                    <img src="/image/teachers/t-4.jpg" alt="Teachers">
+                                </div>
+                                <div class="cont">
+                                    <a href="teachers-single.html"><h6>Hanna Bein</h6></a>
+                                    <span>Aerobics head</span>
+                                </div>
+                            </div> <!-- single teachers -->
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- teachers -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== TEACHERS PART ENDS ======-->
+
+<!--====== PUBLICATION PART START ======-->
+
+<section id="publication-part" class="pt-115 pb-120 gray-bg">
+    <div class="container">
+        <div class="row align-items-end">
+            <div class="col-lg-6 col-md-8 col-sm-7">
+                <div class="section-title pb-60">
+                    <h5>Publications</h5>
+                    <h2>From Store </h2>
+                </div> <!-- section title -->
+            </div>
+            <div class="col-lg-6 col-md-4 col-sm-5">
+                <div class="products-btn text-right pb-60">
+                    <a href="#" class="main-btn">All Products</a>
+                </div> <!-- products btn -->
+            </div>
+        </div> <!-- row -->
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 col-sm-8">
+                <div class="single-publication mt-30 text-center">
+                    <div class="image">
+                        <img src="/image/publication/p-1.jpg" alt="Publication">
+                        <div class="add-cart">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content pt-10">
+                        <h5 class="book-title"><a href="#">Stones The Road </a></h5>
+                        <p class="writer-name"><span>By</span> Scott Trench</p>
+                        <div class="price-btn d-flex align-items-center justify-content-between">
+                            <div class="price pt-20">
+                                <span class="discount-price">$250</span>
+                                <span class="normal-price">$200</span>
+                            </div>
+                            <div class="button pt-10">
+                                <a href="#" class="main-btn"><i class="fa fa-cart-plus"></i> Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single publication -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-8">
+                <div class="single-publication mt-30 text-center">
+                    <div class="image">
+                        <img src="/image/publication/p-2.jpg" alt="Publication">
+                        <div class="add-cart">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content pt-10">
+                        <h5 class="book-title"><a href="#">The Stranded </a></h5>
+                        <p class="writer-name"><span>By</span> Scott Trench</p>
+                        <div class="price-btn d-flex align-items-center justify-content-between">
+                            <div class="price pt-20">
+                                <span class="discount-price">$250</span>
+                                <span class="normal-price">$200</span>
+                            </div>
+                            <div class="button pt-10">
+                                <a href="#" class="main-btn"><i class="fa fa-cart-plus"></i> Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single publication -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-8">
+                <div class="single-publication mt-30 text-center">
+                    <div class="image">
+                        <img src="/image/publication/p-3.jpg" alt="Publication">
+                        <div class="add-cart">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content pt-10">
+                        <h5 class="book-title"><a href="#">The Sicario </a></h5>
+                        <p class="writer-name"><span>By</span> Scott Trench</p>
+                        <div class="price-btn d-flex align-items-center justify-content-between">
+                            <div class="price pt-20">
+                                <span class="discount-price">$250</span>
+                                <span class="normal-price">$200</span>
+                            </div>
+                            <div class="button pt-10">
+                                <a href="#" class="main-btn"><i class="fa fa-cart-plus"></i> Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single publication -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-8">
+                <div class="single-publication mt-30 text-center">
+                    <div class="image">
+                        <img src="/image/publication/p-4.jpg" alt="Publication">
+                        <div class="add-cart">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content pt-10">
+                        <h5 class="book-title"><a href="#">There Were None </a></h5>
+                        <p class="writer-name"><span>By</span> Scott Trench</p>
+                        <div class="price-btn d-flex align-items-center justify-content-between">
+                            <div class="price pt-20">
+                                <span class="discount-price">$250</span>
+                                <span class="normal-price">$200</span>
+                            </div>
+                            <div class="button pt-10">
+                                <a href="#" class="main-btn"><i class="fa fa-cart-plus"></i> Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- single publication -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== PUBLICATION PART ENDS ======-->
+
+<!--====== TEASTIMONIAL PART START ======-->
+
+<section id="testimonial" class="bg_cover pt-115 pb-115" data-overlay="8" style="background-image: url(/image/bg-2.jpg)">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-title pb-40">
+                    <h5>Testimonial</h5>
+                    <h2>What they say</h2>
+                </div> <!-- section title -->
+            </div>
+        </div> <!-- row -->
+        <div class="row testimonial-slide mt-40">
+            <div class="col-lg-6">
+                <div class="single-testimonial">
+                    <div class="testimonial-thum">
+                        <img src="/image/testimonial/t-1.jpg" alt="Testimonial">
+                        <div class="quote">
+                            <i class="fa fa-quote-right"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-cont">
+                        <p>Aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet sem nibh id elit sollicitudirem </p>
+                        <h6>Rubina Helen</h6>
+                        <span>Bsc, Engineering</span>
+                    </div>
+                </div> <!-- single testimonial -->
+            </div>
+            <div class="col-lg-6">
+                <div class="single-testimonial">
+                    <div class="testimonial-thum">
+                        <img src="/image/testimonial/t-2.jpg" alt="Testimonial">
+                        <div class="quote">
+                            <i class="fa fa-quote-right"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-cont">
+                        <p>Aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet sem nibh id elit sollicitudirem </p>
+                        <h6>Rubina Helen</h6>
+                        <span>Bsc, Engineering</span>
+                    </div>
+                </div> <!-- single testimonial -->
+            </div>
+            <div class="col-lg-6">
+                <div class="single-testimonial">
+                    <div class="testimonial-thum">
+                        <img src="/image/testimonial/t-3.jpg" alt="Testimonial">
+                        <div class="quote">
+                            <i class="fa fa-quote-right"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-cont">
+                        <p>Aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet sem nibh id elit sollicitudirem </p>
+                        <h6>Rubina Helen</h6>
+                        <span>Bsc, Engineering</span>
+                    </div>
+                </div> <!-- single testimonial -->
+            </div>
+        </div> <!-- testimonial slide -->
+    </div> <!-- container -->
+</section>
+
+<!--====== TEASTIMONIAL PART ENDS ======-->
+
+<!--====== NEWS PART START ======-->
+
+<section id="news-part" class="pt-115 pb-110">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-title pb-50">
+                    <h5>Latest News</h5>
+                    <h2>From the news</h2>
+                </div> <!-- section title -->
+            </div>
+        </div> <!-- row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="single-news mt-30">
+                    <div class="news-thum pb-25">
+                        <img src="/image/news/n-1.jpg" alt="News">
+                    </div>
+                    <div class="news-cont">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-calendar"></i>2 December 2018 </a></li>
+                            <li><a href="#"> <span>By</span> Adam linn</a></li>
+                        </ul>
+                        <a href="blog-single.html"><h3>Tips to grade high cgpa in university life</h3></a>
+                        <p>Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt .</p>
+                    </div>
+                </div> <!-- single news -->
+            </div>
+            <div class="col-lg-6">
+                <div class="single-news news-list">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="news-thum mt-30">
+                                <img src="/image/news/ns-1.jpg" alt="News">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="news-cont mt-30">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-calendar"></i>2 December 2018 </a></li>
+                                    <li><a href="#"> <span>By</span> Adam linn</a></li>
+                                </ul>
+                                <a href="blog-single.html"><h3>Intellectual communication</h3></a>
+                                <p>Gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons  vel.</p>
+                            </div>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- single news -->
+                <div class="single-news news-list">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="news-thum mt-30">
+                                <img src="/image/news/ns-2.jpg" alt="News">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="news-cont mt-30">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-calendar"></i>2 December 2018 </a></li>
+                                    <li><a href="#"> <span>By</span> Adam linn</a></li>
+                                </ul>
+                                <a href="blog-single.html"><h3>Study makes you perfect</h3></a>
+                                <p>Gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons  vel.</p>
+                            </div>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- single news -->
+                <div class="single-news news-list">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="news-thum mt-30">
+                                <img src="/image/news/ns-3.jpg" alt="News">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="news-cont mt-30">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-calendar"></i>2 December 2018 </a></li>
+                                    <li><a href="#"> <span>By</span> Adam Linn</a></li>
+                                </ul>
+                                <a href="blog-single.html"><h3>Technology eduction is now....</h3></a>
+                                <p>Gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons  vel.</p>
+                            </div>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- single news -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== NEWS PART ENDS ======-->
+
+<!--====== PATNAR LOGO PART START ======-->
+
+<div id="patnar-logo" class="pt-40 pb-80 gray-bg">
+    <div class="container">
+        <div class="row patnar-slide">
+            <div class="col-lg-12">
+                <div class="single-patnar text-center mt-40">
+                    <img src="/image/patnar-logo/p-1.png" alt="Logo">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="single-patnar text-center mt-40">
+                    <img src="/image/patnar-logo/p-2.png" alt="Logo">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="single-patnar text-center mt-40">
+                    <img src="/image/patnar-logo/p-3.png" alt="Logo">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="single-patnar text-center mt-40">
+                    <img src="/image/patnar-logo/p-4.png" alt="Logo">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="single-patnar text-center mt-40">
+                    <img src="/image/patnar-logo/p-2.png" alt="Logo">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="single-patnar text-center mt-40">
+                    <img src="/image/patnar-logo/p-3.png" alt="Logo">
+                </div>
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</div>
+
+<!--====== PATNAR LOGO PART ENDS ======-->
+
+<!--====== FOOTER PART START ======-->
+
+<footer id="footer-part">
+    <div class="footer-top pt-40 pb-70">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-about mt-40">
+                        <div class="logo">
+                            <a href="#"><img src="/image/logo-2.png" alt="Logo"></a>
+                        </div>
+                        <p>Gravida nibh vel velit auctor aliquetn quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate.</p>
+                        <ul class="mt-20">
+                            <li><a href="#"><i class="fa fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        </ul>
+                    </div> <!-- footer about -->
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer-link mt-40">
+                        <div class="footer-title pb-25">
+                            <h6>Sitemap</h6>
+                        </div>
+                        <ul>
+                            <li><a href="index-2.html"><i class="fa fa-angle-right"></i>Home</a></li>
+                            <li><a href="about.html"><i class="fa fa-angle-right"></i>About us</a></li>
+                            <li><a href="courses.html"><i class="fa fa-angle-right"></i>Courses</a></li>
+                            <li><a href="blog.html"><i class="fa fa-angle-right"></i>News</a></li>
+                            <li><a href="events.html"><i class="fa fa-angle-right"></i>Event</a></li>
+                        </ul>
+                        <ul>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>Gallery</a></li>
+                            <li><a href="shop.html"><i class="fa fa-angle-right"></i>Shop</a></li>
+                            <li><a href="teachers.html"><i class="fa fa-angle-right"></i>Teachers</a></li>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>Support</a></li>
+                            <li><a href="contact.html"><i class="fa fa-angle-right"></i>Contact</a></li>
+                        </ul>
+                    </div> <!-- footer link -->
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <div class="footer-link support mt-40">
+                        <div class="footer-title pb-25">
+                            <h6>Support</h6>
+                        </div>
+                        <ul>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>FAQS</a></li>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>Privacy</a></li>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>Policy</a></li>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>Support</a></li>
+                            <li><a href="#"><i class="fa fa-angle-right"></i>Documentation</a></li>
+                        </ul>
+                    </div> <!-- support -->
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-address mt-40">
+                        <div class="footer-title pb-25">
+                            <h6>Contact Us</h6>
+                        </div>
+                        <ul>
+                            <li>
+                                <div class="icon">
+                                    <i class="fa fa-home"></i>
+                                </div>
+                                <div class="cont">
+                                    <p>143 castle road 517 district, kiyev port south Canada</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="icon">
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                                <div class="cont">
+                                    <p>+3 123 456 789</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="icon">
+                                    <i class="fa fa-envelope-o"></i>
+                                </div>
+                                <div class="cont">
+                                    <p>info@yourmail.com</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div> <!-- footer address -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- footer top -->
+
+    <div class="footer-copyright pt-10 pb-25">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="copyright text-md-left text-center pt-15">
+                        <p>&copy; Copyrights 2020 Edubin All rights reserved. </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="copyright text-md-right text-center pt-15">
+                        <p>Designed by <span>Pixelcurve</span> </p>
+                    </div>
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- footer copyright -->
+</footer>
+
+<!--====== FOOTER PART ENDS ======-->
+
+<!--====== BACK TO TP PART START ======-->
+
+<a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+<!--====== BACK TO TP PART ENDS ======-->
+
+
+
+
+
+
+
+
+<!--====== jquery js ======-->
+<script src="/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/js/vendor/jquery-1.12.4.min.js"></script>
+
+<!--====== Bootstrap js ======-->
+<script src="/js/bootstrap.min.js"></script>
+
+<!--====== Slick js ======-->
+<script src="/js/slick.min.js"></script>
+
+<!--====== Magnific Popup js ======-->
+<script src="/js/jquery.magnific-popup.min.js"></script>
+
+<!--====== Counter Up js ======-->
+<script src="/js/waypoints1.min.js"></script>
+<script src="/js/jquery.counterup.min.js"></script>
+
+<!--====== Nice Select js ======-->
+<script src="/js/jquery.nice-select.min.js"></script>
+
+<!--====== Nice Number js ======-->
+<script src="/js/jquery.nice-number.min.js"></script>
+
+<!--====== Count Down js ======-->
+<script src="/js/jquery.countdown.min.js"></script>
+
+<!--====== Validator js ======-->
+<script src="/js/validator.min.js"></script>
+
+<!--====== Ajax Contact js ======-->
+<script src="/js/ajax-contact.js"></script>
+
+<!--====== Main js ======-->
+<script src="/js/main1.js"></script>
+
+<!--====== Map js ======-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC3Ip9iVC0nIxC6V14CKLQ1HZNF_65qEQ"></script>
+<script src="/js/map-script.js"></script>
+
 </body>
-
 </html>
-
