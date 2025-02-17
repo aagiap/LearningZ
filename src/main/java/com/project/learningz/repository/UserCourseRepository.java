@@ -8,16 +8,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCourseId> {
-    @Query("""
-                    SELECT c.id AS courseId, AVG(COALESCE(uc.rating, 0)) AS averageRating
-                    FROM Course c
-                    LEFT JOIN UsersCourse uc ON c.id = uc.course.id
-                    GROUP BY c.id
-            """)
-        //COALESCE Đảm bảo rằng nếu không có rating, giá trị mặc định là 0.
-    List<Object[]> findAverageRatingByCourse();
+   @Query("""
+        SELECT c.id AS courseId, ROUND(AVG(COALESCE(uc.rating, 0)), 2) AS averageRating
+        FROM Course c
+        LEFT JOIN UsersCourse uc ON c.id = uc.course.id
+        GROUP BY c.id
+    """)
+   List<Object[]> findAverageRatingByCourse();
+
 
     @Query("""
             SELECT COUNT(uc.user.id) 
@@ -32,6 +33,8 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
                 FROM UsersCourse uc
                 JOIN User u ON uc.user.id = u.id
                 WHERE uc.course.id = :courseId
+                AND uc.comment IS NOT NULL AND uc.comment <> ''
+                AND uc.rating IS NOT NULL
                ORDER BY uc.date DESC
             """)
     List<CourseReviewDTO> findReviewsByCourseId(@Param("courseId") int courseId);
@@ -49,4 +52,12 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
    @Query("SELECT uc FROM UsersCourse uc WHERE uc.user.id = :userId AND uc.course.id = :courseId")
    UsersCourse findUsersCourseBy(@Param("userId") Integer userId, @Param("courseId") Integer courseId);
 
+    @Query("SELECT new com.project.learningz.dto.CourseReviewDTO(uc.user.id, u.username, uc.course.id, uc.rating, uc.comment, uc.date, u.avtUrl) " +
+            "FROM UsersCourse uc JOIN uc.user u " +
+            "WHERE uc.user.id = :userId AND uc.course.id = :courseId")
+    Optional<CourseReviewDTO> findReviewByUserIdAndCourseId(@Param("userId") Integer userId, @Param("courseId") Integer courseId);
+
+
+    @Query("SELECT uc FROM UsersCourse uc WHERE uc.user.id = :userId AND uc.course.id = :courseId")
+    Optional<UsersCourse> findReviewByUserIdAndCourseIdReturnEntity(@Param("userId") Integer userId, @Param("courseId") Integer courseId);
 }
