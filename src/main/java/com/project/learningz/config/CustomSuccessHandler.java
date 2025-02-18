@@ -18,7 +18,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
         String redirectURL = "/home";
 
         for (GrantedAuthority authority : authorities) {
@@ -38,3 +37,4 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         response.sendRedirect(redirectURL);
     }
 }
+
