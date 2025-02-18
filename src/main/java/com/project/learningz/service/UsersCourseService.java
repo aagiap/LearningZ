@@ -135,4 +135,7 @@ public class UsersCourseService {
 
         userCourseRepository.save(usersCourse);
     }
+    public int countReviewByCourseId(int courseId){
+        return userCourseRepository.countReviewByCourseId(courseId);
+    }
 }
