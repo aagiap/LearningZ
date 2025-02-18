@@ -5,6 +5,9 @@ import com.project.learningz.entity.Grade;
 import com.project.learningz.service.CourseService;
 import com.project.learningz.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,10 @@ public class LandingController {
     private CourseService courseService;
     @GetMapping("/")
     public String landingPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/home";
+        }
         List<Grade> grades = gradeService.getAllGrades();
         model.addAttribute("grades", grades);
         List<Course> courses = courseService.getAllCourses();

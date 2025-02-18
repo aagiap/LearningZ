@@ -115,6 +115,8 @@ public class CourseController {
         String avt = userService.getAvtByUsername(username);
         model.addAttribute("avt", avt);
 
+        int numberOfFeedbacks = usersCourseService.countReviewByCourseId(courseId);
+        model.addAttribute("numberOfFeedbacks", numberOfFeedbacks);
         return "course/course_details";
     }
 
