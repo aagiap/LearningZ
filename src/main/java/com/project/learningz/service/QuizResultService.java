@@ -4,6 +4,7 @@ import com.project.learningz.entity.Quiz;
 import com.project.learningz.entity.QuizResult;
 import com.project.learningz.entity.QuizResultId;
 import com.project.learningz.entity.User;
+import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.QuizResultRepository;
 import com.project.learningz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

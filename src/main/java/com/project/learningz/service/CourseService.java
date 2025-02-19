@@ -78,4 +78,9 @@ public class CourseService {
         course.setDescription(description);
         courseRepository.save(course);
     }
+
+    public List<Course> findCoursesByGradeId(int gradeId) {
+        return courseRepository.findCoursesByGradeId(gradeId);
+    }
+
 }

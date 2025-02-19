@@ -2,18 +2,110 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Review Quiz</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
     <link rel="stylesheet" href="/css/DoQuiz.css">
+    <style>
+        <!--
+        -->
+        <!--
+        -->
+        <!--
+        -->
+        <!--
+        -->
+        <!--
+        -->
+
+        .avatar-container {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            margin-left: 40px;
+            z-index: 10;
+        }
+
+        .user-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+
+        .user-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .user-menu ul li {
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .user-menu ul li a:hover {
+            color: #007bff;
+        }
+
+        .user-menu ul li:nth-child(2):hover {
+            background-color: #e0e0e0;
+        /
+        }
+
+
+        .user-menu ul li:first-child {
+            cursor: default;
+            background-color: transparent;
+        }
+
+        .user-menu ul li:first-child:hover {
+            background-color: transparent;
+        }
+    </style>
+    <!--====== Header CSS ======-->
+    <link rel="shortcut icon" th:href="@{/image/learningz.png}" type="image/png">
+
+    <link rel="stylesheet" th:href="@{/css/slick.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+    </script>
 </head>
 <body>
+<div th:replace="common/header :: header"></div>
 <div>
-    <div class="nav-header">
+    <div class="nav-header" style="margin-top: 0px">
         <div class="left-section">
-            <button class="menu-button">
-                <i class="fas fa-tag"></i>
-            </button>
+            <i class="fas fa-tag"></i>
             <h1>Review quiz</h1>
             <h1 class="title" th:text="${session.quiz.getLesson().getTitle()}">
             </h1>
@@ -27,86 +119,115 @@
         </div>
     </div>
 </div>
-<div class="box-container" >
-    <div class="box" th:each="result,resultQuestionsStat : ${resultQuestions}">
-    <span th:classappend="${result=='True' ? 'text-success' : 'text-danger'}">
-<span th:text="${#numbers.formatInteger(resultQuestionsStat.index + 1, 0)}"></span>
-    </span>
-    </div>
-</div>
+
 <form action="/Exam/SubmitQuiz" method="post">
-    <div>
-        <th:block th:each="question, questionStat : ${session.questionBankList}">
-            <div class="container mt-sm-5 my-1">
-                <span th:text="'Question ' + ${questionStat.index + 1}"></span>
-                <span th:classappend="${resultQuestions.get(questionStat.index)=='True' ? 'text-success' : 'text-danger'}">
+    <div style="display: flex;justify-content:center">
+        <div style="position: absolute;margin-right: 75%">
+            <div class="box-container">
+                <div>
+                    <h5 style="text-align: center;">Continue learning</h5>
+                    <ul>
+                        <li>
+                    <a th:href="@{/course/lesson(lessonId=${session.quiz.lesson.id},chapterId=${quiz.lesson.chapter.getId()})}"
+                       th:text="'Lesson: ' + ${quiz.lesson.getTitle()}"></a>
+                        </li>
+<!--                        <li>-->
+<!--                            <a th:href="@{/course/chapterLessonList(courseId=${quiz.lesson.chapter.course.getId()})}"-->
+<!--                               th:text="'Course: ' + ${quiz.lesson.chapter.course.getTitle()}"></a>-->
+<!--                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div>
+            <th:block th:each="question, questionStat : ${session.questionBankList}">
+                <div class="container- mt-sm-5 my-1" th:id="'question-' + ${questionStat.index}">
+                    <span th:text="'Question ' + ${questionStat.index + 1}"></span>
+                    <span th:classappend="${resultQuestions.get(questionStat.index)=='True' ? 'text-success' : 'text-danger'}">
                 <span th:text="${resultQuestions.get(questionStat.index)}"
                       style="    border-style: solid; border-radius: 5px;margin-left: 20px;"></span>
                 </span>
 
-                <div class="question ml-sm-5 pl-sm-5 pt-2">
-                    <div class="py-2 h5"><b th:text="${question.getContent()}"></b></div>
-                    <div class="pt-3" id="options">
-                        <label class="options"
-                               th:classappend="${question.getOption1() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
-                            <input type="radio"
-                                   th:name="'question_' + ${questionStat.index}"
-                                   th:value="${question.getOption1()}"
-                                   th:checked="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                   th:disabled="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
-                            <span th:text="${question.getOption1()}"></span>
-                            <span class="checkmark"></span>
-                        </label>
+                    <div class="question ml-sm-5 pl-sm-5 pt-2">
+                        <div class="py-2 h5"><b th:text="${question.getContent()}"></b></div>
+                        <div class="pt-3" id="options">
+                            <label class="options"
+                                   th:classappend="${question.getOption1() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
+                                <input type="radio"
+                                       th:name="'question_' + ${questionStat.index}"
+                                       th:value="${question.getOption1()}"
+                                       th:checked="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                                       th:disabled="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                <span th:text="${question.getOption1()}"></span>
+                                <span class="checkmark"></span>
+                            </label>
 
-                        <label class="options"
-                               th:classappend="${question.getOption2() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
-                            <input type="radio"
-                                   th:name="'question_' + ${questionStat.index}"
-                                   th:value="${question.getOption2()}"
-                                   th:checked="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                   th:disabled="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
-                            <span th:text="${question.getOption2()}"></span>
-                            <span class="checkmark"></span>
-                        </label>
+                            <label class="options"
+                                   th:classappend="${question.getOption2() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
+                                <input type="radio"
+                                       th:name="'question_' + ${questionStat.index}"
+                                       th:value="${question.getOption2()}"
+                                       th:checked="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                                       th:disabled="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                <span th:text="${question.getOption2()}"></span>
+                                <span class="checkmark"></span>
+                            </label>
 
-                        <label class="options"
-                               th:classappend="${question.getOption3() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
-                            <input type="radio"
-                                   th:name="'question_' + ${questionStat.index}"
-                                   th:value="${question.getOption3()}"
-                                   th:checked="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                   th:disabled="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
-                            <span th:text="${question.getOption3()}"></span>
-                            <span class="checkmark"></span>
-                        </label>
+                            <label class="options"
+                                   th:classappend="${question.getOption3() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
+                                <input type="radio"
+                                       th:name="'question_' + ${questionStat.index}"
+                                       th:value="${question.getOption3()}"
+                                       th:checked="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                                       th:disabled="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                <span th:text="${question.getOption3()}"></span>
+                                <span class="checkmark"></span>
+                            </label>
 
-                        <label class="options"
-                               th:classappend="${question.getOption4() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
-                            <input type="radio"
-                                   th:name="'question_' + ${questionStat.index}"
-                                   th:value="${question.getOption4()}"
-                                   th:checked="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                   th:disabled="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
-                            <span th:text="${question.getOption4()}"></span>
-                            <span class="checkmark"></span>
-                        </label>
+                            <label class="options"
+                                   th:classappend="${question.getOption4() == quizSubmitionList.get(questionStat.index).getWrongSelection()} ? 'text-danger' : ''">
+                                <input type="radio"
+                                       th:name="'question_' + ${questionStat.index}"
+                                       th:value="${question.getOption4()}"
+                                       th:checked="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                                       th:disabled="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                <span th:text="${question.getOption4()}"></span>
+                                <span class="checkmark"></span>
+                            </label>
 
-                        <label class="options">
+                            <label class="options">
                             <span th:text="${'Correct option: '+ quizSubmitionList.get(questionStat.index).getCorrectAnswer()}"
                                   style="color: green"></span>
-                        </label>
+                            </label>
+                        </div>
                     </div>
                 </div>
+            </th:block>
+        </div>
+        <div style="margin-left: 50px;">
+            <div class="box-container" style="position: fixed">
+                <div class="box" th:each="result,resultQuestionsStat : ${resultQuestions}"
+                     th:id="'box-' + ${resultQuestionsStat.index}"
+                     th:attr="onclick='scrollToQuestion(' + ${resultQuestionsStat.index} + ')'"
+                     th:classappend="${result=='True' ? 'border-success' : 'border-danger'}">
+                    <span th:classappend="${result=='True' ? 'text-success' : 'text-danger'}">
+                         <span th:text="${#numbers.formatInteger(resultQuestionsStat.index + 1, 0)}"></span>
+                    </span>
+                </div>
             </div>
-        </th:block>
-    </div>
-    <div class="d-flex justify-content-center align-items-center pt-3">
-        <div class="d-flex ">
-            <button class="btn btn-success">Start</button>
         </div>
     </div>
-</form>
 
+</form>
+<script>
+    function scrollToQuestion(index) {
+        let questionElement = document.getElementById("question-" + index);
+        if (questionElement) {
+            questionElement.scrollIntoView({behavior: "smooth", block: "center"});
+        }
+    }
+
+</script>
 
 </body>
 </html>

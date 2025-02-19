@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Start quiz</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <title>Warning</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
     <link rel="stylesheet" href="/css/DoQuiz.css">
     <style>
@@ -95,45 +95,43 @@
 </head>
 <body>
 <div th:replace="common/header :: header"></div>
-<div class="container- mt-sm-5 my-1">
-    <div class="question ml-sm-5 pl-sm-5 pt-2">
-        <div class="py-2 h5"><b th:text="${quiz.getTitle()}"></b></div>
-        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-            <label class="options" th:if="${quizResult != null}">
-                <i class="fas fa-tag"></i>
-                <span th:classappend="${quizResult.getMaxScore() >=8 ? 'text-success' : 'text-danger'}"
-                      th:text="${'Highest score: '+ quizResult.getMaxScore()}"></span>
-            </label>
-            <label class="options">
-                <i class="fas fa-tag"></i>
-                <span th:text="${quiz.getSubject()}"></span>
-            </label>
-            <label class="options">
-                <i class="far fa-clock"></i>
-                <span th:text="${quiz.getTimeLimit()+ ' minutes'} "></span>
-            </label>
-            <label class="options">
-                <i class="fas fa-question-circle"></i>
-                <span th:text="${quiz.getTotalQuestions()+ ' questions'}"></span>
-            </label>
+<div class="container--">
+    <div class="result-container">
+        <div class="result-header">
+            <h4 style="color: red">This quiz belongs to a course you haven't enrolled in! Enroll now?</h4>
+        </div>
+        <div class="result-details">
+            <p><strong>Course:</strong> <span th:text="${quiz.lesson.chapter.course.getTitle()}"></span></p>
+            <p><strong>Chapter:</strong> <span th:text="${quiz.lesson.chapter.getDescription()}"></span></p>
+            <p><strong>Exam tittle:</strong> <span th:text="${quiz.lesson.getTitle()}"></span></p>
+        </div>
+        <div class="result-actions">
+            <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+            <a th:href="@{/course/details/{id}(id=${course.getId()})}" class="btn btn-primary-">Enroll Now</a>
         </div>
     </div>
-    <form method="get" action="/Exam/DoQuiz" onsubmit="removeTimeLimit()">
-        <input type="hidden" name="quizId" th:value="${quiz.getQuizId()}">
-        <div class="d-flex justify-content-center align-items-center pt-3">
-            <div class="d-flex ">
-                <button class="btn btn-success">Start</button>
-            </div>
-        </div>
-    </form>
-
-    <script>
-        function removeTimeLimit() {
-            localStorage.removeItem('timeLeft');
-            localStorage.removeItem('endTime');
-        }
-    </script>
-
 </div>
+
 </body>
+<style>
+    .result-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .result-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .result-details {
+        margin-bottom: 20px;
+    }
+    .result-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
 </html>

@@ -1,26 +1,26 @@
 
 body {
-    background-image: linear-gradient(to right, #5370D9 0%, #FFFFFF 100%) !important;
+    background-image: linear-gradient(to right, #07294D 0%, #FFFFFF 100%) !important;
     margin-top: 10%;
 }
 
 
 /* ===== LOGIN PAGE ===== */
 body {
-    background-image: linear-gradient(to right, #5370D9 0%, #FFFFFF 100%);
+    background-image: linear-gradient(to right, #07294D 0%, #FFFFFF 100%);
 }
 .login-box {
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
 }
 .form-icon {
-    background-color: #4e63d7;
+    background-color: #1C3B5C;
 }
 .social-btn {
-    background-color: #6893e1;
+    background-color: #1C3B5C;
     transition: background-color 0.3s ease;
 }
 .social-btn:hover {
-    background-color: #5370D9;
+    background-color: #1C3B5C;
 }
 .login-box {
     -webkit-box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
@@ -120,7 +120,7 @@ body {
     position: absolute;
     z-index: 1;
     color: #fff;
-    background-color: #4e63d7;
+    background-color: #1C3B5C;
     border-radius: 5px;
     height: 100%;
     width: 45px;
@@ -133,10 +133,10 @@ body {
     padding-left: 60px;
 }
 .border-bottom a{
-    border: 2px solid #5370D9; /* Tạo đường viền màu xanh */
+    border: 2px solid #1C3B5C; /* Tạo đường viền màu xanh */
     border-radius: 5px; /* Bo góc nhẹ */
     padding: 10px 20px; /* Tạo khoảng cách bên trong nút */
-    color: #5370D9; /* Màu chữ */
+    color: #1C3B5C; /* Màu chữ */
     text-decoration: none; /* Bỏ gạch chân */
 
     display: inline-block; /* Giúp nút nhìn cân đối */

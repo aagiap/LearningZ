@@ -20,14 +20,15 @@ body {
     background-color: #f5f5f5;
 }
 
-.container {
+.container- {
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .test-item {
     padding: 16px 20px;
-    background-color: #fff;
+    /*background-color: whitesmoke;*/
+    border-bottom: 1px solid #ccc;
 }
 
 .test-item:nth-child(even) {
@@ -36,7 +37,7 @@ body {
 
 .test-title {
     display: block;
-    color: #2563eb;
+    color: #1C3B5C;
     text-decoration: none;
     font-size: 16px;
     margin-bottom: 8px;
@@ -87,7 +88,7 @@ body {
     background-color: #f4f4f4
 }
 
-.container {
+.container- {
     margin: 40px auto
 }
 
@@ -184,7 +185,7 @@ select {
     width: initial
 }
 
-#filterbar {
+#filterer {
     width: 30%;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -192,28 +193,28 @@ select {
     float: left
 }
 
-#filterbar input[type="radio"] {
+#filterer input[type="radio"] {
     visibility: hidden
 }
 
-#filterbar input[type='radio']:checked {
+#filterer input[type='radio']:checked {
     background-color: #16c79a;
     border: none
 }
 
-#filterbar .btn.btn-success {
+#filterer .btn.btn-success {
     background-color: #ddd;
     color: #333;
     border: none;
     width: 115px
 }
 
-#filterbar .btn.btn-success:hover {
+#filterer .btn.btn-success:hover {
     background-color: #aff1e1;
     color: #444
 }
 
-#filterbar .btn-success:not(:disabled):not(.disabled).active, #filterbar .btn-success:not(:disabled):not(.disabled):active {
+#filterer .btn-success:not(:disabled):not(.disabled).active, #filterer .btn-success:not(:disabled):not(.disabled):active {
     background-color: #16c79a;
     color: #fff
 }
@@ -557,13 +558,13 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 @media (min-width: 1199.6px) {
-    #filterbar {
+    #filterer {
         width: 25%
     }
 }
 
 @media (max-width: 1199.5px) {
-    #filterbar {
+    #filterer {
         width: 28%
     }
 
@@ -593,7 +594,7 @@ input[type=range]::-webkit-slider-thumb {
         background-color: #1d1c1cb2
     }
 
-    #filterbar {
+    #filterer {
         width: 36%
     }
 
@@ -624,13 +625,13 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 @media (max-width: 767.5px) {
-    #filterbar {
+    #filterer {
         width: 50%
     }
 }
 
 @media (max-width: 525.5px) {
-    #filterbar {
+    #filterer {
         float: none;
         width: 100%;
         margin-bottom: 20px;
@@ -651,4 +652,5 @@ input[type=range]::-webkit-slider-thumb {
     .pagination {
         display: none
     }
+
 }

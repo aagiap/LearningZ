@@ -13,7 +13,7 @@ import java.util.List;
 public class QuizService {
 
     @Autowired
-private QuizRepository quizRepository;
+    private QuizRepository quizRepository;
 
     public Quiz getQuizById(Integer quizId) {
         return quizRepository.findById(quizId).orElse(null);
@@ -22,7 +22,6 @@ private QuizRepository quizRepository;
     public QuizJoinToGradeDTO getQuizJoinToGradeDTOById(Integer quizId) {
         return quizRepository.findByQuizId(quizId);
     }
-
 
 
     public List<QuizJoinToGradeDTO> getQuizzesWithFilter(String subject, String grade) {

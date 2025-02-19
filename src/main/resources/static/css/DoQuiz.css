@@ -9,15 +9,16 @@
 body{
     background-color: white;
 }
-.container{
+.container-{
     background-color: whitesmoke;
+    margin: auto;
     /*color: #ddd;*/
     border-radius: 10px;
     padding: 20px;
     font-family: 'Montserrat', sans-serif;
     max-width: 700px;
 }
-.container > p{
+.container- > p{
     font-size: 32px;
 }
 .question{
@@ -69,12 +70,12 @@ body{
 .options input[type="radio"]:checked ~ .checkmark:after{
     transform: translate(-50%,-50%) scale(1);
 }
-.btn-primary{
+.btn-primary-{
     background-color: #555;
     color: #ddd;
     border: 1px solid #ddd;
 }
-.btn-primary:hover{
+.btn-primary-:hover{
     background-color: #21bf73;
     border: 1px solid #21bf73;
 }
@@ -96,7 +97,7 @@ body{
     align-items: center;
     padding: 12px 20px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .left-section {
@@ -190,17 +191,20 @@ body{
 .box-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 8px;
     padding: 20px;
-    max-width: 1200px;
+    max-width: 300px; /* Increased to accommodate 5 boxes per row */
     margin: 0 auto;
+    margin-top: 47px;
+    border-radius: 12px;
+    border: 1px solid #ccc; /* Added border */
 }
 
 .box {
     position: relative;
     width: 40px;
     height: 40px;
-    background-color: #e0e0e0;
+    background-color: white;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -210,8 +214,12 @@ body{
     color: #333;
     cursor: pointer;
     transition: background-color 0.2s;
+    border: 1px solid #ccc; /* Added border */
 }
-
+.box.selected {
+    background-color: gray;
+    color: white;
+}
 .box:hover {
     background-color: #d0d0d0;
 }

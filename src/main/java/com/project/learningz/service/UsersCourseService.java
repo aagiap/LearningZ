@@ -90,6 +90,18 @@ public class UsersCourseService {
         return false;
     }
 
+    public String progressStatus(Integer userId, Integer courseId) {
+        Integer numberOfQuiz = quizRepository.countNumberOfQuizInCourse(courseId);
+        int count = 0;
+        List<QuizResult> quizResults = quizResults(userId);
+        for (QuizResult quizResult : quizResults) {
+            if (quizResult.getMaxScore() >= 8) {
+                count++;
+            }
+        }
+        return count + "/" + numberOfQuiz;
+    }
+
     public boolean checkIsFeeback(Integer userId, Integer courseId) {
         UsersCourse usersCourse = userCourseRepository.findUsersCourseBy(userId, courseId);
         if (usersCourse == null) {

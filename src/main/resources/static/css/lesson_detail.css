@@ -21,7 +21,9 @@ body {
     text-decoration: none;
 }
 
-.container {
+.container- {
+    border-top: 1px solid; border-color: #1C3B5C;
+    margin-top: 30px;
     display: flex;
     min-height: 100vh;
 }
@@ -34,8 +36,9 @@ body {
 }
 
 .sidebar-title {
-    color: #495057;
-    font-size: 18px;
+    margin-top: 10px;
+    color: #1C3B5C;
+    font-size: 20px;
     margin-bottom: 20px;
 }
 
@@ -55,11 +58,11 @@ body {
 }
 
 .sidebar-menu a:hover {
-    color: #4666E5;
+    color: #1C3B5C;
 }
 
 .active {
-    color: #4666E5 !important;
+    color: #1C3B5C !important;
     font-weight: 500;
 }
 
@@ -70,10 +73,11 @@ body {
 
 .lesson-title {
     font-size: 24px;
-    color: #212529;
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #dee2e6;
+    color: white;
+    background-color: #1C3B5C;
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
 
 .content-grid {

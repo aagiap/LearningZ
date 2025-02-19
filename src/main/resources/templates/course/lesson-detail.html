@@ -2,44 +2,135 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="'Chapter '+${chapter.getChapterOrder()} +': '+ ${chapter.getChapterTitle()}"></title>
     <link rel="stylesheet" href="/css/lesson_detail.css">
+    <style>
+        <!-- -->
+        <!-- -->
+        <!-- -->
+        <!-- -->
+        <!-- -->
+
+        .avatar-container {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            margin-left: 40px;
+            z-index: 10;
+        }
+
+        .user-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+        .user-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .user-menu ul li {
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .user-menu ul li a:hover {
+            color: #007bff;
+        }
+
+        .user-menu ul li:nth-child(2):hover {
+            background-color: #e0e0e0;/
+        }
+
+
+        .user-menu ul li:first-child {
+            cursor: default;
+            background-color: transparent;
+        }
+
+        .user-menu ul li:first-child:hover {
+            background-color: transparent;
+        }
+    </style>
+    <!--====== Header CSS ======-->
+    <link rel="shortcut icon" th:href="@{/image/learningz.png}" type="image/png">
+
+    <link rel="stylesheet" th:href="@{/css/slick.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+    </script>
 </head>
 <body>
+<div th:replace="common/header :: header"></div>
 
-
-<div class="container">
+<div class="container-">
     <aside class="sidebar">
-        <h2 class="sidebar-title" th:text="'Chapter lesson: '+ ${chapter.getChapterTitle()}"></h2>
+        <h2 class="sidebar-title" th:text="'Chapter '+${chapter.getChapterOrder()} +': '+ ${chapter.getChapterTitle()}"></h2>
         <ul class="sidebar-menu" th:each="lesson : ${chapter.getLessons()}">
-            <li><a th:href="@{/course/lesson(lessonId=${lesson.id}, chapterId=${chapter.id})}" th:text="${lesson.getTitle()}"></a></li>
+            <li style="border-top: 1px solid; border-image: linear-gradient(to right, transparent, #1C3B5C, transparent) 1;">
+                <a th:href="@{/course/lesson(lessonId=${lesson.id}, chapterId=${chapter.id})}" th:text="${lesson.getTitle()}"></a>
+            </li>
         </ul>
     </aside>
 
     <main class="main-content">
-        <h1 class="lesson-title" th:text="'Lesson: '+${lesson.getTitle()}"></h1>
-
+        <div class="lesson-title">
+<a th:href="@{/course/chapterLessonList(courseId=${lesson.chapter.course.getId()})}" th:text="'Course: ' + ${lesson.chapter.course.getTitle()}"
+   style="margin-left: 38px;color: whitesmoke; text-decoration: none; margin-bottom: 8px;" onmouseover="this.style.textDecoration='underline'; this.style.color='#ffc600';" onmouseout="this.style.textDecoration='none'; this.style.color='whitesmoke';"></a>
+        <h3  th:text="'Lesson: '+${lesson.getTitle()}" style="margin-left: 40px;color: whitesmoke"></h3>
+        </div>
         <div class="content-grid">
             <section class="section">
                 <h3 class="section-title">Document</h3>
-                <ul class="section-links" th:each="pdf : ${lesson.getPdfs()}">
+                <ul class="section-links" th:each="pdf : ${lesson.getPdfs()}" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                     <li><a href="#" th:text="${pdf.getTitle()}"><i class="icon">📄</i></a></li>
                 </ul>
             </section>
 
             <section class="section">
                 <h3 class="section-title">Video</h3>
-                <ul class="section-links" th:each="video : ${lesson.getVideos()}">
+                <ul class="section-links" th:each="video : ${lesson.getVideos()}" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                     <li><a href="#" th:text="${video.getTitle()}"><i class="icon"></i></a></li>
                 </ul>
             </section>
 
             <section class="section">
                 <h3 class="section-title">Quiz</h3>
-                <ul class="section-links" th:each="quizInfor : ${quizInfores}" style="display: flex">
+                <ul class="section-links" th:each="quizInfor : ${quizInfores}" style="display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                     <li><a th:href="@{/Exam/StartQuiz(quizId=${quizInfor.key.getId()})}" th:text="${quizInfor.key.lesson.getTitle()}"><i class="icon">📋</i></a></li>
-                    <li th:classappend="${quizInfor.value.equals('Pass') ? 'text-success' : 'text-danger'}">
-                        <span th:text="${quizInfor.value}" style="margin-left: 35px;border: 1px solid;border-radius: 5px"></span>
+                    <li th:classappend="${quizInfor.value.equals('Pass') ? 'text-success' : 'text-danger'}" style="margin-left: 5px;padding: 1px ;   margin-block: auto;border: 1px solid;border-radius: 5px;text-align: center;">
+                        <span th:text="${quizInfor.value}" ></span>
                     </li>
                 </ul>
             </section>

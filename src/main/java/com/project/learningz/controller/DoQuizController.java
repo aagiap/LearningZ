@@ -3,6 +3,7 @@ package com.project.learningz.controller;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.dto.QuizSubmitionDTO;
 import com.project.learningz.dto.QuizSubmitionListDTO;
+import com.project.learningz.entity.Course;
 import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
 import com.project.learningz.entity.QuizResult;
@@ -37,6 +38,9 @@ public class DoQuizController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UsersCourseService usersCourseService;
+
     @GetMapping("/StartQuiz")
     public String startQuiz(@RequestParam("quizId") Integer quizId, Model model,HttpSession session,
                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
@@ -51,12 +55,20 @@ public class DoQuizController {
             model.addAttribute("user", userOAuth2);
         }
         Integer userId = userService.getUserIdByUsername(username);
+        Quiz quiz = quizService.getQuizById(quizId);
+        Course course = quiz.getLesson().getChapter().getCourse();
+        Integer courseId = quiz.getLesson().getChapter().getCourse().getId();
+        Boolean isEnrolled = usersCourseService.checkUserEnrolled(username, courseId);
+        if (!isEnrolled) {
+            model.addAttribute("quiz", quiz);
+            model.addAttribute("course", course);
+            return "quiz/quiz-warning";
+        }
 
         QuizJoinToGradeDTO quizJoinToGradeDTO = quizService.getQuizJoinToGradeDTOById(quizId);
         QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId,quizId);
         model.addAttribute("quizResult", quizResult);
         model.addAttribute("quiz", quizJoinToGradeDTO);
-        Quiz quiz = quizService.getQuizById(quizId);
         session.setAttribute("quiz", quiz);
         return "/quiz/StartQuiz";
     }
@@ -161,6 +173,8 @@ public class DoQuizController {
         QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
         List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
+        Quiz quiz = (Quiz) session.getAttribute("quiz");
+        model.addAttribute("quiz", quiz);
         model.addAttribute("resultQuestions", resultQuestions);
         model.addAttribute("quizSubmitionList", quizSubmitionList);
         return "/quiz/QuizReview";
