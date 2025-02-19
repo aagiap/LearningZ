@@ -245,7 +245,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="/marketer/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -264,9 +264,6 @@
                         <ul class="nav sub-navbar-nav">
                             <li class="sub-nav-item">
                                 <a class="sub-nav-link" href="/marketer/slider">List</a>
-                            </li>
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/marketer/edit_slider">Edit</a>
                             </li>
                             <li class="sub-nav-item">
                                 <a class="sub-nav-link" href="/marketer/add_slider">Create</a>
@@ -322,7 +319,7 @@
                 <div class="col-xl-12 col-lg-11">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Chỉnh sửa Slider</h4>
+                            <h4 class="card-title">Edit Slider</h4>
                         </div>
                         <div class="card-body">
                             <form th:action="@{/marketer/slider/edit}" method="post" enctype="multipart/form-data">
@@ -334,25 +331,25 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Tiêu đề</label>
+                                    <label for="title" class="form-label">Title</label>
                                     <input type="text" id="title" name="title" class="form-control" th:value="${slider.title}" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Mô tả</label>
+                                    <label for="description" class="form-label">Description</label>
                                     <textarea id="description" name="description" class="form-control" th:text="${slider.description}" required></textarea>
                                 </div>
 
                                 <!-- File Upload -->
                                 <div class="mb-3">
-                                    <label class="form-label">Ảnh</label>
+                                    <label class="form-label">Image</label>
                                     <input type="file" name="imageUrl" class="form-control">
                                     <img th:src="@{${slider.imageUrl}}" alt="Slider Image" class="img-fluid mt-3" style="max-width: 285px; height: auto;">
                                 </div>
 
                                 <div class="form-check mb-3">
                                     <input type="checkbox" id="status" name="status" class="form-check-input" th:checked="${slider.status}">
-                                    <label for="status" class="form-check-label">Hiện</label>
+                                    <label for="status" class="form-check-label">Visible</label>
                                 </div>
 
                                 <div class="row justify-content-end g-2">
@@ -360,7 +357,7 @@
                                         <button type="reset" class="btn btn-outline-secondary w-100">Reset</button>
                                     </div>
                                     <div class="col-lg-2">
-                                        <button type="submit" class="btn btn-primary w-100">Lưu</button>
+                                        <button type="submit" class="btn btn-primary w-100">Save</button>
                                     </div>
                                 </div>
                             </form>

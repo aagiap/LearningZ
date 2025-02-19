@@ -1,10 +1,7 @@
 package com.project.learningz.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "sliders")
@@ -19,10 +16,10 @@ public class Slider {
     @Column(name = "slider_id")
     private Integer sliderId;
 
-    @Column(name = "tittle", length = 255)
-    private String title;
+    @Column(name = "title", columnDefinition = "NVARCHAR(255)")
+    private String title;;
 
-    @Column(name = "description", columnDefinition = "ntext")
+    @Column(name = "description", columnDefinition = "NVARCHAR(500)")
     private String description;
 
     @Column(name = "image_url", length = 255)

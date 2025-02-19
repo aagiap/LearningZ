@@ -16,44 +16,41 @@ public class SliderService {
     @Autowired
     private SliderRepository sliderRepository;
 
-    // Lấy tất cả slider
     public List<Slider> getAllSliders() {
         return sliderRepository.findAll();
     }
 
-    // Thêm slider mới
     public void addSlider(Slider slider) {
         sliderRepository.save(slider);
     }
 
-    // Lấy slider theo ID
     public Slider getSliderById(Integer id) {
         return sliderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Slider not found"));
     }
 
-    // Cập nhật slider
     public void updateSlider(Slider slider) {
         sliderRepository.save(slider);
     }
 
-    // Xóa slider
     public void deleteSlider(Integer id) {
         sliderRepository.deleteById(id);
     }
 
-    // Ẩn/Hiện slider
     public void toggleVisibility(Integer id) {
         sliderRepository.findById(id)
                 .ifPresent(slider -> {
-                    slider.setStatus(!slider.getStatus()); // Đảo trạng thái active
+                    slider.setStatus(!slider.getStatus());
                     sliderRepository.save(slider);
                 });
     }
 
-    // Lấy sliders với phân trang
     public Page<Slider> getSlidersWithPagination(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return sliderRepository.findAll(pageable);
+    }
+
+    public long countSliders() {
+        return sliderRepository.count();
     }
 }

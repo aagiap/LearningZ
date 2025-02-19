@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SliderRepository extends JpaRepository<Slider, Integer> {
     Page<Slider> findAll(Pageable pageable);
+    long count();
+
 }
 
 
