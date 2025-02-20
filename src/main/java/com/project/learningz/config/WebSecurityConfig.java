@@ -1,5 +1,6 @@
 package com.project.learningz.config;
 
+import com.project.learningz.service.CustomOAuth2UserService;
 import com.project.learningz.service.LoginService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,13 @@ import java.time.LocalDateTime;
 public class WebSecurityConfig {
     private static final String[] STATIC_RESOURCE = {"/css/**", "/font/**", "/js/**", "/image/**"};
     private final LoginService customUserDetailsService;
-    public WebSecurityConfig(LoginService customUserDetailsService) {
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public WebSecurityConfig(LoginService customUserDetailsService, CustomOAuth2UserService customOAuth2UserService) {
         this.customUserDetailsService = customUserDetailsService;
+        this.customOAuth2UserService = customOAuth2UserService;
     }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -38,7 +43,7 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(STATIC_RESOURCE).permitAll()
-                                .requestMatchers("/","/login").permitAll()
+                                .requestMatchers("/", "/login").permitAll()
                                 .requestMatchers("/home/**").authenticated()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/marketing/**").hasRole("MARKETING_TEAM")
@@ -48,9 +53,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/verify").permitAll()
                                 .requestMatchers("/resend").permitAll()
+                                .requestMatchers("/learning/**").hasAnyRole("VIP_STUDENT", "EXPERT", "ADMIN", "MARKETING_TEAM")
                                 .requestMatchers("/course/**").permitAll()
-                                .requestMatchers("/course/lesson").authenticated()
-                                .requestMatchers("/course/chapterLessonList").authenticated()
                                 .anyRequest().authenticated()
                 ).formLogin(form -> form
                         .loginPage("/login")
@@ -62,8 +66,8 @@ public class WebSecurityConfig {
                 ).oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(oauth2UserService()))
-                        .defaultSuccessUrl("/home", true)
+                                .userService(customOAuth2UserService))
+                        .successHandler(customSuccessHandler)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -77,7 +81,8 @@ public class WebSecurityConfig {
                 );
         return http.build();
     }
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
+    //old OAuth2Service, cannot user authorize, update at CustomOuth2User
+    /*public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
         return new DefaultOAuth2UserService() {
             @Override
             public OAuth2User loadUser(OAuth2UserRequest userRequest) {
@@ -86,6 +91,6 @@ public class WebSecurityConfig {
                 return oAuth2User;
             }
         };
-    }
+    }*/
 
 }

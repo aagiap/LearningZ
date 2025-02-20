@@ -120,23 +120,35 @@
                                 <li><a href="https://www.facebook.com/sun.dark.566790"><i class="fab fa-facebook-f"></i></a></li>
                                 <li><a href="https://www.youtube.com/@HOCMAITHPT"><i class="fab fa-youtube"></i></a></li>
                             </ul>
-                        </div> <!-- social -->
-                        <div class="col-md-2 ">
-                            <div class="avatar-container ">
-                                <ul>
-                                    <li><img th:src="@{${avatarUrl}}" alt="User Avatar" class="user-avatar" onclick="toggleUserMenu()" /></li>
-                                </ul>
-                            </div>
-                            <div class="user-menu" id="userMenu">
-                                <ul>
-                                    <li>Hello, <span id="username" th:text="${username}"></span></li>
-                                    <li><a href="/home/profile">Profile</a></li>
-                                    <li><a href="/home/change_password">Change Password</a></li>
-                                    <li><a href="/logout">Sign Out</a></li>
-                                </ul>
+                        </div>
+                        <!-- social -->
+
+                        <div th:if="${user != null}">
+                            <div class="col-md-2 ">
+                                <div class="avatar-container ">
+                                    <ul>
+                                        <li><img th:src="@{${avatarUrl}}" alt="User Avatar" class="user-avatar" onclick="toggleUserMenu()" /></li>
+                                    </ul>
+                                </div>
+                                <div class="user-menu" id="userMenu">
+                                    <ul>
+                                        <li>Hello, <span id="username" th:text="${username}"></span></li>
+                                        <li><a href="/home/profile">Profile</a></li>
+                                        <li><a href="/home/change_password">Change Password</a></li>
+                                        <li><a href="/logout">Sign Out</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
 
+                        <div th:if="${user == null}">
+                            <div class="login-register">
+                                <ul>
+                                    <li><a href="/login">Login</a></li>
+                                    <li><a href="/register">Register</a></li>
+                                </ul>
+                            </div>
+                            </div>
 
                     </div> <!-- header right -->
                 </div>
@@ -168,9 +180,9 @@
                                 <li class="nav-item">
                                     <a href="/course">Courses</a>
                                     <ul class="sub-menu">
-                                        <li><a th:href="@{/templates/course?keyword=Lớp+10&gradeId=-1}">Lớp 10</a></li>
-                                        <li><a th:href="@{/templates/course?keyword=Lớp+11&gradeId=-1}">Lớp 11</a></li>
-                                        <li><a th:href="@{/templates/course?keyword=Lớp+12&gradeId=-1}">Lớp 12</a></li>
+                                        <li><a th:href="@{/templates/course?gradeId=1}">Lớp 10</a></li>
+                                        <li><a th:href="@{/templates/course?gradeId=2}">Lớp 11</a></li>
+                                        <li><a th:href="@{/templates/course?gradeId=3}">Lớp 12</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item">

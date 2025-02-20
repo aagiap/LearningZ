@@ -1,5 +1,6 @@
 package com.project.learningz.service;
 
+import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -136,5 +137,9 @@ public class UserService {
 
     public String findUserNameByEmail(String email){
         return  userRepository.findUserNameByEmail(email);
+    }
+
+    public Role getRoleById(Integer userId) {
+        return userRepository.getRoleById(userId);
     }
 }

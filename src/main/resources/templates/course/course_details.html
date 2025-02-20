@@ -29,7 +29,6 @@
     <link th:href="@{/css/course_style.css}" rel="stylesheet">
 
 
-
     <!--====== Header CSS ======-->
     <link rel="shortcut icon" href="/image/learningz.png" type="image/png">
 
@@ -40,6 +39,8 @@
     <link rel="stylesheet" href="/css/style.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="/css/default.css">
 
 </head>
 <style>
@@ -184,7 +185,8 @@
     }
 
 
-    <!-- -->
+    <!--
+    -->
 
     .avatar-container {
         width: 30px;
@@ -214,6 +216,7 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         z-index: 9999;
     }
+
     .user-menu ul {
         list-style: none;
         margin: 0;
@@ -235,7 +238,8 @@
     }
 
     .user-menu ul li:nth-child(2):hover {
-        background-color: #e0e0e0;/
+        background-color: #e0e0e0;
+    /
     }
 
 
@@ -252,29 +256,33 @@
 </style>
 <body>
 
-<div th:replace="common/header :: header"></div>
+<!--<div th:replace="common/header :: header"></div>-->
 
+<th:block th:replace="~{common/header :: header}"></th:block>
 
-<!-- Header Start
-<div class="container-fluid bg-primary py-5 mb-5 page-header">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-10 text-center">
-                <h1 class="display-3 text-white animated slideInDown" th:text="${course.title}">Course Name</h1>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center">
-                        <li class="breadcrumb-item"><a class="text-white" th:href="@{/home}">Home</a></li>
-                        <li class="breadcrumb-item"><a class="text-white" th:href="@{/course}">All Courses</a></li>
-                        <li class="breadcrumb-item text-white active" aria-current="page" th:text="${course.title}">
-                            Course Name
-                        </li>
-                    </ol>
-                </nav>
+<section id="page-banner" class="pt-105 pb-110 bg_cover" data-overlay="8"
+         style="background-image: url('/image/page-banner-1.jpg'); ">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-banner-cont">
+                    <h2 class="display-3 text-white animated slideInDown" th:text="${course.title}">Course Name</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb animated slideInDown">
+                            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/course}">All Course</a></li>
+                            <li class="breadcrumb-item" th:text="${course.title}">
+                                Course Name
+                            </li>
+                        </ol>
+                    </nav>
+                </div>  <!-- page banner cont -->
             </div>
-        </div>
-    </div>
-</div>
-Header End -->
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== PAGE BANNER PART ENDS ======-->
 
 
 <!-- Course Detail Start -->
@@ -305,35 +313,38 @@ Header End -->
                                     <span th:text="${course.subject}">Course subject</span>
                                 </small>
 
-                                <br>
-                                <br>
+                            </div>
 
-                            </div>
-                            <h4 class="text-dark" style="margin-bottom: 0">&nbsp;&nbsp;&nbsp;Expert Information:</h4>
-                            <div class="image-div text-left" style="margin-top: 5px">
-                                <img th:src="${course.createdBy.avtUrl}" alt="avt"
-                                     style="height: 40px; width: 40px; border-radius: 50%; margin-left: 20px">
-                                <span style="margin-left: 10px;"
-                                      th:text="'Expert: ' + ${course.createdBy.username}">Expert Name</span>
-                                <span style="margin-left: 10px;"
-                                      th:text="'Email: ' + ${course.createdBy.email}">Expert Email</span>
-                                <span style="margin-left: 10px;"
-                                      th:text="'Phone Number: ' + ${course.createdBy.phoneNum}">Expert Phone Number</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
 
 
                 <div class="container-fluid wow fadeInUp mt-5 tabs">
+
                     <!-- Tab panes -->
                     <div class="tab-content mt-4">
                         <div class="tab-pane container active" id="Overview">
-                            <h4>Course Description:</h4>
-                            <p th:text="${course.description}">Course Description</p>
+                            <div class="image-div text-left" style="margin-top: 8px">
+                                <h4 class="text-dark" style="margin-bottom: 8px">About the Instructor:</h4>
+
+                                <img th:src="${course.createdBy.avtUrl}" alt="avt"
+                                     style="height: 40px; width: 40px; border-radius: 50%; margin-left: 20px">
+                                <span style="margin-left: 10px;"
+                                      th:text="'Username: ' + ${course.createdBy.username}">Expert Name</span>
+                                <span style="margin-left: 10px;"
+                                      th:text="'Email: ' + ${course.createdBy.email}">Expert Email</span>
+                                <span style="margin-left: 10px;"
+                                      th:text="'Phone Number: ' + ${course.createdBy.phoneNum}">Expert Phone Number</span>
+                            </div>
 
 
-                            <h4 class="mt-4">
+                            <h4 style="margin-top: 8px">Course Description:</h4>
+
+                            <p style="margin-top: 8px" th:text="${course.description}">Course Description</p>
+
+                            <h4 class="mt-2">
                                 LearningZ commits to:
                             </h4>
 
@@ -354,9 +365,7 @@ Header End -->
 
                             <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
                                   style="font-size: 13px; font-weight: normal;">Friendly website interface, easy to use.</span>
-
                         </div>
-
 
                     </div>
 
@@ -386,36 +395,62 @@ Header End -->
                 <br>
 
                 <div class="buttons">
+<!--                    <div th:if="${!isEnrolled}">-->
+<!--&lt;!&ndash;                        <a href="#" class="btn btn-primary btn-lg w-100 mb-2">REGISTER NOW</a>&ndash;&gt;-->
+<!--                        <form id="enrollForm" action="/course/enroll" method="POST">-->
+<!--                            <div class="buttons">-->
+<!--                                <div>-->
+<!--&lt;!&ndash;                                    <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">REGISTER</button>&ndash;&gt;-->
+<!--                                    <button type="button" class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0"-->
+<!--                                            onclick="enrollCourse(event)">REGISTER NOW</button>-->
+<!--                                    <input type="hidden" name="courseId" th:value="${course.getId()}">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </div>-->
+
                     <div th:if="${!isEnrolled}">
-                        <a href="#" class="btn btn-primary btn-lg w-100 mb-2">REGISTER NOW</a>
+                        <form id="enrollForm">
+                            <div class="buttons">
+                                <div>
+                                    <button type="button" class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0"
+                                            onclick="enrollCourse(event)">
+                                        REGISTER NOW
+                                    </button>
+                                    <input type="hidden" name="courseId" th:value="${course.getId()}">
+                                </div>
+                            </div>
+                        </form>
                     </div>
+
+
                     <div th:if="${isEnrolled}">
-                        <button class="btn btn-success btn-lg w-100 mb-2" disabled>REGISTERED</button>
+                        <form action="/learning/chapterLessonList" method="get">
+                            <div class="buttons">
+                                <div>
+                                    <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">REGISTERED-STUDY NOW</button>
+                                    <input type="hidden" name="courseId" th:value="${course.getId()}">
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <form action="/learning/chapterLessonList" method="get">
-                    <div class="buttons">
-                        <div>
-                            <button class="btn btn-success btn-lg w-100 mb-2">STUDY</button>
-                            <input type="hidden" name="courseId" th:value="${course.getId()}">
-                        </div>
-                    </div>
-                </form>
+
 
                 <div class="list mt-2">
                     <div class="list1 d-flex justify-content-between pt-2 border-bottom">
-                        <p><i class="fa fa-star text-warning"></i>Rating</p>
+                        <p><i class="fa fa-star text-warning"></i> Rating</p>
                         <p th:text="${averageRatings[course.id] ?: 0} + '/5'">0.0/5</p>
 
                     </div>
 
                     <div class="list2 d-flex justify-content-between pt-2 border-bottom">
-                        <p><i class="fa fa-solid fa-book-open"></i> Number of lessons</p>
-                        <p th:text="${lessonCount} + ' lessons' ">0</p>
+                        <p><i class="fa fa-solid fa-book-open"></i> Lessons</p>
+                        <p th:text="${lessonCount}">0</p>
                     </div>
                     <div class="list3 d-flex justify-content-between pt-2 border-bottom">
-                        <p><i class="fa fa-bolt"></i> Number of students</p>
-                        <p th:text="${numberOfStudents} + ' students' ">0 students</p>
+                        <p><i class="fa-solid fa-users"></i> Students</p>
+                        <p th:text="${numberOfStudents}">0</p>
                     </div>
                     <div class="list5 d-flex justify-content-between pt-2 border-bottom">
                         <p><i class="fa fa-list"></i> Level</p>
@@ -445,7 +480,8 @@ Header End -->
                 <div class="row">
 
                     <div class="col-1 p-0">
-                        <img th:src="${avt}" width="45" height="45" class="rounded-circle mt-2 float-end">
+                        <img th:src="${avatarUrl}" width="45" height="45" class="rounded-circle mt-2 float-end"
+                             alt="avt">
                     </div>
                     <div class="col-11">
                         <div class="comment-box ml-2">
@@ -508,7 +544,7 @@ Header End -->
                                 </button>
                             </form>
 
-                            
+
                             <span class="stars">
     <i th:each="star : ${#numbers.sequence(1, 5)}"
        th:class="${(userFeedback.rating != null and star <= userFeedback.rating) ? 'fas' : 'far'} + ' fa-star'"
@@ -533,11 +569,11 @@ Header End -->
         <th:block th:if="${isEnrolled && !checkIsFeeback}">
             <div class="card">
                 <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-1">
-                        <img th:src="${avt}" width="60" height="60" class="rounded-circle mt-2">
+
+                    <div class="col-1 ms-auto text-end p-0">
+                        <img th:src="${avatarUrl}" width="45" height="45" class="rounded-circle mt-2">
                     </div>
-                    <div class="col-9">
+                    <div class="col-10 p-0">
                         <div class="comment-box ml-2">
                             <h4 th:text="${username}"></h4>
 
@@ -561,10 +597,10 @@ Header End -->
                                 <!-- Comment Buttons -->
                                 <div class="comment-btns mt-2">
                                     <div class="row">
-                                        <div class="col-10">
+                                        <div class="col-1">
                                             <button type="reset" class="btn btn-danger btn-sm">Cancel</button>
                                         </div>
-                                        <div class="col-2 text-right">
+                                        <div class="col-11 text-left">
                                             <button type="submit" class="btn btn-success btn-sm">Submit <i
                                                     class="fa fa-paper-plane ml-1"></i></button>
                                         </div>
@@ -585,18 +621,36 @@ Header End -->
     <div th:if="${user != null && !isEnrolled}">
         <p>Please register to be able to rate this course.</p>
     </div>
-    <!-- Course Review End -->
+
+
+    <br>
+
+    <h3 style="display: inline-block" class="mb-2" th:text="'Course Feedbacks('+ ${numberOfFeedbacks} +')' + ':'">Course
+        Feedbacks (0)</h3>
+    <div style="display: inline-block" th:if="${#lists.isEmpty(reviews)} == false">
+        <div class="d-flex align-items-center gap-2">
+            <select id="rating-filter" class="form-select" style="width: auto;">
+                <option value="">⭐ALL FEEDBACKS⭐</option>
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+            </select>
+            <button class="btn btn-primary" onclick="filterReviews()">Lọc</button>
+        </div>
+    </div>
+    <div th:if="${#lists.isEmpty(reviews)}">
+        <p>There are no feedbacks yet.</p>
+    </div>
 
     <!-- List Reviews -->
     <div class="reviews mt-4">
-        <h3 th:text="'Course Feedbacks('+ ${numberOfFeedbacks} +')' + ':'">Course Feedbacks (0)</h3>
-        <div th:if="${#lists.isEmpty(reviews)}">
-            <p>There are no feedbacks yet.</p>
-        </div>
+
 
         <div id="review-list">
             <th:block th:each="review : ${reviews}">
-                <div class="review">
+                <div class="review" th:data-rating="${review.rating}">
                     <p>
                         <img th:src="${review.avatar}"
                              alt="Avatar"
@@ -606,28 +660,23 @@ Header End -->
                               th:text="${#temporals.format(review.date, 'dd-MM-yyyy')}"></span>
                         <br>
                         <span class="stars">
-                        <i th:each="star : ${#numbers.sequence(1, 5)}"
-                           th:class="${(review.rating != null and star <= review.rating) ? 'fas' : 'far'} + ' fa-star'"
-                           th:style="${(review.rating != null and star <= review.rating) ? 'color: #ffd700;' : 'color: #ccc;'}">
-                        </i>
-                    </span>
-                        <!--<span th:if="${review.comment != null and review.comment != ''}"
-                              class="badge rounded-pill text-white bg-secondary px-4 py-2 m-2"
-                              th:text="${review.comment}">
-                    </span>-->
+                    <i th:each="star : ${#numbers.sequence(1, 5)}"
+                       th:class="${(review.rating != null and star <= review.rating) ? 'fa fa-star text-warning' : 'fa fa-star text-secondary'}">
+                    </i>
+                </span>
                         <span th:if="${review.comment != null and review.comment != ''}"
                               class="badge rounded-pill text-dark bg-light px-4 py-2 m-2"
-                              style="white-space: pre-line; word-break: break-word; max-width: 125ch; text-align: left; line-height: 1.3; font-weight: 500; color: #212122"
+                              style="white-space: pre-line; word-break: break-word; max-width: 125ch; text-align: left;
+                             line-height: 1.3; font-weight: 500; color: #212122"
                               th:text="${review.comment}">
-</span>
-
-
+                </span>
                     </p>
                     <hr>
                 </div>
             </th:block>
         </div>
     </div>
+
 
     <!-- Load More Button -->
     <button id="load-more" class="btn btn-primary mt-3">View More</button>
@@ -650,11 +699,16 @@ Header End -->
 
 <!-- Template Javascript -->
 <script th:src="@{js/main.js}"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let reviews = document.querySelectorAll(".review");
         let loadMoreBtn = document.getElementById("load-more");
         let visibleReviews = 3;
+
+        if (visibleReviews >= reviews.length) {
+            loadMoreBtn.style.display = "none";
+        }
 
         loadMoreBtn.addEventListener("click", function () {
             let count = 0;
@@ -666,13 +720,13 @@ Header End -->
             }
             visibleReviews += count;
 
-            // Ẩn nút khi đã hiển thị hết
             if (visibleReviews >= reviews.length) {
                 loadMoreBtn.style.display = "none";
             }
         });
     });
 </script>
+
 <script>
     document.getElementById("comment-form").addEventListener("submit", function (event) {
         let selectedRating = document.querySelector('input[name="rating"]:checked');
@@ -754,7 +808,50 @@ Header End -->
         const userMenu = document.getElementById('userMenu');
         userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
     }
-
 </script>
+
+<script>
+    function filterReviews() {
+        let selectedRating = document.getElementById("rating-filter").value;
+        let reviews = document.querySelectorAll("#review-list .review");
+
+        reviews.forEach(review => {
+            let reviewRating = review.getAttribute("data-rating");
+            if (!selectedRating || reviewRating === selectedRating) {
+                review.style.display = "block";
+            } else {
+                review.style.display = "none";
+            }
+        });
+    }
+</script>
+
+
+<script>
+    function enrollCourse(event) {
+        event.preventDefault(); // Ngăn chặn submit form mặc định
+
+        const courseId = document.querySelector("input[name='courseId']").value;
+
+        fetch("/course/enroll", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "courseId=" + encodeURIComponent(courseId)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error); // Hiển thị lỗi bằng alert nếu có
+                } else {
+                    alert(data.success); // Hiển thị thành công
+                    window.location.href = "/course/details/" + courseId; // Chuyển hướng sau khi đăng ký thành công
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
+</script>
+
 </body>
 </html>
