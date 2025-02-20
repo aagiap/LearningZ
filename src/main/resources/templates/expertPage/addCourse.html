@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add new course</title>
+    <link rel="stylesheet" th:href="@{/css/addCourseStyle.css}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Add new course</h2>
+
+    <form action="/expert/add_course/create" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="createdById" th:value="${createdById}">
+
+        <label>Title:</label>
+        <input type="text" name="title" required>
+
+        <label>Subject:</label>
+        <select id="subject" name="subject">
+            <option value="Mathematics">Mathematics</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
+            <option value="Literature">Literature</option>
+            <option value="History">History</option>
+            <option value="Geography">Geography</option>
+            <option value="Civic Education">Civic Education</option>
+            <option value="English">English</option>
+            <option value="Informatics">Informatics</option>
+            <option value="Technology">Technology</option>
+            <option value="Physical Education">Physical Education</option>
+        </select>
+
+        <label>Grade:</label>
+        <select name="gradeId" required>
+            <option value="1">Grade 10</option>
+            <option value="2">Grade 11</option>
+            <option value="3">Grade 12</option>
+        </select>
+
+        <label>Logo</label>
+        <input type="file" name="courseImageUrl" id="courseImage" accept="image/*" onchange="previewImage(event)">
+
+        <div class="image-preview-container">
+            <img id="imagePreview" src="" alt="Preview Image" style="display:none; width: 350px; margin-top: 10px; border: 1px solid #ccc; object-fit: cover;">
+        </div>
+
+        <label>Description:</label>
+        <textarea name="description"></textarea>
+
+        <div class="btn-group">
+            <button type="submit" class="create-btn">Create</button>
+            <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+        </div>
+
+        <a href="/expert" id="returnCourseList" hidden></a>
+    </form>
+    <!-- Hiển thị lỗi -->
+    <div th:if="${error}" class="error-messages">
+        <p th:text="${error}">
+    </div>
+
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${notification}" class="success-message">
+        <p th:text="${notification}"></p>
+    </div>
+</div>
+
+<script>
+    function closeEditForm() {
+        document.querySelector('#returnCourseList').click();
+    }
+    function previewImage(event) {
+        var input = event.target;
+        var imagePreview = document.getElementById('imagePreview');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block'; // Hiện ảnh lên
+            };
+
+            reader.readAsDataURL(input.files[0]); // Đọc file ảnh
+        }
+    }
+</script>
+
+</body>
+</html>

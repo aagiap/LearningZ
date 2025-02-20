@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter List</title>
+  <link rel="stylesheet" th:href="@{/css/chapterListStyle.css}">
+</head>
+
+<body>
+<div class="container">
+  <h2>Chapter List</h2>
+
+  <div class="filter-section">
+    <form action="/expert/chapter/search">
+      <input name="courseId" type="text" hidden th:value="${courseId}">
+      <input name="chapterSearchKey" type="text" id="searchInput" placeholder="Search chapter by title">
+      <input type="submit" value="Search">
+    </form>
+
+    <button id="returnCourseButton" onclick="returnCourse()">Return Course List</button>
+    <a href="/expert" hidden id="returnCourse">Return Course</a>
+    <button id="addChapter" onclick="addChapterRequest()">+ Add New Chapter</button>
+    <form action="/expert/chapter/addChapter" method="get" id="addChapterRequest">
+      <input type="number" name="courseId" th:value="${courseId}" hidden>
+    </form>
+  </div>
+
+  <table th:if="${notification}">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Order</th>
+      <th>Course Title</th>
+      <th>Chapter Title</th>
+      <th>Lessons</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${notification}" colspan="9" style="text-align: center;"></td>
+    </tr>
+    </tbody>
+  </table>
+  <table th:if="${chapterList}">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Order</th>
+      <th>Course Title</th>
+      <th>Chapter Title</th>
+      <th>Lessons</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="chapter:${chapterList}">
+      <td th:text="${chapter.getId()}"></td>
+      <td th:text="${chapter.getChapterOrder()}"></td>
+      <td th:text="${chapter.getCourseTitle()}"></td>
+      <td th:text="${chapter.getChapterTitle()}"></td>
+      <td th:text="${chapter.getNumberOfLessons()}"></td>
+      <td>
+        <button class="desc-btn" onclick="showPopup(this)">...</button>
+        <span class="description-text" hidden th:text="${chapter.getDescription()}"></span>
+      </td>
+      <td class="actions">
+        <div class="top-actions">
+          <form action="/expert/chapter/edit" method="POST" style="display: inline">
+            <input type="hidden" name="chapterId" th:value="${chapter.getId()}" />
+            <button type="submit" class="edit-btn">Edit</button>
+          </form>
+          <form action="#" method="POST" style="display: inline">
+            <input type="hidden" name="id" th:value="${chapter.getId()}"/>
+            <button type="submit" class="delete-btn">Delete</button>
+          </form>
+        </div>
+        <div class="bottom-action">
+          <form action="/expert/chapter/lesson" method="get">
+            <input type="hidden" name="chapterId" th:value="${chapter.getId()}" />
+            <button type="submit" class="view-btn">View Lessons</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div id="descPopup" class="popup hidden">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <p id="popupText"></p>
+    </div>
+  </div>
+</div>
+<script>
+  function showPopup(button) {
+    // Lấy nội dung mô tả từ phần tử span
+    document.getElementById("popupText").textContent = button.nextElementSibling.textContent; // Gán nội dung vào popup
+    document.getElementById("descPopup").classList.remove("hidden"); // Hiện popup
+  }
+
+  function closePopup() {
+    document.getElementById("descPopup").classList.add("hidden"); // Ẩn popup khi bấm nút đóng
+  }
+  function addChapterRequest(){
+    document.querySelector('#addChapterRequest').submit();
+  }
+  function returnCourse(){
+    document.querySelector('#returnCourse').click();
+  }
+</script>
+</body>
+
+</html>

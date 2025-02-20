@@ -50,5 +50,14 @@ public class Lesson {
     private List<Quiz> quizzes = new ArrayList<>();
 
     @Column(name = "lesson_drive_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
-    private String LessonDriveLink;
+    private String lessonDriveLink;
+
+    @Column(name = "document_folder_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String documentFolderLink;
+
+    @Column(name = "video_folder_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String videoFolderLink;
+
+    @Column(name = "quiz_image_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String quizImageLink;
 }

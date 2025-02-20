@@ -7,6 +7,7 @@ import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.repository.UserRepository;
 import com.project.learningz.service.GradeService;
 
+import com.project.learningz.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class HomeController {
     private GradeService gradeService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private CourseRepository courseRepository;
@@ -37,17 +38,17 @@ public class HomeController {
 
         if (principal instanceof OAuth2User) {
             OAuth2User oAuth2User = (OAuth2User) principal;
-            username = oAuth2User.getAttribute("name");
             String email = oAuth2User.getAttribute("email");
-            User user = userRepository.findByEmail(email);
+            User user = userService.findByEmail(email);
             if (user != null) {
                 avatarUrl = user.getAvtUrl() != null ? user.getAvtUrl() : avatarUrl;
+                username = user.getUsername();
             }
         } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userRepository.findByUsername(username);
+            User user = userService.findByUsername(username);
             if (user == null) {
-                user = userRepository.findByEmail(username);
+                user = userService.findByEmail(username);
             }
             if (user != null) {
                 avatarUrl = user.getAvtUrl() != null ? user.getAvtUrl() : avatarUrl;
@@ -57,7 +58,7 @@ public class HomeController {
         Integer countUpdate = (Integer) session.getAttribute("countUpdate");
         Integer idReload = (Integer) session.getAttribute("idReload");
         if (countUpdate != null && idReload != null) {
-            User user = userRepository.findById(idReload).orElse(null);
+            User user = userService.findById(idReload);
             if (user != null) {
                 model.addAttribute("username", user.getUsername());
                 model.addAttribute("avatarUrl", user.getAvtUrl());

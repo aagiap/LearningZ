@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents List</title>
+    <link rel="stylesheet" th:href="@{/css/docListStyle.css}">
+</head>
+
+<body>
+<div class="container">
+    <h2>Documents List</h2>
+
+    <div class="filter-section">
+        <form action="/expert/chapter/lesson/docs/search">
+            <input name="lessonId" type="text" hidden th:value="${lessonId}">
+            <input name="docSearchKey" type="text" id="searchInput" placeholder="Search documents by title">
+            <input type="submit" value="Search">
+        </form>
+
+        <button id="returnLessonButton" onclick="returnLesson()">Return Lesson List</button>
+        <form action="/expert/chapter/lesson" method="get" id="returnLesson">
+            <input type="number" name="chapterId" th:value="${chapterId}" hidden>
+        </form>
+        <button id="addDoc" onclick="addDocRequest()">+ Add New Document</button>
+        <form action="/expert/chapter/lesson/docs/addDoc" method="get" id="addDocRequest">
+            <input type="number" name="lessonId" th:value="${lessonId}" hidden>
+        </form>
+    </div>
+
+    <table th:if="${notification}">
+        <thead>
+        <tr>
+            <th>Lesson ID</th>
+            <th>Doc ID</th>
+            <th>Document Title</th>
+            <th>File URL</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${notification}" colspan="9" style="text-align: center;"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table th:if="${pdfList}">
+        <thead>
+        <tr>
+            <th>Lesson ID</th>
+            <th>Doc ID</th>
+            <th>Document Title</th>
+            <th>File URL</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doc:${pdfList}">
+            <td th:text="${doc.lesson.getId()}"></td>
+            <td th:text="${doc.getId()}"></td>
+            <td th:text="${doc.getTitle()}"></td>
+            <td th:text="${doc.getFileUrl()}"></td>
+            <td class="actions">
+                <div class="top-actions">
+                    <form action="/expert/chapter/lesson/docs/edit" method="POST" style="display: inline">
+                        <input type="hidden" name="pdfId" th:value="${doc.getId()}" />
+                        <button type="submit" class="edit-btn">Edit</button>
+                    </form>
+                    <form action="#" method="POST" style="display: inline">
+                        <input type="hidden" name="pdfId" th:value="${doc.getId()}"/>
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function addDocRequest(){
+        document.querySelector('#addDocRequest').submit();
+    }
+    function returnLesson(){
+        document.querySelector('#returnLesson').submit();
+    }
+</script>
+</body>
+
+</html>

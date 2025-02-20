@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video List</title>
+  <link rel="stylesheet" th:href="@{/css/videoListStyle.css}">
+</head>
+
+<body>
+<div class="container">
+  <h2>Video List</h2>
+
+  <div class="filter-section">
+    <form action="/expert/chapter/lesson/videos/search">
+      <input name="lessonId" type="text" hidden th:value="${lessonId}">
+      <input name="videoSearchKey" type="text" id="searchInput" placeholder="Search video by title">
+      <input type="submit" value="Search">
+    </form>
+
+    <button id="returnLessonButton" onclick="returnLesson()">Return Lesson List</button>
+    <form action="/expert/chapter/lesson" method="get" id="returnLesson">
+      <input type="number" name="chapterId" th:value="${chapterId}" hidden>
+    </form>
+    <button id="addVideo" onclick="addVideoRequest()">+ Add New Video</button>
+    <form action="/expert/chapter/lesson/videos/addVideo" method="get" id="addVideoRequest">
+      <input type="number" name="lessonId" th:value="${lessonId}" hidden>
+    </form>
+  </div>
+
+  <table th:if="${notification}">
+    <thead>
+    <tr>
+      <th>Lesson ID</th>
+      <th>Video ID</th>
+      <th>Video Title</th>
+      <th>File URL</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${notification}" colspan="9" style="text-align: center;"></td>
+    </tr>
+    </tbody>
+  </table>
+  <table th:if="${videoList}">
+    <thead>
+    <tr>
+      <th>Lesson ID</th>
+      <th>Video ID</th>
+      <th>Video Title</th>
+      <th>File URL</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="video:${videoList}">
+      <td th:text="${video.getLesson().getId()}"></td>
+      <td th:text="${video.getId()}"></td>
+      <td th:text="${video.getTitle()}"></td>
+      <td th:text="${video.getFileUrl()}"></td>
+      <td class="actions">
+        <div class="top-actions">
+          <form action="/expert/chapter/lesson/videos/edit" method="POST" style="display: inline">
+            <input type="hidden" name="videoId" th:value="${video.getId()}" />
+            <button type="submit" class="edit-btn">Edit</button>
+          </form>
+          <form action="#" method="POST" style="display: inline">
+            <input type="hidden" name="videoId" th:value="${video.getId()}"/>
+            <button type="submit" class="delete-btn">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  function addVideoRequest(){
+    document.querySelector('#addVideoRequest').submit();
+  }
+  function returnLesson(){
+    document.querySelector('#returnLesson').submit();
+  }
+</script>
+</body>
+
+</html>

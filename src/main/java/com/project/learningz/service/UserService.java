@@ -8,7 +8,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +54,7 @@ public class UserService {
         return userRepository.findAvatarUrlByUsername(username);
     }
 
-    public List<String> userCheck(int id, String username, String phoneNumber){
+    public List<String> userCheck(int id, String username, String phoneNumber, MultipartFile avatarUrl){
         User user = userRepository.findById(id);
         List<String> errorList = new ArrayList<>();
         if(user == null) {
@@ -76,7 +79,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(int id, String username, String phoneNumber, String avatarUrl) {
+    public void updateUser(int id, String username, String phoneNumber, MultipartFile avatarUrl) throws GeneralSecurityException, IOException {
         User user = userRepository.findById(id);
         if(user != null && !username.equals(user.getUsername()) && username.length() > 0) {
             user.setUsername(username);
@@ -90,7 +93,23 @@ public class UserService {
             }
         }
         if(avatarUrl != null) {
-            user.setAvtUrl(avatarUrl);
+            user.setAvtUrl(googleDriveService.uploadFileAvatar(avatarUrl));
+        }
+        userRepository.save(user);
+    }
+    @Transactional
+    public void updateUser(int id, String username, String phoneNumber)  {
+        User user = userRepository.findById(id);
+        if(user != null && !username.equals(user.getUsername()) && username.length() > 0) {
+            user.setUsername(username);
+        }
+        if(user != null && !phoneNumber.equals(user.getPhoneNum()) && phoneNumber.length() > 0) {
+            User userCheck = userRepository.findByPhoneNumber(phoneNumber);
+            if(userCheck != null) {
+                throw new IllegalStateException("phone already exist");
+            }else{
+                user.setPhoneNum(phoneNumber);
+            }
         }
         userRepository.save(user);
     }

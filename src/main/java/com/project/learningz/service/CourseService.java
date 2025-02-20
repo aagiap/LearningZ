@@ -12,15 +12,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
     private final GradeService gradeService;
+    private final UserService userService;
+    private final GoogleDriveService googleDriveService;
 
     public Page<Course> getCoursesPagingByKeyword(String keyword, Pageable pageable) {
         Specification<Course> spec = CourseSpecification.getAllSpec();
@@ -70,12 +73,22 @@ public class CourseService {
     }
 
     @Transactional
-    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, String subject, int gradeId, String description) {
+    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, String subject, int gradeId, MultipartFile courseImageUrl,String description) throws GeneralSecurityException, IOException {
         Course course = courseRepository.findById(courseId).orElse(null);
         course.setTitle(title);
         course.setSubject(subject);
         course.setGrade(gradeService.findById(gradeId));
         course.setDescription(description);
+        if(courseImageUrl != null && !courseImageUrl.isEmpty()) {
+            if(course.getCourseImageUrl() != null){
+                if(course.getCourseImageUrl().contains("https://lh3.googleusercontent.com/d/")){
+                    String[] oldCourseImageSplit = course.getCourseImageUrl().split("https://lh3.googleusercontent.com/d/");
+                    googleDriveService.deleteFile(oldCourseImageSplit[1]);
+                }
+            }
+            String newCourseImage = googleDriveService.uploadFileCourseImage(courseImageUrl);
+            course.setCourseImageUrl(newCourseImage);
+        }
         courseRepository.save(course);
     }
 
@@ -83,4 +96,20 @@ public class CourseService {
         return courseRepository.findCoursesByGradeId(gradeId);
     }
 
+    @Transactional
+    public void createCourse(int createdByID, int gradeId, String subject, String title, String description, MultipartFile courseImageUrl) throws GeneralSecurityException, IOException {
+        Course newCourse = new Course();
+        newCourse.setCreatedBy(userService.findById(createdByID));
+        newCourse.setTitle(title);
+        newCourse.setSubject(subject);
+        newCourse.setGrade(gradeService.findById(gradeId));
+        newCourse.setDescription(description);
+        String courseDriveLink = googleDriveService.createFolder(title,googleDriveService.getCoursesFolderId());
+        newCourse.setCourseDriveLink(courseDriveLink);
+        if(courseImageUrl != null && !courseImageUrl.isEmpty()) {
+            String imageUrl = googleDriveService.uploadFileCourseImage(courseImageUrl);
+            newCourse.setCourseImageUrl(imageUrl);
+        }
+        courseRepository.save(newCourse);
+    }
 }

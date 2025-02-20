@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Video</title>
+    <link rel="stylesheet" th:href="@{/css/editVideoStyle.css}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Edit Video</h2>
+
+    <form action="/expert/chapter/lesson/videos/edit/update" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="lessonId" th:value="${video.lesson.getId()}">
+        <input type="hidden" name="videoId" th:value="${video.getId()}">
+
+        <label>Title:</label>
+        <input type="text" name="videoTitle" th:value="${video.getTitle()}" required>
+
+        <label>VideoUrl</label>
+        <input type="file" id="videoUrl" name="videoUrl" accept="video/*">
+
+        <div class="btn-group">
+            <button type="submit" class="save-btn">Save</button>
+            <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+        </div>
+    </form>
+    <div class="video-container">
+        <iframe id="googleDriveVideo" th:if="${video.getFileUrl()}" th:src="${video.getFileUrl()}" width="750" height="450" allow="autoplay"></iframe>
+
+        <video id="videoPreview" width="750" controls style="display: none;"></video>
+    </div>
+    <!-- Hiển thị lỗi -->
+    <div th:if="${error}" class="error-messages">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${notification}" class="success-message">
+        <p th:text="${notification}"></p>
+    </div>
+
+    <form action="/expert/chapter/lesson/videos" method="get" id="returnVideoList">
+        <input type="number" name="lessonId" th:value="${video.lesson.getId()}" hidden>
+    </form>
+
+</div>
+
+<script>
+    function closeEditForm() {
+        document.querySelector('#returnVideoList').submit();
+    }
+    document.getElementById("videoUrl").addEventListener("change", function(event) {
+        const file = event.target.files[0]; // Lấy file mới
+        if (file) {
+            const videoPreview = document.getElementById("videoPreview");
+            const googleDriveVideo = document.getElementById("googleDriveVideo");
+
+            // Ẩn video cũ trên Google Drive nếu có
+            if (googleDriveVideo) {
+                googleDriveVideo.style.display = "none";
+            }
+
+            // Hiển thị video mới
+            const videoURL = URL.createObjectURL(file);
+            videoPreview.src = videoURL;
+            videoPreview.style.display = "block";
+            videoPreview.load();
+        }
+    });
+</script>
+
+</body>
+</html>

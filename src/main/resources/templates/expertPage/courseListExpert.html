@@ -33,7 +33,7 @@
             <input type="submit" value="Search">
         </form>
 
-        <button id="addCourse" >+ Add New Course</button>
+        <button id="addCourse" onclick="addCourseRequest()">+ Add New Course</button>
         <a href="/expert/add_course" hidden id="addCourseRequest">Add Course</a>
     </div>
 
@@ -96,8 +96,8 @@
                     </form>
                 </div>
                 <div class="bottom-action">
-                    <form action="#">
-                        <input type="hidden" name="id" th:value="${course.getId()}" />
+                    <form action="/expert/chapter" method="GET">
+                        <input type="hidden" name="courseId" th:value="${course.getId()}" />
                         <button type="submit" class="view-btn">View Chapters</button>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
 </div>
 <script>
     function showPopup(button) {
-         // Lấy nội dung mô tả từ phần tử span
+        // Lấy nội dung mô tả từ phần tử span
         document.getElementById("popupText").textContent = button.nextElementSibling.textContent; // Gán nội dung vào popup
         document.getElementById("descPopup").classList.remove("hidden"); // Hiện popup
     }
@@ -122,7 +122,7 @@
     function closePopup() {
         document.getElementById("descPopup").classList.add("hidden"); // Ẩn popup khi bấm nút đóng
     }
-    function addCourseRequest(e){
+    function addCourseRequest(){
         document.querySelector('#addCourseRequest').click();
     }
 </script>

@@ -45,4 +45,7 @@ public class Course {
 
     @Column(name = "course_drive_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
     private String courseDriveLink;
+
+    @Column(name = "course_image_url", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
+    private String courseImageUrl;
 }

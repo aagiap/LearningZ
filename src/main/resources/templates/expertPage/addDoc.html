@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add new document</title>
+  <link rel="stylesheet" th:href="@{/css/addDocStyle.css}">
+</head>
+<body>
+
+<div class="container">
+  <h2>Add new document</h2>
+
+  <form action="/expert/chapter/lesson/docs/addDoc/create" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="lessonId" th:value="${lessonId}">
+
+    <label>Title:</label>
+    <input type="text" name="docTitle" required>
+
+    <label>Document URL</label>
+    <input type="file" name="docUrl" id="docFile" accept=".pdf, .docx">
+    <div class="btn-group">
+      <button type="submit" class="create-btn">Create</button>
+      <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+    </div>
+  </form>
+  <div id="previewContainer" style="display: none; margin-top: 10px;">
+    <iframe id="pdfPreview" width="750" height="500" style="display: none;"></iframe>
+    <p id="docxMessage" style="display: none; color: red;">Không thể xem trước file DOCX. Vui lòng tải lên để xem.</p>
+  </div>
+  <!-- Hiển thị lỗi -->
+  <div th:if="${error}" class="error-messages">
+    <p th:text="${error}">
+  </div>
+  <!-- Hiển thị thông báo thành công -->
+  <div th:if="${notification}" class="success-message">
+    <p th:text="${notification}"></p>
+  </div>
+
+  <form action="/expert/chapter/lesson/docs" method="get" id="returnDocList">
+    <input type="number" name="lessonId" th:value="${lessonId}" hidden>
+  </form>
+</div>
+<script>
+  function closeEditForm() {
+    document.querySelector('#returnDocList').submit();
+  }
+  document.getElementById("docFile").addEventListener("change", function(event) {
+    const file = event.target.files[0]; // Lấy file mới
+    const previewContainer = document.getElementById("previewContainer");
+    const pdfPreview = document.getElementById("pdfPreview");
+    const docxMessage = document.getElementById("docxMessage");
+
+    if (file) {
+      const fileType = file.name.split('.').pop().toLowerCase(); // Lấy phần mở rộng file
+      const fileURL = URL.createObjectURL(file);
+
+      previewContainer.style.display = "block"; // Hiển thị khu vực xem trước
+
+      if (fileType === "pdf") {
+        pdfPreview.src = fileURL;
+        pdfPreview.style.display = "block";
+        docxMessage.style.display = "none";
+      } else if (fileType === "docx") {
+        pdfPreview.style.display = "none";
+        docxMessage.style.display = "block";
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

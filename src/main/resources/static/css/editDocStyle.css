@@ -86,15 +86,13 @@ button {
         width: 90%;
     }
 }
-.image-preview-container {
-    display: flex;
-    justify-content: center; /* Căn giữa ảnh */
-    margin-top: 10px;
+#currentPdf{
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
-
-#logoPreview {
-    width: 350px;
-    height: auto;
-    border: 1px solid #ccc;
-    object-fit: cover;
+#previewContainer iframe {
+    display: block;
+    margin: auto;
 }

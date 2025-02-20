@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter List</title>
+    <link rel="stylesheet" th:href="@{/css/lessonListStyle.css}">
+</head>
+
+<body>
+<div class="container">
+    <h2>Lesson List</h2>
+
+    <div class="filter-section">
+        <form action="/expert/chapter/lesson/search">
+            <input name="chapterId" type="text" hidden th:value="${chapterId}">
+            <input name="lessonSearchKey" type="text" id="searchInput" placeholder="Search lesson by title">
+            <input type="submit" value="Search">
+        </form>
+
+        <button id="returnLessonButton" onclick="returnChapter()">Return Chapter List</button>
+        <form action="/expert/chapter" method="get" id="returnChapter">
+            <input type="number" name="courseId" th:value="${courseId}" hidden>
+        </form>
+        <button id="addLesson" onclick="addLessonRequest()">+ Add New Lesson</button>
+        <form action="/expert/chapter/lesson/addLesson" method="get" id="addLessonRequest">
+            <input type="number" name="chapterId" th:value="${chapterId}" hidden>
+        </form>
+    </div>
+
+    <table th:if="${notification}">
+        <thead>
+        <tr>
+            <th>Lesson ID</th>
+            <th>Chapter ID</th>
+            <th>Lesson Title</th>
+            <th>Quiz Type</th>
+            <th>Videos</th>
+            <th>Docs</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${notification}" colspan="9" style="text-align: center;"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table th:if="${lessonList}">
+        <thead>
+        <tr>
+            <th>Lesson ID</th>
+            <th>Chapter ID</th>
+            <th>Lesson Title</th>
+            <th>Quiz Type</th>
+            <th>Videos</th>
+            <th>Docs</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lesson:${lessonList}">
+            <td th:text="${lesson.getLessonId()}"></td>
+            <td th:text="${lesson.getChapterId()}"></td>
+            <td th:text="${lesson.getLessonTitle()}"></td>
+            <td th:text="${lesson.getQuizType()}"></td>
+            <td th:text="${lesson.getNumberOfVideos()}"></td>
+            <td th:text="${lesson.getNumberOfDocs()}"></td>
+            <td>
+                <button class="desc-btn" onclick="showPopup(this)">...</button>
+                <span class="description-text" hidden th:text="${lesson.getDescription()}"></span>
+            </td>
+            <td class="actions">
+                <div class="top-actions">
+                    <form action="/expert/chapter/lesson/edit" method="POST" style="display: inline">
+                        <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}" />
+                        <button type="submit" class="edit-btn">Edit</button>
+                    </form>
+                    <form action="#" method="POST" style="display: inline">
+                        <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}"/>
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+                <div class="bottom-actions">
+                    <form action="/expert/chapter/lesson/videos" method="get">
+                        <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}" />
+                        <button type="submit" class="view-btn">Videos</button>
+                    </form>
+                    <form action="/expert/chapter/lesson/docs" method="get">
+                        <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}" />
+                        <button type="submit" class="view-btn">Docs</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="descPopup" class="popup hidden">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <p id="popupText"></p>
+        </div>
+    </div>
+</div>
+<script>
+    function showPopup(button) {
+        // Lấy nội dung mô tả từ phần tử span
+        document.getElementById("popupText").textContent = button.nextElementSibling.textContent; // Gán nội dung vào popup
+        document.getElementById("descPopup").classList.remove("hidden"); // Hiện popup
+    }
+
+    function closePopup() {
+        document.getElementById("descPopup").classList.add("hidden"); // Ẩn popup khi bấm nút đóng
+    }
+    function addLessonRequest(){
+        document.querySelector('#addLessonRequest').submit();
+    }
+    function returnChapter(){
+        document.querySelector('#returnChapter').submit();
+    }
+</script>
+</body>
+
+</html>

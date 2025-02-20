@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add new lesson</title>
+  <link rel="stylesheet" th:href="@{/css/addLessonStyle.css}">
+</head>
+<body>
+
+<div class="container">
+  <h2>Add new lesson</h2>
+
+  <form action="/expert/chapter/lesson/addLesson/create" method="post">
+    <input type="hidden" name="chapterId" th:value="${chapterId}">
+
+    <label>Title:</label>
+    <input type="text" name="lessonTitle" required>
+
+    <label>Quiz Type:</label>
+    <select name="quizType" required>
+      <option th:each="type : ${quizTypeList}"
+              th:text="${type}">
+      </option>
+    </select>
+
+    <label>Description:</label>
+    <textarea name="description"></textarea>
+
+    <div class="btn-group">
+      <button type="submit" class="create-btn">Create</button>
+      <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+    </div>
+  </form>
+  <!-- Hiển thị lỗi -->
+  <div th:if="${error}" class="error-messages">
+    <p th:text="${error}">
+  </div>
+
+  <!-- Hiển thị thông báo thành công -->
+  <div th:if="${notification}" class="success-message">
+    <p th:text="${notification}"></p>
+  </div>
+
+  <form action="/expert/chapter/lesson" method="get" id="returnLessonList">
+    <input type="number" name="chapterId" th:value="${chapterId}" hidden>
+  </form>
+</div>
+
+<script>
+  function closeEditForm() {
+    document.querySelector('#returnLessonList').submit();
+  }
+</script>
+
+</body>
+</html>

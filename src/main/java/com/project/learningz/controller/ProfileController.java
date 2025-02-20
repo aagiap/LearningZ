@@ -30,6 +30,7 @@ public class ProfileController {
 
     @Autowired
     private GoogleDriveService googleDriveService;
+
     @GetMapping(path = "/home/profile")
     public String profile(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -38,15 +39,13 @@ public class ProfileController {
         String email = null;
         String phoneNumber = null;
         Role role = null;
-        if (principal instanceof OAuth2User){
-            username = ((OAuth2User) principal).getAttribute("name");
-            avatarUrl = ((OAuth2User) principal).getAttribute("picture");
+        if (principal instanceof OAuth2User) {
             email = ((OAuth2User) principal).getAttribute("email");
             User user = userService.findByEmail(email);
-            if (user != null) {
-                role = user.getRole();
-            }
-        }else{
+            role = user.getRole();
+            username = user.getUsername();
+            avatarUrl = user.getAvtUrl();
+        } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(username);
             if (user != null) {
@@ -56,7 +55,7 @@ public class ProfileController {
                 role = user.getRole();
             }
         }
-        if(countUpdate != 0 && idReload != 0){
+        if (countUpdate != 0 && idReload != 0) {
             User user = userService.findById(idReload);
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
@@ -79,15 +78,14 @@ public class ProfileController {
         String avatarUrl = null;
         String email = null;
         String phoneNumber = null;
-        if (principal instanceof OAuth2User){
-            username = ((OAuth2User) principal).getAttribute("name");
-            avatarUrl = ((OAuth2User) principal).getAttribute("picture");
+        if (principal instanceof OAuth2User) {
             email = ((OAuth2User) principal).getAttribute("email");
             User user = userService.findByEmail(email);
-            if (user != null) {
-                userId = user.getId();
-            }
-        }else{
+            userId = user.getId();
+            username = user.getUsername();
+            avatarUrl = user.getAvtUrl();
+            phoneNumber = user.getPhoneNum();
+        } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(username);
             if (user != null) {
@@ -97,7 +95,7 @@ public class ProfileController {
                 phoneNumber = user.getPhoneNum();
             }
         }
-        if(countUpdate != 0 && idReload != 0){
+        if (countUpdate != 0 && idReload != 0) {
             User user = userService.findById(idReload);
             userId = user.getId();
             username = user.getUsername();
@@ -120,32 +118,30 @@ public class ProfileController {
                                 @RequestParam("phoneNumber") String phoneNumber,
                                 HttpSession session) throws GeneralSecurityException, IOException {
         List<String> errors = new ArrayList<String>();
-                errors = userService.userCheck(id, username, phoneNumber);
+        errors = userService.userCheck(id, username, phoneNumber, avatarFile);
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
             model.addAttribute("username", username);
             model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
-            if(avatarFile != null){
+            if (avatarFile != null) {
                 model.addAttribute("avatarUrl", avatarFile.getOriginalFilename());
-            }else{
+            } else {
                 User user = userService.findById(id);
                 model.addAttribute("avatarUrl", user.getAvtUrl());
             }
-        }else{
-            String avatarUrl = null;
-            if(!avatarFile.isEmpty()){
-                try{
-                    avatarUrl = googleDriveService.uploadFileAvatar(avatarFile);
-                }catch(IOException | GeneralSecurityException e){
-                    model.addAttribute("errors", List.of("Failed to upload file"));
-                    model.addAttribute("errors", errors);
-                    model.addAttribute("username", username);
-                    model.addAttribute("phoneNumber", phoneNumber);
-                    model.addAttribute("userId", id);
-                    model.addAttribute("avatarUrl", avatarUrl);
-                    return "profile/profile_edit";
+        } else {
+            if (!avatarFile.isEmpty()) {
+                User user = userService.findById(id);
+                if (user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")) {
+                    String[] oldAvtId = user.getAvtUrl().split("https://lh3.googleusercontent.com/d/");
+                    if (googleDriveService.fiLeExists(oldAvtId[1])) {
+                        googleDriveService.deleteFile(oldAvtId[1]);
+                    }
                 }
+                userService.updateUser(id, username, phoneNumber, avatarFile);
+            }else{
+                userService.updateUser(id, username, phoneNumber);
             }
             countUpdate++;
             idReload = id;
@@ -153,19 +149,11 @@ public class ProfileController {
             session.setAttribute("countUpdate", countUpdate);
             session.setAttribute("idReload", idReload);
 
-
-            User user = userService.findById(id);
-            if(user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")){
-                String[] oldAvtId = user.getAvtUrl().split("https://lh3.googleusercontent.com/d/");
-                googleDriveService.deleteFile(oldAvtId[1]);
-            }
-
-            userService.updateUser(id, username, phoneNumber, avatarUrl);
-            model.addAttribute("notification","Update success");
+            model.addAttribute("notification", "Update success");
             model.addAttribute("username", username);
             model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
-            model.addAttribute("avatarUrl", avatarUrl);
+            model.addAttribute("avatarUrl", userService.getUserById(id).getAvtUrl());
         }
         return "profile/profile_edit";
     }

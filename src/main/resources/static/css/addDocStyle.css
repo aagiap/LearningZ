@@ -44,12 +44,12 @@ button {
     transition: 0.3s;
 }
 
-.save-btn {
+.create-btn {
     background: #007bff;
     color: white;
 }
 
-.save-btn:hover {
+.create-btn:hover {
     background: #0056b3;
 }
 
@@ -86,15 +86,11 @@ button {
         width: 90%;
     }
 }
-.image-preview-container {
-    display: flex;
-    justify-content: center; /* Căn giữa ảnh */
-    margin-top: 10px;
+#pdfPreview {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
-#logoPreview {
-    width: 350px;
-    height: auto;
-    border: 1px solid #ccc;
-    object-fit: cover;
-}
+

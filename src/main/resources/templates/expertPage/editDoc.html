@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Document</title>
+  <link rel="stylesheet" th:href="@{/css/editDocStyle.css}">
+</head>
+<body>
+
+<div class="container">
+  <h2>Edit Document</h2>
+
+  <form action="/expert/chapter/lesson/docs/edit/update" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="lessonId" th:value="${pdf.lesson.getId()}">
+    <input type="hidden" name="docId" th:value="${pdf.getId()}">
+
+    <label>Title:</label>
+    <input type="text" name="docTitle" th:value="${pdf.getTitle()}" required>
+
+    <label>Document Url:</label>
+    <input type="file" id="docUrl" name="docUrl" accept=".pdf, .docx">
+
+    <div class="btn-group">
+      <button type="submit" class="save-btn">Save</button>
+      <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+    </div>
+  </form>
+  <div id="viewCurrentPdf">
+    <iframe id="currentPdf" th:src="${pdf.getFileUrl()}" width="750" height="500" allow="autoplay"></iframe>
+  </div>
+  <div id="previewContainer" style="margin-top: 10px;">
+    <iframe id="pdfPreview" th:if="${pdf.getFileUrl().endsWith('.pdf')}" th:src="@{${pdf.getFileUrl()}}" width="750" height="500"></iframe>
+    <p id="docxMessage" th:if="${pdf.getFileUrl().endsWith('.docx')}" style="color: red;">
+      Không thể xem trước file DOCX. Vui lòng tải xuống để xem.
+    </p>
+  </div>
+  <!-- Hiển thị lỗi -->
+  <div th:if="${error}" class="error-messages">
+    <p th:text="${error}"></p>
+  </div>
+
+  <!-- Hiển thị thông báo thành công -->
+  <div th:if="${notification}" class="success-message">
+    <p th:text="${notification}"></p>
+  </div>
+
+  <form action="/expert/chapter/lesson/docs" method="get" id="returnVideoList">
+    <input type="number" name="lessonId" th:value="${pdf.lesson.getId()}" hidden>
+  </form>
+
+</div>
+
+<script>
+  function closeEditForm() {
+    document.querySelector('#returnVideoList').submit();
+  }
+  document.getElementById("docUrl").addEventListener("change", function(event) {
+    const file = event.target.files[0]; // Lấy file mới
+    const previewContainer = document.getElementById("previewContainer");
+    const currentPdfContainer = document.getElementById("viewCurrentPdf"); // Lấy div của file cũ
+
+    // Ẩn file cũ nếu có
+    if (currentPdfContainer) {
+      currentPdfContainer.style.display = "none";
+    }
+
+    // Xóa tất cả nội dung trong previewContainer để ẩn file cũ đã hiển thị trước đó
+    previewContainer.innerHTML = "";
+
+    if (file) {
+      const fileType = file.name.split('.').pop().toLowerCase();
+      const fileURL = URL.createObjectURL(file);
+
+      // Tạo và hiển thị file mới
+      if (fileType === "pdf") {
+        const newIframe = document.createElement("iframe");
+        newIframe.width = "750";
+        newIframe.height = "500";
+        newIframe.src = fileURL;
+        previewContainer.appendChild(newIframe);
+      } else if (fileType === "docx") {
+        const newMessage = document.createElement("p");
+        newMessage.style.color = "red";
+        newMessage.innerText = "Không thể xem trước file DOCX. Vui lòng tải xuống để xem.";
+        previewContainer.appendChild(newMessage);
+      }
+    }
+  });
+
+</script>
+
+</body>
+</html>

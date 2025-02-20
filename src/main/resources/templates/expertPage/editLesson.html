@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Lesson</title>
+  <link rel="stylesheet" th:href="@{/css/editLessonStyle.css}">
+</head>
+<body>
+
+<div class="container">
+  <h2>Edit Lesson</h2>
+
+  <form action="/expert/chapter/lesson/edit/update" method="post">
+    <input type="hidden" name="lessonId" th:value="${lesson.getId()}">
+    <input type="hidden" name="chapterId" th:value="${lesson.chapter.getId()}">
+    <input type="hidden" name="lessonDriveLink" th:value="${lesson.getLessonDriveLink()}"/>
+    <input type="hidden" name="documentFolderLink" th:value="${lesson.getDocumentFolderLink()}">
+    <input type="hidden" name="videoFolderLink" th:value="${lesson.getVideoFolderLink()}">
+    <input type="hidden" name="quizImageLink" th:value="${lesson.getQuizImageLink()}">
+
+    <label>Title:</label>
+    <input type="text" name="lessonTitle" th:value="${lesson.getTitle()}" required>
+
+    <label>Quiz Type:</label>
+    <select name="quizType" required>
+      <option th:each="type : ${quizTypeList}"
+              th:value="${type}"
+              th:selected="${type == lesson.getQuizType()}"
+              th:text="${type}">
+      </option>
+    </select>
+
+
+    <label>Description:</label>
+    <textarea name="description" rows="3" th:text="${lesson.getDescription()}"></textarea>
+
+    <div class="btn-group">
+      <button type="submit" class="save-btn">Save</button>
+      <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+    </div>
+  </form>
+  <!-- Hiển thị lỗi -->
+  <div th:if="${error}" class="error-messages">
+    <p th:text="${error}"></p>
+  </div>
+
+  <!-- Hiển thị thông báo thành công -->
+  <div th:if="${notification}" class="success-message">
+    <p th:text="${notification}"></p>
+  </div>
+
+  <form action="/expert/chapter/lesson" method="get" id="returnLessonList">
+    <input type="number" name="chapterId" th:value="${chapterId}" hidden>
+  </form>
+
+</div>
+
+<script>
+  function closeEditForm() {
+    document.querySelector('#returnLessonList').submit();
+  }
+</script>
+
+</body>
+</html>

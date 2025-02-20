@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Edit Course</h2>
 
-    <form action="/expert/edit/update" method="post">
+    <form action="/expert/edit/update" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" th:value="${course.getId()}">
         <input type="hidden" name="createdByUserId" th:value="${course.getCreatedBy().getId()}">
         <input type="hidden" name="courseDriveLink" th:value="${course.getCourseDriveLink()}"/>
@@ -41,6 +41,12 @@
             <option value="3" th:selected="${course.getGrade().getId() == 3}">Grade 12</option>
         </select>
 
+        <label>Logo:</label>
+        <div class="image-preview-container">
+            <img th:src="${course.getCourseImageUrl()}" id="logoPreview" alt="Course Logo">
+        </div>
+        <input name="courseImageUrl" type="file" id="courseLogo" accept="image/*" onchange="previewImage(event)">
+
         <label>Description:</label>
         <textarea name="description" rows="3" th:text="${course.description}"></textarea>
 
@@ -65,6 +71,20 @@
 <script>
     function closeEditForm() {
         document.querySelector('#returnCourseList').click();
+    }
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('logoPreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 </script>
 
