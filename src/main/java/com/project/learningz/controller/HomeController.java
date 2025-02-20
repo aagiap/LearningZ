@@ -3,11 +3,12 @@ package com.project.learningz.controller;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.User;
 import com.project.learningz.entity.Grade;
+import com.project.learningz.entity.Slider;
 import com.project.learningz.repository.CourseRepository;
-import com.project.learningz.repository.UserRepository;
 import com.project.learningz.service.GradeService;
-
+import com.project.learningz.service.SliderService;
 import com.project.learningz.service.UserService;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,9 @@ public class HomeController {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private SliderService sliderService;
 
     @GetMapping("/home")
     public String homePage(Model model, HttpSession session) {
@@ -68,11 +72,13 @@ public class HomeController {
 
         List<Grade> grades = gradeService.getAllGrades();
         List<Course> courses = courseRepository.findAll();
+        List<Slider> sliders = sliderService.getAllSliders();
 
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("grades", grades);
         model.addAttribute("courses", courses);
+        model.addAttribute("sliders", sliders);
 
         return "home/home";
     }
