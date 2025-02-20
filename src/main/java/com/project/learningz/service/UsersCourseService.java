@@ -1,14 +1,8 @@
 package com.project.learningz.service;
 
 import com.project.learningz.dto.CourseReviewDTO;
-import com.project.learningz.entity.QuizResult;
-import com.project.learningz.entity.User;
-import com.project.learningz.entity.UsersCourse;
-import com.project.learningz.entity.UsersCourseId;
-import com.project.learningz.repository.QuizRepository;
-import com.project.learningz.repository.QuizResultRepository;
-import com.project.learningz.repository.UserCourseRepository;
-import com.project.learningz.repository.UserRepository;
+import com.project.learningz.entity.*;
+import com.project.learningz.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +25,8 @@ public class UsersCourseService {
 
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Map<Integer, Double> getAverageRatingByCourse() {
         List<Object[]> results = userCourseRepository.findAverageRatingByCourse();
@@ -52,7 +48,6 @@ public class UsersCourseService {
     public List<CourseReviewDTO> getCourseReviews(int courseId) {
         return userCourseRepository.findReviewsByCourseId(courseId);
     }
-
     public boolean checkUserEnrolled(String userName, int courseId) {
         return userCourseRepository.isUserEnrolled(userName, courseId);
     }
@@ -150,4 +145,19 @@ public class UsersCourseService {
     public int countReviewByCourseId(int courseId){
         return userCourseRepository.countReviewByCourseId(courseId);
     }
+
+    @Transactional
+    public void enrollCourse(Integer userId, Integer courseId) {
+        User user = userRepository.findUserById(userId);
+        Course course = courseRepository.findByCourseId(courseId);
+        UsersCourseId usersCourseId = new UsersCourseId();
+        usersCourseId.setUserId(userId);
+        usersCourseId.setCourseId(courseId);
+        UsersCourse usersCourse = new UsersCourse();
+        usersCourse.setId(usersCourseId);
+        usersCourse.setUser(user);
+        usersCourse.setCourse(course);
+        userCourseRepository.save(usersCourse);
+    }
+
 }

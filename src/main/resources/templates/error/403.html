@@ -14,36 +14,40 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-image: linear-gradient(to right, #5370D9 0%, #FFFFFF 100%);
-            color: #333; /* Màu chữ */
+            background-image: linear-gradient(to right, #07294D 0%, #FFFFFF 100%);
+            color: white; /* Màu chữ */
         }
+
         h1 {
-            color: #007acc; /* Màu xanh da trời đậm */
+            color: whitesmoke;
             font-size: 2.5em;
             margin-bottom: 20px;
         }
+
         p {
             font-size: 1.2em;
             margin-bottom: 30px;
         }
+
         a {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #007acc; /* Màu xanh da trời đậm */
+            background-color: #1C3B5C;
             color: white;
             text-decoration: none;
             border-radius: 5px;
             font-size: 1em;
             transition: background-color 0.3s;
         }
+
         a:hover {
-            background-color: #005fa3; /* Màu xanh đậm hơn khi hover */
+            background-color: #007acc; /* Màu xanh đậm hơn khi hover */
         }
     </style>
 </head>
 <body>
-<h1>Error 403: Forbidden</h1>
+<h1 style="color: white">An error has occurred</h1>
 <p>Sorry, you are not authorized to access this resource.</p>
-<a th:href="@{/home}" >Back to the home page</a>
+<a th:href="@{/home}">Back to the home page</a>
 </body>
 </html>

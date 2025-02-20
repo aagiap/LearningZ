@@ -1,5 +1,6 @@
 package com.project.learningz.repository;
 
+import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -27,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByPhoneNumber(String phoneNumber);
     @Query("SELECT u.username FROM User u where u.email=?1")
     String findUserNameByEmail(String email);
+
+    @Query("SELECT u.role FROM User u WHERE u.id= :userId")
+    Role getRoleById(@Param("userId") Integer userId);
 }

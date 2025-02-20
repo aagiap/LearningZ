@@ -1,5 +1,6 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.Role;
 import com.project.learningz.dto.CourseReviewDTO;
 import com.project.learningz.entity.Chapter;
 import com.project.learningz.entity.Course;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,9 @@ public class CourseController {
                              @RequestParam(name = "keyword", defaultValue = "") String keyword,
                              @RequestParam(name = "gradeId", defaultValue = "-1") int gradeId,
                              @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-                             @RequestParam(name = "pageSize", defaultValue = "8") int pageSize) {
+                             @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
+                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                             @AuthenticationPrincipal OAuth2User userOAuth2) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Page<Course> pageCourse = courseService.getCoursesPagingByKeywordNGradeId(gradeId, keyword, pageable);
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
@@ -62,6 +66,20 @@ public class CourseController {
         model.addAttribute("page", response);
         model.addAttribute("keyword", keyword);
         model.addAttribute("gradeId", gradeId);
+
+        //lấy avtUrl
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
+        }
+        model.addAttribute("username", username);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
 
         return "course/course_list";
     }
@@ -92,9 +110,9 @@ public class CourseController {
             username = user.getUsername();
             model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
-           String email = userOAuth2.getAttribute("email");
-           username = userService.findUserNameByEmail(email);
-           model.addAttribute("user", userOAuth2);
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
         }
 
         boolean isEnrolled = (username != null) && usersCourseService.checkUserEnrolled(username, courseId);
@@ -112,8 +130,8 @@ public class CourseController {
         model.addAttribute("isEnrolled", isEnrolled);
         model.addAttribute("username", username);
 
-        String avt = userService.getAvtByUsername(username);
-        model.addAttribute("avt", avt);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
 
         int numberOfFeedbacks = usersCourseService.countReviewByCourseId(courseId);
         model.addAttribute("numberOfFeedbacks", numberOfFeedbacks);
@@ -173,5 +191,31 @@ public class CourseController {
 
         return "redirect:/course/details/" + courseId;
     }
+
+    @PostMapping("/enroll")
+    public ResponseEntity<?> enrollCourse(@RequestParam("courseId") Integer courseId,
+                                          @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                          @AuthenticationPrincipal OAuth2User userOAuth2) {
+        String username = null;
+
+        if (user != null) {
+            username = user.getUsername();
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+        }
+
+        Integer userId = userService.getUserIdByUsername(username);
+        Role role = userService.getRoleById(userId);
+
+        if (role == Role.STUDENT || username == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Collections.singletonMap("error", "Please register for VIP membership before enrolling in a course."));
+        }
+
+        usersCourseService.enrollCourse(userId, courseId);
+        return ResponseEntity.ok(Collections.singletonMap("success", "Enrollment successful!"));
+    }
+
 
 }
