@@ -128,3 +128,22 @@ body {
 .text-danger {
     color: red !important;
 }
+
+.chapter-navigation {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+
+}
+.chapter-navigation p {
+    color: #1C3B5C;
+    font-size: 25px;
+}
+.fas {
+    font-size: 31px;
+    color: #1C3B5C;
+    transition: color 0.3s;
+}
+
+.fas:hover {
+    color: #ffc600;
+}

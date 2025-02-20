@@ -44,27 +44,27 @@ public class LessonService {
         return lessonRepository.findLessonById(lessonId);
     }
 
-public List<String> isLessonCompleted(Integer userId, Integer courseId) {
-    List<String> completionStatus = new ArrayList<>();
-    List<Lesson> lessons = lessonRepository.findByCourseId(courseId);
-    for (Lesson lesson : lessons) {
-        List<Quiz> quizzes = lesson.getQuizzes();
-        boolean allQuizzesCompleted = true;
-        for (Quiz quiz : quizzes) {
-            String quizResult = quizResultService.isPass(userId, quiz.getId());
-            if (quizResult.equals("Not done yet") || quizResult.equals("Not pass")) {
-                allQuizzesCompleted = false;
-                break;
+    public List<String> isLessonCompleted(Integer userId, Integer courseId) {
+        List<String> completionStatus = new ArrayList<>();
+        List<Lesson> lessons = lessonRepository.findByCourseId(courseId);
+        for (Lesson lesson : lessons) {
+            List<Quiz> quizzes = lesson.getQuizzes();
+            boolean allQuizzesCompleted = true;
+            for (Quiz quiz : quizzes) {
+                String quizResult = quizResultService.isPass(userId, quiz.getId());
+                if (quizResult.equals("Not done yet") || quizResult.equals("Not pass")) {
+                    allQuizzesCompleted = false;
+                    break;
+                }
+            }
+            if (allQuizzesCompleted) {
+                completionStatus.add("Completed");
+            } else {
+                completionStatus.add("Not complete");
             }
         }
-        if (allQuizzesCompleted) {
-            completionStatus.add("Completed");
-        } else {
-            completionStatus.add("Not complete");
-        }
+        return completionStatus;
     }
-    return completionStatus;
-}
     public List<LessonDetailDTO> allLessonsByChapterId(Integer chapterId) {
         return lessonRepository.allLessonsByChapterId(chapterId);
     }
@@ -73,8 +73,18 @@ public List<String> isLessonCompleted(Integer userId, Integer courseId) {
         return lessonRepository.findLessons(courseId, keyword);
     }
 
-
-
+    public Integer getFirstLessonIdOfPreviousChapter(Chapter chapterCurrent, List<Chapter> chapters) {
+        Integer chapterCurrentIndex = chapters.indexOf(chapterCurrent);
+        if (chapterCurrentIndex == 0) {
+            return null;
+        }
+        Chapter chapterPrevious = chapters.get(chapterCurrentIndex - 1);
+        List<Lesson> lessons = lessonRepository.findByChapterId(chapterPrevious.getId());
+        if (lessons.size() == 0) {
+            return null;
+        }
+        return lessons.get(0).getId();
+    }
     @Transactional
     public void updateLesson(int lessonId, int chapterId, String lessonDriveLink,
                              String documentFolderLink, String videoFolderLink, String quizImageLink,
@@ -103,5 +113,19 @@ public List<String> isLessonCompleted(Integer userId, Integer courseId) {
         String quizImageLink = googleDriveService.createFolder("Quiz Images",lessonDriveLink);
         lesson.setQuizImageLink(quizImageLink);
         lessonRepository.save(lesson);
+    }
+}
+
+    public Integer getFirstLessonIdOfNextChapter(Chapter chapterCurrent, List<Chapter> chapters) {
+        Integer chapterCurrentIndex = chapters.indexOf(chapterCurrent);
+        if (chapterCurrentIndex == chapters.size() - 1) {
+            return null;
+        }
+        Chapter chapterNext = chapters.get(chapterCurrentIndex + 1);
+        List<Lesson> lessons = lessonRepository.findByChapterId(chapterNext.getId());
+        if (lessons.size() == 0) {
+            return null;
+        }
+        return lessons.get(0).getId();
     }
 }

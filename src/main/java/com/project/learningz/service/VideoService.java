@@ -79,5 +79,8 @@ public class VideoService {
         }
         video.setLesson(lessonService.getLessonById(lessonId));
         videoRepository.save(video);
+
+    public Video findByVideoId(Integer videoId) {
+        return videoRepository.findByVideoId(videoId);
     }
 }

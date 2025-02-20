@@ -26,6 +26,10 @@ public class ChapterService {
         return chapterRepository.findChapterById(chapterId);
     }
 
+    List<Chapter> getChaptersByCourseId(Integer courseId) {
+        return chapterRepository.findByCourseId(courseId);
+    }
+
     public List<ChapterDetailDTO> allChaptersByCourseId(int courseId) {
         return chapterRepository.allChapterByCourseId(courseId);
     }

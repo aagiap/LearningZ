@@ -128,7 +128,7 @@
                     <h5 style="text-align: center;">Continue learning</h5>
                     <ul>
                         <li>
-                    <a th:href="@{/course/lesson(lessonId=${session.quiz.lesson.id},chapterId=${quiz.lesson.chapter.getId()})}"
+                    <a th:href="@{/learning/lesson(lessonId=${session.quiz.lesson.id},chapterId=${quiz.lesson.chapter.getId()})}"
                        th:text="'Lesson: ' + ${quiz.lesson.getTitle()}"></a>
                         </li>
 <!--                        <li>-->
