@@ -139,69 +139,6 @@ public class CourseController {
         return "redirect:/course/details/" + courseId;
     }
 
-    @GetMapping("chapterLessonList")
-    public String viewChapterLesson(@RequestParam int courseId, Model model,
-                                    @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-                                    @AuthenticationPrincipal OAuth2User userOAuth2) {
-        List<Chapter> chapters = lessonService.getChaptersByCourseId(courseId);
-        Course course = courseService.getCourseById(courseId);
-        String username = null;
-
-        if (user != null) {
-            username = user.getUsername();
-            model.addAttribute("user", user);
-        } else if (userOAuth2 != null) {
-            String email = userOAuth2.getAttribute("email");
-            username = userService.findUserNameByEmail(email);
-            model.addAttribute("user", userOAuth2);
-        }
-        Integer userId = userService.getUserIdByUsername(username);
-        boolean checkConditionFeedBack = usersCourseService.checkConditionFeedback(userId, course.getId());
-        List<String> completionStatus = lessonService.isLessonCompleted(userId, courseId);
-        String progress = usersCourseService.progressStatus(userId, courseId);
-        List<Course> courses = courseService.findCoursesByGradeId(course.getGrade().getId());
-        model.addAttribute("courses", courses);
-        model.addAttribute("progress", progress);
-        model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
-        model.addAttribute("completionStatus", completionStatus);
-        model.addAttribute("course", course);
-        model.addAttribute("chapters", chapters);
-        return "/course/chapter-lesson-list";
-    }
-
-    @GetMapping("/lesson")
-    public String viewLessonInChapter(@RequestParam int lessonId, @RequestParam int chapterId, Model model,
-                                      @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-                                      @AuthenticationPrincipal OAuth2User userOAuth2) {
-        String username = null;
-
-        if (user != null) {
-            username = user.getUsername();
-            model.addAttribute("user", user);
-        } else if (userOAuth2 != null) {
-            String email = userOAuth2.getAttribute("email");
-            username = userService.findUserNameByEmail(email);
-            model.addAttribute("user", userOAuth2);
-        }
-        Integer userId = userService.getUserIdByUsername(username);
-
-        Chapter chapter = chapterService.getChapterById(chapterId);
-        Lesson lesson = lessonService.getLessonById(lessonId);
-        List<Quiz> quizzes = lesson.getQuizzes();
-        HashMap<Quiz, String> quizInfores = new HashMap<>();
-        for (Quiz quiz : quizzes) {
-            quizInfores.put(quiz, quizResultService.isPass(userId, quiz.getId()));
-        }
-        model.addAttribute("quizInfores", quizInfores);
-        model.addAttribute("lesson", lesson);
-        model.addAttribute("chapter", chapter);
-        return "/course/lesson-detail";
-    }
-
-
-
-
-
     @PutMapping("/feedback/clear")
     public ResponseEntity<String> clearFeedback(@RequestParam("userId") Integer userId,
                                                 @RequestParam("courseId") Integer courseId) {

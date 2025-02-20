@@ -142,7 +142,7 @@
             </tr>
             <tr th:each="lesson : ${chapter.getLessons()}" th:with="var=${chapterStat.index * chapter.getLessons().size() + lessonStat.index}">
                 <td style="display: flex; justify-content: space-between">
-                    <form method="get" action="/course/lesson">
+                    <form method="get" action="/learning/lesson">
                         <button type="submit" class="subject btn btn-link" style="color: black">
                             <span th:text="${lesson.getTitle()}"></span>
                             <input type="hidden" name="lessonId" th:value="${lesson.getId()}">

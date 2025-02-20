@@ -1,0 +1,79 @@
+.content-grid {
+    position: relative;
+    display: inline-block;
+    padding: 0px;
+}
+
+.fullscreen-btn {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #333;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.fullscreen-btn::before,
+.fullscreen-btn::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 2px solid #333;
+    transition: all 0.2s ease;
+}
+
+.fullscreen-btn::before {
+    top: -2px;
+    left: -2px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.fullscreen-btn::after {
+    bottom: -2px;
+    right: -2px;
+    border-left: none;
+    border-top: none;
+}
+
+/* Hover effect */
+.fullscreen-btn:hover {
+    border-color: #666;
+}
+
+.fullscreen-btn:hover::before,
+.fullscreen-btn:hover::after {
+    border-color: #666;
+}
+
+/* Click effect */
+.fullscreen-btn:active {
+    transform: scale(0.95);
+}
+
+/* Optional: Add focus outline for accessibility */
+.fullscreen-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
