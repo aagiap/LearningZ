@@ -254,7 +254,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
                                    <span class="nav-icon">
-                                        <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
+                                        <iconify-icon icon="solar:gallery-bold"></iconify-icon>
                                    </span>
                         <span class="nav-text"> Sliders </span>
                     </a>
@@ -346,9 +346,11 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
-                                                <a th:href="@{/marketer/slider/edit/{id}(id=${slider.sliderId})}" class="btn btn-soft-primary btn-sm">
+                                                <a th:href="@{/marketer/slider/edit/{id}(id=${slider.sliderId}, page=${currentPage})}"
+                                                   class="btn btn-soft-primary btn-sm">
                                                     <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
                                                 </a>
+
                                                 <a th:href="@{/marketer/slider/delete/{id}(id=${slider.sliderId}, page=${currentPage})}"
                                                    class="btn btn-soft-danger btn-sm"
                                                    onclick="return confirm('Confirm delete?')">
