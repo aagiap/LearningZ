@@ -114,7 +114,7 @@ public class LessonService {
         lesson.setQuizImageLink(quizImageLink);
         lessonRepository.save(lesson);
     }
-}
+
 
     public Integer getFirstLessonIdOfNextChapter(Chapter chapterCurrent, List<Chapter> chapters) {
         Integer chapterCurrentIndex = chapters.indexOf(chapterCurrent);

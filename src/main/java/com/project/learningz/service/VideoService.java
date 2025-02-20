@@ -69,7 +69,7 @@ public class VideoService {
         Video video = videoRepository.getVideoById(videoId);
         video.setTitle(videoTitle);
         String videoUrl;
-        if(videoFile != null && !videoFile.isEmpty()){
+        if (videoFile != null && !videoFile.isEmpty()) {
             videoUrl = googleDriveService.uploadFileVideo(videoFile,
                     lessonService.getLessonById(lessonId).getVideoFolderLink());
             String oldVideoUrl = video.getFileUrl();
@@ -79,7 +79,7 @@ public class VideoService {
         }
         video.setLesson(lessonService.getLessonById(lessonId));
         videoRepository.save(video);
-
+    }
     public Video findByVideoId(Integer videoId) {
         return videoRepository.findByVideoId(videoId);
     }
