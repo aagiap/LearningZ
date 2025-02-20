@@ -168,4 +168,34 @@ public class GoogleDriveService {
                 .execute();
     }
 
+    public String uploadBannerFile(MultipartFile file) throws IOException, GeneralSecurityException {
+        Drive driveService = getDriveService();
+        File fileMetadata = new File();
+        fileMetadata.setName(file.getOriginalFilename());
+        fileMetadata.setParents(Collections.singletonList(SLIDE_FOLDER_ID));
+
+        InputStreamContent content = new InputStreamContent(file.getContentType(), file.getInputStream());
+        File uploadedFile = driveService.files().create(fileMetadata, content)
+                .setFields("id, webViewLink")
+                .execute();
+
+        Permission permission = new Permission();
+        permission.setType("anyone");
+        permission.setRole("reader");
+        driveService.permissions().create(uploadedFile.getId(), permission).execute();
+
+        return "https://lh3.googleusercontent.com/d/" + uploadedFile.getId();
+    }
+
+    public String getGoogleDriveFileId(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return null;
+        }
+        if (imageUrl.contains("/d/")) {
+            return imageUrl.split("/d/")[1].split("/")[0];
+        }
+        return null;
+    }
+
+
 }

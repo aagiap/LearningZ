@@ -3,8 +3,10 @@ package com.project.learningz.controller;
 import com.project.learningz.entity.Slider;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
+import com.project.learningz.service.GoogleDriveService;
 import com.project.learningz.service.SliderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.project.learningz.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +15,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @Controller
 @RequestMapping("/marketer")
@@ -23,6 +29,9 @@ public class SliderController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GoogleDriveService googleDriveService;
 
     private static final String REDIRECT_SLIDERS = "redirect:/marketer/slider";
 
@@ -81,26 +90,83 @@ public class SliderController {
 
     // Xử lý form thêm slider
     @PostMapping("/add_slider")
-    public String addSlider(@ModelAttribute Slider slider) {
-        slider.setStatus(true); // Mặc định slider được kích hoạt
-        sliderService.addSlider(slider);
-        return REDIRECT_SLIDERS;
+    public String addSlider(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("img") MultipartFile imgFile,
+            @RequestParam("status") boolean status,
+            Model model) {
+        try {
+            // 1. Tải ảnh lên Google Drive
+            String imageUrl = googleDriveService.uploadBannerFile(imgFile);
+
+            // 2. Lưu slider vào database (Sử dụng `addSlider` thay vì `save`)
+            Slider slider = new Slider();
+            slider.setTitle(title);
+            slider.setDescription(description);
+            slider.setImageUrl(imageUrl);
+            slider.setStatus(status);
+
+            sliderService.addSlider(slider); // Đổi từ save() → addSlider()
+
+            // 3. Chuyển hướng về trang danh sách sliders
+            return "redirect:/marketer/slider";
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Lỗi khi tải ảnh hoặc lưu slider!");
+            return "add_slider";
+        }
     }
+
 
     // Hiển thị form sửa slider
     @GetMapping("/slider/edit/{id}")
-    public String showEditSliderForm(@PathVariable Integer id, Model model) {
+    public String showEditSliderForm(@PathVariable Integer id,
+                                     @RequestParam(value = "page", defaultValue = "1") int page,
+                                     Model model) {
         getAuthenticatedUserInfo(model);
         model.addAttribute("slider", sliderService.getSliderById(id));
+        model.addAttribute("page", page); // Lưu page để dùng sau
         return "/marketer/edit_slider";
     }
 
-    // Xử lý form sửa slider
+
     @PostMapping("/slider/edit")
-    public String editSlider(@ModelAttribute Slider slider) {
-        sliderService.updateSlider(slider);
-        return REDIRECT_SLIDERS;
+    public String editSlider(@RequestParam("sliderId") Integer sliderId,
+                             @RequestParam("title") String title,
+                             @RequestParam("description") String description,
+                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                             @RequestParam(value = "status", defaultValue = "false") boolean status,
+                             @RequestParam(value = "page", defaultValue = "1") int page) {
+        try {
+            Slider existingSlider = sliderService.getSliderById(sliderId);
+            String oldImageUrl = existingSlider.getImageUrl();
+
+            existingSlider.setTitle(title);
+            existingSlider.setDescription(description);
+            existingSlider.setStatus(status);
+
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String newImageUrl = googleDriveService.uploadBannerFile(imageFile);
+                existingSlider.setImageUrl(newImageUrl);
+
+                if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                    String oldFileId = googleDriveService.getGoogleDriveFileId(oldImageUrl);
+                    if (oldFileId != null) {
+                        googleDriveService.deleteFile(oldFileId);
+                    }
+                }
+            }
+
+            sliderService.updateSlider(existingSlider);
+            return "redirect:/marketer/slider?page=" + page;
+
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+            return "redirect:/slider/edit/" + sliderId + "?page=" + page;
+        }
     }
+
 
     // Xóa slider
     @GetMapping("/slider/delete/{id}")
