@@ -46,7 +46,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/", "/login").permitAll()
                                 .requestMatchers("/home/**").authenticated()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/marketing/**").hasRole("MARKETING_TEAM")
+                                .requestMatchers("/marketer/**").hasRole("MARKETING_TEAM")
                                 .requestMatchers("/expert/**").hasRole("EXPERT")
                                 .requestMatchers("/forgot_password").permitAll()
                                 .requestMatchers("/reset_password").permitAll()
