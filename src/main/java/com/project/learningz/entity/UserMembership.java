@@ -23,11 +23,10 @@ public class UserMembership {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Size(max = 255)
     @NotNull
-    @Nationalized
-    @Column(name = "package_name", nullable = false, columnDefinition = "NVARCHAR(255)")
-    private String packageName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "vip_package_id", nullable = false)
+    private VipPackage vipPackage;
 
     @NotNull
     @Column(name = "registration_date", nullable = false)
@@ -37,8 +36,5 @@ public class UserMembership {
     @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
 
-    @NotNull
-    @Column(name = "duration", nullable = false)
-    private Integer duration;
 
 }
