@@ -116,5 +116,13 @@ public class UserManagementService {
         }
     }
 
+    public String getAvtByUsername(String username) {
+        return userRepository.findAvatarUrlByUsername(username);
+    }
+
+    public String findUserNameByEmail(String email){
+        return  userRepository.findUserNameByEmail(email);
+    }
+
 }
 

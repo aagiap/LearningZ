@@ -14,7 +14,7 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
 
     public User findByResetPasswordToken(String token);
 
-    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
 
     @Query("SELECT u FROM User u WHERE LOWER(u.username) " +
             "LIKE LOWER(CONCAT('%', :keyword, '%')) " +
@@ -22,6 +22,12 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
             "OR LOWER(u.phoneNum) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(u.role) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     public List<User> findByKeyword(String keyword, Sort sort);
+
+    @Query("SELECT u.avtUrl FROM User u WHERE u.username = ?1")
+    String findAvatarUrlByUsername(String username);
+
+    @Query("SELECT u.username FROM User u where u.email=?1")
+    String findUserNameByEmail(String email);
 
     boolean existsByEmail(String email);
     boolean existsByPhoneNum(String phoneNum);

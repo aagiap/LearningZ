@@ -1,77 +1,64 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 20px;
-}
-
-.container {
-    background-color: #fff;
+.form-wrapper {
+    position: relative;
+    border: 2px solid #07294d; /* Viền bao quanh form */
+    border-radius: 10px;
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    background-color: white;
+    text-align: center;
 }
 
 h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 30px;
-    margin-top: 50px;
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 0 10px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
-form input, form button {
-    height: 40px;
+.avatar-detail-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Khoảng cách giữa ảnh và form */
 }
 
-form .form-control {
-    border-radius: 20px;
-    box-shadow: none;
-    padding-left: 15px;
+.avatar-detail-container img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #07294d;
+    object-fit: cover;
 }
 
-form button {
-    border-radius: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-table {
+/* Tạo viền và bo góc cho dropdown */
+.form-select {
     border-radius: 8px;
-    overflow: hidden;
-    margin-top: 20px;
-}
-
-th, td {
-    text-align: center;
-    vertical-align: middle;
-}
-
-th a {
-    text-decoration: none;
-    color: black;
-    font-weight: 600;
-}
-
-th a:hover {
-    color: black;
-}
-
-
-.sort-icon {
-    margin-left: 5px;
-}
-
-.text-warning, .text-danger {
-    font-size: 20px;
+    height: 40px;
+    font-size: 16px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.text-warning:hover {
-    color: #f0ad4e;
+/* Khi di chuột vào từng option */
+.form-select option:hover {
+    background-color: #07294d;
+    color: white;
 }
 
-.text-danger:hover {
-    color: #d9534f;
+/* Màu mặc định khi chưa hover */
+.form-select option {
+    background-color: white;
+    color: black;
 }
+
+.form-group {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
 
