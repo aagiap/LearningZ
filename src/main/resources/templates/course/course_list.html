@@ -34,6 +34,8 @@
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 
+    <link rel="stylesheet" th:href="@{/css/default.css}">
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -45,7 +47,7 @@
             align-items: center;
             background-color: #e8f4fb; /* Nền xanh nhạt */
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
         }
 
@@ -180,7 +182,7 @@
             <a th:href="@{/}">
                 <h6 class="section-title bg-white text-center px-3">LearningZ</h6>
             </a>
-            <h1 class="mb-5" style="color: #426dce;">Explore our new and exciting course</h1>
+            <h1 class="mb-5" style="color: #07294d;">Explore our new and exciting course</h1>
         </div>
 
 
@@ -250,10 +252,10 @@
                     </div>
 
 
-                    <div class="d-flex">
+                    <div class="d-flex flex-row-reverse">
                         <small class="text-primary py-1 px-2 fw-bold fs-6" style="float:right;">
-                            <a th:href="@{/course/details/{id}(id=${course.id})}">View Details</a>
-                            <i class="fa fa-chevron-right me-2 fs-10"></i>
+                            <a style="color: #07294d" th:href="@{/course/details/{id}(id=${course.id})}">View Details</a>
+                            <i style="color: #07294d" class="fa fa-chevron-right me-2 fs-10 text-end"></i>
                         </small>
                     </div>
                 </div>
@@ -298,6 +300,7 @@
 
     </div>
 </div>
+<th:block th:replace="~{common/footer :: #footer-part}"></th:block>
 </body>
 
 

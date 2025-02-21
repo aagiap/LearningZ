@@ -67,7 +67,7 @@ public class CourseController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("gradeId", gradeId);
 
-        //lấy avtUrl
+        //lấy avtUrl và username
         String username = null;
         if (user != null) {
             username = user.getUsername();
@@ -211,6 +211,11 @@ public class CourseController {
         if (role == Role.STUDENT || username == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Collections.singletonMap("error", "Please register for VIP membership before enrolling in a course."));
+        }
+
+        if (role == Role.ADMIN || role == Role.MARKETING_TEAM || role == Role.EXPERT) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Collections.singletonMap("error", "Register for a course only available with STUDENT"));
         }
 
         usersCourseService.enrollCourse(userId, courseId);
