@@ -266,7 +266,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-banner-cont">
-                    <h2 class="display-3 text-white animated slideInDown" th:text="${course.title}">Course Name</h2>
+                    <h2 class="display-3 text-white animated slideInDown" style="font-family: 'Montserrat', sans-serif; font-weight: bold" th:text="${course.title}">Course Name</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb animated slideInDown">
                             <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
@@ -684,6 +684,7 @@
 
 </div>
 <!-- Course Detail End -->
+<th:block th:replace="~{common/footer :: #footer-part}"></th:block>
 
 
 <!-- Back to Top -->

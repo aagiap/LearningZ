@@ -8,6 +8,7 @@ import com.project.learningz.entity.*;
 import com.project.learningz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,21 @@ public class ExpertController {
 
     @GetMapping(path = "/expert")
     public String courseList(Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        String username;
+        if (principal instanceof OAuth2User) {
+            OAuth2User oauthUser = (OAuth2User) principal;
+            email = oauthUser.getAttribute("email");
+            User user = userService.findByEmail(email);
+            if (user != null) {
+                username = user.getUsername();
+            } else {
+                username = oauthUser.getAttribute("name");
+            }
+        } else {
+            username = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
         User user = userService.findByUsername(username);
         List<CourseDetailsDTO> courseList = new ArrayList<>();
         courseList = courseService.allCoursesByUserID(user.getId());
@@ -58,7 +73,21 @@ public class ExpertController {
     public String courseListSearch(Model model,
                                    String courseSearchKey,
                                    String subject) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        String username;
+        if (principal instanceof OAuth2User) {
+            OAuth2User oauthUser = (OAuth2User) principal;
+            email = oauthUser.getAttribute("email");
+            User user = userService.findByEmail(email);
+            if (user != null) {
+                username = user.getUsername();
+            } else {
+                username = oauthUser.getAttribute("name");
+            }
+        } else {
+            username = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
         User user = userService.findByUsername(username);
         List<CourseDetailsDTO> courseList = new ArrayList<>();
         if (courseSearchKey != null) {
@@ -112,7 +141,21 @@ public class ExpertController {
 
     @GetMapping(path = "/expert/add_course")
     public String addCourse(Model model){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        String username;
+        if (principal instanceof OAuth2User) {
+            OAuth2User oauthUser = (OAuth2User) principal;
+            email = oauthUser.getAttribute("email");
+            User user = userService.findByEmail(email);
+            if (user != null) {
+                username = user.getUsername();
+            } else {
+                username = oauthUser.getAttribute("name");
+            }
+        } else {
+            username = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
         User user = userService.findByUsername(username);
         model.addAttribute("createdById",user.getId());
         return "/expertPage/addCourse";
