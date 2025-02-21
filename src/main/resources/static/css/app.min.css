@@ -83,7 +83,7 @@ html[data-bs-theme=dark][data-topbar-color=light] {
   --bs-gray-700: #424e5a;
   --bs-gray-800: #36404a;
   --bs-gray-900: #323a46;
-  --bs-primary: #ff6c2f;
+  --bs-primary: #ffc600;
   --bs-secondary: #5d7186;
   --bs-success: #22c55e;
   --bs-warning: #f9b931;
@@ -15562,7 +15562,7 @@ textarea.form-control-lg {
   position: relative;
 }
 .topbar .topbar-item .topbar-button.show, .topbar .topbar-item .topbar-button.active, .topbar .topbar-item .topbar-button:active, .topbar .topbar-item .topbar-button:hover {
-  color: #ff6c2f;
+  color: #ffc600;
 }
 .topbar .topbar-badge {
   right: -7px;

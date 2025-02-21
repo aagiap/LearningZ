@@ -29,7 +29,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 redirectURL = "/expert";
                 break;
             } else if (role.equals("ROLE_MARKETING_TEAM")) {
-                redirectURL = "/marketing";
+                redirectURL = "/marketer/dashboard";
                 break;
             }
         }
