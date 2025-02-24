@@ -53,4 +53,5 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
+
 }
