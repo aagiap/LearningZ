@@ -1,37 +1,41 @@
 package com.project.learningz.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
-import java.time.Instant;
-
-@Getter
-@Setter
 @Entity
 @Table(name = "Posts")
+@Getter
+@Setter
 public class Post {
     @Id
-    @Column(name = "post_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer postId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
-    @Column(name = "content", columnDefinition = "NVARCHAR(MAX)")
-    private String content;
+    @Column(name = "post_content", columnDefinition = "NVARCHAR(MAX)")
+    private String postContent;
 
-    @NotNull
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @Column(name = "post_img_url", columnDefinition = "NVARCHAR(255)")
+    private String postImgUrl;
 
-    @NotNull
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
