@@ -91,15 +91,17 @@ public class DoQuizController {
     public String checkProgress(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO, Model model,HttpSession session){
         int answeredQuestions = quizReviewService.countAnsweredQuestions(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
+        List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
+        model.addAttribute("quizSubmitionList", quizSubmitionList);
         if(answeredQuestions == totalQuestions){
             session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
-            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" /" + totalQuestions);
+            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" / " + totalQuestions);
             return "/quiz/QuizProgressWarning";
         }else if (answeredQuestions < totalQuestions){
             session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
-            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" /" + totalQuestions);
+            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" / " + totalQuestions);
             return "/quiz/QuizProgressWarning";
         }else {
             session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
@@ -174,7 +176,13 @@ public class DoQuizController {
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
         List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
         Quiz quiz = (Quiz) session.getAttribute("quiz");
+        int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
+        int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
+        float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
         model.addAttribute("quiz", quiz);
+        model.addAttribute("score", score);
+        model.addAttribute("correctAnswers", correctAnswers);
+        model.addAttribute("totalQuestions", totalQuestions);
         model.addAttribute("resultQuestions", resultQuestions);
         model.addAttribute("quizSubmitionList", quizSubmitionList);
         return "/quiz/QuizReview";

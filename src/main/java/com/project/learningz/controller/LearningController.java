@@ -39,6 +39,9 @@ public class LearningController {
     @Autowired
     private QuizResultService quizResultService;
 
+    @Autowired
+    private PdfService pdfService;
+
 
     @GetMapping("chapterLessonList")
     public String viewChapterLesson(@RequestParam int courseId, Model model,
@@ -61,6 +64,11 @@ public class LearningController {
         List<String> completionStatus = lessonService.isLessonCompleted(userId, courseId);
         String progress = usersCourseService.progressStatus(userId, courseId);
         List<Course> courses = courseService.findCoursesByGradeId(course.getGrade().getId());
+
+        model.addAttribute("username", username);
+
+        String avt = userService.getAvtByUsername(username);
+        model.addAttribute("avt", avt);
         model.addAttribute("courses", courses);
         model.addAttribute("progress", progress);
         model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
@@ -96,6 +104,10 @@ public class LearningController {
         for (Quiz quiz : quizzes) {
             quizInfores.put(quiz, quizResultService.isPass(userId, quiz.getId()));
         }
+        model.addAttribute("username", username);
+
+        String avt = userService.getAvtByUsername(username);
+        model.addAttribute("avt", avt);
         model.addAttribute("firstLessonIdOfPreviousChapter", firstLessonIdOfPreviousChapter);
         model.addAttribute("firstLessonIdOfNextChapter", firstLessonIdOfNextChapter);
         model.addAttribute("chapters", chapters);
@@ -107,16 +119,63 @@ public class LearningController {
 
 
     @GetMapping("/video")
-    public String video(@RequestParam Integer videoId, Model model) {
+    public String video(@RequestParam Integer videoId, Model model,
+                        @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                        @AuthenticationPrincipal OAuth2User userOAuth2) {
+        String username = null;
+
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
+        }
+
         Video video = videoService.findByVideoId(videoId);
         Chapter chapter = video.getLesson().getChapter();
         List<Chapter> chapters = lessonService.getChaptersByCourseId(chapter.getCourse().getId());
         Lesson lesson = lessonService.getLessonById(video.getLesson().getId());
 
+        model.addAttribute("username", username);
+
+        String avt = userService.getAvtByUsername(username);
+        model.addAttribute("avt", avt);
         model.addAttribute("video", video);
         model.addAttribute("chapters", chapters);
         model.addAttribute("lesson", lesson);
         model.addAttribute("chapter", chapter);
         return "/course/video";
+    }
+    @GetMapping("/pdf")
+    public String pdf(@RequestParam Integer pdfId, Model model,
+                      @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                      @AuthenticationPrincipal OAuth2User userOAuth2) {
+        String username = null;
+
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
+        }
+
+        PDF pdf = pdfService.getPdfById(pdfId);
+        Chapter chapter = pdf.getLesson().getChapter();
+        List<Chapter> chapters = lessonService.getChaptersByCourseId(chapter.getCourse().getId());
+        Lesson lesson = lessonService.getLessonById(pdf.getLesson().getId());
+
+        model.addAttribute("username", username);
+
+        String avt = userService.getAvtByUsername(username);
+        model.addAttribute("avt", avt);
+        model.addAttribute("pdf", pdf);
+        model.addAttribute("chapters", chapters);
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("chapter", chapter);
+        return "/course/pdf";
     }
 }

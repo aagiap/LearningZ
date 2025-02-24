@@ -8,10 +8,14 @@
     <link rel="stylesheet" href="/css/DoQuiz.css">
 </head>
 <body>
-<div class="container- mt-sm-5 my-1">
+<div>
+<div class="container- mt-sm-5 my-1" style="border: #1e2b37 solid;position: sticky;
+    top: 0px; /* Dính ở trên cùng khi cuộn */
+    background-color: white; /* Để tránh bị trong suốt khi cuộn */
+    z-index: 1000; /* Đảm bảo luôn nằm trên */">
     <div class="question ml-sm-5 pl-sm-5 pt-2">
         <div class="py-2 h5"><b th:text="${warningTitle}" ></b></div>
-        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="optionss">
             <label class="options">
                 <span th:text="${warningMessage}" style="color: red"></span>
             </label>
@@ -30,5 +34,60 @@
         </div>
 
 </div>
+<div>
+    <th:block th:each="question, questionStat : ${session.questionBankList}">
+        <div class="container- mt-sm-5 my-1" th:id="'question-' + ${questionStat.index}">
+            <span th:text="'Question ' + ${questionStat.index + 1}"></span>
+
+            <div class="question ml-sm-5 pl-sm-5 pt-2">
+                <div class="py-2 h5"><b th:text="${question.getContent()}"></b></div>
+                <div class="pt-3" id="options">
+                    <label class="options">
+                        <input type="radio"
+                               th:name="'question_' + ${questionStat.index}"
+                               th:value="${question.getOption1()}"
+                               th:checked="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                               disabled="disabled">
+                        <span th:text="${question.getOption1()}"></span>
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="options">
+                        <input type="radio"
+                               th:name="'question_' + ${questionStat.index}"
+                               th:value="${question.getOption2()}"
+                               th:checked="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                               disabled="disabled">
+                        <span th:text="${question.getOption2()}"></span>
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="options">
+                        <input type="radio"
+                               th:name="'question_' + ${questionStat.index}"
+                               th:value="${question.getOption3()}"
+                               th:checked="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                               disabled="disabled">
+                        <span th:text="${question.getOption3()}"></span>
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <label class="options">
+                        <input type="radio"
+                               th:name="'question_' + ${questionStat.index}"
+                               th:value="${question.getOption4()}"
+                               th:checked="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
+                               disabled="disabled">
+                        <span th:text="${question.getOption4()}"></span>
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+</div>
+
 </body>
 </html>

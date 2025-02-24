@@ -1,6 +1,7 @@
 package com.project.learningz.repository;
 
 import com.project.learningz.dto.CourseReviewDTO;
+import com.project.learningz.entity.Course;
 import com.project.learningz.entity.UsersCourse;
 import com.project.learningz.entity.UsersCourseId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -65,4 +66,7 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
 
     @Query("SELECT COUNT (uc) FROM UsersCourse uc WHERE uc.course.id = :courseId AND uc.rating IS NOT NULL")
     Integer countReviewByCourseId(Integer courseId);
+
+
+    List<UsersCourse> getCourseByUserId(int userId);
 }

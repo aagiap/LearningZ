@@ -1,10 +1,7 @@
 package com.project.learningz.service;
 
 import com.project.learningz.dto.CourseReviewDTO;
-import com.project.learningz.entity.QuizResult;
-import com.project.learningz.entity.User;
-import com.project.learningz.entity.UsersCourse;
-import com.project.learningz.entity.UsersCourseId;
+import com.project.learningz.entity.*;
 import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.QuizResultRepository;
 import com.project.learningz.repository.UserCourseRepository;
@@ -93,7 +90,8 @@ public class UsersCourseService {
     public String progressStatus(Integer userId, Integer courseId) {
         Integer numberOfQuiz = quizRepository.countNumberOfQuizInCourse(courseId);
         int count = 0;
-        List<QuizResult> quizResults = quizResults(userId);
+        //List<QuizResult> quizResults = quizResults(userId);
+        List<QuizResult> quizResults = quizResultRepository.getQuizResultInCourse(userId, courseId);
         for (QuizResult quizResult : quizResults) {
             if (quizResult.getMaxScore() >= 8) {
                 count++;
@@ -149,5 +147,9 @@ public class UsersCourseService {
     }
     public int countReviewByCourseId(int courseId){
         return userCourseRepository.countReviewByCourseId(courseId);
+    }
+
+    public List<UsersCourse> getUserCourseByUserId(int userId){
+        return userCourseRepository.getCourseByUserId(userId);
     }
 }

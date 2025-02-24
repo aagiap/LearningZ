@@ -37,4 +37,9 @@ public class QuizService {
     }
 
 
+    public List<Quiz> getQuizzesByCourseId(int courseId) {
+        return quizRepository.findByCourseId(courseId);
+    }
+
+
 }

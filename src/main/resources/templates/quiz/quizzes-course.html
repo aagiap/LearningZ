@@ -8,11 +8,16 @@
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
     <link rel="stylesheet" href="/css/chapter-lesson.css">
     <style>
-        <!-- -->
-        <!-- -->
-        <!-- -->
-        <!-- -->
-        <!-- -->
+        <!--
+        -->
+        <!--
+        -->
+        <!--
+        -->
+        <!--
+        -->
+        <!--
+        -->
 
         .avatar-container {
             width: 30px;
@@ -42,6 +47,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 9999;
         }
+
         .user-menu ul {
             list-style: none;
             margin: 0;
@@ -63,7 +69,8 @@
         }
 
         .user-menu ul li:nth-child(2):hover {
-            background-color: #e0e0e0;/
+            background-color: #e0e0e0;
+        /
         }
 
 
@@ -119,7 +126,7 @@
                    th:style="${checkConditionFeedBack} ? 'color: green' : 'color: red'"></p>
             </div>
             <div>
-                <a th:href="@{/QuizList/course(courseId=${course.getId()})}" class="hover-underline">Take quiz</a>
+                <a th:href="@{/learning/chapterLessonList(courseId=${course.getId()})}" class="hover-underline">Back to course</a>
             </div>
             <div>
                 <a href="/course/quiz" class="hover-underline">Frequently Asked Questions</a>
@@ -128,53 +135,39 @@
     </div>
 
 
- <div class="col-lg-6" style="margin-top: 48px" >
-        <table class="table table-bordered table-striped" th:each="chapter : ${chapters}">
+    <div class="col-lg-6" style="margin-top: 48px">
+        <table class="table table-bordered table-striped">
             <tbody>
-            <tr>
-                <td>
-                    <a class="test-title">
-                        <i class="fas fa-file-alt" style="color: darkblue"></i>
-                        <span th:text="${'Chapter '+ chapter.getChapterOrder() +': '+ chapter.getChapterTitle()}"
-                              style="font-size: larger; color: darkblue; font-weight: bolder"></span>
-                    </a>
-                </td>
-            </tr>
-            <tr th:each="lesson : ${chapter.getLessons()}" th:with="var=${chapterStat.index * chapter.getLessons().size() + lessonStat.index}">
+            <tr th:each="quiz : ${quizInfores}">
                 <td style="display: flex; justify-content: space-between">
-                    <form method="get" action="/learning/lesson">
-                        <button type="submit" class="subject btn btn-link" style="color: black">
-                            <span th:text="${lesson.getTitle()}"></span>
-                            <input type="hidden" name="lessonId" th:value="${lesson.getId()}">
-                            <input type="hidden" name="chapterId" th:value="${chapter.getId()}">
-                        </button>
-                    </form>
-                    <span th:classappend="${completionStatus.get(var).equals('Completed') ? 'text-success' : 'text-danger'}" style="margin-block: auto;">
-                        <span th:text="${completionStatus.get(var)}" ></span>
+                    <div class="test-item">
+                        <a th:href="@{/Exam/StartQuiz(quizId=${quiz.key.getId()})}" class="test-title"
+                           style="color:#1C3B5C;" onmouseover="this.style.color='#007bff'"
+                           onmouseout="this.style.color='#1C3B5C'">
+                            <i class="fas fa-file-alt"></i>
+                            <span th:text="${quiz.key.getLesson().getTitle()}"></span>
+                        </a>
+                        <div class="test-info" style="display: flex;justify-content: space-between;">
+                            <span class="duration">
+                                <i class="far fa-clock"></i>
+                                <span th:text="${quiz.key.getTimeLimit() + ' minutes'} "></span>
+                            </span>
+                            <span class="total-questions">
+                                <i class="fas fa-question-circle"></i>
+                                <span th:text="${quiz.key.getTotalQuestions() + ' questions'} "></span>
+                            </span>
+                        </div>
+                    </div>
+                    <span th:classappend="${quiz.value.equals('Pass') ? 'text-success' : 'text-danger'}"
+                          style="margin-block: auto;border: 2px solid;border-radius: 6px;">
+                        <span th:text="${quiz.value}"></span>
                     </span>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="col-lg-3" style="margin-top: 48px;padding: inherit;">
-        <div class="related-courses">
-            <div class="related-header" style="width: 100%; text-align: center">
-                <span class="header-icon">🌱</span>
-                RELATED COURSES
-                <span class="header-icon">🌱</span>
-            </div>
-            <div class="courses-list" th:each="course : ${courses}">
-                <a th:href="@{/course/details/{id}(id=${course.id})}" class="course-item"
-                   style="display: flex; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
-                    <img src="/image/grade10.jpg" alt="Đạo Đức lớp 5" class="course-image-list">
-                    <div class="course-title-list" style="display: flex; align-items: center;">
-                        <p th:text="${course.getTitle()}" style="margin: 0;"></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 
