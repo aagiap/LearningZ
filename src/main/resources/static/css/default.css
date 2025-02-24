@@ -1,15 +1,4 @@
-/*
-  Theme Name: Edubin - LMS Education HTML Template
-  Author: PixelCurve
-  Author URL: https://themeforest.net/user/pixelcurve
-  Support: help.pixelcurve@gmail.com
-  Description: Creative  HTML5 template.
-  Version: 5.0
-*/
 
-
-/* Deafult Margin & Padding */
-/*-- Margin Top --*/
 .mt-5 {
 	margin-top: 5px;
 }
@@ -911,6 +900,7 @@
 	position: relative;
 }
 [data-overlay]::before {
+	background: #07294d none repeat scroll 0 0;
 	content: "";
 	height: 100%;
 	left: 0;
