@@ -34,6 +34,7 @@ public class ProfileController {
     @GetMapping(path = "/home/profile")
     public String profile(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User();
         String username;
         String avatarUrl = null;
         String email = null;
@@ -41,13 +42,13 @@ public class ProfileController {
         Role role = null;
         if (principal instanceof OAuth2User) {
             email = ((OAuth2User) principal).getAttribute("email");
-            User user = userService.findByEmail(email);
+            user = userService.findByEmail(email);
             role = user.getRole();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
         } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userService.findByUsername(username);
+            user = userService.findByUsername(username);
             if (user != null) {
                 avatarUrl = user.getAvtUrl();
                 email = user.getEmail();
@@ -56,7 +57,7 @@ public class ProfileController {
             }
         }
         if (countUpdate != 0 && idReload != 0) {
-            User user = userService.findById(idReload);
+            user = userService.findById(idReload);
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
             email = user.getEmail();
@@ -67,12 +68,14 @@ public class ProfileController {
         model.addAttribute("email", email);
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("role", role);
+        model.addAttribute("user",user);
         return "profile/profile";
     }
 
     @GetMapping(path = "/home/profile/profile_edit")
     public String profile_edit(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User();
         int userId = 0;
         String username;
         String avatarUrl = null;
@@ -80,14 +83,14 @@ public class ProfileController {
         String phoneNumber = null;
         if (principal instanceof OAuth2User) {
             email = ((OAuth2User) principal).getAttribute("email");
-            User user = userService.findByEmail(email);
+            user = userService.findByEmail(email);
             userId = user.getId();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
             phoneNumber = user.getPhoneNum();
         } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userService.findByUsername(username);
+            user = userService.findByUsername(username);
             if (user != null) {
                 userId = user.getId();
                 avatarUrl = user.getAvtUrl();
@@ -96,7 +99,7 @@ public class ProfileController {
             }
         }
         if (countUpdate != 0 && idReload != 0) {
-            User user = userService.findById(idReload);
+            user = userService.findById(idReload);
             userId = user.getId();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
@@ -107,6 +110,7 @@ public class ProfileController {
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("userId", userId);
+        model.addAttribute("user",user);
         return "profile/profile_edit";
     }
 
@@ -154,6 +158,7 @@ public class ProfileController {
             model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
             model.addAttribute("avatarUrl", userService.getUserById(id).getAvtUrl());
+            model.addAttribute("user",userService.getUserById(id));
         }
         return "profile/profile_edit";
     }
