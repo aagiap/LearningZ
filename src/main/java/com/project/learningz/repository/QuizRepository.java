@@ -55,4 +55,14 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
             "JOIN co.grade g " +
             "WHERE co.id = :courseId")
     Integer countNumberOfQuizInCourse(@Param("courseId") Integer courseId);
+
+    @Query("SELECT q " +
+            "FROM Quiz q " +
+            "JOIN q.lesson l " +
+            "JOIN l.chapter c " +
+            "JOIN c.course co " +
+            "WHERE co.id = :courseId")
+    List<Quiz> findByCourseId(@Param("courseId") int courseId);
+
+
 }

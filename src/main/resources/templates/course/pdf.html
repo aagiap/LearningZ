@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${video.getTitle()}"></title>
+    <title th:text="${pdf.getTitle()}"></title>
     <link rel="stylesheet" href="/css/lesson_detail.css">
     <link rel="stylesheet" href="/css/video.css">
     <style>
@@ -137,12 +137,10 @@
     margin-top: 5px;">
         <div class="content-grid" id="videoContainer">
             <div class="square"><img src="/image/learningz.png"></div>
-            <iframe id="videoPlayer"
-                    th:src="${video.getFileUrl()}"
-                    width="800"
-                    height="600"
-                    allowfullscreen>
+            <iframe th:src="${pdf.getFileUrl()}"
+                    width="790" height="800" allow="autoplay">
             </iframe>
+
         </div>
     </main>
 

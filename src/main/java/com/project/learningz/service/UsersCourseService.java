@@ -3,6 +3,11 @@ package com.project.learningz.service;
 import com.project.learningz.dto.CourseReviewDTO;
 import com.project.learningz.entity.*;
 import com.project.learningz.repository.*;
+import com.project.learningz.entity.*;
+import com.project.learningz.repository.QuizRepository;
+import com.project.learningz.repository.QuizResultRepository;
+import com.project.learningz.repository.UserCourseRepository;
+import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +93,8 @@ public class UsersCourseService {
     public String progressStatus(Integer userId, Integer courseId) {
         Integer numberOfQuiz = quizRepository.countNumberOfQuizInCourse(courseId);
         int count = 0;
-        List<QuizResult> quizResults = quizResults(userId);
+        //List<QuizResult> quizResults = quizResults(userId);
+        List<QuizResult> quizResults = quizResultRepository.getQuizResultInCourse(userId, courseId);
         for (QuizResult quizResult : quizResults) {
             if (quizResult.getMaxScore() >= 8) {
                 count++;
@@ -144,6 +150,10 @@ public class UsersCourseService {
     }
     public int countReviewByCourseId(int courseId){
         return userCourseRepository.countReviewByCourseId(courseId);
+    }
+
+    public List<UsersCourse> getUserCourseByUserId(int userId){
+        return userCourseRepository.getCourseByUserId(userId);
     }
 
     @Transactional

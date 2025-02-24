@@ -22,4 +22,5 @@ public interface PdfRepository  extends JpaRepository<PDF, Long> {
     SELECT pdf FROM PDF pdf WHERE pdf.id = ?1
 """)
     PDF getPdfById(int id);
+
 }
