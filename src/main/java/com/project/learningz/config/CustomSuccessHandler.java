@@ -56,7 +56,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 }
             }
         }
-        System.out.println(redirectURL);
         response.sendRedirect(redirectURL);
     }
 }
