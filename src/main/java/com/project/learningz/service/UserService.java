@@ -142,4 +142,8 @@ public class UserService {
     public Role getRoleById(Integer userId) {
         return userRepository.getRoleById(userId);
     }
+
+    public boolean isNormalStudent(Integer userId, Role role){
+        return userRepository.isNormalStudent(userId, role);
+    }
 }

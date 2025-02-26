@@ -1,10 +1,13 @@
 package com.project.learningz.controller;
 
 import com.project.learningz.entity.User;
+import com.project.learningz.service.EmailService;
+import com.project.learningz.service.UserRegisterAccountService;
 import com.project.learningz.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 
 @Controller
 
@@ -26,21 +30,27 @@ public class ForgotPasswordController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserRegisterAccountService userRegisterAccountServiceService;
+
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm() {
         return "auth/forgot_password_form";
     }
 
     @PostMapping("/forgot_password")
-    public String processForgotPassword(HttpServletRequest request, Model model) {
+    public String processForgotPassword(HttpServletRequest request, HttpSession session, Model model) {
         String email = request.getParameter("email");
         String token = RandomString.make(30);
 
         try {
             userService.updateResetPasswordToken(token, email);
             String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
-
-            sendEmail(email, resetPasswordLink);
+            session.setAttribute("tokenGenerationTime", LocalDateTime.now());
+            emailService.sendEmail(email, resetPasswordLink);
             model.addAttribute("message", "We have sent a reset password link to your email. Please check.");
 
         } catch (UsernameNotFoundException ex) {
@@ -52,40 +62,21 @@ public class ForgotPasswordController {
         return "auth/forgot_password_form";
     }
 
-    public void sendEmail(String recipientEmail, String link)
-            throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-
-        helper.setFrom("learningz@gmail.com", "Learningz Platform");
-        helper.setTo(recipientEmail);
-
-        String subject = "Here's the link to reset your password";
-
-        String content = "<p>Hello,</p>"
-                + "<p>You have requested to reset your password.</p>"
-                + "<p>Click the link below to change your password:</p>"
-                + "<p><a href=\"" + link + "\">Change my password</a></p>"
-                + "<br>"
-                + "<p>Ignore this email if you do remember your password, "
-                + "or you have not made the request.</p>";
-
-        helper.setSubject(subject);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
-    }
 
     @GetMapping("/reset_password")
-    public String showResetPasswordForm(@Param(value = "token") String token, Model model) {
+    public String showResetPasswordForm(@Param(value = "token") String token, Model model, HttpSession session) {
         User user = userService.getByResetPasswordToken(token);
         model.addAttribute("token", token);
 
         if (user == null) {
             model.addAttribute("message", "Invalid Token");
             return "auth/message";
+        }
+
+        LocalDateTime tokenGenerationTime = (LocalDateTime) session.getAttribute("tokenGenerationTime");
+        if(userRegisterAccountServiceService.isCodeExpired(tokenGenerationTime)){
+            model.addAttribute("message", "Reset Password Link has expired! Try again.");
+            return "/auth/forgot_password_form";
         }
 
         return "auth/reset_password_form";

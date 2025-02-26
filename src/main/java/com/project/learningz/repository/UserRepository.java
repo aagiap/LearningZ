@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     User findByEmail(String email);
     User findByUsername(String username);
@@ -31,4 +33,11 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     @Query("SELECT u.role FROM User u WHERE u.id= :userId")
     Role getRoleById(@Param("userId") Integer userId);
+
+    @Query("SELECT u FROM User u WHERE u.role= :role")
+    List<User> findByRole(Role role);
+
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.id = :userId AND u.role = :role")
+    boolean isNormalStudent(@Param("userId") Integer userId, @Param("role") Role role);
+
 }
