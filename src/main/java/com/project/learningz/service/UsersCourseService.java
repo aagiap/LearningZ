@@ -163,6 +163,9 @@ public class UsersCourseService {
         UsersCourseId usersCourseId = new UsersCourseId();
         usersCourseId.setUserId(userId);
         usersCourseId.setCourseId(courseId);
+        if (userCourseRepository.existsById(usersCourseId)) {
+            throw new RuntimeException("Extend your VIP package to continue learning");
+        }
         UsersCourse usersCourse = new UsersCourse();
         usersCourse.setId(usersCourseId);
         usersCourse.setUser(user);

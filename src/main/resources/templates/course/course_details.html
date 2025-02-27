@@ -310,7 +310,7 @@
 
                                 <small style="margin-left: 15px;">
                                     <i class="fa fa-solid fa-book"></i>
-                                    <span th:text="${course.subject}">Course subject</span>
+                                    <span th:text="${course.subject.description}">Course subject</span>
                                 </small>
 
                             </div>
@@ -410,29 +410,43 @@
 <!--                    </div>-->
 
                     <div th:if="${!isEnrolled}">
-                        <form id="enrollForm">
-                            <div class="buttons">
-                                <div>
-                                    <button type="button" class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0"
-                                            onclick="enrollCourse(event)">
-                                        REGISTER NOW
-                                    </button>
-                                    <input type="hidden" name="courseId" th:value="${course.getId()}">
+                            <form id="enrollForm">
+                                <div class="buttons">
+                                    <div>
+                                        <button type="button" class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0"
+                                                onclick="enrollCourse(event)">
+                                            REGISTER NOW
+                                        </button>
+                                        <input type="hidden" name="courseId" th:value="${course.getId()}">
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
                     </div>
 
 
                     <div th:if="${isEnrolled}">
-                        <form action="/learning/chapterLessonList" method="get">
-                            <div class="buttons">
-                                <div>
-                                    <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">REGISTERED-STUDY NOW</button>
-                                    <input type="hidden" name="courseId" th:value="${course.getId()}">
+                        <div th:if="${isNormalStudent}">
+                            <form action="/course/membership" method="post">
+                                <div class="buttons">
+                                    <div>
+                                        <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">
+                                            <div>Extend your VIP package</div>
+                                            <div>to continue learning</div>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
+                        <div th:if="${!isNormalStudent}">
+                            <form action="/learning/chapterLessonList" method="get">
+                                <div class="buttons">
+                                    <div>
+                                        <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">REGISTERED-STUDY NOW</button>
+                                        <input type="hidden" name="courseId" th:value="${course.getId()}">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -843,11 +857,19 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (data.error) {
-                    alert(data.error); // Hiển thị lỗi bằng alert nếu có
-                } else {
-                    alert(data.success); // Hiển thị thành công
-                    window.location.href = "/course/details/" + courseId; // Chuyển hướng sau khi đăng ký thành công
+                if (data.error1) {
+                    alert(data.error1);
+                    window.location.href = "/login";
+                } else if (data.error2) {
+                    let confirmAction = confirm(data.error2 + "\n" + data.action);
+                    if (confirmAction) {
+                        window.location.href = "/course/membership";
+                    }
+                } else if (data.error3) {
+                    alert(data.error3);
+                } else if (data.success) {
+                    alert(data.success);
+                    window.location.href = "/course/details/" + courseId;
                 }
             })
             .catch(error => console.error("Error:", error));
