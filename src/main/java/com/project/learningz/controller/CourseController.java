@@ -2,10 +2,7 @@ package com.project.learningz.controller;
 
 import com.project.learningz.constant.Role;
 import com.project.learningz.dto.CourseReviewDTO;
-import com.project.learningz.entity.Chapter;
-import com.project.learningz.entity.Course;
-import com.project.learningz.entity.Lesson;
-import com.project.learningz.entity.Quiz;
+import com.project.learningz.entity.*;
 import com.project.learningz.service.*;
 import com.project.learningz.utils.PageWrapper;
 import lombok.RequiredArgsConstructor;
@@ -46,18 +43,23 @@ public class CourseController {
     private LessonService lessonService;
     @Autowired
     private QuizResultService quizResultService;
+    @Autowired
+    private GradeService gradeService;
+    @Autowired
+    private SubjectService subjectService;
 
 
     @GetMapping("")
     public String viewCourse(Model model,
                              @RequestParam(name = "keyword", defaultValue = "") String keyword,
                              @RequestParam(name = "gradeId", defaultValue = "-1") int gradeId,
+                             @RequestParam(name = "subjectId", defaultValue = "-1") int subjectId,
                              @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
                              @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Course> pageCourse = courseService.getCoursesPagingByKeywordNGradeId(gradeId, keyword, pageable);
+        Page<Course> pageCourse = courseService.getCoursesPaging(gradeId, subjectId, keyword, pageable);
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
 
         PageWrapper<Course> response = new PageWrapper<>(pageCourse, "/course");
@@ -66,7 +68,14 @@ public class CourseController {
         model.addAttribute("page", response);
         model.addAttribute("keyword", keyword);
         model.addAttribute("gradeId", gradeId);
+        model.addAttribute("subjectId", subjectId);
 
+
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+
+        List<Subject> subjects = subjectService.getAllSubjects();
+        model.addAttribute("subjects", subjects);
         //lấy avtUrl và username
         String username = null;
         if (user != null) {
@@ -132,6 +141,9 @@ public class CourseController {
 
         String avatarUrl = userService.getAvtByUsername(username);
         model.addAttribute("avatarUrl", avatarUrl);
+
+        boolean isNormalStudent = userService.isNormalStudent(userId, Role.STUDENT);
+        model.addAttribute("isNormalStudent", isNormalStudent);
 
         int numberOfFeedbacks = usersCourseService.countReviewByCourseId(courseId);
         model.addAttribute("numberOfFeedbacks", numberOfFeedbacks);
@@ -208,14 +220,23 @@ public class CourseController {
         Integer userId = userService.getUserIdByUsername(username);
         Role role = userService.getRoleById(userId);
 
-        if (role == Role.STUDENT || username == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Collections.singletonMap("error", "Please register for VIP membership before enrolling in a course."));
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error1", "You must be logged in to enroll in a course."));
         }
+
+        if (role == Role.STUDENT) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of(
+                            "error2", "Please register for VIP membership before enrolling in a course.",
+                            "action", "Click OK to go to VIP Membership register page."
+                    ));
+        }
+
 
         if (role == Role.ADMIN || role == Role.MARKETING_TEAM || role == Role.EXPERT) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Collections.singletonMap("error", "Register for a course only available with STUDENT"));
+                    .body(Collections.singletonMap("error3", "Register for a course only available with STUDENT"));
         }
 
         usersCourseService.enrollCourse(userId, courseId);

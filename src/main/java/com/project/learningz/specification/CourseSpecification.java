@@ -17,7 +17,7 @@ public class CourseSpecification {
                 cb.or(
                         cb.like(root.get("title"), "%" + keyword + "%"),
                         cb.like(root.get("description"), "%" + keyword + "%"),
-                        cb.like(root.get("subject"), "%" + keyword + "%"),
+                        cb.like(root.get("subject").get("name"), "%" + keyword + "%"),
                         cb.like(root.get("grade").get("name"), "%" + keyword + "%"),
                         cb.like(root.get("createdBy").get("username"), "%" + keyword + "%"));
     }
@@ -26,5 +26,7 @@ public class CourseSpecification {
         return (root, query, cb) -> cb.equal(root.get("grade").get("id"), gradeId);
     }
 
-
+    public static Specification<Course> bySubjectId(int subjectId) {
+        return (root, query, cb) -> cb.equal(root.get("subject").get("id"), subjectId);
+    }
 }
