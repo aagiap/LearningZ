@@ -3,7 +3,7 @@ package com.project.learningz.service;
 import com.project.learningz.dto.CourseDetailsDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
-import com.project.learningz.repository.SubjectRepository;
+import com.project.learningz.repository.UserRepository;
 import com.project.learningz.specification.CourseSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +33,10 @@ public class CourseService {
         return courseRepository.findAll(spec, pageable);
     }
 
-    public Page<Course> getCoursesPaging(int gradeId, int subjectId, String keyword, Pageable pageable) {
-            Specification<Course> spec = CourseSpecification.getAllSpec();
+    public Page<Course> getCoursesPagingByKeywordNGradeId(int gradeId, String keyword, Pageable pageable) {
+        Specification<Course> spec = CourseSpecification.getAllSpec();
         if (gradeId > 0) {
             spec = spec.and(CourseSpecification.byGradeId(gradeId));
-        }
-        if(subjectId > 0) {
-            spec = spec.and(CourseSpecification.bySubjectId(subjectId));
         }
         if (StringUtils.isNotEmpty(keyword)) {
             spec = spec.and(CourseSpecification.byKeywordSpec(keyword));
@@ -79,7 +76,7 @@ public class CourseService {
     public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, String subject, int gradeId, MultipartFile courseImageUrl,String description) throws GeneralSecurityException, IOException {
         Course course = courseRepository.findById(courseId).orElse(null);
         course.setTitle(title);
-        //course.setSubject(subject);
+        course.setSubject(subject);
         course.setGrade(gradeService.findById(gradeId));
         course.setDescription(description);
         if(courseImageUrl != null && !courseImageUrl.isEmpty()) {
@@ -104,7 +101,7 @@ public class CourseService {
         Course newCourse = new Course();
         newCourse.setCreatedBy(userService.findById(createdByID));
         newCourse.setTitle(title);
-        //newCourse.setSubject(subject);
+        newCourse.setSubject(subject);
         newCourse.setGrade(gradeService.findById(gradeId));
         newCourse.setDescription(description);
         String courseDriveLink = googleDriveService.createFolder(title,googleDriveService.getCoursesFolderId());

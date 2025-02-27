@@ -202,14 +202,6 @@
                         th:selected="${gradeId == grade.id}">
                 </option>
             </select>
-            <select name="subjectId">
-                <option value="-1" th:selected="${subjectId == -1}">All subject</option>
-                <option th:each="subject : ${subjects}"
-                        th:value="${subject.id}"
-                        th:text="${subject.name}"
-                        th:selected="${subjectId == subject.id}">
-                </option>
-            </select>
             <button type="submit" class="btn-search">Search</button>
             <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" class="btn-clear"/>
         </form>
@@ -249,7 +241,7 @@
                             <a th:href="@{/course/details/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course
                                 Title</a>
                         </h5>
-                        <p th:text="${course.subject.name}">Course subject</p>
+                        <p th:text="${course.subject}">Course subject</p>
                     </div>
 
 
