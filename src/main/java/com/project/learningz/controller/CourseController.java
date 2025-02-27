@@ -13,9 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +21,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,18 +41,21 @@ public class CourseController {
     private QuizResultService quizResultService;
     @Autowired
     private GradeService gradeService;
+    @Autowired
+    private SubjectService subjectService;
 
 
     @GetMapping("")
     public String viewCourse(Model model,
                              @RequestParam(name = "keyword", defaultValue = "") String keyword,
                              @RequestParam(name = "gradeId", defaultValue = "-1") int gradeId,
+                             @RequestParam(name = "subjectId", defaultValue = "-1") int subjectId,
                              @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
                              @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Course> pageCourse = courseService.getCoursesPagingByKeywordNGradeId(gradeId, keyword, pageable);
+        Page<Course> pageCourse = courseService.getCoursesPaging(gradeId, subjectId, keyword, pageable);
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
 
         PageWrapper<Course> response = new PageWrapper<>(pageCourse, "/course");
@@ -65,9 +64,14 @@ public class CourseController {
         model.addAttribute("page", response);
         model.addAttribute("keyword", keyword);
         model.addAttribute("gradeId", gradeId);
+        model.addAttribute("subjectId", subjectId);
 
         List<Grade> grades = gradeService.getAllGrades();
         model.addAttribute("grades", grades);
+
+        List<Subject> subjects = subjectService.getAllSubjects();
+        model.addAttribute("subjects", subjects);
+
         //lấy avtUrl và username
         String username = null;
         if (user != null) {

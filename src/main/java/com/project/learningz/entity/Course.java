@@ -35,8 +35,12 @@ public class Course {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "grade_id", nullable = false)
+    @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
+//    @Size(max = 100)
+//    @NotNull
+//    @Column(name = "subject", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
+//    private String subject;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
