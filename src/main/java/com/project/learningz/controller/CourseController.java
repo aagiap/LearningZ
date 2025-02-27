@@ -45,18 +45,21 @@ public class CourseController {
     private QuizResultService quizResultService;
     @Autowired
     private GradeService gradeService;
+    @Autowired
+    private SubjectService subjectService;
 
 
     @GetMapping("")
     public String viewCourse(Model model,
                              @RequestParam(name = "keyword", defaultValue = "") String keyword,
                              @RequestParam(name = "gradeId", defaultValue = "-1") int gradeId,
+                             @RequestParam(name = "subjectId", defaultValue = "-1") int subjectId,
                              @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
                              @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Course> pageCourse = courseService.getCoursesPagingByKeywordNGradeId(gradeId, keyword, pageable);
+        Page<Course> pageCourse = courseService.getCoursesPaging(gradeId, subjectId, keyword, pageable);
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
 
         PageWrapper<Course> response = new PageWrapper<>(pageCourse, "/course");
@@ -65,9 +68,14 @@ public class CourseController {
         model.addAttribute("page", response);
         model.addAttribute("keyword", keyword);
         model.addAttribute("gradeId", gradeId);
+        model.addAttribute("subjectId", subjectId);
+
 
         List<Grade> grades = gradeService.getAllGrades();
         model.addAttribute("grades", grades);
+
+        List<Subject> subjects = subjectService.getAllSubjects();
+        model.addAttribute("subjects", subjects);
         //lấy avtUrl và username
         String username = null;
         if (user != null) {

@@ -145,21 +145,23 @@
     </div>
     <div class="course-list">
         <h2>Registered Course</h2>
-        <ul>
-            <li>
-                <div class="course-title">Khóa học 1</div>
-                <div class="course-description">Mô tả khóa học 1</div>
-            </li>
-            <li>
-                <div class="course-title">Khóa học 2</div>
-                <div class="course-description">Mô tả khóa học 2</div>
-            </li>
-            <li>
-                <div class="course-title">Khóa học 3</div>
-                <div class="course-description">Mô tả khóa học 3</div>
-            </li>
-            <!-- Thêm các khóa học khác tại đây -->
-        </ul>
+        <div th:if="${!courseIdList.isEmpty()}">
+            <div class="course-list-container">
+                <ul id="courseList">
+                    <li th:each="course : ${courseList}" class="course-item">
+                        <div class="course-title" th:text="${course.getTitle()}"></div>
+                        <div class="course-view">
+                            <button onclick="viewCourseDetails(this)">View details</button>
+                            <a hidden id="viewCourseDetailsRequest" th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div th:if="${courseIdList.isEmpty()}" style="text-align: center">
+            <p>Courses List Empty <a th:href="@{/course}">Register course now!</a></p>
+        </div>
     </div>
 </div>
 <script>
@@ -176,6 +178,12 @@
             dropdown.style.display = "none";
         }
     });
+    function viewCourseDetails(button) {
+        let link = button.parentElement.querySelector("#viewCourseDetailsRequest");
+        if (link) {
+            link.click();
+        }
+    }
 </script>
 </body>
 </html>

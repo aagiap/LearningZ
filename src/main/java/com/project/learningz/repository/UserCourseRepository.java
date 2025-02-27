@@ -69,4 +69,9 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
 
 
     List<UsersCourse> getCourseByUserId(int userId);
+
+    @Query("""
+    SELECT uc.course.id FROM UsersCourse uc WHERE uc.user.id = ?1
+    """)
+    List<Integer> courseIdListByUserId(Integer userId);
 }

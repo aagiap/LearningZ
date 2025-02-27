@@ -1,6 +1,7 @@
 package com.project.learningz.entity;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.constant.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -52,5 +53,9 @@ public class User {
 
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
+
+    @Column(name = "user_status")
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
 }

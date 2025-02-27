@@ -173,4 +173,7 @@ public class UsersCourseService {
         userCourseRepository.save(usersCourse);
     }
 
+    public List<Integer> courseIdListByUserId(Integer userId){
+        return userCourseRepository.courseIdListByUserId(userId);
+    }
 }
