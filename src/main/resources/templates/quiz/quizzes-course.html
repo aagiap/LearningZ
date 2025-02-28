@@ -145,7 +145,7 @@
                            style="color:#1C3B5C;" onmouseover="this.style.color='#007bff'"
                            onmouseout="this.style.color='#1C3B5C'">
                             <i class="fas fa-file-alt"></i>
-                            <span th:text="${quiz.key.getLesson().getTitle()}"></span>
+                            <span th:text="${quiz.key.getLesson().getTitle() + ': ' + quiz.key.getTitle()}"></span>
                         </a>
                         <div class="test-info" style="display: flex;justify-content: space-between;">
                             <span class="duration">

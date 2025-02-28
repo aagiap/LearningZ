@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin/users")
+@RequestMapping("/admin/dashboard")
 public class UserManagementController {
     @Autowired
     private UserManagementService userManagementService;

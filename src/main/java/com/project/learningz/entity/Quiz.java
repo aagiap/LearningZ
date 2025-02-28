@@ -31,6 +31,10 @@ public class Quiz {
     @Column(name = "time_limit", nullable = false)
     private Integer timeLimit;
 
+    @NotNull
+    @Column(name = "quiz_title", length = 255, nullable = false)
+    private String title;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<QuizResult> quizResults = new ArrayList<>();
 

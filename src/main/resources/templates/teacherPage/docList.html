@@ -13,18 +13,18 @@
     <h2>Documents List</h2>
 
     <div class="filter-section">
-        <form action="/expert/chapter/lesson/docs/search">
+        <form action="/teacher/chapter/lesson/docs/search">
             <input name="lessonId" type="text" hidden th:value="${lessonId}">
             <input name="docSearchKey" type="text" id="searchInput" placeholder="Search documents by title">
             <input type="submit" value="Search">
         </form>
 
         <button id="returnLessonButton" onclick="returnLesson()">Return Lesson List</button>
-        <form action="/expert/chapter/lesson" method="get" id="returnLesson">
+        <form action="/teacher/chapter/lesson" method="get" id="returnLesson">
             <input type="number" name="chapterId" th:value="${chapterId}" hidden>
         </form>
         <button id="addDoc" onclick="addDocRequest()">+ Add New Document</button>
-        <form action="/expert/chapter/lesson/docs/addDoc" method="get" id="addDocRequest">
+        <form action="/teacher/chapter/lesson/docs/addDoc" method="get" id="addDocRequest">
             <input type="number" name="lessonId" th:value="${lessonId}" hidden>
         </form>
     </div>
@@ -63,7 +63,7 @@
             <td th:text="${doc.getFileUrl()}"></td>
             <td class="actions">
                 <div class="top-actions">
-                    <form action="/expert/chapter/lesson/docs/edit" method="POST" style="display: inline">
+                    <form action="/teacher/chapter/lesson/docs/edit" method="POST" style="display: inline">
                         <input type="hidden" name="pdfId" th:value="${doc.getId()}" />
                         <button type="submit" class="edit-btn">Edit</button>
                     </form>
