@@ -3,7 +3,6 @@ package com.project.learningz.service;
 import com.project.learningz.dto.CourseDetailsDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
-import com.project.learningz.repository.UserRepository;
 import com.project.learningz.specification.CourseSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

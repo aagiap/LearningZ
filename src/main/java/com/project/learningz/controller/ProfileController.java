@@ -1,10 +1,11 @@
 package com.project.learningz.controller;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.entity.Course;
+import com.project.learningz.entity.Grade;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
-import com.project.learningz.service.GoogleDriveService;
-import com.project.learningz.service.UserService;
+import com.project.learningz.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,15 @@ public class ProfileController {
 
     @Autowired
     private GoogleDriveService googleDriveService;
+
+    @Autowired
+    private UsersCourseService usersCourseService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private GradeService gradeService;
 
     @GetMapping(path = "/home/profile")
     public String profile(Model model) {
@@ -63,6 +73,20 @@ public class ProfileController {
             email = user.getEmail();
             phoneNumber = user.getPhoneNum();
         }
+
+        List<Integer> courseIdList = new ArrayList<>();
+        courseIdList = usersCourseService.courseIdListByUserId(user.getId());
+        List<Course> courseList = new ArrayList<>();
+        if(!courseIdList.isEmpty()){
+            for (Integer integer : courseIdList) {
+                courseList.add(courseService.findByCourseId(integer));
+            }
+            model.addAttribute("courseList", courseList);
+        }
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+
+        model.addAttribute("courseIdList", courseIdList);
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("email", email);
@@ -106,6 +130,9 @@ public class ProfileController {
             email = user.getEmail();
             phoneNumber = user.getPhoneNum();
         }
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("phoneNumber", phoneNumber);
@@ -137,7 +164,7 @@ public class ProfileController {
         } else {
             if (!avatarFile.isEmpty()) {
                 User user = userService.findById(id);
-                if (user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")) {
+                if (user.getAvtUrl() != null && user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")) {
                     String[] oldAvtId = user.getAvtUrl().split("https://lh3.googleusercontent.com/d/");
                     if (googleDriveService.fiLeExists(oldAvtId[1])) {
                         googleDriveService.deleteFile(oldAvtId[1]);
@@ -152,6 +179,9 @@ public class ProfileController {
 
             session.setAttribute("countUpdate", countUpdate);
             session.setAttribute("idReload", idReload);
+
+            List<Grade> grades = gradeService.getAllGrades();
+            model.addAttribute("grades", grades);
 
             model.addAttribute("notification", "Update success");
             model.addAttribute("username", username);

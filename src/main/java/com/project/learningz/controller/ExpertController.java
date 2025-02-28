@@ -176,6 +176,7 @@ public class ExpertController {
         try{
             courseService.createCourse(createdById, gradeId, subject, title, description, courseImageUrl);
         }catch(Exception e){
+            e.printStackTrace();
             model.addAttribute("error","Course Creation Failed");
             return "/expertPage/addCourse";
         }

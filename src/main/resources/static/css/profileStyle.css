@@ -81,12 +81,12 @@
     color: #ff9800;
 }
 
-.course-list ul {
+.course-list-container ul {
     list-style-type: none;
     padding: 0;
 }
 
-.course-list ul li {
+.course-list-container ul li {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     display: flex;
@@ -95,21 +95,42 @@
     transition: 0.3s;
 }
 
-.course-list ul li:hover {
+.course-list-container ul li:hover {
     background-color: #f9f9f9;
 }
 
-.course-list ul li:last-child {
+.course-list-container ul li:last-child {
     border-bottom: none;
 }
-
-.course-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
+.course-view button{
+    background-color: #f19d38;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.course-list-container {
+    max-height: 300px; /* Điều chỉnh chiều cao theo ý muốn */
+    overflow-y: auto; /* Tạo thanh cuộn khi danh sách dài */
+    border: 1px solid #ccc; /* Viền cho dễ nhìn */
+    padding: 10px;
 }
 
-.course-description {
-    color: #777;
-    font-size: 14px;
+.course-list-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.course-list-container li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
 }

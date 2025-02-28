@@ -138,7 +138,7 @@
         <div class="content-grid" id="videoContainer">
             <div class="square"><img src="/image/learningz.png"></div>
             <iframe id="videoPlayer"
-                    th:src="${video.getFileUrl()}"
+                    th:src="@{${video.getFileUrl()}}"
                     width="800"
                     height="600"
                     allowfullscreen>
