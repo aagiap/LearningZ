@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Add new chapter</h2>
 
-    <form action="/expert/chapter/addChapter/create" method="post">
+    <form action="/teacher/chapter/addChapter/create" method="post">
         <input type="hidden" name="courseId" th:value="${courseId}">
 
         <label>Order:</label>
@@ -38,7 +38,7 @@
         <p th:text="${notification}"></p>
     </div>
 
-    <form action="/expert/chapter" method="get" id="returnChapterList">
+    <form action="/teacher/chapter" method="get" id="returnChapterList">
         <input type="number" name="courseId" th:value="${courseId}" hidden>
     </form>
 </div>

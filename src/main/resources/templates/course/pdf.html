@@ -163,7 +163,7 @@
         <ul class="sidebar-menu" th:each="quiz : ${lesson.getQuizzes()}">
             <li style="border-top: 1px solid; border-image: linear-gradient(to right, transparent, #1C3B5C, transparent) 1;">
                 <a th:href="@{/Exam/StartQuiz(quizId=${quiz.id})}"
-                   th:text="${quiz.lesson.getTitle()}"></a>
+                   th:text="${quiz.getTitle()}"></a>
             </li>
         </ul>
     </aside>

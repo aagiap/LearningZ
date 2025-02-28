@@ -36,8 +36,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             if (role.equals("ROLE_ADMIN")) {
                 redirectURL = "/admin/dashboard";
                 break;
-            } else if (role.equals("ROLE_EXPERT")) {
-                redirectURL = "/expert";
+            } else if (role.equals("ROLE_TEACHER")) {
+                redirectURL = "/teacher";
                 break;
             } else if (role.equals("ROLE_MARKETING_TEAM")) {
                 redirectURL = "/marketer/dashboard";

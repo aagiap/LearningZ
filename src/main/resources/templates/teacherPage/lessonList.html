@@ -13,18 +13,18 @@
     <h2>Lesson List</h2>
 
     <div class="filter-section">
-        <form action="/expert/chapter/lesson/search">
+        <form action="/teacher/chapter/lesson/search">
             <input name="chapterId" type="text" hidden th:value="${chapterId}">
             <input name="lessonSearchKey" type="text" id="searchInput" placeholder="Search lesson by title">
             <input type="submit" value="Search">
         </form>
 
         <button id="returnLessonButton" onclick="returnChapter()">Return Chapter List</button>
-        <form action="/expert/chapter" method="get" id="returnChapter">
+        <form action="/teacher/chapter" method="get" id="returnChapter">
             <input type="number" name="courseId" th:value="${courseId}" hidden>
         </form>
         <button id="addLesson" onclick="addLessonRequest()">+ Add New Lesson</button>
-        <form action="/expert/chapter/lesson/addLesson" method="get" id="addLessonRequest">
+        <form action="/teacher/chapter/lesson/addLesson" method="get" id="addLessonRequest">
             <input type="number" name="chapterId" th:value="${chapterId}" hidden>
         </form>
     </div>
@@ -75,7 +75,7 @@
             </td>
             <td class="actions">
                 <div class="top-actions">
-                    <form action="/expert/chapter/lesson/edit" method="POST" style="display: inline">
+                    <form action="/teacher/chapter/lesson/edit" method="POST" style="display: inline">
                         <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}" />
                         <button type="submit" class="edit-btn">Edit</button>
                     </form>
@@ -85,11 +85,11 @@
                     </form>
                 </div>
                 <div class="bottom-actions">
-                    <form action="/expert/chapter/lesson/videos" method="get">
+                    <form action="/teacher/chapter/lesson/videos" method="get">
                         <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}" />
                         <button type="submit" class="view-btn">Videos</button>
                     </form>
-                    <form action="/expert/chapter/lesson/docs" method="get">
+                    <form action="/teacher/chapter/lesson/docs" method="get">
                         <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}" />
                         <button type="submit" class="view-btn">Docs</button>
                     </form>
