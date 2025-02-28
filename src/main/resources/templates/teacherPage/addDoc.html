@@ -11,7 +11,7 @@
 <div class="container">
   <h2>Add new document</h2>
 
-  <form action="/expert/chapter/lesson/docs/addDoc/create" method="post" enctype="multipart/form-data">
+  <form action="/teacher/chapter/lesson/docs/addDoc/create" method="post" enctype="multipart/form-data">
     <input type="hidden" name="lessonId" th:value="${lessonId}">
 
     <label>Title:</label>
@@ -37,7 +37,7 @@
     <p th:text="${notification}"></p>
   </div>
 
-  <form action="/expert/chapter/lesson/docs" method="get" id="returnDocList">
+  <form action="/teacher/chapter/lesson/docs" method="get" id="returnDocList">
     <input type="number" name="lessonId" th:value="${lessonId}" hidden>
   </form>
 </div>

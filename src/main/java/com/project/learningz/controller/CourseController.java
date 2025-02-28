@@ -234,7 +234,7 @@ public class CourseController {
         }
 
 
-        if (role == Role.ADMIN || role == Role.MARKETING_TEAM || role == Role.EXPERT) {
+        if (role == Role.ADMIN || role == Role.MARKETING_TEAM || role == Role.TEACHER) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Collections.singletonMap("error3", "Register for a course only available with STUDENT"));
         }

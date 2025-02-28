@@ -155,9 +155,9 @@
             <section class="section">
                 <h3 class="section-title">Quiz</h3>
                 <ul class="section-links" th:each="quizInfor : ${quizInfores}"
-                    style="display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                    style="display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);justify-content: space-between">
                     <li><a th:href="@{/Exam/StartQuiz(quizId=${quizInfor.key.getId()})}"
-                           th:text="${quizInfor.key.lesson.getTitle()}"><i class="icon">📋</i></a></li>
+                           th:text="${quizInfor.key.getTitle()}"><i class="icon">📋</i></a></li>
                     <li th:classappend="${quizInfor.value.equals('Pass') ? 'text-success' : 'text-danger'}"
                         style="margin-left: 5px;padding: 1px ;   margin-block: auto;border: 1px solid;border-radius: 5px;text-align: center;">
                         <span th:text="${quizInfor.value}"></span>

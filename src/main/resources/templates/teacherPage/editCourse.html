@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Edit Course</h2>
 
-    <form action="/expert/edit/update" method="post" enctype="multipart/form-data">
+    <form action="/teacher/edit/update" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" th:value="${course.getId()}">
         <input type="hidden" name="createdByUserId" th:value="${course.getCreatedBy().getId()}">
         <input type="hidden" name="courseDriveLink" th:value="${course.getCourseDriveLink()}"/>
@@ -55,7 +55,7 @@
             <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
         </div>
 
-        <a href="/expert" id="returnCourseList" hidden></a>
+        <a href="/teacher" id="returnCourseList" hidden></a>
     </form>
     <!-- Hiển thị lỗi -->
     <div th:if="${error}" class="error-messages">

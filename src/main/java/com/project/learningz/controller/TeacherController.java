@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class ExpertController {
+public class TeacherController {
 
     @Autowired
     private CourseService courseService;
@@ -40,7 +40,7 @@ public class ExpertController {
     @Autowired
     private PdfService pdfService;
 
-    @GetMapping(path = "/expert")
+    @GetMapping(path = "/teacher")
     public String courseList(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email;
@@ -66,10 +66,10 @@ public class ExpertController {
             model.addAttribute("courseList",courseList);
         }
 
-        return "/expertPage/courseListExpert";
+        return "/teacherPage/courseListTeacher";
     }
 
-    @GetMapping(path = "/expert/search")
+    @GetMapping(path = "/teacher/search")
     public String courseListSearch(Model model,
                                    String courseSearchKey,
                                    String subject) {
@@ -100,18 +100,18 @@ public class ExpertController {
         }else{
             model.addAttribute("courseList",courseList);
         }
-        return "/expertPage/courseListExpert";
+        return "/teacherPage/courseListTeacher";
     }
 
-    @PostMapping(path = "/expert/edit")
+    @PostMapping(path = "/teacher/edit")
     public String editCourse(Model model,
                              @RequestParam("courseId") int courseId){
         Course course = courseService.findByCourseId(courseId);
         model.addAttribute("course",course);
-        return "/expertPage/editCourse";
+        return "/teacherPage/editCourse";
     }
 
-    @PostMapping(path = "/expert/edit/update")
+    @PostMapping(path = "/teacher/edit/update")
     public String updateCourse(Model model,
                                @RequestParam("id") int id,
                                @RequestParam("createdByUserId") int createdByUseID,
@@ -131,15 +131,15 @@ public class ExpertController {
             }catch(Exception e){
                 model.addAttribute("error","Course Update Failed");
                 model.addAttribute("course",courseService.findByCourseId(id));
-                return "/expertPage/editCourse";
+                return "/teacherPage/editCourse";
             }
             model.addAttribute("course",courseService.findByCourseId(id));
             model.addAttribute("notification","Update Course Successfully");
         }
-        return "/expertPage/editCourse";
+        return "/teacherPage/editCourse";
     }
 
-    @GetMapping(path = "/expert/add_course")
+    @GetMapping(path = "/teacher/add_course")
     public String addCourse(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email;
@@ -158,10 +158,10 @@ public class ExpertController {
         }
         User user = userService.findByUsername(username);
         model.addAttribute("createdById",user.getId());
-        return "/expertPage/addCourse";
+        return "/teacherPage/addCourse";
     }
 
-    @PostMapping(path = "/expert/add_course/create")
+    @PostMapping(path = "/teacher/add_course/create")
     public String confirmAddCourse(Model model,
                                    @RequestParam("createdById") int createdById,
                                    @RequestParam("title") String title,
@@ -171,20 +171,20 @@ public class ExpertController {
                                    @RequestParam("description") String description){
         if(title.isEmpty() || title.trim().isEmpty()){
             model.addAttribute("error","Please fill title");
-            return "/expertPage/addCourse";
+            return "/teacherPage/addCourse";
         }
         try{
             courseService.createCourse(createdById, gradeId, subject, title, description, courseImageUrl);
         }catch(Exception e){
             e.printStackTrace();
             model.addAttribute("error","Course Creation Failed");
-            return "/expertPage/addCourse";
+            return "/teacherPage/addCourse";
         }
         model.addAttribute("notification","Course Creation Successfully");
-        return "/expertPage/addCourse";
+        return "/teacherPage/addCourse";
     }
 
-    @GetMapping(path = "/expert/chapter")
+    @GetMapping(path = "/teacher/chapter")
     public String chapterList(Model model,
                               @RequestParam("courseId") int courseId){
         List<ChapterDetailDTO> chapterList = new ArrayList<>();
@@ -196,10 +196,10 @@ public class ExpertController {
             model.addAttribute("courseId", courseId);
             model.addAttribute("chapterList",chapterList);
         }
-        return "/expertPage/chapterList";
+        return "/teacherPage/chapterList";
     }
 
-    @GetMapping(path = "/expert/chapter/search")
+    @GetMapping(path = "/teacher/chapter/search")
     public String chapterListSearch(Model model,
                                     int courseId,
                                     String chapterSearchKey) {
@@ -216,18 +216,18 @@ public class ExpertController {
             model.addAttribute("courseId", courseId);
             model.addAttribute("chapterList",chapterList);
         }
-        return "/expertPage/chapterList";
+        return "/teacherPage/chapterList";
     }
 
-    @PostMapping(path = "/expert/chapter/edit")
+    @PostMapping(path = "/teacher/chapter/edit")
     public String editChapter(Model model,
                               int chapterId){
         Chapter chapter = chapterService.getChapterById(chapterId);
         model.addAttribute("chapter",chapter);
-        return "expertPage/editChapter";
+        return "teacherPage/editChapter";
     }
 
-    @PostMapping(path = "/expert/chapter/edit/update")
+    @PostMapping(path = "/teacher/chapter/edit/update")
     public String updateChapter(Model model,
                                 @RequestParam("id") int id,
                                 @RequestParam("courseId") int courseId,
@@ -248,17 +248,17 @@ public class ExpertController {
             model.addAttribute("error",error);
             model.addAttribute("chapter", chapterService.getChapterById(id));
         }
-        return "/expertPage/editChapter";
+        return "/teacherPage/editChapter";
     }
 
-    @GetMapping(path = "/expert/chapter/addChapter")
+    @GetMapping(path = "/teacher/chapter/addChapter")
     public String addChapter(Model model,
                              @RequestParam("courseId") int courseId){
         model.addAttribute("courseId", courseId);
-        return "/expertPage/addChapter";
+        return "/teacherPage/addChapter";
     }
 
-    @PostMapping(path = "/expert/chapter/addChapter/create")
+    @PostMapping(path = "/teacher/chapter/addChapter/create")
     public String confirmAddChapter(Model model,
                                     @RequestParam("courseId") int courseId,
                                     @RequestParam("order") int order,
@@ -271,19 +271,19 @@ public class ExpertController {
             }catch(Exception e){
                 model.addAttribute("error","Chapter Creation Failed");
                 model.addAttribute("courseId", courseId);
-                return "/expertPage/addChapter";
+                return "/teacherPage/addChapter";
             }
         }else{
             model.addAttribute("error",error);
             model.addAttribute("courseId", courseId);
-            return "/expertPage/addChapter";
+            return "/teacherPage/addChapter";
         }
         model.addAttribute("notification","Chapter Creation Successfully");
         model.addAttribute("courseId", courseId);
-        return "/expertPage/addChapter";
+        return "/teacherPage/addChapter";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson")
+    @GetMapping(path = "/teacher/chapter/lesson")
     public String lessonList(Model model,
                              @RequestParam("chapterId") int chapterId){
         List<LessonDetailDTO> lessonList = new ArrayList<>();
@@ -297,10 +297,10 @@ public class ExpertController {
             model.addAttribute("chapterId", chapterId);
             model.addAttribute("lessonList",lessonList);
         }
-        return "/expertPage/lessonList";
+        return "/teacherPage/lessonList";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/search")
+    @GetMapping(path = "/teacher/chapter/lesson/search")
     public String lessonListSearch(Model model,
                                    @RequestParam("chapterId") int chapterId,
                                    @RequestParam("lessonSearchKey") String lessonSearchKey ){
@@ -315,10 +315,10 @@ public class ExpertController {
             model.addAttribute("chapterId", chapterId);
             model.addAttribute("lessonList",lessonList);
         }
-        return "/expertPage/lessonList";
+        return "/teacherPage/lessonList";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/edit")
+    @PostMapping(path = "/teacher/chapter/lesson/edit")
     public String editLesson(Model model,
                              @RequestParam("lessonId") int lessonId){
         Lesson lesson = lessonService.getLessonById(lessonId);
@@ -327,10 +327,10 @@ public class ExpertController {
         model.addAttribute("chapterId", lessonService.getLessonById(lessonId).getChapter().getId());
         model.addAttribute("quizTypeList",typeList);
         model.addAttribute("lesson",lesson);
-        return "expertPage/editLesson";
+        return "teacherPage/editLesson";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/edit/update")
+    @PostMapping(path = "/teacher/chapter/lesson/edit/update")
     public String updateLesson(Model model,
                                @RequestParam("lessonId") int lessonId,
                                @RequestParam("chapterId") int chapterId,
@@ -356,20 +356,20 @@ public class ExpertController {
             model.addAttribute("chapterId",chapterId);
             model.addAttribute("notification","Update Chapter Successfully");
         }
-        return "expertPage/editLesson";
+        return "teacherPage/editLesson";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/addLesson")
+    @GetMapping(path = "/teacher/chapter/lesson/addLesson")
     public String addLesson(Model model,
                             @RequestParam("chapterId") int chapterId){
         List<QuizType> typeList = new ArrayList<>();
         typeList.add(QuizType.PRACTICE);typeList.add(QuizType.EXAM);
         model.addAttribute("quizTypeList",typeList);
         model.addAttribute("chapterId", chapterId);
-        return "/expertPage/addLesson";
+        return "/teacherPage/addLesson";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/addLesson/create")
+    @PostMapping(path = "/teacher/chapter/lesson/addLesson/create")
     public String confirmAddLesson(Model model,
                                    @RequestParam("chapterId") int chapterId,
                                    @RequestParam("lessonTitle") String lessonTitle,
@@ -388,10 +388,10 @@ public class ExpertController {
             model.addAttribute("notification","Lesson Creation Successfully");
             model.addAttribute("chapterId",chapterId);
         }
-        return "/expertPage/addLesson";
+        return "/teacherPage/addLesson";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/videos")
+    @GetMapping(path = "/teacher/chapter/lesson/videos")
     public String videoList(Model model,
                             @RequestParam("lessonId") int lessonId){
         List<Video> videoList = new ArrayList<>();
@@ -405,10 +405,10 @@ public class ExpertController {
             model.addAttribute("lessonId",lessonId);
             model.addAttribute("videoList",videoList);
         }
-        return "/expertPage/videoList";
+        return "/teacherPage/videoList";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/videos/search")
+    @GetMapping(path = "/teacher/chapter/lesson/videos/search")
     public String videoListSearch(Model model,
                                   @RequestParam("videoSearchKey") String keyWord,
                                   @RequestParam("lessonId") int lessonId){
@@ -423,17 +423,17 @@ public class ExpertController {
             model.addAttribute("lessonId",lessonId);
             model.addAttribute("videoList",videoList);
         }
-        return "/expertPage/videoList";
+        return "/teacherPage/videoList";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/videos/addVideo")
+    @GetMapping(path = "/teacher/chapter/lesson/videos/addVideo")
     public String addVideo(Model model,
                            @RequestParam("lessonId") int lessonId){
         model.addAttribute("lessonId", lessonId);
-        return "/expertPage/addVideo";
+        return "/teacherPage/addVideo";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/videos/addVideo/create")
+    @PostMapping(path = "/teacher/chapter/lesson/videos/addVideo/create")
     public String confirmAddVideo(Model model,
                                   @RequestParam("lessonId") int lessonId,
                                   @RequestParam("videoTitle") String videoTitle,
@@ -445,27 +445,27 @@ public class ExpertController {
             } catch (Exception e) {
                 model.addAttribute("lessonId", lessonId);
                 model.addAttribute("error", "Video Creation Failed");
-                return "/expertPage/addVideo";
+                return "/teacherPage/addVideo";
             }
             model.addAttribute("notification", "Video Creation Successfully");
             model.addAttribute("lessonId", lessonId);
-            return "/expertPage/addVideo";
+            return "/teacherPage/addVideo";
         } else {
             model.addAttribute("lessonId", lessonId);
             model.addAttribute("error", error);
-            return "/expertPage/addVideo";
+            return "/teacherPage/addVideo";
         }
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/videos/edit")
+    @PostMapping(path = "/teacher/chapter/lesson/videos/edit")
     public String editVideo(Model model,
                             @RequestParam("videoId") int videoId){
         Video video = videoService.getVideoById(videoId);
         model.addAttribute("video", video);
-        return "/expertPage/editVideo";
+        return "/teacherPage/editVideo";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/videos/edit/update")
+    @PostMapping(path = "/teacher/chapter/lesson/videos/edit/update")
     public String updateVideo(Model model,
                               @RequestParam("lessonId") int lessonId,
                               @RequestParam("videoId") int videoId,
@@ -480,7 +480,7 @@ public class ExpertController {
                 model.addAttribute("error","Video Update Failed");
                 Video video = videoService.getVideoById(videoId);
                 model.addAttribute("video", video);
-                return "/expertPage/editVideo";
+                return "/teacherPage/editVideo";
             }
             model.addAttribute("notification","Video Update Successfully");
             Video video = videoService.getVideoById(videoId);
@@ -488,10 +488,10 @@ public class ExpertController {
         }
         Video video = videoService.getVideoById(videoId);
         model.addAttribute("video", video);
-        return "/expertPage/editVideo";
+        return "/teacherPage/editVideo";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/docs")
+    @GetMapping(path = "/teacher/chapter/lesson/docs")
     public String docList(Model model,
                           @RequestParam("lessonId") int lessonId){
         List<PDF> pdfList = new ArrayList<>();
@@ -505,10 +505,10 @@ public class ExpertController {
             model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
             model.addAttribute("pdfList",pdfList);
         }
-        return "/expertPage/docList";
+        return "/teacherPage/docList";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/docs/search")
+    @GetMapping(path = "/teacher/chapter/lesson/docs/search")
     public String docListSearch(Model model,
                                 @RequestParam("lessonId") int lessonId,
                                 @RequestParam("docSearchKey") String docSearchKey){
@@ -523,17 +523,17 @@ public class ExpertController {
             model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
             model.addAttribute("pdfList",pdfList);
         }
-        return "/expertPage/docList";
+        return "/teacherPage/docList";
     }
 
-    @GetMapping(path = "/expert/chapter/lesson/docs/addDoc")
+    @GetMapping(path = "/teacher/chapter/lesson/docs/addDoc")
     public String addDoc(Model model,
                          @RequestParam("lessonId") int lessonId){
         model.addAttribute("lessonId", lessonId);
-        return "/expertPage/addDoc";
+        return "/teacherPage/addDoc";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/docs/addDoc/create")
+    @PostMapping(path = "/teacher/chapter/lesson/docs/addDoc/create")
     public String confirmAddDoc(Model model,
                                 @RequestParam("lessonId") int lessonId,
                                 @RequestParam("docTitle") String docTitle,
@@ -545,27 +545,27 @@ public class ExpertController {
             }catch(Exception e){
                 model.addAttribute("lessonId",lessonId);
                 model.addAttribute("error","Document Creation Failed");
-                return "/expertPage/addDoc";
+                return "/teacherPage/addDoc";
             }
             model.addAttribute("notification","Document Creation Successfully");
             model.addAttribute("lessonId",lessonId);
-            return "/expertPage/addDoc";
+            return "/teacherPage/addDoc";
         }else{
             model.addAttribute("lessonId",lessonId);
             model.addAttribute("error",error);
-            return "/expertPage/addDoc";
+            return "/teacherPage/addDoc";
         }
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/docs/edit")
+    @PostMapping(path = "/teacher/chapter/lesson/docs/edit")
     public String editDoc(Model model,
                           @RequestParam("pdfId") int pdfId){
         PDF pdf = pdfService.getPdfById(pdfId);
         model.addAttribute("pdf", pdf);
-        return "/expertPage/editDoc";
+        return "/teacherPage/editDoc";
     }
 
-    @PostMapping(path = "/expert/chapter/lesson/docs/edit/update")
+    @PostMapping(path = "/teacher/chapter/lesson/docs/edit/update")
     public String updateDoc(Model model,
                             @RequestParam("lessonId") int lessonId,
                             @RequestParam("docId") int docId,
@@ -580,7 +580,7 @@ public class ExpertController {
                 model.addAttribute("error","Document Update Failed");
                 PDF pdf = pdfService.getPdfById(docId);
                 model.addAttribute("pdf", pdf);
-                return "/expertPage/editDoc";
+                return "/teacherPage/editDoc";
             }
             model.addAttribute("notification","Document Update Successfully");
             PDF pdf = pdfService.getPdfById(docId);
@@ -588,6 +588,6 @@ public class ExpertController {
         }
         PDF pdf = pdfService.getPdfById(docId);
         model.addAttribute("pdf", pdf);
-        return "/expertPage/editDoc";
+        return "/teacherPage/editDoc";
     }
 }

@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Add new course</h2>
 
-    <form action="/expert/add_course/create" method="post" enctype="multipart/form-data">
+    <form action="/teacher/add_course/create" method="post" enctype="multipart/form-data">
         <input type="hidden" name="createdById" th:value="${createdById}">
 
         <label>Title:</label>
@@ -55,7 +55,7 @@
             <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
         </div>
 
-        <a href="/expert" id="returnCourseList" hidden></a>
+        <a href="/teacher" id="returnCourseList" hidden></a>
     </form>
     <!-- Hiển thị lỗi -->
     <div th:if="${error}" class="error-messages">

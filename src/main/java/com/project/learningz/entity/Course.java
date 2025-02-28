@@ -1,5 +1,6 @@
 package com.project.learningz.entity;
 
+import com.project.learningz.constant.CourseStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -49,4 +50,8 @@ public class Course {
 
     @Column(name = "course_image_url", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
     private String courseImageUrl;
+
+    @Column(name = "course_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CourseStatus courseStatus;
 }
