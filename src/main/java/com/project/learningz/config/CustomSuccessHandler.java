@@ -1,11 +1,16 @@
 package com.project.learningz.config;
 
+import com.project.learningz.constant.UserStatus;
+import com.project.learningz.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -16,13 +21,12 @@ import java.util.Collection;
 
 @Component
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
-    private final RequestCache requestCache = new HttpSessionRequestCache();
-
+    @Autowired
+    UserService userService;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String redirectURL = "/home";
@@ -40,22 +44,17 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 break;
             } else if (role.equals("ROLE_STUDENT") || role.equals("ROLE_VIP_STUDENT")) {
                 String prevPage = (String) request.getSession().getAttribute("prevPage");
-                SavedRequest savedRequest = requestCache.getRequest(request, response);
-
-                if (savedRequest != null) {
-                    response.sendRedirect(savedRequest.getRedirectUrl());
-                    return;
-                }
-
                 if (prevPage != null) {
                     request.getSession().removeAttribute("prevPage");
                     if (!prevPage.contains("/login")) {
                         redirectURL = prevPage;
+                        System.out.println("prevPage:" + prevPage);
                     }
                     break;
                 }
             }
         }
+        System.out.println("url:" + redirectURL);
         response.sendRedirect(redirectURL);
     }
 }
