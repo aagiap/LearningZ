@@ -13,18 +13,18 @@
   <h2>Video List</h2>
 
   <div class="filter-section">
-    <form action="/expert/chapter/lesson/videos/search">
+    <form action="/teacher/chapter/lesson/videos/search">
       <input name="lessonId" type="text" hidden th:value="${lessonId}">
       <input name="videoSearchKey" type="text" id="searchInput" placeholder="Search video by title">
       <input type="submit" value="Search">
     </form>
 
     <button id="returnLessonButton" onclick="returnLesson()">Return Lesson List</button>
-    <form action="/expert/chapter/lesson" method="get" id="returnLesson">
+    <form action="/teacher/chapter/lesson" method="get" id="returnLesson">
       <input type="number" name="chapterId" th:value="${chapterId}" hidden>
     </form>
     <button id="addVideo" onclick="addVideoRequest()">+ Add New Video</button>
-    <form action="/expert/chapter/lesson/videos/addVideo" method="get" id="addVideoRequest">
+    <form action="/teacher/chapter/lesson/videos/addVideo" method="get" id="addVideoRequest">
       <input type="number" name="lessonId" th:value="${lessonId}" hidden>
     </form>
   </div>
@@ -63,7 +63,7 @@
       <td th:text="${video.getFileUrl()}"></td>
       <td class="actions">
         <div class="top-actions">
-          <form action="/expert/chapter/lesson/videos/edit" method="POST" style="display: inline">
+          <form action="/teacher/chapter/lesson/videos/edit" method="POST" style="display: inline">
             <input type="hidden" name="videoId" th:value="${video.getId()}" />
             <button type="submit" class="edit-btn">Edit</button>
           </form>

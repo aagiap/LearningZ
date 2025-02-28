@@ -13,16 +13,16 @@
   <h2>Chapter List</h2>
 
   <div class="filter-section">
-    <form action="/expert/chapter/search">
+    <form action="/teacher/chapter/search">
       <input name="courseId" type="text" hidden th:value="${courseId}">
       <input name="chapterSearchKey" type="text" id="searchInput" placeholder="Search chapter by title">
       <input type="submit" value="Search">
     </form>
 
     <button id="returnCourseButton" onclick="returnCourse()">Return Course List</button>
-    <a href="/expert" hidden id="returnCourse">Return Course</a>
+    <a href="/teacher" hidden id="returnCourse">Return Course</a>
     <button id="addChapter" onclick="addChapterRequest()">+ Add New Chapter</button>
-    <form action="/expert/chapter/addChapter" method="get" id="addChapterRequest">
+    <form action="/teacher/chapter/addChapter" method="get" id="addChapterRequest">
       <input type="number" name="courseId" th:value="${courseId}" hidden>
     </form>
   </div>
@@ -70,7 +70,7 @@
       </td>
       <td class="actions">
         <div class="top-actions">
-          <form action="/expert/chapter/edit" method="POST" style="display: inline">
+          <form action="/teacher/chapter/edit" method="POST" style="display: inline">
             <input type="hidden" name="chapterId" th:value="${chapter.getId()}" />
             <button type="submit" class="edit-btn">Edit</button>
           </form>
@@ -80,7 +80,7 @@
           </form>
         </div>
         <div class="bottom-action">
-          <form action="/expert/chapter/lesson" method="get">
+          <form action="/teacher/chapter/lesson" method="get">
             <input type="hidden" name="chapterId" th:value="${chapter.getId()}" />
             <button type="submit" class="view-btn">View Lessons</button>
           </form>

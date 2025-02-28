@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Edit Course</h2>
 
-    <form action="/expert/chapter/edit/update" method="post">
+    <form action="/teacher/chapter/edit/update" method="post">
         <input type="hidden" name="id" th:value="${chapter.getId()}">
         <input type="hidden" name="courseId" th:value="${chapter.course.getId()}">
         <input type="hidden" name="chapterDriveLink" th:value="${chapter.getChapterDriveLink()}"/>
@@ -40,7 +40,7 @@
         <p th:text="${notification}"></p>
     </div>
 
-    <form action="/expert/chapter" method="get" id="returnCourseList">
+    <form action="/teacher/chapter" method="get" id="returnCourseList">
         <input type="number" name="courseId" th:value="${chapter.course.getId()}" hidden>
     </form>
 

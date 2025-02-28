@@ -107,7 +107,7 @@
         <div class="left-section">
             <i class="fas fa-tag"></i>
             <h1>Review quiz</h1>
-            <h1 class="title" th:text="${session.quiz.getLesson().getTitle()}">
+            <h1 class="title" th:text="${session.quiz.getLesson().getTitle() + ': ' + session.quiz.getTitle()}">
             </h1>
         </div>
 
@@ -147,7 +147,7 @@
                     <ul>
                         <li>
                             <a th:href="@{/Exam/StartQuiz(quizId=${session.quiz.getId()})}"
-                               th:text="'Quiz: ' + ${quiz.lesson.getTitle()}" style="color: #07294d"></a>
+                               th:text="'Quiz: ' + ${quiz.getTitle()}" style="color: #07294d"></a>
                         </li>
                     </ul>
                 </div>
