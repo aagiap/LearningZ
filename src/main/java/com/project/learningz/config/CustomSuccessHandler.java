@@ -47,17 +47,15 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         User userLogin = userService.findByUsername(username);
         System.out.println("User status: " + userLogin.getUserStatus());
         if (userLogin != null && userLogin.getUserStatus() == UserStatus.BANNED) {
+            System.out.println("moc 1");
             request.getSession().removeAttribute("prevPage");
             response.sendRedirect(request.getContextPath() + "/error/banned-message");
-            System.out.println("da vao day");
             return;
         }
-
-
         String redirectURL = determineRedirectUrl(authentication, request);
-        System.out.println(redirectURL);
-        System.out.println("chua vao day");
-        response.sendRedirect( redirectURL);
+        System.out.println("redirectURL:" + redirectURL);
+        System.out.println("moc 2");
+        response.sendRedirect(redirectURL);
     }
 
     private String determineRedirectUrl(Authentication authentication, HttpServletRequest request) {
