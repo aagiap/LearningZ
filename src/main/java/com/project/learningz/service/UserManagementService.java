@@ -1,11 +1,12 @@
 package com.project.learningz.service;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.constant.UserStatus;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,26 +23,6 @@ public class UserManagementService {
 
     private final UserManagementRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public void updatePassword(User user, String newPassword) {
-        String encodedPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedPassword);
-
-        user.setResetPasswordToken(null);
-        userRepository.save(user);
-    }
-
-    public void encryptExistingPassword() {
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            String password = user.getPassword();
-            if (!password.startsWith("$2a$")) {
-                String encryptedPassword = passwordEncoder.encode(password);
-                user.setPassword(encryptedPassword);
-                userRepository.save(user);
-            }
-        }
-    }
 
     public List<User> getAllUsersSorted(String sortField, String sortOrder) {
         Sort sort;
@@ -63,12 +44,14 @@ public class UserManagementService {
         return userRepository.findByKeyword(keyword.toUpperCase(), sort);
     }
 
-    public void deleteUserById(Integer id) {
-        try {
-            userRepository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Cannot delete this user due to data integrity constraints.");
+    public void banUserById(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getUserStatus() == UserStatus.BANNED) {
+            throw new RuntimeException("User is already banned");
         }
+        user.setUserStatus(UserStatus.BANNED);
+        userRepository.save(user);
     }
 
     public void createUser(String username, String email, String password, String phoneNum, String role) {
@@ -76,10 +59,10 @@ public class UserManagementService {
             throw new RuntimeException("Password must be at least 6 digits");
         }
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already exists: " + email);
+            throw new RuntimeException("Email has already exists: " + email);
         }
         if (userRepository.existsByPhoneNum(phoneNum)) {
-            throw new RuntimeException("Phone number already exists: " + phoneNum);
+            throw new RuntimeException("Phone number has already exists: " + phoneNum);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -90,6 +73,7 @@ public class UserManagementService {
         user.setPassword(encodedPassword);
         user.setPhoneNum(phoneNum);
         user.setAvtUrl("AvartaDefault.jpg");
+        user.setUserStatus(UserStatus.ACTIVE);
 
         try {
             user.setRole(Role.valueOf(role.toUpperCase()));
@@ -116,13 +100,50 @@ public class UserManagementService {
         }
     }
 
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+
     public String getAvtByUsername(String username) {
         return userRepository.findAvatarUrlByUsername(username);
     }
 
-    public String findUserNameByEmail(String email){
-        return  userRepository.findUserNameByEmail(email);
+    public String findUserNameByEmail(String email) {
+        return userRepository.findUserNameByEmail(email);
     }
+
+    public long getNumberOfUsers() {
+        List<User> users = userRepository.findAll();
+        return users.size();
+    }
+
+    public long getNumberOfAdminUsers() {
+        return userRepository.countAdminUsers();
+    }
+
+    public long getNumberOfVipUsers() {
+        return userRepository.countVIPUsers();
+    }
+
+    public long getNumberOfMarketerUsers() {
+        return userRepository.countMarketerUsers();
+    }
+
+    public long getNumberOfCasualStudentUsers() {
+        return userRepository.countCasualStudentUsers();
+    }
+
+    public long getNumberOfTeacherUsers() {
+        return userRepository.countTeacherUsers();
+    }
+
+    public List<User> getTenLatestUsers() {
+        return userRepository.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"))).getContent();
+    }
+
+
+
 
 }
 

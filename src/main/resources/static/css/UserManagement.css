@@ -6,6 +6,8 @@
     margin-top: 30px;
     background-color: white;
     text-align: center;
+    margin-left: 200px;
+    margin-right: 200px;
 }
 
 h2 {
@@ -26,31 +28,11 @@ h2 {
 }
 
 .avatar-detail-container img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     border: 3px solid #07294d;
     object-fit: cover;
-}
-
-/* Tạo viền và bo góc cho dropdown */
-.form-select {
-    border-radius: 8px;
-    height: 40px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* Khi di chuột vào từng option */
-.form-select option:hover {
-    background-color: #07294d;
-    color: white;
-}
-
-/* Màu mặc định khi chưa hover */
-.form-select option {
-    background-color: white;
-    color: black;
 }
 
 .form-group {
@@ -59,6 +41,18 @@ h2 {
     border-radius: 8px;
     margin-bottom: 15px;
     background-color: #f9f9f9;
+}
+
+h3 {
+    text-align: center; /* Căn giữa */
+    font-size: 24px; /* Kích thước chữ */
+    font-weight: bold; /* Độ đậm */
+    color: #0d47a1; /* Màu xanh đậm */
+    margin-top: 20px; /* Khoảng cách phía trên */
+    margin-bottom: 20px; /* Khoảng cách phía dưới */
+    padding: 10px 0; /* Thêm padding để không quá sát */
+    border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
+    display: inline-block; /* Giữ nội dung gọn gàng */
 }
 
 

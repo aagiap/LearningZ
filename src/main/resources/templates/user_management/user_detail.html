@@ -1,78 +1,377 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>User Management</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Title Meta -->
+    <meta charset="utf-8" />
+    <title>User Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully responsive premium admin dashboard template" />
+    <meta name="author" content="Techzaa" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Vendor css (Require in all Page) -->
+    <link href="/css/vendor.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Icons css (Require in all Page) -->
+    <link href="/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- App css (Require in all Page) -->
+    <link href="/css/app.min.css" rel="stylesheet" type="text/css" />
+
     <link rel="stylesheet" href="/css/UserManagement.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Theme Config js (Require in all Page) -->
+    <script src="/js/config.js"></script>
 </head>
+
 <body>
-<div class="container-xl">
-    <div class="table-responsive">
-        <div class="table-wrapper">
-            <h2 >User Detail</h2>
 
-            <div th:if="${errorMessage}" class="alert alert-danger">
-                <p th:text="${errorMessage}"></p>
-            </div>
+<!-- START Wrapper -->
+<div class="wrapper">
 
-            <div class="container" style="max-width: 800px; margin: 40px auto;">
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <div class="avatar-container">
-                            <img th:src="@{/image/AvartaDefault.jpg}" alt="User Avatar" class="avatar img-thumbnail" style="width: 150px; height: 150px;">
+    <!-- ========== Topbar Start ========== -->
+    <header class="topbar" style="box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="d-flex align-items-center">
+                    <!-- Menu Toggle Button -->
+                    <div class="topbar-item">
+                        <button type="button" class="button-toggle-menu me-2">
+                            <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Menu Toggle Button -->
+                    <a class="navbar-brand" href="/home">
+                        <img src="/image/learningz.png" alt="Logo" width="60px">
+                        <a style="font-size: 24px; font-weight: bold;">
+                            Learning<span style="font-size: 30px; color: blue;">Z</span>
+                        </a>
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+
+                    <!-- Theme Color (Light/Dark) -->
+                    <div class="topbar-item">
+                        <button type="button" class="topbar-button" id="light-dark-mode">
+                            <iconify-icon icon="solar:moon-bold-duotone" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Theme Setting -->
+                    <div class="topbar-item d-none d-md-flex">
+                        <button type="button" class="topbar-button" id="theme-settings-btn" data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
+                            <iconify-icon icon="solar:settings-bold-duotone" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- User -->
+                    <div class="dropdown topbar-item">
+                        <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+    <span class="d-flex align-items-center">
+        <img class="rounded-circle" width="32" th:src="@{${avatarUrl}}" alt="User Avatar">
+    </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- Hiển thị tên người dùng -->
+                            <h6 class="dropdown-header">Welcome <span th:text="${username}">User</span>!</h6>
+
+                            <a class="dropdown-item" href="/home/profile">
+                                <i class="bx bx-user-circle text-muted fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="/home/change_password">
+                                <i class="bx bx-key text-muted fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Change Password</span>
+                            </a>
+
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <i class="bx bx-log-out fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Logout</span>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="col-md-8">
-                        <form th:object="${user}" method="post" action="/admin/users/update" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label>ID</label>
-                                <input th:field="*{id}" type="text" class="form-control" readonly required>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Right Sidebar (Theme Settings) -->
+    <div>
+        <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
+            <div class="d-flex align-items-center bg-primary p-3 offcanvas-header">
+                <h5 class="text-white m-0">Theme Settings</h5>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body p-0">
+                <div data-simplebar class="h-100">
+                    <div class="p-3 settings-bar">
+
+                        <div>
+                            <h5 class="mb-3 font-16 fw-semibold">Color Scheme</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-light" value="light">
+                                <label class="form-check-label" for="layout-color-light">Light</label>
                             </div>
 
-                            <div class="form-group">
-                                <label>Username</label>
-                                <input th:field="*{username}" type="text" class="form-control" readonly required>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-dark" value="dark">
+                                <label class="form-check-label" for="layout-color-dark">Dark</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Topbar Color</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-light" value="light">
+                                <label class="form-check-label" for="topbar-color-light">Light</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-dark" value="dark">
+                                <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Menu Color</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-light" value="light">
+                                <label class="form-check-label" for="leftbar-color-light">
+                                    Light
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input th:field="*{password}" type="password" class="form-control">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-dark" value="dark">
+                                <label class="form-check-label" for="leftbar-color-dark">
+                                    Dark
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Sidebar Size</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-default" value="default">
+                                <label class="form-check-label" for="leftbar-size-default">
+                                    Default
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input th:field="*{email}" type="email" class="form-control" required>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-small" value="condensed">
+                                <label class="form-check-label" for="leftbar-size-small">
+                                    Condensed
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label>Phone number</label>
-                                <input th:field="*{phoneNum}" type="text" class="form-control" required>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-hidden" value="hidden">
+                                <label class="form-check-label" for="leftbar-hidden">
+                                    Hidden
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label>Role</label>
-                                <select class="form-select" th:field="*{role}" required>
-                                    <option value="ADMIN">ADMIN</option>
-                                    <option value="STUDENT">STUDENT</option>
-                                    <option value="TEACHER">TEACHER</option>
-                                    <option value="MARKETING_TEAM">MARKETING_TEAM</option>
-                                </select>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-small-hover-active" value="sm-hover-active">
+                                <label class="form-check-label" for="leftbar-size-small-hover-active">
+                                    Small Hover Active
+                                </label>
                             </div>
-                            <br>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin/users'">Cancel</button>
-                                <input type="submit" class="btn btn-info" value="Save">
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-small-hover" value="sm-hover">
+                                <label class="form-check-label" for="leftbar-size-small-hover">
+                                    Small Hover
+                                </label>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
-
+            <div class="offcanvas-footer border-top p-3 text-center">
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-danger w-100" id="reset-layout">Reset</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- ========== Topbar End ========== -->
+
+    <!-- ========== App Menu Start ========== -->
+    <div class="main-nav">
+        <!-- Sidebar Logo -->
+        <div class="logo-box">
+            <a href="index.html" class="logo-dark">
+                <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
+                <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
+
+            </a>
+            <a href="index.html" class="logo-light">
+                <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
+                <img src="/image/learningz.png" class="logo-lg" alt="logo light">
+            </a>
+        </div>
+
+        <!-- Menu Toggle Button (sm-hover) -->
+        <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
+            <iconify-icon icon="solar:double-alt-arrow-right-bold-duotone" class="button-sm-hover-icon"></iconify-icon>
+        </button>
+
+        <div class="scrollbar" data-simplebar>
+            <ul class="navbar-nav" id="navbar-nav">
+
+                <li class="menu-title">General</li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dashboard">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Dashboard </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
+                                   <span class="nav-icon">
+                                       <iconify-icon icon="solar:user-bold"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Users list </span>
+                    </a>
+                    <div class="collapse" id="sidebarProducts">
+                        <ul class="nav sub-navbar-nav">
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/admin/user_list">List</a>
+                            </li>
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/admin/create">Create</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- ========== App Menu End ========== -->
+
+    <!-- ==================================================== -->
+    <!-- Start right Content here -->
+    <!-- ==================================================== -->
+    <div class="page-content">
+
+        <!-- Start Container Fluid -->
+        <div class="container-fluid" style="padding-top: 50px">
+
+            <div class="form-wrapper" >
+                <h2 class="text-center">User Detail</h2>
+
+                <!-- Ảnh Avatar -->
+                <div class="avatar-detail-container text-center">
+                    <img th:src="@{${avatarUrl}}" alt="User Avatar" class="avatar img-thumbnail"
+                         style="width: 150px; height: 150px; border-radius: 50%;">
+                </div>
+
+                <form th:object="${user}" method="post" action="/admin/update" enctype="multipart/form-data">
+                    <div class="row mt-3">
+                        <!-- Cột Trái -->
+                        <div class="col-md-6">
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label>ID</label>
+                                    <input th:field="*{id}" type="text" class="form-control" readonly required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input th:field="*{username}" type="text" class="form-control" readonly required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input th:field="*{userStatus}" type="text" class="form-control" readonly required>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cột Phải -->
+                        <div class="col-md-6">
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input th:field="*{password}" type="password" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input th:field="*{email}" type="email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone number</label>
+                                    <input th:field="*{phoneNum}" type="text" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select class="form-control" id="role" th:field="*{role}" required style="border-radius: 5px;">
+                                        <option value="ADMIN">ADMIN</option>
+                                        <option value="STUDENT">STUDENT</option>
+                                        <option value="VIP_STUDENT">VIP_STUDENT</option>
+                                        <option value="TEACHER">TEACHER</option>
+                                        <option value="MARKETING_TEAM">MARKETING_TEAM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nút hành động -->
+                    <div class="form-actions text-center mt-4">
+                        <button type="button" class="btn btn-secondary" style="background-color: #ccc; color: #07294d" th:onclick="|window.location.href='@{/admin/user_list}'|">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-info" style="background-color: #083768; color:#fbf8f8;">Save</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <!-- End Container Fluid -->
+
+    </div>
+    <!-- ==================================================== -->
+    <!-- End Page Content -->
+    <!-- ==================================================== -->
+
 </div>
+<!-- END Wrapper -->
+
+<!-- Vendor Javascript (Require in all Page) -->
+<script src="/js/vendor.js"></script>
+
+<!-- App Javascript (Require in all Page) -->
+<script src="/js/app.js"></script>
+
+<!-- Vector Map Js -->
+<script src="/vendor/jsvectormap/js/jsvectormap.min.js"></script>
+<script src="/vendor/jsvectormap/maps/world-merc.js"></script>
+<script src="/vendor/jsvectormap/maps/world.js"></script>
+
+<!-- Dashboard Js -->
+<script src="/js/pages/dashboard.js"></script>
+
 </body>
 </html>
+

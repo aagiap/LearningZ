@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserManagementRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     @Query("SELECT u FROM User u WHERE u.email = ?1")
@@ -32,4 +31,20 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
     boolean existsByEmail(String email);
     boolean existsByPhoneNum(String phoneNum);
     User findByEmail(String email);
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'admin'")
+    long countAdminUsers();
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'VIP_STUDENT'")
+    long countVIPUsers();
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'TEACHER'")
+    long countTeacherUsers();
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'STUDENT'")
+    long countCasualStudentUsers();
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'MARKETING_TEAM'")
+    long countMarketerUsers();
+
 }
