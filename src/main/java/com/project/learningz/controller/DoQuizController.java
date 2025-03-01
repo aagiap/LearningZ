@@ -64,7 +64,10 @@ public class DoQuizController {
             model.addAttribute("course", course);
             return "quiz/quiz-warning";
         }
+        model.addAttribute("username", username);
 
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
         QuizJoinToGradeDTO quizJoinToGradeDTO = quizService.getQuizJoinToGradeDTOById(quizId);
         QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId,quizId);
         model.addAttribute("quizResult", quizResult);
@@ -81,9 +84,12 @@ public class DoQuizController {
         model.addAttribute("quiz", quiz);
         model.addAttribute("timeLimitSeconds", timeLimitSeconds);
         session.setAttribute("quiz", quiz);
-        model.addAttribute("questionBankList", questionBankList);
-        session.setAttribute("questionBankList", questionBankList);
-
+        if(session.getAttribute("questionBankList")!=null){
+            model.addAttribute("questionBankList", (List<QuestionBank>) session.getAttribute("questionBankList"));
+        }else{
+            model.addAttribute("questionBankList", questionBankList);
+            session.setAttribute("questionBankList", questionBankList);
+        }
         return "/quiz/DoQuiz";
     }
 
@@ -131,7 +137,10 @@ public class DoQuizController {
             model.addAttribute("user", userOAuth2);
         }
         Integer userId = userService.getUserIdByUsername(username);
+        model.addAttribute("username", username);
 
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
         quizResultService.saveResult(userId, quiz.getId(), score);
 
         session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
@@ -161,7 +170,10 @@ public class DoQuizController {
         }
         Integer userId = userService.getUserIdByUsername(username);
         quizResultService.saveResult(userId, quiz.getId(), score);
+        model.addAttribute("username", username);
 
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
 
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
@@ -171,14 +183,34 @@ public class DoQuizController {
     }
 
     @GetMapping("/QuizReview")
-    public String quizReview(Model model, HttpSession session) {
+    public String quizReview(Model model, HttpSession session,
+                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                             @AuthenticationPrincipal OAuth2User userOAuth2) {
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+        model.addAttribute("username", username);
+
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
+
         QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
         List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
         Quiz quiz = (Quiz) session.getAttribute("quiz");
+        List<QuestionBank> questionBankList = (List<QuestionBank>) session.getAttribute("questionBankList");
+        session.invalidate();
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
+        model.addAttribute("questionBankList",questionBankList);
         model.addAttribute("quiz", quiz);
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
