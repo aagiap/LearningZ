@@ -98,18 +98,34 @@
 <input type="hidden" id="timeLimitInput" th:value="${timeLimitSeconds}">
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Khi chọn radio button, đổi màu box tương ứng
-        document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                let index = this.getAttribute('data-index');
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy trạng thái đã lưu từ localStorage
+        let savedSelections = JSON.parse(localStorage.getItem("selectedBoxes")) || {};
+
+        // Duyệt qua tất cả radio button để gán sự kiện change
+        document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
+            let index = radio.getAttribute("data-index");
+
+            // Nếu box này đã được chọn trước đó, áp dụng class "selected"
+            if (savedSelections[index]) {
                 let box = document.getElementById("box-" + index);
                 if (box) {
-                    box.classList.add("selected"); // Đổi màu khi chọn
+                    box.classList.add("selected");
+                }
+            }
+
+            // Lưu trạng thái vào localStorage khi chọn radio button
+            radio.addEventListener("change", function () {
+                let box = document.getElementById("box-" + index);
+                if (box) {
+                    box.classList.add("selected");
+                    savedSelections[index] = true; // Đánh dấu đã chọn
+                    localStorage.setItem("selectedBoxes", JSON.stringify(savedSelections));
                 }
             });
         });
     });
+
 
     // Hàm cuộn đến câu hỏi tương ứng khi nhấn vào box
     function scrollToQuestion(index) {

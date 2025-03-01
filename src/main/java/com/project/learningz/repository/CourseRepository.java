@@ -29,7 +29,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
         c.id,
         c.createdBy.username,
         g.name,
-        c.subject,
+        c.subject.name,
         c.title,
         c.description,
         c.courseDriveLink,
@@ -42,7 +42,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     LEFT JOIN Grade g ON c.grade.id = g.id
     WHERE c.createdBy.id = ?1
     GROUP BY c.id, c.createdBy.username, g.name,
-    c.subject, c.title, c.description, c.courseDriveLink
+    c.subject.name, c.title, c.description, c.courseDriveLink
 """)
     List<CourseDetailsDTO> allCoursesByUserID(int userId);
 
@@ -52,7 +52,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
         c.id,
         c.createdBy.username,
         g.name,
-        c.subject,
+        c.subject.name,
         c.title,
         c.description,
         c.courseDriveLink,
@@ -63,9 +63,9 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     LEFT JOIN Chapter ch ON c.id = ch.course.id
     LEFT JOIN Lesson l ON ch.id = l.chapter.id
     LEFT JOIN Grade g ON c.grade.id = g.id
-    WHERE c.createdBy.id = ?1 AND c.subject like CONCAT('%', ?2, '%') AND c.title like CONCAT('%', ?3, '%')
+    WHERE c.createdBy.id = ?1 AND c.subject.name like CONCAT('%', ?2, '%') AND c.title like CONCAT('%', ?3, '%')
     GROUP BY c.id, c.createdBy.username, g.name,
-    c.subject, c.title, c.description, c.courseDriveLink
+    c.subject.name, c.title, c.description, c.courseDriveLink
 """)
     List<CourseDetailsDTO> findCourses(int id, String subject, String keyWord);
 

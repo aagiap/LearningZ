@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course List</title>
-    <link rel="stylesheet" th:href="@{/css/courseListExpertStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/courseListTeacherStyle.css}">
 </head>
 
 <body>
@@ -13,7 +13,7 @@
     <h2>Course List</h2>
 
     <div class="filter-section">
-        <form action="/expert/search">
+        <form action="/teacher/search" >
             <input name="courseSearchKey" type="text" id="searchInput" placeholder="Search course by name">
             <select id="subjectFilter" name="subject">
                 <option value="">All Subjects</option>
@@ -34,7 +34,7 @@
         </form>
 
         <button id="addCourse" onclick="addCourseRequest()">+ Add New Course</button>
-        <a href="/expert/add_course" hidden id="addCourseRequest">Add Course</a>
+        <a href="/teacher/add_course" hidden id="addCourseRequest">Add Course</a>
     </div>
 
     <table th:if="${notification}">
@@ -86,7 +86,7 @@
             </td>
             <td class="actions">
                 <div class="top-actions">
-                    <form action="/expert/edit" method="POST" style="display: inline">
+                    <form action="/teacher/edit" method="POST" style="display: inline">
                         <input type="hidden" name="courseId" th:value="${course.getId()}" />
                         <button type="submit" class="edit-btn">Edit</button>
                     </form>
@@ -96,7 +96,7 @@
                     </form>
                 </div>
                 <div class="bottom-action">
-                    <form action="/expert/chapter" method="GET">
+                    <form action="/teacher/chapter" method="GET">
                         <input type="hidden" name="courseId" th:value="${course.getId()}" />
                         <button type="submit" class="view-btn">View Chapters</button>
                     </form>

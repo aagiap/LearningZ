@@ -104,11 +104,13 @@
 <div class="container-">
     <aside class="sidebar">
         <div class="chapter-navigation">
-            <a th:href="@{/learning/lesson(lessonId=${firstLessonIdOfPreviousChapter}, chapterId=${chapter.id - 1})}" class="prev-chapter">
+            <a th:href="@{/learning/lesson(lessonId=${firstLessonIdOfPreviousChapter}, chapterId=${chapter.id - 1})}"
+               class="prev-chapter">
                 <i th:if="${chapter.getChapterOrder() != 1}" class="fas fa-arrow-left"></i>
             </a>
             <p th:text="'Chapter '+${chapter.getChapterOrder()}"></p>
-            <a th:href="@{/learning/lesson(lessonId=${firstLessonIdOfNextChapter}, chapterId=${chapter.id + 1})}" class="next-chapter">
+            <a th:href="@{/learning/lesson(lessonId=${firstLessonIdOfNextChapter}, chapterId=${chapter.id + 1})}"
+               class="next-chapter">
                 <i th:if="${chapter.getChapterOrder() < chapters.size()}" class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -136,7 +138,8 @@
                 <h3 class="section-title">Document</h3>
                 <ul class="section-links" th:each="pdf : ${lesson.getPdfs()}"
                     style="border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                    <li><a href="#" th:text="${pdf.getTitle()}"><i class="icon">📄</i></a></li>
+                    <li><a th:href="@{/learning/pdf(pdfId=${pdf.getId()})}" th:text="${pdf.getTitle()}"><i class="icon">📄</i></a>
+                    </li>
                 </ul>
             </section>
 
@@ -152,9 +155,9 @@
             <section class="section">
                 <h3 class="section-title">Quiz</h3>
                 <ul class="section-links" th:each="quizInfor : ${quizInfores}"
-                    style="display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                    style="display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);justify-content: space-between">
                     <li><a th:href="@{/Exam/StartQuiz(quizId=${quizInfor.key.getId()})}"
-                           th:text="${quizInfor.key.lesson.getTitle()}"><i class="icon">📋</i></a></li>
+                           th:text="${quizInfor.key.getTitle()}"><i class="icon">📋</i></a></li>
                     <li th:classappend="${quizInfor.value.equals('Pass') ? 'text-success' : 'text-danger'}"
                         style="margin-left: 5px;padding: 1px ;   margin-block: auto;border: 1px solid;border-radius: 5px;text-align: center;">
                         <span th:text="${quizInfor.value}"></span>

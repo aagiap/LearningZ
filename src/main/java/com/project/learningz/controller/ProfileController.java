@@ -1,10 +1,11 @@
 package com.project.learningz.controller;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.entity.Course;
+import com.project.learningz.entity.Grade;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
-import com.project.learningz.service.GoogleDriveService;
-import com.project.learningz.service.UserService;
+import com.project.learningz.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,9 +32,19 @@ public class ProfileController {
     @Autowired
     private GoogleDriveService googleDriveService;
 
+    @Autowired
+    private UsersCourseService usersCourseService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private GradeService gradeService;
+
     @GetMapping(path = "/home/profile")
     public String profile(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User();
         String username;
         String avatarUrl = null;
         String email = null;
@@ -41,13 +52,13 @@ public class ProfileController {
         Role role = null;
         if (principal instanceof OAuth2User) {
             email = ((OAuth2User) principal).getAttribute("email");
-            User user = userService.findByEmail(email);
+            user = userService.findByEmail(email);
             role = user.getRole();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
         } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userService.findByUsername(username);
+            user = userService.findByUsername(username);
             if (user != null) {
                 avatarUrl = user.getAvtUrl();
                 email = user.getEmail();
@@ -56,23 +67,39 @@ public class ProfileController {
             }
         }
         if (countUpdate != 0 && idReload != 0) {
-            User user = userService.findById(idReload);
+            user = userService.findById(idReload);
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
             email = user.getEmail();
             phoneNumber = user.getPhoneNum();
         }
+
+        List<Integer> courseIdList = new ArrayList<>();
+        courseIdList = usersCourseService.courseIdListByUserId(user.getId());
+        List<Course> courseList = new ArrayList<>();
+        if(!courseIdList.isEmpty()){
+            for (Integer integer : courseIdList) {
+                courseList.add(courseService.findByCourseId(integer));
+            }
+            model.addAttribute("courseList", courseList);
+        }
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+
+        model.addAttribute("courseIdList", courseIdList);
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("email", email);
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("role", role);
+        model.addAttribute("user",user);
         return "profile/profile";
     }
 
     @GetMapping(path = "/home/profile/profile_edit")
     public String profile_edit(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User();
         int userId = 0;
         String username;
         String avatarUrl = null;
@@ -80,14 +107,14 @@ public class ProfileController {
         String phoneNumber = null;
         if (principal instanceof OAuth2User) {
             email = ((OAuth2User) principal).getAttribute("email");
-            User user = userService.findByEmail(email);
+            user = userService.findByEmail(email);
             userId = user.getId();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
             phoneNumber = user.getPhoneNum();
         } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userService.findByUsername(username);
+            user = userService.findByUsername(username);
             if (user != null) {
                 userId = user.getId();
                 avatarUrl = user.getAvtUrl();
@@ -96,17 +123,21 @@ public class ProfileController {
             }
         }
         if (countUpdate != 0 && idReload != 0) {
-            User user = userService.findById(idReload);
+            user = userService.findById(idReload);
             userId = user.getId();
             username = user.getUsername();
             avatarUrl = user.getAvtUrl();
             email = user.getEmail();
             phoneNumber = user.getPhoneNum();
         }
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("userId", userId);
+        model.addAttribute("user",user);
         return "profile/profile_edit";
     }
 
@@ -133,7 +164,7 @@ public class ProfileController {
         } else {
             if (!avatarFile.isEmpty()) {
                 User user = userService.findById(id);
-                if (user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")) {
+                if (user.getAvtUrl() != null && user.getAvtUrl().contains("https://lh3.googleusercontent.com/d/")) {
                     String[] oldAvtId = user.getAvtUrl().split("https://lh3.googleusercontent.com/d/");
                     if (googleDriveService.fiLeExists(oldAvtId[1])) {
                         googleDriveService.deleteFile(oldAvtId[1]);
@@ -149,11 +180,15 @@ public class ProfileController {
             session.setAttribute("countUpdate", countUpdate);
             session.setAttribute("idReload", idReload);
 
+            List<Grade> grades = gradeService.getAllGrades();
+            model.addAttribute("grades", grades);
+
             model.addAttribute("notification", "Update success");
             model.addAttribute("username", username);
             model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
             model.addAttribute("avatarUrl", userService.getUserById(id).getAvtUrl());
+            model.addAttribute("user",userService.getUserById(id));
         }
         return "profile/profile_edit";
     }

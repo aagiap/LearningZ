@@ -1,5 +1,6 @@
 package com.project.learningz.entity;
 
+import com.project.learningz.constant.CourseStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,17 +36,22 @@ public class Course {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "subject_id", nullable = false)
+    private Subject subject;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-    @Size(max = 100)
-    @NotNull
-    @Column(name = "subject", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
-    private String subject;
 
     @Column(name = "course_drive_link", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
     private String courseDriveLink;
 
     @Column(name = "course_image_url", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
     private String courseImageUrl;
+
+    @Column(name = "course_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CourseStatus courseStatus;
 }

@@ -21,7 +21,7 @@
     height: 40px; /* Chiều cao đồng nhất */
     font-size: 14px;
     font-weight: bold;
-    color: #007bff;
+    color: #07294d;
     text-decoration: none;
     background-color: #f8f9fa;
     border-radius: 4px; /* Bo góc nhẹ */
@@ -44,7 +44,7 @@
 
 /* Hiệu ứng hover */
 .pagination li a:hover {
-    background-color: #007bff;
+    background-color: #07294d;
     color: #fff;
 }
 

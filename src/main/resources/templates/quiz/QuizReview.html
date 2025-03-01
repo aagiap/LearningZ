@@ -107,14 +107,17 @@
         <div class="left-section">
             <i class="fas fa-tag"></i>
             <h1>Review quiz</h1>
-            <h1 class="title" th:text="${session.quiz.getLesson().getTitle()}">
+            <h1 class="title" th:text="${session.quiz.getLesson().getTitle() + ': ' + session.quiz.getTitle()}">
             </h1>
         </div>
 
         <div class="right-section">
-            <div class="timer">
-                <i class="far fa-clock"></i>
-                <span th:text="${session.quiz.getTimeLimit() + 'minutes'}"></span>
+            <div class="result-container">
+                <div class="result-details">
+                    <p><strong>Score:</strong> <span th:text="${score}"></span></p>
+                    <p><strong>Correct Answers:</strong> <span th:text="${correctAnswers}"></span></p>
+                    <p><strong>Total Questions:</strong> <span th:text="${totalQuestions}"></span></p>
+                </div>
             </div>
         </div>
     </div>
@@ -128,13 +131,24 @@
                     <h5 style="text-align: center;">Continue learning</h5>
                     <ul>
                         <li>
-                    <a th:href="@{/learning/lesson(lessonId=${session.quiz.lesson.id},chapterId=${quiz.lesson.chapter.getId()})}"
-                       th:text="'Lesson: ' + ${quiz.lesson.getTitle()}"></a>
+                            <a th:href="@{/learning/lesson(lessonId=${session.quiz.lesson.id},chapterId=${quiz.lesson.chapter.getId()})}"
+                               th:text="'Lesson: ' + ${quiz.lesson.getTitle()}" style="color: #07294d"></a>
                         </li>
-<!--                        <li>-->
-<!--                            <a th:href="@{/course/chapterLessonList(courseId=${quiz.lesson.chapter.course.getId()})}"-->
-<!--                               th:text="'Course: ' + ${quiz.lesson.chapter.course.getTitle()}"></a>-->
-<!--                        </li>-->
+                        <!--                        <li>-->
+                        <!--                            <a th:href="@{/course/chapterLessonList(courseId=${quiz.lesson.chapter.course.getId()})}"-->
+                        <!--                               th:text="'Course: ' + ${quiz.lesson.chapter.course.getTitle()}"></a>-->
+                        <!--                        </li>-->
+                    </ul>
+                </div>
+            </div>
+            <div class="box-container">
+                <div>
+                    <h5 style="text-align: center;">Redo Exam</h5>
+                    <ul>
+                        <li>
+                            <a th:href="@{/Exam/StartQuiz(quizId=${session.quiz.getId()})}"
+                               th:text="'Quiz: ' + ${quiz.getTitle()}" style="color: #07294d"></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -157,7 +171,7 @@
                                        th:name="'question_' + ${questionStat.index}"
                                        th:value="${question.getOption1()}"
                                        th:checked="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                       th:disabled="${question.getOption1() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                       disabled="disabled">
                                 <span th:text="${question.getOption1()}"></span>
                                 <span class="checkmark"></span>
                             </label>
@@ -168,7 +182,7 @@
                                        th:name="'question_' + ${questionStat.index}"
                                        th:value="${question.getOption2()}"
                                        th:checked="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                       th:disabled="${question.getOption2() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                       disabled="disabled">
                                 <span th:text="${question.getOption2()}"></span>
                                 <span class="checkmark"></span>
                             </label>
@@ -179,7 +193,7 @@
                                        th:name="'question_' + ${questionStat.index}"
                                        th:value="${question.getOption3()}"
                                        th:checked="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                       th:disabled="${question.getOption3() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                       disabled="disabled">
                                 <span th:text="${question.getOption3()}"></span>
                                 <span class="checkmark"></span>
                             </label>
@@ -190,7 +204,7 @@
                                        th:name="'question_' + ${questionStat.index}"
                                        th:value="${question.getOption4()}"
                                        th:checked="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}"
-                                       th:disabled="${question.getOption4() == quizSubmitionList.get(questionStat.index).getSelectedOption()}">
+                                       disabled="disabled">
                                 <span th:text="${question.getOption4()}"></span>
                                 <span class="checkmark"></span>
                             </label>

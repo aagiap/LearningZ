@@ -119,7 +119,7 @@
                    th:style="${checkConditionFeedBack} ? 'color: green' : 'color: red'"></p>
             </div>
             <div>
-                <a href="/course/quiz" class="hover-underline">Take quiz</a>
+                <a th:href="@{/QuizList/course(courseId=${course.getId()})}" class="hover-underline">Take quiz</a>
             </div>
             <div>
                 <a href="/course/quiz" class="hover-underline">Frequently Asked Questions</a>

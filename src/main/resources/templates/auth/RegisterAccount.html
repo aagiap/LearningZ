@@ -18,12 +18,11 @@
                         <div class="form-wrap bg-white">
                             <h4 class="btm-sep pb-3 mb-5">Registration</h4>
                             <form class="form" method="post" action="/register">
-                                <p th:text="${message}" style="color: red";></p>
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group position-relative">
                                             <span class="zmdi zmdi-account"></span>
-                                            <input type="text" name="username" class="form-control" placeholder="User name" required>
+                                            <input type="text" name="username" class="form-control" placeholder="Username" required>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -46,6 +45,7 @@
                                                    pattern=".{6,}" title="Password must be at least 6 characters long">
                                         </div>
                                     </div>
+                                    <p th:text="${message}" style="color: red";></p>
                                     <div class="col-12 mt-30">
                                         <button type="submit" class="btn btn-lg btn-custom btn-dark btn-block" style="background-color: #1C3B5C">Register</button>
                                     </div>

@@ -1,10 +1,9 @@
 package com.project.learningz.service;
 
 import com.project.learningz.dto.CourseReviewDTO;
-import com.project.learningz.entity.QuizResult;
-import com.project.learningz.entity.User;
-import com.project.learningz.entity.UsersCourse;
-import com.project.learningz.entity.UsersCourseId;
+import com.project.learningz.entity.*;
+import com.project.learningz.repository.*;
+import com.project.learningz.entity.*;
 import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.QuizResultRepository;
 import com.project.learningz.repository.UserCourseRepository;
@@ -31,6 +30,8 @@ public class UsersCourseService {
 
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public Map<Integer, Double> getAverageRatingByCourse() {
         List<Object[]> results = userCourseRepository.findAverageRatingByCourse();
@@ -52,7 +53,6 @@ public class UsersCourseService {
     public List<CourseReviewDTO> getCourseReviews(int courseId) {
         return userCourseRepository.findReviewsByCourseId(courseId);
     }
-
     public boolean checkUserEnrolled(String userName, int courseId) {
         return userCourseRepository.isUserEnrolled(userName, courseId);
     }
@@ -93,7 +93,8 @@ public class UsersCourseService {
     public String progressStatus(Integer userId, Integer courseId) {
         Integer numberOfQuiz = quizRepository.countNumberOfQuizInCourse(courseId);
         int count = 0;
-        List<QuizResult> quizResults = quizResults(userId);
+        //List<QuizResult> quizResults = quizResults(userId);
+        List<QuizResult> quizResults = quizResultRepository.getQuizResultInCourse(userId, courseId);
         for (QuizResult quizResult : quizResults) {
             if (quizResult.getMaxScore() >= 8) {
                 count++;
@@ -149,5 +150,30 @@ public class UsersCourseService {
     }
     public int countReviewByCourseId(int courseId){
         return userCourseRepository.countReviewByCourseId(courseId);
+    }
+
+    public List<UsersCourse> getUserCourseByUserId(int userId){
+        return userCourseRepository.getCourseByUserId(userId);
+    }
+
+    @Transactional
+    public void enrollCourse(Integer userId, Integer courseId) {
+        User user = userRepository.findUserById(userId);
+        Course course = courseRepository.findByCourseId(courseId);
+        UsersCourseId usersCourseId = new UsersCourseId();
+        usersCourseId.setUserId(userId);
+        usersCourseId.setCourseId(courseId);
+        if (userCourseRepository.existsById(usersCourseId)) {
+            throw new RuntimeException("Extend your VIP package to continue learning");
+        }
+        UsersCourse usersCourse = new UsersCourse();
+        usersCourse.setId(usersCourseId);
+        usersCourse.setUser(user);
+        usersCourse.setCourse(course);
+        userCourseRepository.save(usersCourse);
+    }
+
+    public List<Integer> courseIdListByUserId(Integer userId){
+        return userCourseRepository.courseIdListByUserId(userId);
     }
 }

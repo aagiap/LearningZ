@@ -27,7 +27,7 @@
 <div class="wrapper">
 
     <!-- ========== Topbar Start ========== -->
-    <header class="topbar">
+    <header class="topbar" style="box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="d-flex align-items-center">
@@ -39,9 +39,12 @@
                     </div>
 
                     <!-- Menu Toggle Button -->
-                    <div class="topbar-item">
-                        <h4 class="fw-bold topbar-button pe-none text-uppercase mb-0">Slider Edit</h4>
-                    </div>
+                    <a class="navbar-brand" href="/home">
+                        <img src="/image/learningz.png" alt="Logo" width="60px">
+                        <a style="font-size: 24px; font-weight: bold;">
+                            Learning<span style="font-size: 30px; color: blue;">Z</span>
+                        </a>
+                    </a>
                 </div>
 
                 <div class="d-flex align-items-center gap-1">
@@ -250,9 +253,9 @@
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
                                    <span class="nav-icon">
-                                        <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
+                                        <iconify-icon icon="solar:gallery-bold"></iconify-icon>
                                    </span>
-                        <span class="nav-text"> Products </span>
+                        <span class="nav-text"> Lists </span>
                     </a>
                     <div class="collapse" id="sidebarProducts">
                         <ul class="nav sub-navbar-nav">
@@ -297,7 +300,7 @@
     <!-- ==================================================== -->
     <div class="page-content">
         <!-- Start Container Fluid -->
-        <div class="container-xxl">
+        <div class="container-xxl" style="padding-top: 50px">
             <div class="row">
                 <div class="col-xl-12 col-lg-11">
                     <div class="card">
@@ -307,6 +310,8 @@
                         <div class="card-body">
                             <form th:action="@{/marketer/slider/edit}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="sliderId" th:value="${slider.sliderId}">
+                                <input type="hidden" name="page" th:value="${page}">
+
 
                                 <div class="mb-3">
                                     <label class="form-label">ID Slider</label>
@@ -326,9 +331,14 @@
                                 <!-- File Upload -->
                                 <div class="mb-3">
                                     <label class="form-label">Image</label>
-                                    <input type="file" name="imageUrl" class="form-control">
-                                    <img th:src="@{${slider.imageUrl}}" alt="Slider Image" class="img-fluid mt-3" style="max-width: 285px; height: auto;">
+                                    <input type="file" name="imageFile" class="form-control">
+
+                                    <!-- Hiển thị ảnh hiện tại nếu có -->
+                                    <div th:if="${slider.imageUrl}">
+                                        <img th:src="${slider.imageUrl}" alt="Slider Image" class="img-fluid mt-3" style="max-width: 285px; height: auto;">
+                                    </div>
                                 </div>
+
 
                                 <div class="form-check mb-3">
                                     <input type="checkbox" id="status" name="status" class="form-check-input" th:checked="${slider.status}">
