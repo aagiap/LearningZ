@@ -116,6 +116,9 @@ public class CourseController {
         List<CourseReviewDTO> reviews = usersCourseService.getCourseReviews(courseId);
         model.addAttribute("reviews", reviews);
 
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+
         // Kiểm tra user và userOAuth2
         String username = null;
 
