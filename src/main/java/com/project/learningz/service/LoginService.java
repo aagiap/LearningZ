@@ -1,6 +1,7 @@
 package com.project.learningz.service;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.constant.UserStatus;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class LoginService implements UserDetailsService {
             user.setGoogleId(googleId);
             user.setPassword("OAUTH2_DEFAULT_PASSWORD");
             user.setRole(Role.STUDENT);
+            user.setUserStatus(UserStatus.ACTIVE);
             userRepository.save(user);
         } else if (user.getGoogleId() == null) {
             user.setGoogleId(googleId);
