@@ -1,5 +1,6 @@
 package com.project.learningz.specification;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.entity.Course;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CourseSpecification {
     public static Specification<Course> getAllSpec() {
-        return (root, query, cb) -> cb.greaterThan(root.get("id"), 0);
+        return (root, query, cb) -> cb.and(
+                cb.greaterThan(root.get("id"), 0),
+                cb.equal(root.get("courseStatus"), CourseStatus.ACTIVE));
     }
 
     public static Specification<Course> byKeywordSpec(String keyword) {

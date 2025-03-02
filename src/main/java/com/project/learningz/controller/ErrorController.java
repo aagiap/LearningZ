@@ -2,8 +2,12 @@ package com.project.learningz.controller;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,5 +39,15 @@ public class ErrorController {
         }
 
         return "error/default";
+    }
+    @GetMapping("/banned-message")
+    public String bannedMessage(HttpServletRequest request,
+                                HttpServletResponse response,
+                                Authentication authentication,
+                                Model model) {
+        model.addAttribute("title", "You are banned");
+        model.addAttribute("message", "You are banned, please contact admin at LearningZ@gmail.com to unban.");
+        request.getSession().invalidate();
+        return "auth/message";
     }
 }
