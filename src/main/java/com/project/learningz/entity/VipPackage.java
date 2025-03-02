@@ -30,9 +30,12 @@ public class VipPackage {
     @Column(name = "duration", nullable = false)
     private Integer duration;
 
+    //    @NotNull
+//    @Column(name = "price", nullable = false, precision = 13, scale = 2)
+//    private BigDecimal price;
     @NotNull
-    @Column(name = "price", nullable = false, precision = 13, scale = 0)
-    private BigDecimal price;
+    @Column(name = "price", nullable = false)
+    private long price;
 
     @OneToMany(mappedBy = "vipPackage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserMembership> userMemberships = new ArrayList<>();

@@ -37,4 +37,11 @@ public class UserMembership {
     private LocalDate expirationDate;
 
 
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+        if (vipPackage != null) {
+            this.expirationDate = registrationDate.plusMonths(vipPackage.getDuration());
+        }
+    }
+
 }
