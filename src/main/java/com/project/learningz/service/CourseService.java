@@ -1,5 +1,6 @@
 package com.project.learningz.service;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.CourseDetailsDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
@@ -23,6 +24,7 @@ public class CourseService {
     private final GradeService gradeService;
     private final UserService userService;
     private final GoogleDriveService googleDriveService;
+    private final SubjectService subjectService;
 
     public Page<Course> getCoursesPagingByKeyword(String keyword, Pageable pageable) {
         Specification<Course> spec = CourseSpecification.getAllSpec();
@@ -66,8 +68,20 @@ public class CourseService {
         return courseRepository.allCoursesByUserID(userId);
     }
 
-    public List<CourseDetailsDTO> findCourses(int userId, String subject, String courseSearchKey) {
-        return courseRepository.findCourses(userId, subject, courseSearchKey);
+    public List<CourseDetailsDTO> findCourses(int userId, int subjectId, String courseSearchKey) {
+        if(subjectId != 0){
+            if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                return courseRepository.findCourses(userId, subjectId,courseSearchKey);
+            }else {
+                return courseRepository.findCourses(userId, subjectId, "");
+            }
+        }else{
+            if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                return courseRepository.findCourses(userId, courseSearchKey);
+            }else{
+                return courseRepository.findCourses(userId, "");
+            }
+        }
     }
 
     public Course findByCourseId(int courseId) {
@@ -75,10 +89,16 @@ public class CourseService {
     }
 
     @Transactional
-    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, String subject, int gradeId, MultipartFile courseImageUrl,String description) throws GeneralSecurityException, IOException {
+    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, int subjectId, int gradeId, CourseStatus courseStatus, MultipartFile courseImageUrl, String description) throws GeneralSecurityException, IOException {
         Course course = courseRepository.findById(courseId).orElse(null);
         course.setTitle(title);
-        //course.setSubject(subject);
+        course.setSubject(subjectService.getSubjectById(subjectId));
+        course.setCourseStatus(courseStatus);
+
+        if(courseDriveLink != null && !courseDriveLink.isEmpty()){
+            googleDriveService.renameFolder(courseDriveLink, title);
+        }
+
         course.setGrade(gradeService.findById(gradeId));
         course.setDescription(description);
         if(courseImageUrl != null && !courseImageUrl.isEmpty()) {
@@ -99,11 +119,12 @@ public class CourseService {
     }
 
     @Transactional
-    public void createCourse(int createdByID, int gradeId, String subject, String title, String description, MultipartFile courseImageUrl) throws GeneralSecurityException, IOException {
+    public void createCourse(int createdByID, int gradeId, int subjectId, String title, CourseStatus courseStatus ,String description, MultipartFile courseImageUrl) throws GeneralSecurityException, IOException {
         Course newCourse = new Course();
         newCourse.setCreatedBy(userService.findById(createdByID));
         newCourse.setTitle(title);
-        //newCourse.setSubject(subject);
+        newCourse.setSubject(subjectService.getSubjectById(subjectId));
+        newCourse.setCourseStatus(courseStatus);
         newCourse.setGrade(gradeService.findById(gradeId));
         newCourse.setDescription(description);
         String courseDriveLink = googleDriveService.createFolder(title,googleDriveService.getCoursesFolderId());

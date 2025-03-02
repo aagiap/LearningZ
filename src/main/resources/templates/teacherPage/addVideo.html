@@ -5,13 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add new video</title>
     <link rel="stylesheet" th:href="@{/css/addVideoStyle.css}">
+    <!-- Thư viện jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
+<div class="expertNavigation">
+    <div class="logo-container">
+        <a href="/home">
+            <img src="/image/learningz.png" alt="Logo">
+        </a>
+        <span class="logo-text">Learning<span class="highlight">Z</span></span>
+        <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
 
+        <div id="sidebar" class="sidebar">
+            <button onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
+            <br>
+            <ul>
+                <li><a href="#">📊 Dashboard</a></li>
+                <li><a href="/teacher">📚 Courses Management</a></li>
+                <li>
+                    <a href="#" onclick="viewSubjectList(this)">📖 Subjects List</a>
+                    <form action="/teacher/subject" id="viewSubjectList">
+                        <input type="number" name="userId" th:value="${user.getId()}" hidden>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <button id="openSidebarBtn" onclick="openSidebar()"><i class="fa-solid fa-bars"></i></button>
+    </div>
+    <div class="rightNav">
+        <div class="expertAvatar">
+            <button>
+                <img th:src="${user.getAvtUrl()}"
+                     src="https://lh3.googleusercontent.com/d/1PR3JqFmR2l4O4BE_dVBoRTjT0Se7GLw9" alt="Avatar">
+            </button>
+            <ul class="dropdownMenu">
+                <li><a href="/home/profile">Profile</a></li>
+                <li><a href="/home/change_password">Change password</a></li>
+                <li><a href="/logout">Log out</a></li>
+            </ul>
+        </div>
+        <label>Teacher:</label>
+        <p th:text="${user.getUsername()}"></p>
+    </div>
+</div>
 <div class="container">
     <h2>Add new video</h2>
 
     <form action="/teacher/chapter/lesson/videos/addVideo/create" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="userId" th:value="${user.getId()}">
         <input type="hidden" name="lessonId" th:value="${lessonId}">
 
         <label>Title:</label>
@@ -38,6 +85,7 @@
     </div>
 
     <form action="/teacher/chapter/lesson/videos" method="get" id="returnVideoList">
+        <input type="hidden" name="userId" th:value="${user.getId()}">
         <input type="number" name="lessonId" th:value="${lessonId}" hidden>
     </form>
 </div>
@@ -54,6 +102,47 @@
             videoPreview.style.display = "block";
         }
     });
+    document.addEventListener("DOMContentLoaded", function () {
+        const avatarBtn = document.querySelector(".expertAvatar button");
+        const avatarDropdown = document.querySelector(".expertAvatar");
+
+        avatarBtn.addEventListener("click", function (event) {
+            event.stopPropagation();
+            avatarDropdown.classList.toggle("active");
+        });
+
+        // Ẩn menu khi click bên ngoài
+        document.addEventListener("click", function () {
+            avatarDropdown.classList.remove("active");
+        });
+
+        avatarDropdown.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+    });
+    $(document).ready(function () {
+        $('#listTable').DataTable({
+            "pageLength": 5, // Hiển thị 5 hàng mỗi trang
+            "lengthChange": false, // Ẩn dropdown chọn số hàng
+            "info": false, // Ẩn thông tin số dòng
+            "searching": false
+        });
+    });
+
+    function openSidebar() {
+        document.getElementById("sidebar").classList.add("active");
+        document.getElementById("overlay").classList.add("active");
+    }
+
+    function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("active");
+        document.getElementById("overlay").classList.remove("active");
+    }
+
+    function viewSubjectList(e) {
+        let form = document.querySelector('#viewSubjectList')
+        form.submit();
+    }
 </script>
 
 </body>

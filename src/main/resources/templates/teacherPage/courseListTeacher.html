@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documents List</title>
-    <link rel="stylesheet" th:href="@{/css/docListStyle.css}">
+    <title>Course List</title>
+    <link rel="stylesheet" th:href="@{/css/courseListTeacherStyle.css}">
     <!-- Thư viện jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables -->
@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
+
+<body>
 <div class="expertNavigation">
     <div class="logo-container">
         <a href="/home">
@@ -53,40 +55,37 @@
         <p th:text="${user.getUsername()}"></p>
     </div>
 </div>
-<body>
 <div class="container">
-    <h2>Documents List</h2>
+    <h2>Course List</h2>
 
     <div class="filter-section">
-        <form action="/teacher/chapter/lesson/docs/search">
-            <input type="hidden" name="userId" th:value="${user.getId()}">
-            <input name="lessonId" type="text" hidden th:value="${lessonId}">
-            <input name="docSearchKey" type="text" id="searchInput" placeholder="Search documents by title">
+        <form action="/teacher/search">
+            <input name="courseSearchKey" type="text" id="searchInput" placeholder="Search course by name">
+            <select id="subjectFilter" name="subjectId">
+                <option value="0">All Subjects</option>
+                <option th:each="subject : ${subjectList}" th:value="${subject.getId()}" th:text="${subject.getName()}"></option>
+            </select>
             <input type="submit" value="Search">
         </form>
 
-        <div>
-            <button id="returnLessonButton" onclick="returnLesson()"><i class="fa-solid fa-rotate-left"></i> Return Lesson List</button>
-            <form action="/teacher/chapter/lesson" method="get" id="returnLesson">
-                <input type="hidden" name="userId" th:value="${user.getId()}">
-                <input type="number" name="chapterId" th:value="${chapterId}" hidden>
-            </form>
-            <button id="addDoc" onclick="addDocRequest()">+ Add New Document</button>
-            <form action="/teacher/chapter/lesson/docs/addDoc" method="get" id="addDocRequest">
-                <input type="hidden" name="userId" th:value="${user.getId()}">
-                <input type="number" name="lessonId" th:value="${lessonId}" hidden>
-            </form>
-        </div>
+        <form action="/teacher/add_course" method="get">
+            <input type="number" name="userId" th:value="${user.getId()}" hidden>
+            <button type="submit">+ Add New Course</button>
+        </form>
 
     </div>
 
     <table th:if="${notification}">
         <thead>
         <tr>
-            <th>Lesson ID</th>
-            <th>Doc ID</th>
-            <th>Document Title</th>
-            <th>File URL</th>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Chapters</th>
+            <th>Lessons</th>
+            <th>Status</th>
+            <th>Description</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -96,47 +95,60 @@
         </tr>
         </tbody>
     </table>
-    <table th:if="${pdfList}" id="listTable">
+    <table th:if="${courseList}" id="listTable">
         <thead>
         <tr>
-            <th>Lesson ID</th>
-            <th>Doc ID</th>
-            <th>Document Title</th>
-            <th>File URL</th>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Chapters</th>
+            <th>Lessons</th>
+            <th>Status</th>
+            <th>Description</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="doc:${pdfList}">
-            <td th:text="${doc.lesson.getId()}"></td>
-            <td th:text="${doc.getId()}"></td>
-            <td th:text="${doc.getTitle()}"></td>
-            <td th:text="${doc.getFileUrl()}"></td>
+        <tr th:each="course:${courseList}">
+            <td th:text="${course.getId()}"></td>
+            <td th:text="${course.getTitle()}"></td>
+            <td th:text="${course.getSubject()}"></td>
+            <td th:text="${course.getGradeName()}"></td>
+            <td th:text="${course.getNumberOfChapters()}"></td>
+            <td th:text="${course.getNumberOfLessons()}"></td>
+            <td th:text="${course.getCourseStatus()}"></td>
+            <td>
+                <button class="desc-btn" onclick="showPopup(this)"><i class="fa-solid fa-bars-staggered"></i></button>
+                <span class="description-text" hidden th:text="${course.getDescription()}"></span>
+            </td>
             <td class="actions">
                 <div class="top-actions">
-                    <form action="/teacher/chapter/lesson/docs/edit" method="POST" style="display: inline">
+                    <form action="/teacher/edit" method="POST" style="display: inline">
+                        <input type="hidden" name="numberOfLessons" th:value="${course.getNumberOfLessons()}">
+                        <input type="hidden" name="courseId" th:value="${course.getId()}" />
+                        <button type="submit" class="edit-btn" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </form>
+                    <button onclick="viewCourseDetails(this)" title="Students View"><i class="fa-solid fa-chalkboard-user"></i></button>
+                    <a hidden id="viewCourseDetailsRequest" th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
+                    <form action="/teacher/chapter" method="GET">
                         <input type="hidden" name="userId" th:value="${user.getId()}">
-                        <input type="hidden" name="pdfId" th:value="${doc.getId()}" />
-                        <button type="submit" class="edit-btn" title="Edit Document Material"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <input type="hidden" name="courseId" th:value="${course.getId()}" />
+                        <button type="submit" class="view-btn" title="View chapters list"><i class="fa-solid fa-bookmark"></i></button>
                     </form>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
+    <div id="descPopup" class="popup hidden">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <p id="popupText"></p>
+        </div>
+    </div>
 </div>
 <script>
-    function addDocRequest(){
-        document.querySelector('#addDocRequest').submit();
-    }
-    function returnLesson(){
-        document.querySelector('#returnLesson').submit();
-    }
-    function viewSubjectList(e) {
-        let form = document.querySelector('#viewSubjectList')
-        form.submit();
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
         const avatarBtn = document.querySelector(".expertAvatar button");
         const avatarDropdown = document.querySelector(".expertAvatar");
@@ -154,6 +166,14 @@
             event.stopPropagation();
         });
     });
+    function showPopup(button) {
+        document.getElementById("popupText").textContent = button.nextElementSibling.textContent;
+        document.getElementById("descPopup").classList.remove("hidden");
+    }
+
+    function closePopup() {
+        document.getElementById("descPopup").classList.add("hidden");
+    }
     $(document).ready(function () {
         $('#listTable').DataTable({
             "pageLength": 5,
@@ -162,7 +182,6 @@
             "searching": false
         });
     });
-
     function openSidebar() {
         document.getElementById("sidebar").classList.add("active");
         document.getElementById("overlay").classList.add("active");
@@ -171,6 +190,17 @@
     function closeSidebar() {
         document.getElementById("sidebar").classList.remove("active");
         document.getElementById("overlay").classList.remove("active");
+    }
+
+    function viewCourseDetails(button) {
+        let link = button.parentElement.querySelector("#viewCourseDetailsRequest");
+        if (link) {
+            link.click();
+        }
+    }
+    function viewSubjectList(e){
+        let form = document.querySelector('#viewSubjectList')
+        form.submit();
     }
 </script>
 </body>

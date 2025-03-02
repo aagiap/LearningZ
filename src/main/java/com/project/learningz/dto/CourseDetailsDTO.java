@@ -1,11 +1,14 @@
 package com.project.learningz.dto;
 
+import com.project.learningz.constant.CourseStatus;
+
 public class CourseDetailsDTO {
     private Integer id;
     private String createdByUsername;
     private String gradeName;
     private String subject;
     private String title;
+    private CourseStatus courseStatus;
     private String description;
     private String courseDriveLink;
     private Long numberOfLessons;
@@ -14,12 +17,13 @@ public class CourseDetailsDTO {
     public CourseDetailsDTO() {
     }
 
-    public CourseDetailsDTO(Integer id, String createdByUsername, String gradeName, String subject, String title, String description, String courseDriveLink, Long numberOfLessons, Long numberOfChapters) {
+    public CourseDetailsDTO(Integer id, String createdByUsername, String gradeName, String subject, String title, CourseStatus courseStatus,String description, String courseDriveLink, Long numberOfLessons, Long numberOfChapters) {
         this.id = id;
         this.createdByUsername = createdByUsername;
         this.gradeName = gradeName;
         this.subject = subject;
         this.title = title;
+        this.courseStatus = courseStatus;
         this.description = description;
         this.courseDriveLink = courseDriveLink;
         this.numberOfLessons = numberOfLessons;
@@ -97,4 +101,8 @@ public class CourseDetailsDTO {
     public void setNumberOfChapters(Long numberOfChapters) {
         this.numberOfChapters = numberOfChapters;
     }
+
+    public CourseStatus getCourseStatus() { return courseStatus; }
+
+    public void setCourseStatus(CourseStatus courseStatus) { this.courseStatus = courseStatus; }
 }

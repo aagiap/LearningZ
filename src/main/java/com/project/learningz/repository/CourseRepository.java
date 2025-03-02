@@ -31,6 +31,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
         g.name,
         c.subject.name,
         c.title,
+        c.courseStatus,
         c.description,
         c.courseDriveLink,
         COUNT(DISTINCT l.id),
@@ -41,11 +42,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     LEFT JOIN Lesson l ON ch.id = l.chapter.id
     LEFT JOIN Grade g ON c.grade.id = g.id
     WHERE c.createdBy.id = ?1
-    GROUP BY c.id, c.createdBy.username, g.name,
-    c.subject.name, c.title, c.description, c.courseDriveLink
+    GROUP BY c.id, c.createdBy.username, g.name, c.subject.name, 
+    c.courseStatus, c.title, c.description, c.courseDriveLink
 """)
     List<CourseDetailsDTO> allCoursesByUserID(int userId);
-
 
     @Query("""
     SELECT new com.project.learningz.dto.CourseDetailsDTO(
@@ -54,6 +54,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
         g.name,
         c.subject.name,
         c.title,
+        c.courseStatus,
         c.description,
         c.courseDriveLink,
         COUNT(DISTINCT l.id),
@@ -63,11 +64,34 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     LEFT JOIN Chapter ch ON c.id = ch.course.id
     LEFT JOIN Lesson l ON ch.id = l.chapter.id
     LEFT JOIN Grade g ON c.grade.id = g.id
-    WHERE c.createdBy.id = ?1 AND c.subject.name like CONCAT('%', ?2, '%') AND c.title like CONCAT('%', ?3, '%')
-    GROUP BY c.id, c.createdBy.username, g.name,
-    c.subject.name, c.title, c.description, c.courseDriveLink
+    WHERE c.createdBy.id = ?1 AND c.title like CONCAT('%', ?2, '%')
+    GROUP BY c.id, c.createdBy.username, g.name, c.subject.name, 
+    c.courseStatus, c.title, c.description, c.courseDriveLink
 """)
-    List<CourseDetailsDTO> findCourses(int id, String subject, String keyWord);
+    List<CourseDetailsDTO> findCourses(int id, String keyWord);
+
+    @Query("""
+    SELECT new com.project.learningz.dto.CourseDetailsDTO(
+        c.id,
+        c.createdBy.username,
+        g.name,
+        c.subject.name,
+        c.title,
+        c.courseStatus,
+        c.description,
+        c.courseDriveLink,
+        COUNT(DISTINCT l.id),
+        COUNT(DISTINCT ch.id)
+    )
+    FROM Course AS c
+    LEFT JOIN Chapter ch ON c.id = ch.course.id
+    LEFT JOIN Lesson l ON ch.id = l.chapter.id
+    LEFT JOIN Grade g ON c.grade.id = g.id
+    WHERE c.createdBy.id = ?1 AND c.subject.id = ?2 AND c.title like CONCAT('%', ?3, '%')
+    GROUP BY c.id, c.createdBy.username, g.name, c.subject.name, 
+    c.courseStatus, c.title, c.description, c.courseDriveLink
+""")
+    List<CourseDetailsDTO> findCourses(int id, int subjectId, String keyWord);
 
     @Query("SELECT c FROM Course c WHERE c.id = ?1")
     Course findByCourseId(int courseId);

@@ -118,7 +118,7 @@ p {
 }
 .container {
     margin-top: 80px; /* Đẩy nội dung xuống dưới navbar */
-    width: 90%;
+    width: 95%;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -304,33 +304,4 @@ h2{
 .sidebar button, #openSidebarBtn{
     height: 50px;
     width: 50px;
-}
-/* Đảm bảo cột Actions có chiều rộng cố định */
-.actions {
-    width: 150px; /* Điều chỉnh tùy theo giao diện */
-    text-align: center;
-}
-
-/* Định dạng nhóm nút trong cột Actions */
-.top-actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px; /* Khoảng cách giữa các nút */
-}
-
-/* Đảm bảo các nút có cùng kích thước */
-.actions button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-/* Căn chỉnh biểu tượng bên trong nút */
-.actions button i {
-    font-size: 16px;
 }
