@@ -103,6 +103,30 @@ public class VipRegisterController {
     }
 
 
+//    public PaymentResponse MomoPayment(int id, long amount, String packageName) throws Exception {
+//
+//        String requestId = String.valueOf(System.currentTimeMillis() + "learningz");
+//        String orderId = String.valueOf(System.currentTimeMillis() + "learningz");
+//        System.out.println("Sent orderId: " + orderId);
+//        String orderInfo = "LearningZ payment " + id;
+//        String returnURL = momoProperties.getReturnUrl();
+//        String notifyURL = momoProperties.getNotifyURL();
+//        Environment environment = Environment.selectEnv(momoProperties.getEnvironment());
+//
+//        System.out.println("Debug: orderId=" + orderId + ", requestId=" + requestId);
+//        QueryStatusTransactionResponse queryStatusTransactionResponse = QueryTransactionStatus.process(environment, orderId, requestId);
+//        System.out.println("Transaction Status: " + queryStatusTransactionResponse.getMessage());
+//
+
+    /// /        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
+    /// /        System.out.println("QR: " + captureWalletMoMoResponse.getQrCodeUrl());
+    /// /        System.out.println("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
+    /// /        return captureWalletMoMoResponse;
+//
+//        PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
+//        System.out.println("Momo Payment URL: " + captureATMMoMoResponse.getPayUrl());
+//        return captureATMMoMoResponse;
+//    }
     public PaymentResponse MomoPayment(int id, long amount, String packageName) throws Exception {
 
         String requestId = String.valueOf(System.currentTimeMillis() + "learningz");
@@ -112,19 +136,16 @@ public class VipRegisterController {
         String returnURL = momoProperties.getReturnUrl();
         String notifyURL = momoProperties.getNotifyURL();
         Environment environment = Environment.selectEnv(momoProperties.getEnvironment());
-
         System.out.println("Debug: orderId=" + orderId + ", requestId=" + requestId);
-        QueryStatusTransactionResponse queryStatusTransactionResponse = QueryTransactionStatus.process(environment, orderId, requestId);
-        System.out.println("Transaction Status: " + queryStatusTransactionResponse.getMessage());
 
-//        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
-//        System.out.println("QR: " + captureWalletMoMoResponse.getQrCodeUrl());
-//        System.out.println("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
-//        return captureWalletMoMoResponse;
+        //PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
+        //System.out.println("Momo Payment URL: " + captureATMMoMoResponse.getPayUrl());
+        //return captureATMMoMoResponse;
 
-        PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
-        System.out.println("Momo Payment URL: " + captureATMMoMoResponse.getPayUrl());
-        return captureATMMoMoResponse;
+        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
+        System.out.println("QR: " + captureWalletMoMoResponse.getQrCodeUrl());
+        System.out.println("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
+        return captureWalletMoMoResponse;
     }
 
     @GetMapping("/momo-callback")
@@ -148,7 +169,7 @@ public class VipRegisterController {
                 username = userService.findUserNameByEmail(email);
             }
             if ("0".equals(resultCode)) {
-            //if(1==1){
+                //if(1==1){
                 User userLoggin = userService.findByUsername(username);
                 VipPackage vipPackage = vipPackageService.getVipPackageById(vipPackageId);
 

@@ -67,6 +67,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/course/**", "/post/**").permitAll()
                                 .requestMatchers("/vip-packages").permitAll()
                                 .requestMatchers("/learning/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM")
+                                .requestMatchers("/Exam/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM")
                                 .requestMatchers("/course/**").permitAll()
                                 .anyRequest().authenticated()
                 ).formLogin(form -> form
