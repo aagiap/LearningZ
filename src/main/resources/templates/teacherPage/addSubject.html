@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Detail Setting</title>
-    <link rel="stylesheet" th:href="@{/css/editVideoStyle.css}">
+    <title>Add Subject</title>
+    <link rel="stylesheet" th:href="@{/css/addSubjectStyle.css}">
     <!-- Thư viện jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables -->
@@ -55,70 +55,54 @@
     </div>
 </div>
 <div class="container">
-    <h2>Video Detail Setting</h2>
+    <h2>Add Subject</h2>
 
-    <form action="/teacher/chapter/lesson/videos/edit/update" method="post" enctype="multipart/form-data">
+    <form action="/teacher/subject/addSubject/create" method="post">
         <input type="hidden" name="userId" th:value="${user.getId()}">
-        <input type="hidden" name="lessonId" th:value="${video.lesson.getId()}">
-        <input type="hidden" name="videoId" th:value="${video.getId()}">
 
-        <label>Title:</label>
-        <input type="text" name="videoTitle" th:value="${video.getTitle()}" required>
+        <label>Subject name:</label>
+        <input type="text" name="subjectName" required>
 
-        <label>VideoUrl</label>
-        <input type="file" id="videoUrl" name="videoUrl" accept="video/*">
+        <label>Description:</label>
+        <textarea name="description" rows="3"></textarea>
 
         <div class="btn-group">
             <button type="submit" class="save-btn">Save</button>
             <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
         </div>
     </form>
-    <div class="video-container">
-        <iframe id="googleDriveVideo" th:if="${video.getFileUrl()}" th:src="${video.getFileUrl()}" width="750"
-                height="450" allow="autoplay"></iframe>
-
-        <video id="videoPreview" width="750" controls style="display: none;"></video>
-    </div>
+    <form action="/teacher/subject" id="returnSubjectList">
+        <input name="userId" th:value="${user.getId()}" hidden>
+    </form>
     <!-- Hiển thị lỗi -->
     <div th:if="${error}" class="error-messages">
-        <p th:text="${error}"></p>
+        <p th:text="${error}">
     </div>
 
     <!-- Hiển thị thông báo thành công -->
     <div th:if="${notification}" class="success-message">
         <p th:text="${notification}"></p>
     </div>
-
-    <form action="/teacher/chapter/lesson/videos" method="get" id="returnVideoList">
-        <input type="hidden" name="userId" th:value="${user.getId()}">
-        <input type="number" name="lessonId" th:value="${video.lesson.getId()}" hidden>
-    </form>
-
 </div>
 
 <script>
     function closeEditForm() {
-        document.querySelector('#returnVideoList').submit();
+        document.querySelector('#returnSubjectList').submit();
     }
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('logoPreview');
 
-    document.getElementById("videoUrl").addEventListener("change", function (event) {
-        const file = event.target.files[0]; // Lấy file mới
-        if (file) {
-            const videoPreview = document.getElementById("videoPreview");
-            const googleDriveVideo = document.getElementById("googleDriveVideo");
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
 
-            // Ẩn video cũ trên Google Drive nếu có
-            if (googleDriveVideo) {
-                googleDriveVideo.style.display = "none";
-            }
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
 
-            // Hiển thị video mới
-            const videoURL = URL.createObjectURL(file);
-            videoPreview.src = videoURL;
-            videoPreview.style.display = "block";
-            videoPreview.load();
+            reader.readAsDataURL(input.files[0]);
         }
-    });
+    }
     document.addEventListener("DOMContentLoaded", function () {
         const avatarBtn = document.querySelector(".expertAvatar button");
         const avatarDropdown = document.querySelector(".expertAvatar");
@@ -145,7 +129,6 @@
             "searching": false
         });
     });
-
     function openSidebar() {
         document.getElementById("sidebar").classList.add("active");
         document.getElementById("overlay").classList.add("active");
@@ -155,8 +138,7 @@
         document.getElementById("sidebar").classList.remove("active");
         document.getElementById("overlay").classList.remove("active");
     }
-
-    function viewSubjectList(e) {
+    function viewSubjectList(e){
         let form = document.querySelector('#viewSubjectList')
         form.submit();
     }

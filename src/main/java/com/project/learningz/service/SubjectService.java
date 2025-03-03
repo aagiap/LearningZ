@@ -2,6 +2,7 @@ package com.project.learningz.service;
 
 import com.project.learningz.entity.Subject;
 import com.project.learningz.repository.SubjectRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,30 @@ public class SubjectService {
 
     public List<Subject> getAllSubjects() {
         return subjectRepository.findAll();
+    }
+
+    public Subject getSubjectById(int id) {
+        return subjectRepository.getSubjectById(id);
+    }
+
+    public List<Subject> getSubjectsByKey(String key) {
+        return subjectRepository.getSubjectByKey(key);
+    }
+
+    @Transactional
+    public void updateSubject(int subjectId, String subjectName, String description) {
+        Subject subject = subjectRepository.getSubjectById(subjectId);
+        subject.setName(subjectName);
+        subject.setDescription(description);
+        subjectRepository.save(subject);
+    }
+
+    @Transactional
+    public void createSubject(String subjectName, String description) {
+        Subject subject = new Subject();
+        subject.setName(subjectName);
+        subject.setDescription(description);
+        subjectRepository.save(subject);
     }
 
     public List<String> getAllSubjectInQuestions() {
