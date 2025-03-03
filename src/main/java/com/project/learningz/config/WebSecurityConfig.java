@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 
 @Configuration
 public class WebSecurityConfig {
-    private static final String[] STATIC_RESOURCE = {"/css/**", "/font/**", "/js/**", "/image/**"};
+    private static final String[] STATIC_RESOURCE = {"/css/**", "/font/**", "/js/**", "/image/**","/vendor/**"};
     private final LoginService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
 

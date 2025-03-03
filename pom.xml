@@ -132,6 +132,12 @@
 			<groupId>io.github.momo-wallet</groupId>
 			<artifactId>momopayment</artifactId>
 			<version>1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>gson</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
