@@ -101,4 +101,8 @@ public class ChapterService {
         chapterRepository.save(chapter);
     }
 
+    public List<String> getAllChaptersInQuestions() {
+        return chapterRepository.getAllChaptersInQuestions();
+    }
+
 }

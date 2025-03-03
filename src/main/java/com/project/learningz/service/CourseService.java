@@ -114,4 +114,8 @@ public class CourseService {
         }
         courseRepository.save(newCourse);
     }
+
+    public List<String> getAllCourseInQuestions() {
+        return courseRepository.getAllCourse();
+    }
 }

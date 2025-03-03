@@ -56,4 +56,14 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
 
     @Query("SELECT ch FROM Chapter ch WHERE ch.course.id = ?1 AND ch.chapterOrder = ?2")
     Chapter findChapter(Integer courseId, Integer order);
+
+    @Query("""
+        SELECT DISTINCT ch.chapterTitle 
+        FROM QuestionBank q
+        JOIN QuizQuestion qq ON q.id = qq.question.id
+        JOIN Quiz qu ON qq.quiz.id = qu.id
+        JOIN qu.lesson l
+        JOIN l.chapter ch
+    """)
+    List<String> getAllChaptersInQuestions();
 }
