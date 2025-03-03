@@ -13,8 +13,6 @@ import com.project.learningz.entity.Grade;
 import com.project.learningz.entity.User;
 import com.project.learningz.entity.UserMembership;
 import com.project.learningz.entity.VipPackage;
-import com.project.learningz.repository.UserMembershipRepository;
-import com.project.learningz.repository.UserRepository;
 import com.project.learningz.service.GradeService;
 import com.project.learningz.service.MembershipService;
 import com.project.learningz.service.UserService;
@@ -34,7 +32,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/vip-packages")
-public class VipPackageController {
+public class VipRegisterController {
     @Autowired
     private VipPackageService vipPackageService;
 
@@ -149,8 +147,8 @@ public class VipPackageController {
                 String email = userOAuth2.getAttribute("email");
                 username = userService.findUserNameByEmail(email);
             }
-//            if ("0".equals(resultCode)) {
-            if(1==1){
+            if ("0".equals(resultCode)) {
+            //if(1==1){
                 User userLoggin = userService.findByUsername(username);
                 VipPackage vipPackage = vipPackageService.getVipPackageById(vipPackageId);
 
