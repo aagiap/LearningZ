@@ -120,7 +120,10 @@
     </div>
     <form method="get" action="/Exam/DoQuiz" onsubmit="removeTimeLimit()">
         <input type="hidden" name="quizId" th:value="${quiz.getQuizId()}">
-        <div class="d-flex justify-content-center align-items-center pt-3">
+        <div class="d-flex justify-content-between align-items-center pt-3">
+            <div class="d-flex ">
+          <button class="btn btn-success" type="button" onclick="history.back()">Back</button>
+            </div>
             <div class="d-flex ">
                 <button class="btn btn-success">Start</button>
             </div>
