@@ -206,7 +206,7 @@ public class DoQuizController {
         List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
         Quiz quiz = (Quiz) session.getAttribute("quiz");
         List<QuestionBank> questionBankList = (List<QuestionBank>) session.getAttribute("questionBankList");
-//        session.invalidate();
+        //session.invalidate();
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);

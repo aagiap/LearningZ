@@ -25,6 +25,8 @@ public class MembershipService {
     private final UserRepository userRepository;
     private final UserMembershipRepository userMembershipRepository;
 
+
+    //@Scheduled(fixedRate = 60000)
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Ho_Chi_Minh")
     @Transactional
     public void downgradeExpiredVipUsers() {
@@ -36,7 +38,7 @@ public class MembershipService {
             if (latestMembership == null || latestMembership.getExpirationDate().isBefore(today)) {
                 user.setRole(Role.STUDENT);
                 userRepository.save(user);
-                System.out.println("Downgrade User: " + user.getId());
+                System.out.println("Downgrade User: " + user.getId() + "-" + user.getUsername());
             }
         }
         System.out.println("Scheduled Task done!");

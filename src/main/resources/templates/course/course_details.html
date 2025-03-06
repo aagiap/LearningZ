@@ -15,8 +15,6 @@
           rel="stylesheet">
 
 
-
-
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -33,8 +31,6 @@
 
     <!-- Template Stylesheet -->
     <link th:href="@{/css/course_style.css}" rel="stylesheet">
-
-
 
 
     <!--====== Header CSS ======-->
@@ -109,8 +105,6 @@
     }
 
 
-
-
     .card {
         position: relative;
         display: flex;
@@ -133,14 +127,10 @@
     }
 
 
-
-
     .comment-area textarea {
         resize: none;
         border: 1px solid #ad9f9f;
     }
-
-
 
 
     .form-control:focus {
@@ -164,8 +154,6 @@
         background-color: #f50202;
         border-color: #f50202;
     }
-
-
 
 
     .rating {
@@ -226,8 +214,6 @@
         color: inherit;
         border: none;
     }
-
-
 
 
     <!--
@@ -296,8 +282,6 @@
     }
 
 
-
-
     .user-menu ul li:first-child {
         cursor: default;
         background-color: transparent;
@@ -307,8 +291,6 @@
     .user-menu ul li:first-child:hover {
         background-color: transparent;
     }
-
-
 
 
 </style>
@@ -327,7 +309,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-banner-cont">
-                    <h2 class="display-3 text-white animated slideInDown" style="font-family: 'Montserrat', sans-serif; font-weight: bold" th:text="${course.title}">Course Name</h2>
+                    <h2 class="display-3 text-white animated slideInDown"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: bold" th:text="${course.title}">
+                        Course Name</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb animated slideInDown">
                             <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
@@ -345,8 +329,6 @@
 
 
 <!--====== PAGE BANNER PART ENDS ======-->
-
-
 
 
 <!-- Course Detail Start -->
@@ -386,13 +368,9 @@
                             </div>
 
 
-
-
                         </div>
                     </div>
                 </div>
-
-
 
 
                 <div class="container-fluid wow fadeInUp mt-5 tabs">
@@ -403,8 +381,6 @@
                         <div class="tab-pane container active" id="Overview">
                             <div class="image-div text-left" style="margin-top: 8px">
                                 <h4 class="text-dark" style="margin-bottom: 8px">About the Instructor:</h4>
-
-
                                 <img th:src="${course.createdBy.avtUrl}" alt="avt"
                                      style="height: 40px; width: 40px; border-radius: 50%; margin-left: 20px">
                                 <span style="margin-left: 10px;"
@@ -415,43 +391,139 @@
                                       th:text="'Phone Number: ' + ${course.createdBy.phoneNum}">Teacher Phone Number</span>
                             </div>
 
-
-
-
                             <h4 style="margin-top: 8px">Course Description:</h4>
-
-
                             <p style="margin-top: 8px" th:text="${course.description}">Course Description</p>
 
-
-                            <h4 class="mt-2">
-                                LearningZ commits to:
-                            </h4>
-
-
-                            <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
-                                  style="font-size: 13px; font-weight: normal;">Transparent pricing of study packages, no hidden fees.</span>
-
-
-                            <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
-                                  style="font-size: 13px; font-weight: normal;">Students have access to all courses after signing up for a learning package.</span>
-
-
-                            <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
-                                  style="font-size: 13px; font-weight: normal;">Provide learning materials that closely follow the general education program.</span>
-
-
-                            <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
-                                  style="font-size: 13px; font-weight: normal;">Experienced and highly qualified teaching staff.</span>
-
-
-                            <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
-                                  style="font-size: 13px; font-weight: normal;">Continuously updated to suit modern learning trends.</span>
-
-
-                            <span class="badge rounded-pill text-white bg-primary px-4 py-2 m-2"
-                                  style="font-size: 13px; font-weight: normal;">Friendly website interface, easy to use.</span>
                         </div>
+
+<!--                        <div class="container" id="Curriculum">-->
+<!--                            <h4 class="mt-4">-->
+<!--                                Syllabus-->
+<!--                            </h4>-->
+<!--                            <div class="accordion accordion-flush" id="accordionFlushExample">-->
+<!--                                <div class="accordion-item">-->
+<!--                                    <h2 class="accordion-header">-->
+<!--                                        <button class="accordion-button collapsed" type="button"-->
+<!--                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"-->
+<!--                                                aria-expanded="false" aria-controls="flush-collapseOne">-->
+<!--                                            Elements and Structure-->
+<!--                                        </button>-->
+<!--                                    </h2>-->
+<!--                                    <div id="flush-collapseOne" class="accordion-collapse collapse"-->
+<!--                                         data-bs-parent="#accordionFlushExample">-->
+<!--                                        <div class="accordion-body">-->
+<!--                                            <ul>-->
+<!--                                                <li><i class="fa fa-video text-danger"></i> Introduction to HTML</li>-->
+<!--                                                <li><i class="fa fa-video text-danger"></i> HTMl Document Standards</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="accordion-item">-->
+<!--                                    <h2 class="accordion-header">-->
+<!--                                        <button class="accordion-button collapsed" type="button"-->
+<!--                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"-->
+<!--                                                aria-expanded="false" aria-controls="flush-collapseTwo">-->
+<!--                                            Tables-->
+<!--                                        </button>-->
+<!--                                    </h2>-->
+<!--                                    <div id="flush-collapseTwo" class="accordion-collapse collapse"-->
+<!--                                         data-bs-parent="#accordionFlushExample">-->
+<!--                                        <div class="accordion-body">-->
+<!--                                            <ul>-->
+<!--                                                <li><i class="fa fa-video text-danger"></i> HTML Tables</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="accordion-item">-->
+<!--                                    <h2 class="accordion-header">-->
+<!--                                        <button class="accordion-button collapsed" type="button"-->
+<!--                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseThree"-->
+<!--                                                aria-expanded="false" aria-controls="flush-collapseThree">-->
+<!--                                            Forms-->
+<!--                                        </button>-->
+<!--                                    </h2>-->
+<!--                                    <div id="flush-collapseThree" class="accordion-collapse collapse"-->
+<!--                                         data-bs-parent="#accordionFlushExample">-->
+<!--                                        <div class="accordion-body">-->
+<!--                                            <ul>-->
+<!--                                                <li><i class="fa fa-video text-danger"></i> HTML Forms</li>-->
+<!--                                                <li><i class="fa fa-video text-danger"></i> Form Validation</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="accordion-item">-->
+<!--                                    <h2 class="accordion-header">-->
+<!--                                        <button class="accordion-button collapsed" type="button"-->
+<!--                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseThree"-->
+<!--                                                aria-expanded="false" aria-controls="flush-collapseThree">-->
+<!--                                            Semantic HTML-->
+<!--                                        </button>-->
+<!--                                    </h2>-->
+<!--                                    <div id="flush-collapseThree 2" class="accordion-collapse collapse"-->
+<!--                                         data-bs-parent="#accordionFlushExample">-->
+<!--                                        <div class="accordion-body">-->
+<!--                                            <ul>-->
+<!--                                                <li><i class="fa fa-video text-danger"></i> Semantic HTML</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <div class="container mt-2">
+                            <h4 class="mb-3">Syllabus</h4>
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <th:block th:if="${course.chapters != null}">
+                                    <th:block th:each="chapter, chapIndex : ${course.chapters}">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${chapIndex.index}"
+                                                        aria-expanded="false" th:aria-controls="'collapse' + ${chapIndex.index}">
+                                                    <span th:text="${chapter.chapterTitle}"></span>
+                                                </button>
+                                            </h2>
+                                            <div th:id="'collapse' + ${chapIndex.index}" class="accordion-collapse collapse"
+                                                 data-bs-parent="#accordionFlushExample">
+                                                <div class="accordion-body">
+                                                    <ul>
+                                                        <li th:each="lesson : ${chapter.lessons}">
+                                                            <i class="fa fa-solid fa-book"></i>
+                                                            <span th:text="${lesson.title}"></span>
+
+                                                            <ul class="ml-3">
+                                                                <li th:each="video : ${lesson.videos}">
+                                                                    <i class="fa fa-video text-danger"></i>
+                                                                    <span th:text="${video.title}"></span>
+                                                                </li>
+                                                            </ul>
+
+                                                            <ul class="ml-3">
+                                                                <li th:each="pdf : ${lesson.pdfs}">
+                                                                    <i class="fa fa-solid fa-file text-warning"></i>
+                                                                    <span th:text="${pdf.title}"></span>
+                                                                </li>
+                                                            </ul>
+                                                            <ul class="ml-3">
+                                                                <li th:each="quiz : ${lesson.quizzes}">
+                                                                    <i class="fa-solid fa-circle-question text-success"></i>
+                                                                    <span th:text="${quiz.title}"></span>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                </th:block>
+                            </div>
+                        </div>
+
 
 
                     </div>
@@ -466,7 +538,7 @@
             <div class="col-lg-3 col-md-6 shadow wow fadeInUp" data-wow-delay="0.3s">
 
 
-                <div class="image text-center">
+                <div class="image text-center mt-3">
                     <img class="img-fluid" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
                 </div>
                 <br>
@@ -494,15 +566,13 @@
                                 <div>
                                     <button type="button" class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0"
                                             onclick="enrollCourse(event)">
-                                        REGISTER NOW
+                                        ENROLL NOW
                                     </button>
                                     <input type="hidden" name="courseId" th:value="${course.getId()}">
                                 </div>
                             </div>
                         </form>
                     </div>
-
-
 
 
                     <div th:if="${isEnrolled}">
@@ -522,7 +592,8 @@
                             <form action="/learning/chapterLessonList" method="get">
                                 <div class="buttons">
                                     <div>
-                                        <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">REGISTERED-STUDY NOW</button>
+                                        <button class="btn btn-success btn-lg w-100 mb-2 pl-0 pr-0">ENROLLED-STUDY NOW
+                                        </button>
                                         <input type="hidden" name="courseId" th:value="${course.getId()}">
                                     </div>
                                 </div>
@@ -530,8 +601,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
 
                 <div class="list mt-2">
@@ -563,22 +632,15 @@
                 </div>
 
 
-
-
             </div>
         </div>
     </div>
 
 
-
-
+    <br>
     <!-- Course Review Start -->
     <div th:if="${user != null}">
         <h3>Your feedback:</h3>
-
-
-
-
         <!-- Nếu user đã feedback, hiển thị feedback của họ trước tiên -->
         <th:block th:if="${isEnrolled && checkIsFeeback && userFeedback != null}">
             <div class="card">
@@ -658,16 +720,12 @@
                             </form>
 
 
-
-
                             <span class="stars">
    <i th:each="star : ${#numbers.sequence(1, 5)}"
       th:class="${(userFeedback.rating != null and star <= userFeedback.rating) ? 'fas' : 'far'} + ' fa-star'"
       th:style="${(userFeedback.rating != null and star <= userFeedback.rating) ? 'color: #ffd700;' : 'color: #ccc;'}">
    </i>
 </span>
-
-
 
 
                             <br>
@@ -680,8 +738,6 @@
                 </div>
             </div>
         </th:block>
-
-
 
 
         <!-- <th:block th:if="${isEnrolled && !checkIsFeeback && checkConditionFeedBack}">-->
@@ -740,13 +796,11 @@
 
 
     <div th:if="${user == null}">
-        <p>Please login to feedback this course.</p>
+        <p class="text-warning">Please login to feedback this course.</p>
     </div>
     <div th:if="${user != null && !isEnrolled}">
-        <p>Please register to be able to rate this course.</p>
+        <p class="text-warning">Please register to be able to rate this course.</p>
     </div>
-
-
 
 
     <br>
@@ -774,8 +828,6 @@
 
     <!-- List Reviews -->
     <div class="reviews mt-4">
-
-
 
 
         <div id="review-list">
@@ -808,8 +860,6 @@
     </div>
 
 
-
-
     <!-- Load More Button -->
     <button id="load-more" class="btn btn-primary mt-3">View More</button>
     <!-- List Reviews End -->
@@ -818,8 +868,6 @@
 </div>
 <!-- Course Detail End -->
 <th:block th:replace="~{common/footer :: #footer-part}"></th:block>
-
-
 
 
 <!-- Back to Top -->
@@ -980,8 +1028,6 @@
         });
     }
 </script>
-
-
 
 
 <script>

@@ -20,7 +20,12 @@ import com.project.learningz.service.VipPackageService;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/vip-packages")
@@ -103,30 +109,6 @@ public class VipRegisterController {
     }
 
 
-//    public PaymentResponse MomoPayment(int id, long amount, String packageName) throws Exception {
-//
-//        String requestId = String.valueOf(System.currentTimeMillis() + "learningz");
-//        String orderId = String.valueOf(System.currentTimeMillis() + "learningz");
-//        System.out.println("Sent orderId: " + orderId);
-//        String orderInfo = "LearningZ payment " + id;
-//        String returnURL = momoProperties.getReturnUrl();
-//        String notifyURL = momoProperties.getNotifyURL();
-//        Environment environment = Environment.selectEnv(momoProperties.getEnvironment());
-//
-//        System.out.println("Debug: orderId=" + orderId + ", requestId=" + requestId);
-//        QueryStatusTransactionResponse queryStatusTransactionResponse = QueryTransactionStatus.process(environment, orderId, requestId);
-//        System.out.println("Transaction Status: " + queryStatusTransactionResponse.getMessage());
-//
-
-    /// /        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
-    /// /        System.out.println("QR: " + captureWalletMoMoResponse.getQrCodeUrl());
-    /// /        System.out.println("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
-    /// /        return captureWalletMoMoResponse;
-//
-//        PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
-//        System.out.println("Momo Payment URL: " + captureATMMoMoResponse.getPayUrl());
-//        return captureATMMoMoResponse;
-//    }
     public PaymentResponse MomoPayment(int id, long amount, String packageName) throws Exception {
 
         String requestId = String.valueOf(System.currentTimeMillis() + "learningz");
@@ -169,7 +151,7 @@ public class VipRegisterController {
                 username = userService.findUserNameByEmail(email);
             }
             if ("0".equals(resultCode)) {
-                //if(1==1){
+            //if(1==1){
                 User userLoggin = userService.findByUsername(username);
                 VipPackage vipPackage = vipPackageService.getVipPackageById(vipPackageId);
 
@@ -180,7 +162,7 @@ public class VipRegisterController {
                 userMembership.setVipPackage(vipPackage);
                 userMembership.setRegistrationDate(LocalDate.now());
                 userMembershipService.save(userMembership);
-
+                updateAuthentication(userLoggin);
                 redirectAttributes.addFlashAttribute("success", "Payment successfully");
             } else {
                 redirectAttributes.addFlashAttribute("error", "Payment failed");
@@ -192,5 +174,23 @@ public class VipRegisterController {
         } finally {
             session.removeAttribute("vipPackageId");
         }
+    }
+
+    public void updateAuthentication(User user) {
+
+        List<GrantedAuthority> authorities = List.of(
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+        );
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        authorities
+                ),
+                null,
+                authorities
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

@@ -75,11 +75,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 break;
             } else if (role.equals("ROLE_STUDENT") || role.equals("ROLE_VIP_STUDENT")) {
                 String prevPage = (String) request.getSession().getAttribute("prevPage");
+                System.out.println("prevPage:" + prevPage);
                 if (prevPage != null) {
                     request.getSession().removeAttribute("prevPage");
                     if (!prevPage.contains("/login")) {
                         redirectURL = prevPage;
-                        System.out.println("prevPage:" + prevPage);
                     }
                     break;
                 }

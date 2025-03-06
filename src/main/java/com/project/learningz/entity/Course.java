@@ -54,4 +54,7 @@ public class Course {
     @Column(name = "course_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private CourseStatus courseStatus;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Chapter> chapters;
 }
