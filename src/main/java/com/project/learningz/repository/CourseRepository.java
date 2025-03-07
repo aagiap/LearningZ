@@ -98,4 +98,17 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
 
     List<Course> findCoursesByGradeId(int gradeId);
 
+    @Query("""
+        SELECT DISTINCT co.title
+        FROM QuestionBank q
+                JOIN QuizQuestion qq ON q.id = qq.question.id
+                JOIN Quiz qu ON qq.quiz.id = qu.id
+                JOIN qu.lesson l
+                JOIN l.chapter ch
+                JOIN ch.course co
+                JOIN co.subject s
+                JOIN co.grade g
+    """)
+    List<String> getAllCourse();
+
 }

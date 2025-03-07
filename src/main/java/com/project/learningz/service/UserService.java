@@ -146,4 +146,12 @@ public class UserService {
     public boolean isNormalStudent(Integer userId, Role role){
         return userRepository.isNormalStudent(userId, role);
     }
+
+    public void save(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        userRepository.save(user);
+    }
+
 }

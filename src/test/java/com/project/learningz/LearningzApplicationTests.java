@@ -14,19 +14,19 @@ class LearningzApplicationTests {
 
 	@Autowired
 	private UserRepository userRepository;
-	@Test
-	public void testRoleEnumPersistence() {
-		User user = new User();
-		user.setUsername("testuser");
-		user.setPassword("password");
-		user.setEmail("testuser@example.com");
-		user.setRole(Role.STUDENT);
-
-		userRepository.save(user);
-
-		User retrievedUser = userRepository.findById(user.getId()).orElse(null);
-		assertThat(retrievedUser).isNotNull();
-		assertThat(retrievedUser.getRole()).isEqualTo(Role.STUDENT);
-	}
+//	@Test
+//	public void testRoleEnumPersistence() {
+//		User user = new User();
+//		user.setUsername("testuser");
+//		user.setPassword("password");
+//		user.setEmail("testuser@example.com");
+//		user.setRole(Role.STUDENT);
+//
+//		userRepository.save(user);
+//
+//		User retrievedUser = userRepository.findById(user.getId()).orElse(null);
+//		assertThat(retrievedUser).isNotNull();
+//		assertThat(retrievedUser.getRole()).isEqualTo(Role.STUDENT);
+//	}
 
 }

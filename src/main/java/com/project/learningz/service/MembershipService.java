@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class MembershipService {
     private final UserRepository userRepository;
     private final UserMembershipRepository userMembershipRepository;
 
+
+    //@Scheduled(fixedRate = 60000)
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Ho_Chi_Minh")
     @Transactional
     public void downgradeExpiredVipUsers() {
@@ -35,9 +38,16 @@ public class MembershipService {
             if (latestMembership == null || latestMembership.getExpirationDate().isBefore(today)) {
                 user.setRole(Role.STUDENT);
                 userRepository.save(user);
-                System.out.println("Downgrade User: " + user.getId());
+                System.out.println("Downgrade User: " + user.getId() + "-" + user.getUsername());
             }
         }
         System.out.println("Scheduled Task done!");
+    }
+
+    public void save(UserMembership userMembership) {
+        if (userMembership == null) {
+            throw new IllegalArgumentException("User Membership cannot be null");
+        }
+        userMembershipRepository.save(userMembership);
     }
 }

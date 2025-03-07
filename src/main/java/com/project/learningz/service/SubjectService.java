@@ -40,4 +40,8 @@ public class SubjectService {
         subject.setDescription(description);
         subjectRepository.save(subject);
     }
+
+    public List<String> getAllSubjectInQuestions() {
+        return subjectRepository.getAllSubjects();
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.constant.Role;
 import com.project.learningz.dto.CourseReviewDTO;
 import com.project.learningz.entity.*;
@@ -98,6 +99,9 @@ public class CourseController {
                                     @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                     @AuthenticationPrincipal OAuth2User userOAuth2) {
         Course course = courseService.getCourseById(courseId);
+        if(course.getCourseStatus() == CourseStatus.INACTIVE){
+            return "redirect:/course";
+        }
         model.addAttribute("course", course);
 
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
@@ -111,6 +115,9 @@ public class CourseController {
 
         List<CourseReviewDTO> reviews = usersCourseService.getCourseReviews(courseId);
         model.addAttribute("reviews", reviews);
+
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
 
         // Kiểm tra user và userOAuth2
         String username = null;

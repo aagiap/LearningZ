@@ -8,6 +8,17 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SubjectRepository extends JpaRepository<Subject, Integer>, JpaSpecificationExecutor<Subject> {
+    @Query("""
+        SELECT DISTINCT s.name
+        FROM QuestionBank q
+                JOIN QuizQuestion qq ON q.id = qq.question.id
+                JOIN Quiz qu ON qq.quiz.id = qu.id
+                JOIN qu.lesson l
+                JOIN l.chapter ch
+                JOIN ch.course co
+                JOIN co.subject s
+    """)
+    List<String> getAllSubjects();
 
     @Query("""
     SELECT s FROM Subject s WHERE s.id = ?1

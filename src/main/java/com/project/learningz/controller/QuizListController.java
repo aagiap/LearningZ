@@ -62,8 +62,8 @@ public class QuizListController {
         }
         Integer userId = userService.getUserIdByUsername(username);
         model.addAttribute("username", username);
-        String avt = userService.getAvtByUsername(username);
-        model.addAttribute("avt", avt);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
 
 
         boolean checkConditionFeedBack = usersCourseService.checkConditionFeedback(userId, course.getId());

@@ -99,7 +99,7 @@
 <div class="course-header">
     <div class="col-lg-3"></div>
     <div>
-        <img src="/image/grade10.jpg" alt="Toán lớp 5" class="course-image">
+        <img class="course-image" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
     </div>
     <div class="course-info col-lg-6">
         <h1 class="course-title-" th:text="${course.title}"></h1>
@@ -167,7 +167,7 @@
             <div class="courses-list" th:each="course : ${courses}">
                 <a th:href="@{/course/details/{id}(id=${course.id})}" class="course-item"
                    style="display: flex; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
-                    <img src="/image/grade10.jpg" alt="Đạo Đức lớp 5" class="course-image-list">
+                    <img class="course-image-list" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
                     <div class="course-title-list" style="display: flex; align-items: center;">
                         <p th:text="${course.getTitle()}" style="margin: 0;"></p>
                     </div>

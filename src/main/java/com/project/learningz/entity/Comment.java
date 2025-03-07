@@ -1,41 +1,38 @@
 package com.project.learningz.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
-import java.time.Instant;
-
-@Getter
-@Setter
 @Entity
 @Table(name = "Comments")
+@Getter
+@Setter
 public class Comment {
     @Id
-    @Column(name = "comment_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer commentId;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotNull
-    @Column(name = "content", nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "content", columnDefinition = "NVARCHAR(255)")
     private String content;
 
-    @NotNull
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    @Column(nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

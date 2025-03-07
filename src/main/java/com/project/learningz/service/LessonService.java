@@ -136,4 +136,8 @@ public class LessonService {
         }
         return lessons.get(0).getId();
     }
+
+    public List<String> getAllLessonInQuestions() {
+        return lessonRepository.getAllLesson();
+    }
 }

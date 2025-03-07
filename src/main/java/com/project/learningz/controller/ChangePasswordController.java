@@ -62,21 +62,19 @@ public class ChangePasswordController {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
         }
 
-        Optional<User> tempUser = userRepository.findByUsername(username);
-        if (tempUser.isEmpty()) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
             model.addAttribute("error", "No user found");
             return "/profile/change_password";
         }
 
-        User user = tempUser.get();
-
-        if (newPassword.length() < 6) {
-            model.addAttribute("error", "Password must be at least 6 characters long");
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            model.addAttribute("error", "Incorrect current password");
             return "/profile/change_password";
         }
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            model.addAttribute("error", "Incorrect old password");
+        if (newPassword.length() < 6) {
+            model.addAttribute("error", "Password must be at least 6 characters long");
             return "/profile/change_password";
         }
 

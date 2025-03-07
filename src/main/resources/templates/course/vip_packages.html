@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose VIP Package</title>
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="/image/learningz.png" type="image/png">
+
+    <!--====== Slick css ======-->
+    <link rel="stylesheet" href="/css/slick.css">
+
+    <!--====== Animate css ======-->
+    <link rel="stylesheet" href="/css/animate.css">
+
+    <!--====== Nice Select css ======-->
+    <link rel="stylesheet" href="/css/nice-select.css">
+
+    <!--====== Nice Number css ======-->
+    <link rel="stylesheet" href="/css/jquery.nice-number.min.css">
+
+    <!--====== Magnific Popup css ======-->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+
+    <!--====== Bootstrap css ======-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!--====== Fontawesome css ======-->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!--====== Default css ======-->
+    <link rel="stylesheet" href="/css/default.css">
+
+    <!--====== Style css ======-->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!--====== Responsive css ======-->
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <style>
+        .avatar-container {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            margin-left: 40px;
+            z-index: 10;
+        }
+
+        .user-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+        .user-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .user-menu ul li {
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-menu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .user-menu ul li a:hover {
+            color: #007bff;
+        }
+
+        .user-menu ul li:nth-child(2):hover {
+            background-color: #e0e0e0;/
+        }
+
+
+        .user-menu ul li:first-child {
+            cursor: default;
+            background-color: transparent;
+        }
+
+        .user-menu ul li:first-child:hover {
+            background-color: transparent;
+        }
+
+        .container {
+            margin: 0 auto;
+        }
+
+        .container h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .vip-packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 10px;
+        }
+
+        .package {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #2e8dfa;
+        }
+
+        .package:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .package h3 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .package p {
+            color: #666;
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .package p span {
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .package form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .package button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .package button:hover {
+            background: #2980b9;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .vip-packages {
+                grid-template-columns: 1fr;
+            }
+
+            .container h2 {
+                font-size: 24px;
+            }
+
+            .package {
+                padding: 20px;
+            }
+
+            .package h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+<th:block th:replace="~{common/header :: header}"></th:block>
+
+<div class="message-container ">
+    <div th:if="${error != null}">
+        <p class="text-danger">[[${error}]]</p>
+    </div>
+    <div th:if="${success != null}">
+        <p class="text-warning">[[${success}]]</p>
+    </div>
+</div>
+<div class="container">
+    <h2>Choose VIP Package</h2>
+    <div class="vip-packages">
+        <div th:each="pkg : ${vipPackages}" class="package">
+            <h3 th:text="${pkg.packageName}"></h3>
+            <p>Duration: <span th:text="${pkg.duration}"></span> months</p>
+            <p>Price: <span th:text="${#numbers.formatInteger(pkg.price, 0, 'COMMA')}"></span> VNĐ</p>
+
+            <form action="/vip-packages/momo-pay" method="post">
+                <input type="hidden" name="id" th:value="${pkg.id}">
+                <input type="hidden" name="amount" th:value="${pkg.price}">
+                <input type="hidden" name="packageName" th:value="${pkg.packageName}">
+                <button type="submit">BUY NOW</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed-bottom">
+    <th:block th:replace="~{common/footer :: #footer-part}"></th:block>
+</div></body>
+<script>
+  function toggleUserMenu() {
+    const userMenu = document.getElementById('userMenu');
+    userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+  }
+</script>
+</html>
