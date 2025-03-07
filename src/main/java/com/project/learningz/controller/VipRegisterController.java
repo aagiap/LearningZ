@@ -82,6 +82,7 @@ public class VipRegisterController {
             @RequestParam("id") int id,
             @RequestParam("amount") long amount,
             @RequestParam("packageName") String packageName,
+            @RequestParam("paymentMethod") String paymentMethod,
             HttpSession session,
             RedirectAttributes redirectAttributes,
             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
@@ -89,6 +90,7 @@ public class VipRegisterController {
         System.out.println("Received id: " + id);
         System.out.println("Received amount: " + amount);
         System.out.println("Received packageName: " + packageName);
+        //System.out.println("PaymentMethod: " + paymentMethod);
         try {
             String username = null;
             if (user != null) {
@@ -98,7 +100,7 @@ public class VipRegisterController {
                 username = userService.findUserNameByEmail(email);
             }
             session.setAttribute("vipPackageId", id);
-            PaymentResponse response = MomoPayment(id, amount, packageName);
+            PaymentResponse response = MomoPayment(id, amount, packageName, paymentMethod);
             System.out.println("Momo Response: " + response);
             return "redirect:" + response.getPayUrl();
         } catch (Exception e) {
@@ -109,32 +111,37 @@ public class VipRegisterController {
     }
 
 
-    public PaymentResponse MomoPayment(int id, long amount, String packageName) throws Exception {
+    public PaymentResponse MomoPayment(int id, long amount, String packageName, String paymentMethod) throws Exception {
 
         String requestId = String.valueOf(System.currentTimeMillis() + "learningz");
         String orderId = String.valueOf(System.currentTimeMillis() + "learningz");
         System.out.println("Sent orderId: " + orderId);
-        String orderInfo = "LearningZ payment " + id;
+        String orderInfo = "LearningZ payment " + packageName + " " + paymentMethod;
         String returnURL = momoProperties.getReturnUrl();
         String notifyURL = momoProperties.getNotifyURL();
         Environment environment = Environment.selectEnv(momoProperties.getEnvironment());
         System.out.println("Debug: orderId=" + orderId + ", requestId=" + requestId);
 
-        //PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
-        //System.out.println("Momo Payment URL: " + captureATMMoMoResponse.getPayUrl());
-        //return captureATMMoMoResponse;
-
-        PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
-        System.out.println("QR: " + captureWalletMoMoResponse.getQrCodeUrl());
-        System.out.println("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
-        return captureWalletMoMoResponse;
+        if(("ATM").equalsIgnoreCase(paymentMethod)){
+            PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
+            System.out.println("Momo Payment URL: " + captureATMMoMoResponse.getPayUrl());
+            System.out.println("Momo Response: " + captureATMMoMoResponse.toString());
+            return captureATMMoMoResponse;
+        } else{
+            PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
+            System.out.println("QR: " + captureWalletMoMoResponse.getQrCodeUrl());
+            System.out.println("Pay URL: " + captureWalletMoMoResponse.getPayUrl());
+            return captureWalletMoMoResponse;
+       }
     }
 
     @GetMapping("/momo-callback")
     public String handleCallbackMomo(
             @RequestParam(value = "resultCode", required = false) String resultCode,
             @RequestParam(value = "orderId", required = false) String orderId,
-            HttpSession session,
+            @RequestParam(value = "orderInfo", required = false) String orderInfo,
+            @RequestParam(value = "amount", required = false) String amount,
+            HttpSession session, Model model,
             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
             @AuthenticationPrincipal OAuth2User userOAuth2,
             RedirectAttributes redirectAttributes) {
@@ -163,14 +170,18 @@ public class VipRegisterController {
                 userMembership.setRegistrationDate(LocalDate.now());
                 userMembershipService.save(userMembership);
                 updateAuthentication(userLoggin);
-                redirectAttributes.addFlashAttribute("success", "Payment successfully");
+                model.addAttribute("success", "Payment successfully!");
             } else {
-                redirectAttributes.addFlashAttribute("error", "Payment failed");
+                model.addAttribute("error", "Payment failed!");
             }
-            return "redirect:/vip-packages";
+            model.addAttribute("orderId", orderId);
+            model.addAttribute("resultCode", resultCode);
+            model.addAttribute("orderInfo", orderInfo);
+            model.addAttribute("amount", amount);
+            return "course/momo-result";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Payment processing error!");
-            return "redirect:/vip-packages";
+            model.addAttribute("error", "Payment processing error!");
+            return "course/momo-result";
         } finally {
             session.removeAttribute("vipPackageId");
         }

@@ -118,6 +118,7 @@
         }
 
         .vip-packages {
+            text-align: center;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
@@ -149,7 +150,7 @@
         .package p {
             color: #666;
             font-size: 16px;
-            margin: 10px 0;
+            margin-bottom: 10px;
             line-height: 1.5;
         }
 
@@ -199,20 +200,16 @@
                 font-size: 20px;
             }
         }
+        .btn-pay {
+            margin-top: 10px;
+            width: 100%;
+        }
     </style>
 
 </head>
 <body>
 <th:block th:replace="~{common/header :: header}"></th:block>
 
-<div class="message-container ">
-    <div th:if="${error != null}">
-        <p class="text-danger">[[${error}]]</p>
-    </div>
-    <div th:if="${success != null}">
-        <p class="text-warning">[[${success}]]</p>
-    </div>
-</div>
 <div class="container">
     <h2>Choose VIP Package</h2>
     <div class="vip-packages">
@@ -225,6 +222,15 @@
                 <input type="hidden" name="id" th:value="${pkg.id}">
                 <input type="hidden" name="amount" th:value="${pkg.price}">
                 <input type="hidden" name="packageName" th:value="${pkg.packageName}">
+                <div class="payment-options">
+                    <label>
+                        <input type="radio" name="paymentMethod" value="QR" checked> Pay with QR Code
+                    </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="paymentMethod" value="ATM"> Pay with ATM Card
+                    </label>
+                </div>
                 <button type="submit">BUY NOW</button>
             </form>
         </div>

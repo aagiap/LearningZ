@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .success {
+            color: #28a745;
+            font-size: 60px;
+            font-weight: bold;
+        }
+        .failure {
+            color: #dc3545;
+            font-size: 60px;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 20px;
+            color: #333;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        .info {
+            font-size: 16px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .info strong {
+            color: #333;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .table th {
+            width: 40%;
+            text-align: left;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Trường hợp thành công -->
+    <div th:if="${success}">
+        <div class="success">✓</div>
+        <p class="message" th:text="${success}"></p>
+    </div>
+
+    <!-- Trường hợp thất bại -->
+    <div th:if="${error}">
+        <div class="failure">✗</div>
+        <p class="message" th:text="${error}"></p>
+    </div>
+
+    <!-- Thông tin bổ sung -->
+    <table class="table table-bordered">
+        <tr>
+            <th>Order ID:</th>
+            <td><span th:text="${orderId}"></span></td>
+        </tr>
+        <tr>
+            <th>Order Info:</th>
+            <td><span th:text="${orderInfo}"></span></td>
+        </tr>
+        <tr>
+            <th>Amount:</th>
+            <td><span th:text="${#numbers.formatInteger(amount, 0, 'COMMA')}"></span> VNĐ</td>
+
+        </tr>
+        <tr>
+            <th>Result Code:</th>
+            <td><span th:text="${resultCode}"></span></td>
+        </tr>
+    </table>
+
+
+    <!-- Nút quay lại -->
+    <a href="/" class="btn">Back to Home Page</a>
+</div>
+</body>
+</html>
