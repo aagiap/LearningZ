@@ -171,7 +171,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <nav class="navbar navbar-expand-lg">
-                        <a class="navbar-brand" href="index-4.html">
+                        <a class="navbar-brand" href="/home">
                             <img src="/image/learningz.png" alt="Logo" width="100px">
                             <a style="font-size: 24px; font-weight: bold;">
                                 Learning<span style="font-size: 30px; color: blue;">Z</span>
@@ -266,7 +266,7 @@
                             <li>
                                 <a href="@{/post/{id}(id=${post.postId})}">
                                     <i class="fa fa-tags"></i>
-                                    <span th:text="${post.course.title}"></span>
+                                    <span th:text="${post.grade.name}"></span>
                                 </a>
                             </li>
                         </ul>
@@ -284,11 +284,11 @@
                                 <h3>Comments (<span th:text="${#lists.size(comments)}"></span>)</h3>
                             </div>
                             <ul>
-                                <li th:each="comment : ${comments}">
+                                <li th:each="comment : ${comments}" style="width: 100%; margin-bottom: 10px;">
                                     <div class="comment">
                                         <div class="comment-author">
                                             <div class="author-thum">
-                                                <img th:src="${comment.user.avtUrl}" alt="User Avatar">
+                                                <img th:src="${comment.user.avtUrl}" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                                             </div>
                                             <div class="comment-name">
                                                 <h6 th:text="${comment.user.username}"></h6>
@@ -442,6 +442,68 @@
 <!--====== Map js ======-->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC3Ip9iVC0nIxC6V14CKLQ1HZNF_65qEQ"></script>
 <script src="/js/map-script.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Hiển thị form khi ấn nút Reply
+        document.querySelectorAll(".reply-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let commentId = this.getAttribute("data-comment-id");
+                let replyForm = document.getElementById("reply-form-" + commentId);
+                replyForm.style.display = (replyForm.style.display === "none") ? "block" : "none";
+            });
+        });
+
+        // Gửi phản hồi bằng AJAX
+        document.querySelectorAll(".replyForm").forEach(form => {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Ngăn form load lại trang
+
+                let parentId = this.getAttribute("data-parent-id");
+                let postId = this.getAttribute("data-post-id");
+                let content = this.querySelector("textarea").value;
+
+                fetch("/comments/create", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `postId=${postId}&parentId=${parentId}&content=${encodeURIComponent(content)}`
+                })
+                    .then(response => response.json())
+                    .then(comment => {
+                        // Ẩn form sau khi gửi thành công
+                        this.style.display = "none";
+
+                        // Thêm comment mới vào UI mà không cần tải lại trang
+                        let replyList = document.createElement("ul");
+                        replyList.classList.add("reply");
+
+                        let newComment = document.createElement("li");
+                        newComment.innerHTML = `
+                    <div class="comment">
+                        <div class="comment-author">
+                            <div class="author-thum">
+                                <img src="${comment.user.avtUrl}" alt="User Avatar">
+                            </div>
+                            <div class="comment-name">
+                                <h6>${comment.user.username}</h6>
+                                <span>Vừa xong</span>
+                            </div>
+                        </div>
+                        <div class="comment-description pt-20">
+                            <p>${comment.content}</p>
+                        </div>
+                    </div>
+                `;
+                        replyList.appendChild(newComment);
+                        this.parentElement.appendChild(replyList);
+                    })
+                    .catch(error => console.error("Lỗi:", error));
+            });
+        });
+    });
+
+</script>
 
 </body>
 </html>

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByUserId(Integer userId);
-    List<Post> findByCourseId(Integer courseId);
+    List<Post> findByGrade_Id(Integer gradeId);
     Page<Post> findAll(Pageable pageable);
 
 

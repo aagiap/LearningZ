@@ -4,46 +4,51 @@ import com.project.learningz.entity.Comment;
 import com.project.learningz.entity.Post;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.CommentRepository;
-import com.project.learningz.service.UserService;
-import com.project.learningz.service.PostService;
+import com.project.learningz.repository.PostRepository;
+import com.project.learningz.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class CommentService {
-
     @Autowired
     private CommentRepository commentRepository;
-
     @Autowired
-    private UserService userService;
-
+    private PostRepository postRepository;
     @Autowired
-    private PostService postService;
+    private UserRepository userRepository;
 
-    public Comment createComment(Integer postId, Integer userId, String content) {
-        User user = userService.findById(userId);
-        Post post = postService.findById(postId);
+    public Comment createComment(Integer postId, Integer userId, String content, Integer parentId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
 
-        if (user != null && post != null) {
-
-            Comment comment = new Comment();
-            comment.setUser(user);
-            comment.setPost(post);
-            comment.setContent(content);
-            return commentRepository.save(comment);
+        if (post == null || user == null) {
+            return null; // Nếu post hoặc user không tồn tại
         }
 
-        return null;
-    }
+        Comment comment = new Comment();
+        comment.setPost(post); // Sửa lại chỗ này
+        comment.setUser(user);
+        comment.setContent(content);
+        comment.setCreatedAt(LocalDateTime.now());
 
-    public void deleteCommentsByPost(Integer postId) {
-        commentRepository.deleteByPost_PostId(postId);
+        if (parentId != null) {
+            Comment parentComment = commentRepository.findById(parentId).orElse(null);
+            comment.setParent(parentComment);
+        }
+
+        return commentRepository.save(comment);
     }
 
     public List<Comment> getCommentsByPost(Integer postId) {
-        return commentRepository.findByPost_PostId(postId);
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post == null) {
+            return List.of(); // Trả về danh sách rỗng nếu không tìm thấy bài viết
+        }
+        return commentRepository.findByPostAndParentIsNull(post);
     }
+
 }

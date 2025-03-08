@@ -160,7 +160,7 @@
             <h1 data-animation="fadeInLeft" data-delay="1s" th:text="${slider.title}"></h1>
             <p data-animation="fadeInUp" data-delay="1.3s" th:text="${slider.description}"></p>
             <ul>
-              <li><a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" href="#">Read More</a></li>
+              <li><a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" th:href="${slider.backlink}">Read More</a></li>
               <li><a data-animation="fadeInUp" data-delay="1.9s" class="main-btn" href="#">Get Started</a></li>
             </ul>
           </div>
