@@ -95,13 +95,15 @@
 
                     </div>
 
-                    <!-- App Search-->
-                    <form class="app-search d-none d-md-block ms-2">
+                    <!-- App Search -->
+                    <form class="app-search d-none d-md-block ms-2" th:action="@{/marketer/slider}" method="get">
                         <div class="position-relative">
                             <label>
-                                <input type="search" class="form-control" placeholder="Search..." autocomplete="off" value="">
+                                <input type="text" name="keyword" class="form-control"
+                                       placeholder="Search ..."
+                                       autocomplete="off" th:value="${keyword}">
                             </label>
-                            <iconify-icon icon="solar:magnifer-linear" class="search-widget-icon"></iconify-icon>
+                            <iconify-icon icon="solar:magnifer-linear" class="search-widget-icon" role="button"></iconify-icon>
                         </div>
                     </form>
                 </div>
@@ -306,15 +308,16 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Image</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th style="width: 200px;">Title</th>
+                                        <th style="width: 300px;">Description</th>
+                                        <th style="width: 100px;" class="text-center">Status</th>
+                                        <th style="width: 150px;">Backlink</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="slider : ${sliders}">
-                                        <td th:text="${slider.sliderId}" ></td>
+                                        <td th:text="${slider.sliderId}"></td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
@@ -322,54 +325,78 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td th:text="${slider.title}" ></td>
-                                        <td th:text="${slider.description}" ></td>
-                                        <td>
-                        <span class="badge p-1" th:classappend="${slider.status ? 'bg-success' : 'bg-danger'}">
-                            <span th:text="${slider.status ? 'Visible' : 'Hidden'}"></span>
-                        </span>
+                                        <td class="text-wrap" style="word-wrap: break-word; white-space: normal; max-width: 200px;" th:text="${slider.title}"></td>
+                                        <td class="text-wrap" style="word-wrap: break-word; white-space: normal; max-width: 300px;" th:text="${slider.description}"></td>
+
+                                        <td class="text-center">
+                <span class="badge p-1" th:classappend="${slider.status ? 'bg-success' : 'bg-danger'}">
+                    <span th:text="${slider.status ? 'Visible' : 'Hidden'}"></span>
+                </span>
                                         </td>
                                         <td>
-                                            <div class="d-flex gap-2">
-                                                <a th:href="@{/marketer/slider/edit/{id}(id=${slider.sliderId}, page=${currentPage})}"
-                                                   class="btn btn-soft-primary btn-sm">
-                                                    <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a>
+                                            <a th:href="${slider.backlink}" target="_blank" class="text-primary text-decoration-none">
+                                                <iconify-icon icon="solar:link-bold" class="align-middle fs-18"></iconify-icon>Backlink
+                                            </a>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex flex-column gap-1 align-items-center">
+                                                <!-- Dòng 1: Edit & Delete -->
+                                                <div class="d-flex gap-1 w-100 justify-content-center">
+                                                    <a th:href="@{/marketer/slider/edit/{id}(id=${slider.sliderId}, page=${currentPage})}"
+                                                       class="btn btn-soft-primary btn-sm w-50">
+                                                        <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                    </a>
 
-                                                <a th:href="@{/marketer/slider/delete/{id}(id=${slider.sliderId}, page=${currentPage})}"
-                                                   class="btn btn-soft-danger btn-sm"
-                                                   onclick="return confirm('Confirm delete?')">
-                                                    <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a>
+                                                    <a th:href="@{/marketer/slider/delete/{id}(id=${slider.sliderId}, page=${currentPage})}"
+                                                       class="btn btn-soft-danger btn-sm w-50"
+                                                       onclick="return confirm('Confirm delete?')">
+                                                        <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                    </a>
+                                                </div>
                                                 <a th:href="@{/marketer/slider/toggleVisibility/{id}(id=${slider.sliderId}, page=${currentPage})}"
-                                                   class="btn btn-secondary btn-sm">
+                                                   class="btn btn-secondary btn-sm w-100">
                                                     <span th:text="${slider.status ? 'Hide' : 'Show'}"></span>
                                                 </a>
                                             </div>
                                         </td>
+
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
-                        <div class="card-footer border-top">
+                        <div th:if="${hasResults}" class="card-footer border-top">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-end mb-0">
                                     <li class="page-item" th:if="${currentPage > 0}">
-                                        <a class="page-link" th:href="@{/marketer/slider(page=${currentPage - 1})}">Previous</a>
+                                        <a class="page-link"
+                                           th:href="@{/marketer/slider(keyword=${keyword}, page=${currentPage - 1})}">
+                                            Previous
+                                        </a>
                                     </li>
+
                                     <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                        class="page-item" th:classappend="${i == currentPage} ? 'active'">
-                                        <a class="page-link" th:href="@{/marketer/slider(page=${i})}" th:text="${i + 1}"></a>
+                                        class="page-item"
+                                        th:classappend="${i == currentPage} ? 'active'">
+                                        <a class="page-link"
+                                           th:href="@{/marketer/slider(keyword=${keyword}, page=${i})}"
+                                           th:text="${i + 1}">
+                                        </a>
                                     </li>
+
                                     <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                                        <a class="page-link" th:href="@{/marketer/slider(page=${currentPage + 1})}">Next</a>
+                                        <a class="page-link"
+                                           th:href="@{/marketer/slider(keyword=${keyword}, page=${currentPage + 1})}">
+                                            Next
+                                        </a>
                                     </li>
                                 </ul>
                             </nav>
                         </div>
-
+                        <div th:if="${not hasResults}">
+                            <p class="text-danger" style="margin: 13px">Không tìm thấy slider nào phù hợp.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -387,6 +414,10 @@
 
 <!-- App Javascript (Require in all Page) -->
 <script src="/js/app.js"></script>
-
+<script>
+    document.querySelector(".search-widget-icon").addEventListener("click", function () {
+        this.closest("form").submit();
+    });
+</script>
 </body>
 </html>

@@ -6,7 +6,6 @@ import com.project.learningz.repository.UserRepository;
 import com.project.learningz.service.GoogleDriveService;
 import com.project.learningz.service.SliderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.project.learningz.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +34,6 @@ public class SliderController {
 
     private static final String REDIRECT_SLIDERS = "redirect:/marketer/slider";
 
-    // Phương thức dùng chung để lấy thông tin user
     private void getAuthenticatedUserInfo(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -62,16 +60,26 @@ public class SliderController {
     }
 
     @GetMapping("/slider")
-    public String showSliders(@RequestParam(defaultValue = "0") int page, Model model) {
-        int size = 2; // Số phần tử trên mỗi trang
-        Page<Slider> sliderPage = sliderService.getSlidersWithPagination(page, size);
+    public String showSliders(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(required = false, defaultValue = "") String keyword,
+                              Model model) {
+        int size = 2;
+        Page<Slider> sliderPage;
+
+        if (keyword.isEmpty()) {
+            sliderPage = sliderService.getSlidersWithPagination(page, size);
+        } else {
+            sliderPage = sliderService.searchSliders(keyword, page, size);
+        }
 
         getAuthenticatedUserInfo(model);
         model.addAttribute("sliders", sliderPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", sliderPage.getTotalPages());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("hasResults", !sliderPage.isEmpty());
 
-        return "/marketer/slider";
+        return "marketer/slider";
     }
 
     @GetMapping("/dashboard")
@@ -88,33 +96,30 @@ public class SliderController {
         return "/marketer/add_slider";
     }
 
-    // Xử lý form thêm slider
     @PostMapping("/add_slider")
     public String addSlider(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("img") MultipartFile imgFile,
             @RequestParam("status") boolean status,
+            @RequestParam(value = "backlink", required = false) String backlink,
             Model model) {
         try {
-            // 1. Tải ảnh lên Google Drive
             String imageUrl = googleDriveService.uploadBannerFile(imgFile);
 
-            // 2. Lưu slider vào database (Sử dụng `addSlider` thay vì `save`)
             Slider slider = new Slider();
             slider.setTitle(title);
             slider.setDescription(description);
             slider.setImageUrl(imageUrl);
             slider.setStatus(status);
+            slider.setBacklink(backlink);
 
-            sliderService.addSlider(slider); // Đổi từ save() → addSlider()
-
-            // 3. Chuyển hướng về trang danh sách sliders
-            return "redirect:/marketer/slider";
+            sliderService.addSlider(slider);
+            return REDIRECT_SLIDERS;
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
             model.addAttribute("error", "Lỗi khi tải ảnh hoặc lưu slider!");
-            return "add_slider";
+            return "marketer/add_slider";
         }
     }
 
@@ -126,7 +131,7 @@ public class SliderController {
                                      Model model) {
         getAuthenticatedUserInfo(model);
         model.addAttribute("slider", sliderService.getSliderById(id));
-        model.addAttribute("page", page); // Lưu page để dùng sau
+        model.addAttribute("page", page);
         return "/marketer/edit_slider";
     }
 
@@ -137,6 +142,7 @@ public class SliderController {
                              @RequestParam("description") String description,
                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                              @RequestParam(value = "status", defaultValue = "false") boolean status,
+                             @RequestParam(value = "backlink", required = false) String backlink,
                              @RequestParam(value = "page", defaultValue = "1") int page) {
         try {
             Slider existingSlider = sliderService.getSliderById(sliderId);
@@ -145,6 +151,7 @@ public class SliderController {
             existingSlider.setTitle(title);
             existingSlider.setDescription(description);
             existingSlider.setStatus(status);
+            existingSlider.setBacklink(backlink);
 
             if (imageFile != null && !imageFile.isEmpty()) {
                 String newImageUrl = googleDriveService.uploadBannerFile(imageFile);
@@ -168,6 +175,7 @@ public class SliderController {
     }
 
 
+
     // Xóa slider
     @GetMapping("/slider/delete/{id}")
     public String deleteSlider(@PathVariable Integer id, @RequestParam(defaultValue = "0") int page) {
@@ -187,4 +195,5 @@ public class SliderController {
         sliderService.toggleVisibility(id);
         return "redirect:/marketer/slider?page=" + page;
     }
+
 }

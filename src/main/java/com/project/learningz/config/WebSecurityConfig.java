@@ -64,11 +64,12 @@ public class WebSecurityConfig {
                                 .requestMatchers("/verify").permitAll()
                                 .requestMatchers("/resend").permitAll()
                                 .requestMatchers("/learning/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM")
-                                .requestMatchers("/course/**", "/post/**").permitAll()
+
                                 .requestMatchers("/vip-packages").permitAll()
                                 .requestMatchers("/learning/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM")
                                 .requestMatchers("/Exam/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM")
                                 .requestMatchers("/course/**").permitAll()
+                                .requestMatchers("/post/**").permitAll()
                                 .anyRequest().authenticated()
                 ).formLogin(form -> form
                         .loginPage("/login")
@@ -97,16 +98,6 @@ public class WebSecurityConfig {
     }
 
 
-    //old OAuth2Service, cannot user authorize, update at CustomOuth2User
-    /*public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
-        return new DefaultOAuth2UserService() {
-            @Override
-            public OAuth2User loadUser(OAuth2UserRequest userRequest) {
-                OAuth2User oAuth2User = super.loadUser(userRequest);
-                customUserDetailsService.processOAuthPostLogin(oAuth2User);
-                return oAuth2User;
-            }
-        };
-    }*/
+
 
 }
