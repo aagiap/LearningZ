@@ -48,24 +48,36 @@ public class QnAService {
                 .collect(Collectors.joining("\n"));
     }
 
-    public String getAnswer(String question,MultipartFile image) {
+    public String getAnswerWithHistory(String question, List<Map<String, String>> chatHistory) {
         try {
-            // 🔥 Lấy dữ liệu từ SQL Server
-            String vipPackageData = getVipPackagesFromDB();
+            // Read the base prompt from file
+            String basePrompt = readFixedTextFile();
 
-            // 🔥 Đọc nội dung từ file `.txt`
-            String documentText = readFixedTextFile();
+            // Build the conversation context from chat history
+            StringBuilder conversationContext = new StringBuilder(basePrompt);
+            conversationContext.append("\n\nConversation history:\n");
 
-            // 🔥 Tạo nội dung câu hỏi đầy đủ
-            String fullQuestion = documentText + "\n\n" + vipPackageData + "\n\nCâu hỏi: " + question;
+            if (chatHistory != null && !chatHistory.isEmpty()) {
+                for (Map<String, String> message : chatHistory) {
+                    String role = message.get("role");
+                    String content = message.get("content");
 
-            // 🔥 Encode ảnh nếu có
-            String base64Image = encodeImage(image);
+                    if ("user".equals(role)) {
+                        conversationContext.append("User: ").append(content).append("\n");
+                    } else if ("ai".equals(role)) {
+                        conversationContext.append("Assistant: ").append(content).append("\n");
+                    }
+                }
+            }
 
-            // 🔥 Tạo request gửi đến Gemini
-            Map<String, Object> requestBody = buildRequest(fullQuestion, base64Image);
+            // Add the current question
+            conversationContext.append("User: ").append(question).append("\n");
+            conversationContext.append("Assistant: ");
 
-            // 🔥 Gửi request
+            // Create request for Gemini
+            Map<String, Object> requestBody = buildRequest(conversationContext.toString());
+
+            // Send request
             String response = webClient.post()
                     .uri(geminiApiUrl + geminiApiKey)
                     .header("Content-Type", "application/json")
@@ -76,17 +88,39 @@ public class QnAService {
 
             return extractAnswer(response);
         } catch (Exception e) {
-            return "Lỗi xử lý: " + e.getMessage();
+            return "Error processing: " + e.getMessage();
         }
     }
 
-    private String encodeImage(MultipartFile image) throws IOException {
-        if (image == null || image.isEmpty()) return null;
-        return Base64.getEncoder().encodeToString(image.getBytes());
+    // Original method kept for backward compatibility
+    public String getAnswer(String question) {
+        try {
+            // Read content from file
+            String documentText = readFixedTextFile();
+
+            // Create full question
+            String fullQuestion = documentText + "\n\nQuestion: " + question;
+
+            // Create request for Gemini
+            Map<String, Object> requestBody = buildRequest(fullQuestion);
+
+            // Send request
+            String response = webClient.post()
+                    .uri(geminiApiUrl + geminiApiKey)
+                    .header("Content-Type", "application/json")
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            return extractAnswer(response);
+        } catch (Exception e) {
+            return "Error processing: " + e.getMessage();
+        }
     }
 
     private String readFixedTextFile() throws IOException {
-        //  Đọc file `.txt` trong resources
+        // Read .txt file from resources
         ClassPathResource resource = new ClassPathResource("document/PromptAI.txt");
 
         try (InputStream inputStream = resource.getInputStream();
@@ -95,24 +129,12 @@ public class QnAService {
         }
     }
 
-    private Map<String, Object> buildRequest(String question, String base64Image) {
-        if (base64Image != null) {
-            return Map.of("contents", new Object[]{
-                    Map.of("parts", new Object[]{
-                            Map.of("text", question),
-                            Map.of("inline_data", Map.of(
-                                    "mime_type", "image/jpeg",
-                                    "data", base64Image
-                            ))
-                    })
-            });
-        } else {
-            return Map.of("contents", new Object[]{
-                    Map.of("parts", new Object[]{
-                            Map.of("text", question)
-                    })
-            });
-        }
+    private Map<String, Object> buildRequest(String question) {
+        return Map.of("contents", new Object[]{
+                Map.of("parts", new Object[]{
+                        Map.of("text", question)
+                })
+        });
     }
 
     private String extractAnswer(String jsonResponse) {
