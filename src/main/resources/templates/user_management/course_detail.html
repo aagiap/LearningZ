@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th>
 <head>
   <!-- Title Meta -->
   <meta charset="utf-8"/>
@@ -18,12 +18,34 @@
   <!-- App css (Require in all Page) -->
   <link href="/css/app.min.css" rel="stylesheet" type="text/css"/>
 
-  <link rel="stylesheet" href="/css/UserManagement.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
   <!-- Theme Config js (Require in all Page) -->
   <script src="/js/config.js"></script>
   <style>
+
+    .sub-navbar-nav {
+      padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
+    }
+
+    .sub-navbar-nav li {
+      margin-left: 40px; /* Thụt vào từng mục */
+      list-style-type: none; /* Bỏ dấu chấm mặc định */
+    }
+
+    .sub-nav-link {
+      display: block;
+      padding: 5px 10px;
+      color: rgba(216, 223, 13, 0.93);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .sub-nav-link:hover {
+      color: #176e0e;
+      font-weight: bold;
+    }
+
     h3 {
       text-align: center; /* Căn giữa */
       font-size: 24px; /* Kích thước chữ */
@@ -35,6 +57,58 @@
       border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
       display: inline-block; /* Giữ nội dung gọn gàng */
     }
+
+    .image-content {
+      width: 100%; /* Đảm bảo ảnh phủ toàn bộ chiều rộng */
+      height: 200px; /* Chiều cao cố định */
+      overflow: hidden; /* Cắt phần thừa nếu ảnh quá lớn */
+    }
+
+    .image-content img {
+      width: 100%; /* Phủ toàn bộ chiều rộng */
+      height: 100%; /* Chiều cao luôn bằng 50px */
+      object-fit: cover; /* Cắt ảnh để vừa vặn như banner */
+    }
+
+    /* Căn giữa nội dung, tạo padding đẹp hơn */
+    .container-fluid-content {
+      max-width: 900px; /* Giữ nội dung gọn trong khung đẹp */
+      margin: auto;
+      padding-top: 50px;
+    }
+
+    /* Bảng hiển thị thông tin gọn gàng */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    td {
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    td:first-child {
+      font-weight: bold;
+      color: #07294d;
+      width: 150px;
+    }
+
+    /* Nút Back đẹp hơn */
+    .btn-secondary {
+      background-color: #ccc;
+      color: #07294d;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      font-weight: bold;
+    }
+
+    .btn-secondary:hover {
+      background-color: #bbb;
+    }
+
 
   </style>
 </head>
@@ -265,7 +339,7 @@
         <li class="menu-title">General</li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/admin/users/dashboard">
+          <a class="nav-link" href="/admin/courses/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -276,38 +350,25 @@
         <li class="nav-item">
           <a class="nav-link menu-arrow" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
              aria-expanded="false" aria-controls="sidebarUsers">
-       <span class="nav-icon">
-           <iconify-icon icon="solar:user-bold"></iconify-icon>
-       </span>
-            <span class="nav-text"> Users List </span>
+            <span class="nav-text">📋 Course List </span>
           </a>
           <div class="collapse show" id="sidebarUsers">
             <ul class="nav sub-navbar-nav">
-              <li class="sub-nav-item">
-                <a class="sub-nav-link menu-arrow" href="#sidebarList" data-bs-toggle="collapse"
-                   role="button"
-                   aria-expanded="false" aria-controls="sidebarList">
-                  <span class="nav-text">📋 List </span>
-                </a>
-                <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- All Users</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Super Admin</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Users</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Courses</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- VIP Students</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Casual Students</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Teachers</a></li>
-                  <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Marketers</a></li>
-                </ul>
-              </li>
-
-              <li class="sub-nav-item">
-                <a class="sub-nav-link" href="/admin/users/create">➕ Create</a>
-              </li>
+              <li><a class="sub-nav-link"
+                     th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                All Courses</a></li>
+              <li><a class="sub-nav-link"
+                     th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                Active Courses</a></li>
+              <li><a class="sub-nav-link"
+                     th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                Inactive courses</a></li>
+              <li><a class="sub-nav-link"
+                     th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                Pending courses</a></li>
             </ul>
           </div>
-        </li>
-      </ul>
+        </li>      </ul>
     </div>
   </div>
   <!-- ========== App Menu End ========== -->
@@ -315,77 +376,56 @@
   <!-- ==================================================== -->
   <!-- Start right Content here -->
   <div class="page-content">
-
+    <div class="image-content text-center" >
+      <img class="img-fluid" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
+    </div>
     <!-- Start Container Fluid -->
-    <div class="container-fluid" style="padding-top: 50px">
+    <div class="container-fluid-content" style="padding-top: 50px">
+      <!-- Ảnh Avatar -->
+      <div class="form-wrapper" >
+        <h2 class="text-center">Course Detail</h2>
 
-      <div th:if="${errorMessage}" class="alert alert-danger">
-        <span th:text="${errorMessage}"></span>
-      </div>
-
-      <div th:if="${successMessage}" class="alert alert-success">
-        <span th:text="${successMessage}"></span>
-      </div>
-
-      <div class="add-user-form">
-        <h4 class="form-title">Add New User</h4>
-        <form action="/admin/users/create" method="post">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required
-                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                       oninput="this.setCustomValidity('')">
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="text" class="form-control" id="password" name="password" required
-                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                       oninput="this.setCustomValidity('')">
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phone" name="phone" required
-                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                       oninput="this.setCustomValidity('')">
-              </div>
-              <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-control" id="role" name="role" required style="border-radius: 5px;">
-                  <option value="STUDENT">STUDENT</option>
-                  <option value="VIP_STUDENT">VIP_STUDENT</option>
-                  <option value="TEACHER">TEACHER</option>
-                  <option value="MARKETING_TEAM">MARKETING_TEAM</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="col-md-12">
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-              </div>
-            </div>
-
-            <div class="form-actions text-center mt-4">
-              <button type="button" class="btn btn-secondary"
-                      style="background-color: #ccc; color: #07294d"
-                      th:onclick="|window.location.href='@{/admin/users/dashboard}'|">
-                Cancel
-              </button>
-              <button type="submit" class="btn btn-info"
-                      style="background-color: #083768; color:#fbf8f8;">Save
-              </button>
-            </div>
-
+          <div class="row mt-3">
+            <table>
+              <tr>
+                <td>Title </td>
+                <td th:text="${course.title}"></td>
+              </tr>
+              <tr>
+                <td>Grade </td>
+                <td th:text="${course.grade.name}"></td>
+              </tr>
+              <tr>
+                <td>Subject </td>
+                <td th:text="${course.subject.name}"></td>
+              </tr>
+              <tr>
+                <td>Created by </td>
+                <td th:text="${course.createdBy.username}"></td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td th:text="${course.courseStatus.name()}"></td>
+              </tr>
+              <tr>
+                <td>Description</td>
+                <td th:text="${course.description}"></td>
+              </tr>
+              <tr>
+                <td>Drive Link</td>
+                <td th:text="${course.courseDriveLink}"></td>
+              </tr>
+            </table>
           </div>
-        </form>
-      </div>
 
+          <!-- Nút hành động -->
+          <div class="form-actions text-center mt-4">
+            <button type="button" class="btn btn-secondary" style="background-color: #ccc; color: #07294d" onclick="history.back();">
+              Back
+            </button>
+          </div>
+
+      </div>
     </div>
     <!-- End Container Fluid -->
 

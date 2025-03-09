@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th>
 <head>
     <!-- Title Meta -->
     <meta charset="utf-8"/>
-    <title>User Detail</title>
+    <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A fully responsive premium admin dashboard template"/>
     <meta name="author" content="Techzaa"/>
@@ -23,7 +23,53 @@
 
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
+    <style>
 
+        .sub-navbar-nav {
+            padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
+        }
+
+        .sub-navbar-nav li {
+            margin-left: 40px; /* Thụt vào từng mục */
+            list-style-type: none; /* Bỏ dấu chấm mặc định */
+        }
+
+        .sub-nav-link {
+            display: block;
+            padding: 5px 10px;
+            color: rgba(216, 223, 13, 0.93);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sub-nav-link:hover {
+            color: #176e0e;
+            font-weight: bold;
+        }
+
+
+        h3 {
+            text-align: center; /* Căn giữa */
+            font-size: 24px; /* Kích thước chữ */
+            font-weight: bold; /* Độ đậm */
+            color: #0d47a1; /* Màu xanh đậm */
+            margin-top: 20px; /* Khoảng cách phía trên */
+            margin-bottom: 20px; /* Khoảng cách phía dưới */
+            padding: 10px 0; /* Thêm padding để không quá sát */
+            border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
+            display: inline-block; /* Giữ nội dung gọn gàng */
+        }
+
+        .icon-approve {
+            font-size: 28px; /* Icon tick xanh */
+        }
+
+        .icon-reject {
+            font-size: 28px; /* Icon dấu X đỏ */
+        }
+
+
+    </style>
 </head>
 
 <body>
@@ -252,7 +298,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/users/dashboard">
+                    <a class="nav-link" href="/admin/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -261,36 +307,43 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
-                       aria-expanded="false" aria-controls="sidebarUsers">
-       <span class="nav-icon">
-           <iconify-icon icon="solar:user-bold"></iconify-icon>
-       </span>
-                        <span class="nav-text"> Users List </span>
+                    <a class="nav-link menu-arrow" href="#sidebarUsersMenu" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarUsersMenu">
+                        <span class="nav-text">📋 User List </span>
                     </a>
-                    <div class="collapse show" id="sidebarUsers">
+                    <div class="collapse" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link menu-arrow" href="#sidebarList" data-bs-toggle="collapse"
-                                   role="button"
-                                   aria-expanded="false" aria-controls="sidebarList">
-                                    <span class="nav-text">📋 List </span>
-                                </a>
-                                <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- All Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Super Admin</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Courses</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- VIP Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Casual Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Teachers</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Marketers</a></li>
-                                </ul>
-                            </li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- All Users</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Super Admin</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Admin Users</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Admin Courses</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- VIP Students</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Casual Students</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Teachers</a></li>
+                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Marketers</a></li>
+                        </ul>
+                    </div>
+                </li>
 
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/admin/users/create">➕ Create</a>
-                            </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoursesMenu" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarCoursesMenu">
+                        <span class="nav-text">📋 Course List </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoursesMenu">
+                        <ul class="nav sub-navbar-nav">
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                                All Courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                                Active Courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                                Inactive courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
+                                Pending courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -313,79 +366,113 @@
             <div th:if="${successMessage}" class="alert alert-success">
                 <span th:text="${successMessage}"></span>
             </div>
-
-            <div class="form-wrapper">
-                <h2 class="text-center">User Detail</h2>
-
-                <!-- Ảnh Avatar -->
-                <div class="avatar-detail-container text-center">
-                    <img th:src="@{${avatarUrl}}" alt="User Avatar" class="avatar img-thumbnail"
-                         style="width: 150px; height: 150px; border-radius: 50%;">
-                </div>
-
-                <form th:object="${user}" method="post" action="/admin/users/update" enctype="multipart/form-data">
-                    <div class="row mt-3">
-                        <!-- Cột Trái -->
-                        <div class="col-md-6">
-                            <div class="form-section">
-                                <div class="form-group">
-                                    <label>ID</label>
-                                    <input th:field="*{id}" type="text" class="form-control" readonly required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <input th:field="*{username}" type="text" class="form-control" readonly required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <input th:field="*{userStatus}" type="text" class="form-control" readonly required>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Cột Phải -->
-                        <div class="col-md-6">
-                            <div class="form-section">
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input th:field="*{password}" type="password" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input th:field="*{email}" type="email" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Phone number</label>
-                                    <input th:field="*{phoneNum}" type="text" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select class="form-control" id="role" th:field="*{role}" required
-                                            style="border-radius: 5px;">
-                                        <option value="STUDENT">STUDENT</option>
-                                        <option value="VIP_STUDENT">VIP_STUDENT</option>
-                                        <option value="TEACHER">TEACHER</option>
-                                        <option value="MARKETING_TEAM">MARKETING_TEAM</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Nút hành động -->
-                    <div class="form-actions text-center mt-4">
-                        <button type="button" class="btn btn-secondary" style="background-color: #ccc; color: #07294d"
-                                th:onclick="window.history.back()">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-info" style="background-color: #083768; color:#fbf8f8;">
-                            Save
-                        </button>
-                    </div>
-
-
+            <div class="user-list">
+                <!--search-->
+                <form method="get" action="/admin/view" class="mb-3 d-flex justify-content-start"
+                      style="max-width: 400px; margin: 0 auto;">
+                    <input type="text" name="keyword" id="keyword" th:value="${keyword}" class="form-control me-2"
+                           placeholder="Search courses by title, grade, subject, ...">
+                    <input type="hidden" name="status" th:value="${status}">
+                    <button type="submit" class="btn btn-primary" style="background-color: #0d47a1; color: whitesmoke">
+                        Search
+                    </button>
                 </form>
+
+                <table class="table table-bordered table-striped">
+                    <thead style="background-color: #0d47a1; color: white;">
+                    <tr>
+                        <th style="color: whitesmoke">#</th>
+                        <th>
+                            <a th:href="@{/admin/view(status=${status}, sort='title', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="color: whitesmoke">
+                                Course Name <span
+                                    th:text="${sortField == 'title' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
+                                    style="color: whitesmoke"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{/admin/view(status=${status}, sort='grade', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="color: whitesmoke">
+                                Grade <span th:text="${sortField == 'grade' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
+                                            style="color: whitesmoke"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{/admin/view(status=${status}, sort='subject', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="color: whitesmoke">
+                                Subject <span
+                                    th:text="${sortField == 'subject' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
+                                    style="color: whitesmoke"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{/admin/view(status=${status}, sort='createdBy', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="color: whitesmoke">
+                                Created By <span
+                                    th:text="${sortField == 'createdBy' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
+                                    style="color: whitesmoke"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{/admin/view(status=${status}, sort='courseStatus', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="color: whitesmoke">
+                                Status <span
+                                    th:text="${sortField == 'courseStatus' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
+                                    style="color: whitesmoke"></span>
+                            </a>
+                        </th>
+                        <th style="color: whitesmoke">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="course, index : ${courses}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${course.title}"></td>
+                        <td th:text="${course.grade.getName()}"></td>
+                        <td th:text="${course.subject.getName()}"></td>
+                        <td th:text="${course.createdBy.username}"></td>
+                        <td th:text="${course.courseStatus}"></td>
+                        <td>
+                            <a th:href="@{/admin/detail/{id}(id=${course.id})}" class="text-primary"
+                               title="View">
+                                <i class="fas fa-eye" style="color: #0d47a1"></i>
+                            </a>
+                            <th:block th:if="${course.courseStatus.name() == 'PENDING'}">
+                                <form action="/admin/approve" method="post" style="display:inline;" onsubmit="return confirmAction(event, this);">
+                                    <input type="hidden" name="id" th:value="${course.id}"/>
+                                    <input type="hidden" name="status" th:value="${course.courseStatus}"/>
+                                    <input type="hidden" name="action" class="action-field"/>
+
+                                    <button type="submit" class="btn btn-link text-success" title="Approve" value="approve"
+                                            onclick="setAction(event, this);">
+                                        <i class="fas fa-check-circle icon-approve" style="color: green;"></i>
+                                    </button>
+                                    <button type="submit" class="btn btn-link text-danger" title="Reject" value="reject"
+                                            onclick="setAction(event, this);">
+                                        <i class="fas fa-times-circle icon-reject" style="color: red;"></i>
+                                    </button>
+                                </form>
+                            </th:block>
+
+                            <script>
+                                function setAction(event, button) {
+                                    event.preventDefault();
+                                    let form = button.closest("form");
+                                    form.querySelector(".action-field").value = button.value; // Cập nhật action chính xác
+
+                                    if (confirm(button.value === "approve" ?
+                                        "Are you sure you want to approve this course?" :
+                                        "Are you sure you want to reject this course?")) {
+                                        form.submit();
+                                    }
+                                }
+                            </script>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>

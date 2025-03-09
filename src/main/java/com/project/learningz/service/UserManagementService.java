@@ -24,24 +24,24 @@ public class UserManagementService {
     private final UserManagementRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsersSorted(String sortField, String sortOrder) {
+    public List<User> searchUsersSorted(Role role, String keyword, String sortField, String sortOrder) {
         Sort sort;
         if (sortOrder.equalsIgnoreCase("desc")) {
             sort = Sort.by(sortField).descending();
         } else {
             sort = Sort.by(sortField).ascending();
         }
-        return userRepository.findAll(sort);
+        return userRepository.searchUsersByRoleAndKeyword(role, keyword, sort);
     }
 
-    public List<User> searchUsersSorted(String keyword, String sortField, String sortOrder) {
+    public List<User> getAllUsersByKeyword(String keyword, String sortField, String sortOrder) {
         Sort sort;
         if (sortOrder.equalsIgnoreCase("desc")) {
             sort = Sort.by(sortField).descending();
         } else {
             sort = Sort.by(sortField).ascending();
         }
-        return userRepository.findByKeyword(keyword.toUpperCase(), sort);
+        return userRepository.getAllUsersByKeyword(keyword, sort);
     }
 
     public void banUserById(Integer id) {
@@ -118,9 +118,18 @@ public class UserManagementService {
         return users.size();
     }
 
-    public long getNumberOfAdminUsers() {
-        return userRepository.countAdminUsers();
+    public long getNumberOfAdminSuperUsers() {
+        return userRepository.countAdminSuperUsers();
     }
+
+    public long getNumberOfAdminUserManageUsers() {
+        return userRepository.countAdminUserManageUsers();
+    }
+
+    public long getNumberOfAdminCourseManageUsers() {
+        return userRepository.countAdminCourseManageUsers();
+    }
+
 
     public long getNumberOfVipUsers() {
         return userRepository.countVIPUsers();
