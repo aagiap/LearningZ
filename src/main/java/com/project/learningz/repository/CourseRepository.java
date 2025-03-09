@@ -1,7 +1,10 @@
 package com.project.learningz.repository;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.CourseDetailsDTO;
 import com.project.learningz.entity.Course;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -99,16 +102,46 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     List<Course> findCoursesByGradeId(int gradeId);
 
     @Query("""
-        SELECT DISTINCT co.title
-        FROM QuestionBank q
-                JOIN QuizQuestion qq ON q.id = qq.question.id
-                JOIN Quiz qu ON qq.quiz.id = qu.id
-                JOIN qu.lesson l
-                JOIN l.chapter ch
-                JOIN ch.course co
-                JOIN co.subject s
-                JOIN co.grade g
-    """)
+                SELECT DISTINCT co.title
+                FROM QuestionBank q
+                        JOIN QuizQuestion qq ON q.id = qq.question.id
+                        JOIN Quiz qu ON qq.quiz.id = qu.id
+                        JOIN qu.lesson l
+                        JOIN l.chapter ch
+                        JOIN ch.course co
+                        JOIN co.subject s
+                        JOIN co.grade g
+            """)
     List<String> getAllCourse();
+
+    @Query("SELECT c FROM Course c WHERE c.courseStatus = :status " +
+            "AND (:keyword IS NULL OR :keyword = '' OR " +
+            "LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.grade.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.createdBy.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.subject.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<Course> searchCourseByStatusAndKeyword(@Param("status") CourseStatus status,
+                                                @Param("keyword") String keyword,
+                                                Sort sort);
+
+    @Query("SELECT c FROM Course c WHERE (:keyword IS NULL OR :keyword = '' OR " +
+            "LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.grade.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.createdBy.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.subject.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<Course> getAllCoursesByKeyword(@Param("keyword") String keyword,
+                                        Sort sort);
+
+    @Query("SELECT c FROM Course c WHERE c.courseStatus = :status")
+    List<Course> getAllCoursesByStatus(CourseStatus status);
+
+
+    @Query("SELECT uc.course, COUNT(uc.user) FROM UsersCourse uc " +
+            "WHERE uc.user IS NOT NULL " +  // Loại bỏ dòng có user NULL
+            "GROUP BY uc.course " +
+            "HAVING COUNT(uc.user) > 0 " +  // Đảm bảo chỉ tính khóa học có ít nhất 1 người đăng ký
+            "ORDER BY COUNT(uc.user) DESC")
+    List<Object[]> getTop5PopularCoursesWithEnrollments(Pageable pageable);
+
 
 }

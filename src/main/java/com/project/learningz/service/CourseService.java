@@ -2,6 +2,7 @@ package com.project.learningz.service;
 
 import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.CourseDetailsDTO;
+import com.project.learningz.dto.TopCourseDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.specification.CourseSpecification;
@@ -9,12 +10,15 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -138,5 +142,65 @@ public class CourseService {
 
     public List<String> getAllCourseInQuestions() {
         return courseRepository.getAllCourse();
+    }
+
+    public List<Course> searchCourseByStatusAndKeyword(CourseStatus status, String keyword, String sortField, String sortOrder) {
+        Sort sort;
+        if (sortOrder.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortField).descending();
+        } else {
+            sort = Sort.by(sortField).ascending();
+        }
+        return courseRepository.searchCourseByStatusAndKeyword(status, keyword, sort);
+    }
+
+    public List<Course> getAllCoursesByKeyword(String keyword, String sortField, String sortOrder) {
+        Sort sort;
+        if (sortOrder.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortField).descending();
+        } else {
+            sort = Sort.by(sortField).ascending();
+        }
+        return courseRepository.getAllCoursesByKeyword(keyword, sort);
+    }
+
+    public void approveCourse(Integer courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course Not Found"));
+        course.setCourseStatus(CourseStatus.ACTIVE);
+        courseRepository.save(course);
+    }
+
+    public void rejectCourse(Integer courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course Not Found"));
+        course.setCourseStatus(CourseStatus.INACTIVE);
+        courseRepository.save(course);
+    }
+
+    public Integer sumOfCourseByStatus(CourseStatus courseStatus) {
+        if(courseStatus == CourseStatus.ACTIVE){
+            return courseRepository.getAllCoursesByStatus(CourseStatus.ACTIVE).size();
+        } else if(courseStatus == CourseStatus.INACTIVE){
+            return courseRepository.getAllCoursesByStatus(CourseStatus.INACTIVE).size();
+        } else if (courseStatus == CourseStatus.PENDING){
+            return courseRepository.getAllCoursesByStatus(CourseStatus.PENDING).size();
+        } else {
+            return courseRepository.getAllCourse().size();
+        }
+    }
+
+    public List<TopCourseDTO> getTop5Courses() {
+        Pageable pageable = PageRequest.of(0, 5); // Lấy top 5 khóa học
+        List<Object[]> results = courseRepository.getTop5PopularCoursesWithEnrollments(pageable);
+
+        List<TopCourseDTO> topCourses = new ArrayList<>();
+        for (Object[] row : results) {
+            Course course = (Course) row[0];   // Lấy đối tượng Course
+            Long enrollmentCount = (Long) row[1];  // Lấy số lượng đăng ký
+
+            // Đưa vào DTO để trả về
+            topCourses.add(new TopCourseDTO(course, enrollmentCount));
+        }
+
+        return topCourses;
     }
 }

@@ -64,7 +64,13 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
-            if (role.equals("ROLE_ADMIN")) {
+            if (role.equals("ROLE_ADMIN_USER_MANAGER")) {
+                redirectURL = "/admin/users/dashboard";
+                break;
+            } else if (role.equals("ROLE_ADMIN_COURSE_MANAGER")) {
+                redirectURL = "/admin/courses/dashboard";
+                break;
+            }else if (role.equals("ROLE_ADMIN")) {
                 redirectURL = "/admin/dashboard";
                 break;
             } else if (role.equals("ROLE_TEACHER")) {

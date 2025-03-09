@@ -2,110 +2,102 @@
 <html lang="en">
 <head>
     <!-- Title Meta -->
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A fully responsive premium admin dashboard template" />
-    <meta name="author" content="Techzaa" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="A fully responsive premium admin dashboard template"/>
+    <meta name="author" content="Techzaa"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
     <!-- Vendor css (Require in all Page) -->
-    <link href="/css/vendor.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/vendor.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- Icons css (Require in all Page) -->
-    <link href="/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/icons.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- App css (Require in all Page) -->
-    <link href="/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/app.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-        .col-xxl-5 {
-            border: 2px solid #df5c09;
-            border-radius: 10px;
-            padding: 20px 15px 15px 15px;
-            margin: 10px 0;
-            margin-left: 90px;
-            background-color: #fffaf0;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
 
-        p {
+        .user-latest p {
             color: #df5c09;
             font-size: 16px;
             font-weight: bold;
-            position: absolute;
             top: -12px;
             left: 15px;
-            background-color: #fffaf0;
             padding: 0 8px;
         }
 
 
-        table {
-            width: 100%;
+        .user-latest table {
+            width: 70%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-left: 20px;
             font-size: 12px;
             text-align: left;
         }
 
-        th, td {
+        .user-latest th, td {
             border: 1px solid #ddd;
             padding: 10px;
         }
 
-        th {
+        .user-latest th {
             background-color: #0d47a1;
             color: white;
             font-weight: bold;
         }
 
-        tbody tr:nth-child(even) {
+        .user-latest tbody tr:nth-child(even) {
             background-color: #f2f2f2; /* Màu nền xen kẽ */
         }
 
-        tbody tr:hover {
+        .user-latest tbody tr:hover {
             background-color: #ddd; /* Màu khi hover */
             cursor: pointer;
         }
 
-        td {
+        .user-latest td {
             text-align: center;
         }
 
-        .summary-box {
-            border: 2px solid #df5c09; /* Viền xanh đậm */
-            border-radius: 10px; /* Bo góc */
-            padding: 30px 20px 20px; /* Tăng padding trên để đủ chỗ cho chữ */
-            background-color: #fffaf0; /* Nền xám nhạt */
+        .user-latest tr {
             text-align: center;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-            max-width: 400px; /* Giới hạn chiều rộng */
-            margin: auto;
-            position: relative; /* Để thẻ p có thể định vị tuyệt đối */
         }
 
         .summary-box p {
             font-size: 16px;
             font-weight: bold;
             color: #df5c09; /* Màu cam */
-            background: #fffaf0; /* Nền giống box */
             padding: 5px 15px;
-            border-radius: 5px;
-            position: absolute;
-            top: -12px; /* Đẩy lên trên viền */
             left: 50%;
-            transform: translateX(-50%); /* Căn giữa */
-            white-space: nowrap; /* Tránh xuống dòng */
         }
 
 
         .summary-box table {
-            width: 100%;
+            width: 40%;
             border-collapse: collapse;
+            margin-left: 20px;
+        }
+
+        /* Định dạng đường link */
+        .summary-box a {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px;
+            transition: 0.3s;
+        }
+
+        /* Hover hiệu ứng */
+        .summary-box a:hover {
+            color: #0056b3;
+            transform: scale(1.05);
         }
 
         .summary-box td {
@@ -115,18 +107,13 @@
             font-size: 12px;
         }
 
-        .summary-box tr:last-child td {
-            border-bottom: none; /* Bỏ đường kẻ cho hàng cuối */
-        }
-
-        .summary-box td:first-child {
-            font-weight: bold;
-            color: #0d47a1; /* Màu xanh đậm */
-        }
-
         .summary-box td:last-child {
             font-weight: bold;
-            color: #e53935; /* Màu đỏ cho số lượng */
+            color: #0d47a1; /* Màu đỏ cho số lượng */
+        }
+
+        .summary-box tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Màu nền xen kẽ */
         }
 
 
@@ -170,7 +157,8 @@
 
                     <!-- Theme Setting -->
                     <div class="topbar-item d-none d-md-flex">
-                        <button type="button" class="topbar-button" id="theme-settings-btn" data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
+                        <button type="button" class="topbar-button" id="theme-settings-btn" data-bs-toggle="offcanvas"
+                                data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
                             <iconify-icon icon="solar:settings-bold-duotone" class="fs-24 align-middle"></iconify-icon>
                         </button>
                     </div>
@@ -214,7 +202,8 @@
         <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
             <div class="d-flex align-items-center bg-primary p-3 offcanvas-header">
                 <h5 class="text-white m-0">Theme Settings</h5>
-                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
             </div>
 
             <div class="offcanvas-body p-0">
@@ -225,12 +214,14 @@
                             <h5 class="mb-3 font-16 fw-semibold">Color Scheme</h5>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-light" value="light">
+                                <input class="form-check-input" type="radio" name="data-bs-theme"
+                                       id="layout-color-light" value="light">
                                 <label class="form-check-label" for="layout-color-light">Light</label>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-dark" value="dark">
+                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-dark"
+                                       value="dark">
                                 <label class="form-check-label" for="layout-color-dark">Dark</label>
                             </div>
                         </div>
@@ -239,11 +230,13 @@
                             <h5 class="my-3 font-16 fw-semibold">Topbar Color</h5>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-light" value="light">
+                                <input class="form-check-input" type="radio" name="data-topbar-color"
+                                       id="topbar-color-light" value="light">
                                 <label class="form-check-label" for="topbar-color-light">Light</label>
                             </div>
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-dark" value="dark">
+                                <input class="form-check-input" type="radio" name="data-topbar-color"
+                                       id="topbar-color-dark" value="dark">
                                 <label class="form-check-label" for="topbar-color-dark">Dark</label>
                             </div>
                         </div>
@@ -253,14 +246,16 @@
                             <h5 class="my-3 font-16 fw-semibold">Menu Color</h5>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-light" value="light">
+                                <input class="form-check-input" type="radio" name="data-menu-color"
+                                       id="leftbar-color-light" value="light">
                                 <label class="form-check-label" for="leftbar-color-light">
                                     Light
                                 </label>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-color" id="leftbar-color-dark" value="dark">
+                                <input class="form-check-input" type="radio" name="data-menu-color"
+                                       id="leftbar-color-dark" value="dark">
                                 <label class="form-check-label" for="leftbar-color-dark">
                                     Dark
                                 </label>
@@ -271,35 +266,40 @@
                             <h5 class="my-3 font-16 fw-semibold">Sidebar Size</h5>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-default" value="default">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-default" value="default">
                                 <label class="form-check-label" for="leftbar-size-default">
                                     Default
                                 </label>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-small" value="condensed">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small" value="condensed">
                                 <label class="form-check-label" for="leftbar-size-small">
                                     Condensed
                                 </label>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-hidden" value="hidden">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-hidden"
+                                       value="hidden">
                                 <label class="form-check-label" for="leftbar-hidden">
                                     Hidden
                                 </label>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-small-hover-active" value="sm-hover-active">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small-hover-active" value="sm-hover-active">
                                 <label class="form-check-label" for="leftbar-size-small-hover-active">
                                     Small Hover Active
                                 </label>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-size-small-hover" value="sm-hover">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small-hover" value="sm-hover">
                                 <label class="form-check-label" for="leftbar-size-small-hover">
                                     Small Hover
                                 </label>
@@ -324,12 +324,12 @@
     <div class="main-nav">
         <!-- Sidebar Logo -->
         <div class="logo-box">
-            <a href="index.html" class="logo-dark">
+            <a href="/home" class="logo-dark">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
 
             </a>
-            <a href="index.html" class="logo-light">
+            <a href="/home" class="logo-light">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo light">
             </a>
@@ -346,7 +346,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
+                    <a class="nav-link" href="/admin/users/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -355,19 +355,35 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
-                                   <span class="nav-icon">
-                                       <iconify-icon icon="solar:user-bold"></iconify-icon>
-                                   </span>
-                        <span class="nav-text"> Users list </span>
+                    <a class="nav-link menu-arrow" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarUsers">
+       <span class="nav-icon">
+           <iconify-icon icon="solar:user-bold"></iconify-icon>
+       </span>
+                        <span class="nav-text"> Users List </span>
                     </a>
-                    <div class="collapse" id="sidebarProducts">
+                    <div class="collapse show" id="sidebarUsers">
                         <ul class="nav sub-navbar-nav">
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/admin/user_list">List</a>
+                                <a class="sub-nav-link menu-arrow" href="#sidebarList" data-bs-toggle="collapse"
+                                   role="button"
+                                   aria-expanded="false" aria-controls="sidebarList">
+                                    <span class="nav-text">📋 List </span>
+                                </a>
+                                <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- All Users</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Super Admin</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Users</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Courses</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- VIP Students</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Casual Students</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Teachers</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Marketers</a></li>
+                                </ul>
                             </li>
+
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/admin/create">Create</a>
+                                <a class="sub-nav-link" href="/admin/users/create">➕ Create</a>
                             </li>
                         </ul>
                     </div>
@@ -379,72 +395,105 @@
 
     <!-- ==================================================== -->
     <!-- Start right Content here -->
+    <!-- ==================================================== -->
     <div class="page-content">
 
         <!-- Start Container Fluid -->
-        <div class="container-fluid" style="padding-top: 50px">
+        <div class="container-fluid" style="padding-top: 30px">
 
             <!-- Start here.... -->
-            <div class="row">
-                <div class="col-xxl-5">
-                    <p>The 10 most recently registered accounts</p>
-                    <table class="ten-user">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="user, index : ${users}">
-                            <td th:text="${index.count}"></td>
-                            <td th:text="${user.id}"></td>
-                            <td th:text="${user.username}"></td>
-                            <td th:text="${user.email}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div> <!-- end col -->
-
-                <div class="col-xxl-7 summary-box">
-                    <p>The summary of Accounts</p>
-                    <table>
-                        <tr>
-                            <td>The total of registered accounts:</td>
-                            <td th:text="${sumOfUsers}"></td>
-                        </tr>
-                        <tr>
-                            <td>The total of admin accounts:</td>
-                            <td th:text="${sumOfAdminUsers}"></td>
-                        </tr>
-                        <tr>
-                            <td>The total of vip student accounts:</td>
-                            <td th:text="${sumOfVipUsers}"></td>
-                        </tr>
-                        <tr>
-                            <td>The total of casual student accounts:</td>
-                            <td th:text="${sumOfCasualUsers}"></td>
-                        </tr>
-                        <tr>
-                            <td>The total of teacher accounts:</td>
-                            <td th:text="${sumOfTeacherUsers}"></td>
-                        </tr>
-                        <tr>
-                            <td>The total of marketer accounts:</td>
-                            <td th:text="${sumOfMarketerUsers}"></td>
-                        </tr>
-                    </table>
-
-                </div> <!-- end col -->
+            <div class="summary-box" style="margin-bottom: 40px;">
+                <p>The summary of Accounts</p>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
+                                The total of registered accounts: <span th:text="${sumOfUsers}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">
+                                The total of super admin accounts: <span th:text="${sumOfSuperAdmin}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">
+                                The total of admin user management accounts: <span th:text="${sumOfAdminUsers}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">
+                                The total of admin course management accounts: <span th:text="${sumOfAdminCourses}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
+                                The total of vip student accounts: <span th:text="${sumOfVipUsers}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
+                                The total of casual student accounts: <span th:text="${sumOfCasualUsers}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
+                                The total of teacher accounts: <span th:text="${sumOfTeacherUsers}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">
+                                The total of marketer accounts: <span th:text="${sumOfMarketerUsers}"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
 
             </div> <!-- end row -->
+
+            <div class="user-latest">
+                <p>The 10 most recently registered accounts</p>
+                <table class="ten-user">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user, index : ${users}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div> <!-- end col -->
 
         </div>
         <!-- End Container Fluid -->
 
     </div>
+    <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
 
