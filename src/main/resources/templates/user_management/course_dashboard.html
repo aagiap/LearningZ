@@ -24,6 +24,9 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
+        .btn {
+            border-radius: 8px;
+        }
 
         .sub-navbar-nav {
             padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
@@ -59,19 +62,16 @@
             display: inline-block; /* Giữ nội dung gọn gàng */
         }
 
-        /* Định dạng cho phần summary */
         .summary-box {
-            background: #f8f9fa; /* Màu nền nhạt */
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 500px;
-            margin-left: 20px; /* Hoặc một khoảng cách phù hợp */
+            padding-top: 20px;
+            max-width: 1000px;
+            margin-left: 70px; /* Hoặc một khoảng cách phù hợp */
             text-align: left;
         }
 
         /* Tiêu đề của summary */
         .summary-box p {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             margin-left: 20px;
@@ -79,17 +79,31 @@
             text-align: left;
         }
 
-        /* Định dạng bảng */
         .summary-box table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-left: 50px; /* Canh bảng về bên trái */
+            min-width: 500px;
+            width: 50%;
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
+            margin-top: 15px;
+            border-radius: 8px; /* Bo góc */
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
         }
 
-        /* Các dòng trong bảng */
-        .summary-box td {
-            padding: 5px 0;
+        .summary-box table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Màu cho hàng lẻ */
         }
+
+        .summary-box table th,
+        .summary-box table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-box table th {
+            background-color: #083768;
+            color: whitesmoke;
+        }
+
 
         /* Định dạng đường link */
         .summary-box a {
@@ -108,68 +122,11 @@
             transform: scale(1.05);
         }
 
-        /* Chấm đầu dòng đẹp hơn */
-        .summary-box a::before {
-            content: "• ";
-            color: #dc3545;
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        /* Tổng quan bảng */
-        .table {
-            min-width: 700px;
+        .container-fluid-content {
+            display: flex;
+            gap: 20px; /* Khoảng cách giữa 2 box */
             width: 100%;
-            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
-            margin-top: 15px;
-            background-color: #fff;
-            border-radius: 8px; /* Bo góc */
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
-        }
-
-        /* Tiêu đề bảng */
-        .table thead {
-            background-color: #083768; /* Màu nền xanh */
-            color: white;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        /* Dòng tiêu đề */
-        .table thead th {
-            padding: 12px;
-            border: 1px solid #dee2e6;
-        }
-
-        /* Nội dung bảng */
-        .table tbody td {
-            padding: 10px;
-            border: 1px solid #dee2e6;
-            font-size: 14px;
-            color: #333;
-        }
-
-        /* Dòng xen kẽ màu */
-        .table-striped tbody tr:nth-child(odd) {
-            background-color: #f8f9fa;
-        }
-
-        /* Khi di chuột vào dòng */
-        .table tbody tr:hover {
-            background-color: #e2e6ea;
-            transition: background 0.3s ease-in-out;
-        }
-
-        /* Canh giữa nội dung số thứ tự */
-        .table tbody td:first-child {
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Định dạng lại cột tiêu đề */
-        .table th {
-            font-weight: bold;
+            max-width: 1200px;
         }
 
         /* Responsive bảng trên màn hình nhỏ */
@@ -177,6 +134,7 @@
             .table {
                 font-size: 12px;
             }
+
             .table thead th,
             .table tbody td {
                 padding: 8px;
@@ -429,17 +387,20 @@
                     <div class="collapse show" id="sidebarUsers">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                All Courses</a></li>
+                                   th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Active Courses</a></li>
+                                   th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Inactive courses</a></li>
+                                   th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Pending courses</a></li>
+                                   th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
+                                courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -451,81 +412,105 @@
     <!-- ==================================================== -->
     <!-- Start right Content here -->
     <div class="page-content">
+        <div class="container-fluid-content" style="padding-top: 30px">
 
-        <div class="summary-box">
-            <p>The summary of Courses</p>
-            <table>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of course: <span th:text="${totalCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of active courses: <span th:text="${sumOfActiveCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of inactive courses: <span th:text="${sumOfInactiveCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of pending courses: <span th:text="${sumOfPendingCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-            </table>
+            <div class="summary-box">
+                <p>The summary of Courses</p>
+                <table>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Total of courses</a></td>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${totalCourses}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Active courses</a></td>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfActiveCourses}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Inactive courses</a></td>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfInactiveCourses}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Pending courses</a>
+                        </td>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfPendingCourses}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Rejected courses</a>
+                        </td>
+                        <td>
+                            <a th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfRejectedCourses}"></span></a>
+                        </td>
+                    </tr>
+                </table>
 
-        </div> <!-- end row -->
+            </div> <!-- end row -->
 
-        <div class="summary-box">
-            <p>Top 5 courses with the most student enrollments</p>
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Title</th>
-                    <th>Grade</th>
-                    <th>Subject</th>
-                    <th>Created By</th>
-                    <th>Status</th>
-                    <th>Enrollment Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="course, index : ${courses}">
-                    <td th:text="${index.count}"></td>
-                    <td th:text="${course.course.title}"></td>
-                    <td th:text="${course.course.grade.name}"></td>
-                    <td th:text="${course.course.subject.name}"></td>
-                    <td th:text="${course.course.createdBy.username}"></td>
-                    <td th:text="${course.course.courseStatus.name()}"></td>
-                    <td th:text="${course.enrollmentCount}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="summary-box">
+                <p>Top 5 courses with the most student enrollments</p>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Grade</th>
+                        <th>Subject</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>Enrollment Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="course, index : ${courses}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${course.course.title}"></td>
+                        <td th:text="${course.course.grade.name}"></td>
+                        <td th:text="${course.course.subject.name}"></td>
+                        <td th:text="${course.course.createdBy.username}"></td>
+                        <td th:text="${course.course.courseStatus.name()}"></td>
+                        <td th:text="${course.enrollmentCount}"></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-        </div> <!-- end row -->
+            </div> <!-- end row -->
 
-        <!-- End Container Fluid -->
+            <!-- End Container Fluid -->
 
+        </div>
+        <!-- End Page Content -->
+        <!-- ==================================================== -->
     </div>
-    <!-- End Page Content -->
-    <!-- ==================================================== -->
-
 </div>
 <!-- END Wrapper -->
 

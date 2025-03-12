@@ -195,6 +195,7 @@ public class UserManagementController {
             updatedUser.setEmail(user.getEmail());
             updatedUser.setPhoneNum(user.getPhoneNum());
             updatedUser.setRole(user.getRole());
+            updatedUser.setUserStatus(user.getUserStatus());
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
                 if (user.getPassword().length() < 6) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Password must be at least 6 characters");

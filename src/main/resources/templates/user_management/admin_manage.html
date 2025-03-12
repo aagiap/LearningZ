@@ -24,6 +24,9 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
+        .btn {
+            border-radius: 8px;
+        }
 
         .sub-navbar-nav {
             padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
@@ -47,31 +50,17 @@
             font-weight: bold;
         }
 
-        h3 {
-            text-align: center; /* Căn giữa */
-            font-size: 24px; /* Kích thước chữ */
-            font-weight: bold; /* Độ đậm */
-            color: #0d47a1; /* Màu xanh đậm */
-            margin-top: 20px; /* Khoảng cách phía trên */
-            margin-bottom: 20px; /* Khoảng cách phía dưới */
-            padding: 10px 0; /* Thêm padding để không quá sát */
-            border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
-            display: inline-block; /* Giữ nội dung gọn gàng */
-        }
-
         /* Định dạng cho phần summary */
         .summary-box {
-            background: #f8f9fa; /* Màu nền nhạt */
-            border-radius: 10px;
             padding-top: 20px;
-            max-width: 500px;
-            margin-left: 20px; /* Hoặc một khoảng cách phù hợp */
+            max-width: 1000px;
+            margin-left: 70px; /* Hoặc một khoảng cách phù hợp */
             text-align: left;
         }
 
         /* Tiêu đề của summary */
         .summary-box p {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             margin-left: 20px;
@@ -79,17 +68,31 @@
             text-align: left;
         }
 
-        /* Định dạng bảng */
         .summary-box table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-left: 50px; /* Canh bảng về bên trái */
+            min-width: 500px;
+            width: 50%;
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
+            margin-top: 15px;
+            border-radius: 8px; /* Bo góc */
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
         }
 
-        /* Các dòng trong bảng */
-        .summary-box td {
-            padding: 5px 0;
+        .summary-box table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Màu cho hàng lẻ */
         }
+
+        .summary-box table th,
+        .summary-box table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-box table th {
+            background-color: #083768;
+            color: whitesmoke;
+        }
+
 
         /* Định dạng đường link */
         .summary-box a {
@@ -108,69 +111,62 @@
             transform: scale(1.05);
         }
 
-        /* Chấm đầu dòng đẹp hơn */
-        .summary-box a::before {
-            content: "• ";
-            color: #dc3545;
-            font-weight: bold;
-            margin-right: 5px;
+        /* Định dạng cho phần summary */
+        .summary-box2 {
+            padding-top: 20px;
+            max-width: 1000px;
+            text-align: left;
+            /*margin-right: 20px;*/
         }
 
-        /* Tổng quan bảng */
-        .table {
-            min-width: 700px;
-            width: 100%;
+        /* Tiêu đề của summary */
+        .summary-box2 p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            /*margin-left: 20px;*/
+            color: #ed5b1b;
+            text-align: left;
+        }
+
+        .summary-box2 table {
+            min-width: 500px;
+            width: 70%;
             border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
             margin-top: 15px;
-            background-color: #fff;
             border-radius: 8px; /* Bo góc */
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
         }
 
-        /* Tiêu đề bảng */
-        .table thead {
-            background-color: #083768; /* Màu nền xanh */
-            color: white;
-            text-align: left;
-            font-size: 14px;
+        .summary-box2 table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Màu cho hàng lẻ */
         }
 
-        /* Dòng tiêu đề */
-        .table thead th {
-            padding: 12px;
-            border: 1px solid #dee2e6;
+        .summary-box2 table th,
+        .summary-box2 table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-box2 table th {
+            background-color: #083768;
             color: whitesmoke;
         }
 
-        /* Nội dung bảng */
-        .table tbody td {
-            padding: 10px;
-            border: 1px solid #dee2e6;
-            font-size: 14px;
-            color: #333;
+        /* Hover hiệu ứng */
+        .summary-box2 a:hover {
+            color: #0056b3;
+            transform: scale(1.05);
         }
 
-        /* Dòng xen kẽ màu */
-        .table-striped tbody tr:nth-child(odd) {
-            background-color: #f8f9fa;
+        .summary-container {
+            display: flex;
+            justify-content: space-between; /* Để hai div cách đều nhau */
         }
 
-        /* Khi di chuột vào dòng */
-        .table tbody tr:hover {
-            background-color: #e2e6ea;
-            transition: background 0.3s ease-in-out;
-        }
-
-        /* Canh giữa nội dung số thứ tự */
-        .table tbody td:first-child {
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Định dạng lại cột tiêu đề */
-        .table th {
-            font-weight: bold;
+        .summary-box, .summary-box2 {
+            flex: 1; /* Cả hai div chiếm cùng một không gian */
         }
 
         /* Responsive bảng trên màn hình nhỏ */
@@ -178,6 +174,7 @@
             .table {
                 font-size: 12px;
             }
+
             .table thead th,
             .table tbody td {
                 padding: 8px;
@@ -427,16 +424,22 @@
                        aria-expanded="false" aria-controls="sidebarUsersMenu">
                         <span class="nav-text">📋 User List </span>
                     </a>
-                    <div class="collapse" id="sidebarUsersMenu">
+                    <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- All Users</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Super Admin</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Admin Users</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Admin Courses</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- VIP Students</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Casual Students</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Teachers</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Marketers</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
                         </ul>
                     </div>
                 </li>
@@ -446,20 +449,18 @@
                        aria-expanded="false" aria-controls="sidebarCoursesMenu">
                         <span class="nav-text">📋 Course List </span>
                     </a>
-                    <div class="collapse" id="sidebarCoursesMenu">
+                    <div class="collapse show" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                All Courses</a></li>
+                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Active Courses</a></li>
+                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Inactive courses</a></li>
+                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Pending courses</a></li>
+                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -472,160 +473,192 @@
     <!-- Start right Content here -->
     <div class="page-content">
 
-        <div class="summary-box">
-            <p>The summary of Accounts</p>
-            <table>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                            The total of registered accounts: <span th:text="${sumOfUsers}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of super admin accounts: <span th:text="${sumOfSuperAdmin}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of admin user management accounts: <span th:text="${sumOfAdminUsers}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of admin course management accounts: <span th:text="${sumOfAdminCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                            The total of vip student accounts: <span th:text="${sumOfVipUsers}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                            The total of casual student accounts: <span th:text="${sumOfCasualUsers}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                            The total of teacher accounts: <span th:text="${sumOfTeacherUsers}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of marketer accounts: <span th:text="${sumOfMarketerUsers}"></span>
-                        </a>
-                    </td>
-                </tr>
-            </table>
+        <div class="summary-container">
+            <div class="summary-box">
+                <p>The summary of Accounts</p>
+                <table>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Registered accounts</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span th:text="${sumOfUsers}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">User Manager</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span th:text="${sumOfAdminUsers}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Course Manager</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfAdminCourses}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">VIP Student</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfVipUsers}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Casual Student</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfCasualUsers}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Teacher</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfTeacherUsers}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Marketer</a></td>
+                        <td>
+                            <a th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfMarketerUsers}"></span></a></td>
+                    </tr>
+                </table>
+            </div>
 
-        </div> <!-- end row -->
-
-        <div class="summary-box">
-            <p>The 10 most recently registered accounts</p>
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="user, index : ${users}">
-                    <td th:text="${index.count}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.email}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="summary-box2">
+                <p>The 10 most recently registered accounts</p>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user, index : ${users}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="summary-box">
-            <p>The summary of Courses</p>
-            <table>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of course: <span th:text="${totalCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of active courses: <span th:text="${sumOfActiveCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of inactive courses: <span th:text="${sumOfInactiveCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           style="text-decoration: none; color: inherit;">
-                            The total of pending courses: <span th:text="${sumOfPendingCourses}"></span>
-                        </a>
-                    </td>
-                </tr>
-            </table>
-        </div> <!-- end row -->
+        <div class="summary-container">
+            <div class="summary-box">
+                <p>The summary of Courses</p>
+                <table>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Total of courses</a></td>
+                        <td>
+                            <a th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${totalCourses}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Active courses</a></td>
+                        <td>
+                            <a th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfActiveCourses}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Inactive courses</a></td>
+                        <td>
+                            <a th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfInactiveCourses}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Pending courses</a>
+                        </td>
+                        <td>
+                            <a th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfPendingCourses}"></span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;">Rejected courses</a>
+                        </td>
+                        <td>
+                            <a th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                               style="text-decoration: none; color: inherit;"><span
+                                    th:text="${sumOfRejectedCourses}"></span></a>
+                        </td>
+                    </tr>
+                </table>
+            </div> <!-- end row -->
 
-        <div class="summary-box">
-            <p>Top 5 courses with the most student enrollments</p>
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Title</th>
-                    <th>Grade</th>
-                    <th>Subject</th>
-                    <th>Created By</th>
-                    <th>Status</th>
-                    <th>Enrollment Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="course, index : ${courses}">
-                    <td th:text="${index.count}"></td>
-                    <td th:text="${course.course.title}"></td>
-                    <td th:text="${course.course.grade.name}"></td>
-                    <td th:text="${course.course.subject.name}"></td>
-                    <td th:text="${course.course.createdBy.username}"></td>
-                    <td th:text="${course.course.courseStatus.name()}"></td>
-                    <td th:text="${course.enrollmentCount}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="summary-box2">
+                <p>Top 5 courses with the most student enrollments</p>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Grade</th>
+                        <th>Subject</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>Enrollment Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="course, index : ${courses}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${course.course.title}"></td>
+                        <td th:text="${course.course.grade.name}"></td>
+                        <td th:text="${course.course.subject.name}"></td>
+                        <td th:text="${course.course.createdBy.username}"></td>
+                        <td th:text="${course.course.courseStatus.name()}"></td>
+                        <td th:text="${course.enrollmentCount}"></td>
+                    </tr>
+                    </tbody>
+                </table>
 
-        </div> <!-- end row -->
-
+            </div> <!-- end row -->
+        </div>
         <!-- End Container Fluid -->
 
     </div>

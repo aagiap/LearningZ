@@ -24,6 +24,9 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
+        .btn {
+            border-radius: 8px;
+        }
 
         .sub-navbar-nav {
             padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
@@ -314,17 +317,20 @@
                     <div class="collapse show" id="sidebarUsers">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                All Courses</a></li>
+                                   th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Active Courses</a></li>
+                                   th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Inactive courses</a></li>
+                                   th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Pending courses</a></li>
+                                   th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
+                                   courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -424,6 +430,8 @@
                                     <input type="hidden" name="id" th:value="${course.id}"/>
                                     <input type="hidden" name="status" th:value="${course.courseStatus}"/>
                                     <input type="hidden" name="action" class="action-field"/>
+                                    <input type="hidden" name="feedbackInput" id="feedbackInput"/> <!-- Input feedback ẩn -->
+
 
                                     <button type="submit" class="btn btn-link text-success" title="Approve" value="approve"
                                             onclick="setAction(event, this);">
@@ -441,6 +449,15 @@
                                     event.preventDefault();
                                     let form = button.closest("form");
                                     form.querySelector(".action-field").value = button.value; // Cập nhật action chính xác
+
+                                    if (button.value === "reject") {
+                                        let feedbackInput = prompt("Please enter feedback before rejecting:");
+                                        if (!feedbackInput) {
+                                            alert("You must provide feedback to reject the course.");
+                                            return;
+                                        }
+                                        document.getElementById("feedbackInput").value = feedbackInput; // Gán feedback vào input ẩn
+                                    }
 
                                     if (confirm(button.value === "approve" ?
                                         "Are you sure you want to approve this course?" :

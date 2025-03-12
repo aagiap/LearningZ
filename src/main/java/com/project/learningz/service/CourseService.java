@@ -172,7 +172,7 @@ public class CourseService {
 
     public void rejectCourse(Integer courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course Not Found"));
-        course.setCourseStatus(CourseStatus.INACTIVE);
+        course.setCourseStatus(CourseStatus.REJECTED);
         courseRepository.save(course);
     }
 
@@ -202,5 +202,9 @@ public class CourseService {
         }
 
         return topCourses;
+    }
+
+    public void saveCourse(Course course) {
+        courseRepository.save(course);
     }
 }

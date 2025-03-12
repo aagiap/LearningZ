@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Quiz Title</th>
+        <th>Lesson Title</th>
+<!--        <th>Grade Title</th>-->
+<!--        <th>Subject Title</th>-->
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="quiz, index:${quizzes}">
+        <td th:text="${index.count}"></td>
+        <td th:text="${quiz.title}"></td>
+        <td th:text="${lesson.title}"></td>
+<!--        <td th:text="${lesson.}"></td>-->
+<!--        <td th:text="${quiz.gradeDescription}"></td>-->
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

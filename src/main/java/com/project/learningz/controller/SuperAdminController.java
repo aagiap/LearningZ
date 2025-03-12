@@ -5,6 +5,7 @@ import com.project.learningz.constant.Role;
 import com.project.learningz.dto.TopCourseDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.User;
+import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.service.CourseService;
 import com.project.learningz.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class SuperAdminController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CourseRepository courseRepository;
 
     @GetMapping("/userlist_role")
     public String getUsers(@RequestParam(value = "role", required = false) String roleStr,
@@ -156,6 +159,7 @@ public class SuperAdminController {
             updatedUser.setEmail(user.getEmail());
             updatedUser.setPhoneNum(user.getPhoneNum());
             updatedUser.setRole(user.getRole());
+            updatedUser.setUserStatus(user.getUserStatus());
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
                 if (user.getPassword().length() < 6) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Password must be at least 6 characters");
@@ -279,6 +283,7 @@ public class SuperAdminController {
         Integer sumOfActiveCourses = courseService.sumOfCourseByStatus(CourseStatus.ACTIVE);
         Integer sumOfInactiveCourses = courseService.sumOfCourseByStatus(CourseStatus.INACTIVE);
         Integer sumOfPendingCourses = courseService.sumOfCourseByStatus(CourseStatus.PENDING);
+        Integer sumOfRejectedCourses = courseService.sumOfCourseByStatus(CourseStatus.REJECTED);
         Integer totalCourses = courseService.getAllCourses().size();
         List<TopCourseDTO> courses = courseService.getTop5Courses();
 
@@ -287,6 +292,7 @@ public class SuperAdminController {
         model.addAttribute("sumOfActiveCourses", sumOfActiveCourses);
         model.addAttribute("sumOfInactiveCourses", sumOfInactiveCourses);
         model.addAttribute("sumOfPendingCourses", sumOfPendingCourses);
+        model.addAttribute("sumOfRejectedCourses", sumOfRejectedCourses);
         model.addAttribute("totalCourses", totalCourses);
         model.addAttribute("courses", courses);
         model.addAttribute("sumOfUsers", sumOfUsers);
@@ -308,14 +314,19 @@ public class SuperAdminController {
             @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
             @RequestParam(value = "sort", required = false, defaultValue = "id") String sort,
             @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "feedbackInput", required = false) String feedbackInput,
             @RequestParam("action") String action,
             RedirectAttributes redirectAttributes) {
+        System.out.println(feedbackInput);
         try {
             if ("approve".equalsIgnoreCase(action)) {
                 courseService.approveCourse(id);
                 redirectAttributes.addFlashAttribute("successMessage", "Course has been approved successfully!");
             } else if ("reject".equalsIgnoreCase(action)) {
+                Course course = courseService.getCourseById(id);
+                course.setNote(feedbackInput);
                 courseService.rejectCourse(id);
+                courseService.saveCourse(course);
                 redirectAttributes.addFlashAttribute("successMessage", "Course has been rejected successfully!");
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Invalid action!");
@@ -354,7 +365,7 @@ public class SuperAdminController {
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("course", course);
-        return "user_management/course_detail";
+        return "user_management/admin_course_detail";
     }
 
 }

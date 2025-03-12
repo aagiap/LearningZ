@@ -21,6 +21,9 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
+        .btn {
+            border-radius: 8px;
+        }
 
         .user-latest p {
             color: #df5c09;
@@ -68,29 +71,57 @@
             text-align: center;
         }
 
-        .summary-box p {
-            font-size: 16px;
-            font-weight: bold;
-            color: #df5c09; /* Màu cam */
-            padding: 5px 15px;
-            left: 50%;
+        .summary-box {
+            padding-top: 20px;
+            max-width: 1000px;
+            margin-left: 70px; /* Hoặc một khoảng cách phù hợp */
+            text-align: left;
         }
 
+        /* Tiêu đề của summary */
+        .summary-box p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+            color: #ed5b1b;
+            text-align: left;
+        }
 
         .summary-box table {
-            width: 40%;
-            border-collapse: collapse;
-            margin-left: 20px;
+            min-width: 500px;
+            width: 50%;
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
+            margin-top: 15px;
+            border-radius: 8px; /* Bo góc */
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
         }
+
+        .summary-box table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Màu cho hàng lẻ */
+        }
+
+        .summary-box table th,
+        .summary-box table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-box table th {
+            background-color: #083768;
+            color: whitesmoke;
+        }
+
 
         /* Định dạng đường link */
         .summary-box a {
             display: block;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             text-decoration: none;
-            color: #007bff;
-            padding: 5px;
+            color: #083768;
+            padding: 8px;
             transition: 0.3s;
         }
 
@@ -100,20 +131,12 @@
             transform: scale(1.05);
         }
 
-        .summary-box td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd; /* Đường kẻ ngăn cách */
-            text-align: left;
-            font-size: 12px;
-        }
-
-        .summary-box td:last-child {
-            font-weight: bold;
-            color: #0d47a1; /* Màu đỏ cho số lượng */
-        }
-
-        .summary-box tbody tr:nth-child(even) {
-            background-color: #f2f2f2; /* Màu nền xen kẽ */
+        .container-fluid-content {
+            display: flex;
+            gap: 20px; /* Khoảng cách giữa 2 box */
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
         }
 
 
@@ -371,14 +394,14 @@
                                     <span class="nav-text">📋 List </span>
                                 </a>
                                 <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- All Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Super Admin</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Courses</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- VIP Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Casual Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Teachers</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Marketers</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">All Users</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Super Admin</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Users Manager</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Courses Manager</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">VIP Students</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Casual Students</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Teachers</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Marketers</a></li>
                                 </ul>
                             </li>
 
@@ -399,77 +422,53 @@
     <div class="page-content">
 
         <!-- Start Container Fluid -->
-        <div class="container-fluid" style="padding-top: 30px">
+        <div class="container-fluid-content" style="padding-top: 30px">
 
             <!-- Start here.... -->
             <div class="summary-box" style="margin-bottom: 40px;">
                 <p>The summary of Accounts</p>
                 <table>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                                The total of registered accounts: <span th:text="${sumOfUsers}"></span>
-                            </a>
-                        </td>
+                        <th>Description</th>
+                        <th>Quantity</th>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">
-                                The total of super admin accounts: <span th:text="${sumOfSuperAdmin}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">Registered accounts</span></a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfUsers}"></span></a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">
-                                The total of admin user management accounts: <span th:text="${sumOfAdminUsers}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">Super Admin</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfSuperAdmin}"></span></a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">
-                                The total of admin course management accounts: <span th:text="${sumOfAdminCourses}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">User Manager</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfAdminUsers}"></span></a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                                The total of vip student accounts: <span th:text="${sumOfVipUsers}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">Course manager</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfAdminCourses}"></span></a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                                The total of casual student accounts: <span th:text="${sumOfCasualUsers}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">VIP Student</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfVipUsers}"></span></a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">
-                                The total of teacher accounts: <span th:text="${sumOfTeacherUsers}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">Casual Student</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfCasualUsers}"></span></a></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <a th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">
-                                The total of marketer accounts: <span th:text="${sumOfMarketerUsers}"></span>
-                            </a>
-                        </td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">Teacher</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfTeacherUsers}"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td><a th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;">Marketer</a></td>
+                        <td><a th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="text-decoration: none; color: inherit;"><span th:text="${sumOfMarketerUsers}"></span></a></td>
                     </tr>
                 </table>
 
             </div> <!-- end row -->
 
-            <div class="user-latest">
+            <div class="summary-box">
                 <p>The 10 most recently registered accounts</p>
                 <table class="ten-user">
                     <thead>

@@ -96,6 +96,7 @@ public class UserManagementService {
             updatedUser.setEmail(user.getEmail());
             updatedUser.setPhoneNum(user.getPhoneNum());
             updatedUser.setRole(user.getRole());
+            updatedUser.setUserStatus(user.getUserStatus());
             userRepository.save(updatedUser);
         }
     }

@@ -24,6 +24,9 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
+        .btn {
+            border-radius: 8px;
+        }
 
         .sub-navbar-nav {
             padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
@@ -301,16 +304,22 @@
                        aria-expanded="false" aria-controls="sidebarUsersMenu">
                         <span class="nav-text">📋 User List </span>
                     </a>
-                    <div class="collapse" id="sidebarUsersMenu">
+                    <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- All Users</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Super Admin</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Admin Users</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Admin Courses</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- VIP Students</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Casual Students</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Teachers</a></li>
-                            <li><a class="sub-nav-link" th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">- Marketers</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
                         </ul>
                     </div>
                 </li>
@@ -323,17 +332,15 @@
                     <div class="collapse" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                All Courses</a></li>
+                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Active Courses</a></li>
+                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Inactive courses</a></li>
+                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">-
-                                Pending courses</a></li>
+                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -380,10 +387,17 @@
                                     <label>Username</label>
                                     <input th:field="*{username}" type="text" class="form-control" readonly required>
                                 </div>
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <input th:field="*{userStatus}" type="text" class="form-control" readonly required>
+<!--                                <div class="form-group">-->
+<!--                                    <label>Status</label>-->
+<!--                                    <input th:field="*{userStatus}" type="text" class="form-control" readonly required>-->
 
+<!--                                </div>-->
+                                <div class="form-group">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" th:field="*{userStatus}" required style="border-radius: 5px;">
+                                        <option value="ACTIVE">ACTIVE</option>
+                                        <option value="BANNED">BANNED</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

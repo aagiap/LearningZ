@@ -86,6 +86,7 @@ public class CourseApprovementForAdminController {
         Integer sumOfActiveCourses = courseService.sumOfCourseByStatus(CourseStatus.ACTIVE);
         Integer sumOfInactiveCourses = courseService.sumOfCourseByStatus(CourseStatus.INACTIVE);
         Integer sumOfPendingCourses = courseService.sumOfCourseByStatus(CourseStatus.PENDING);
+        Integer sumOfRejectedCourses = courseService.sumOfCourseByStatus(CourseStatus.REJECTED);
         Integer totalCourses = courseService.getAllCourses().size();
         List<TopCourseDTO> courses = courseService.getTop5Courses();
 
@@ -94,6 +95,7 @@ public class CourseApprovementForAdminController {
         model.addAttribute("sumOfActiveCourses", sumOfActiveCourses);
         model.addAttribute("sumOfInactiveCourses", sumOfInactiveCourses);
         model.addAttribute("sumOfPendingCourses", sumOfPendingCourses);
+        model.addAttribute("sumOfRejectedCourses", sumOfRejectedCourses);
         model.addAttribute("totalCourses", totalCourses);
         model.addAttribute("courses", courses);
         return "user_management/course_dashboard";
@@ -106,6 +108,7 @@ public class CourseApprovementForAdminController {
             @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
             @RequestParam(value = "sort", required = false, defaultValue = "id") String sort,
             @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "feedbackInput", required = false) String feedbackInput,
             @RequestParam("action") String action,
             RedirectAttributes redirectAttributes) {
         try {
@@ -113,7 +116,10 @@ public class CourseApprovementForAdminController {
                 courseService.approveCourse(id);
                 redirectAttributes.addFlashAttribute("successMessage", "Course has been approved successfully!");
             } else if ("reject".equalsIgnoreCase(action)) {
+                Course course = courseService.getCourseById(id);
+                course.setNote(feedbackInput);
                 courseService.rejectCourse(id);
+                courseService.saveCourse(course);
                 redirectAttributes.addFlashAttribute("successMessage", "Course has been rejected successfully!");
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Invalid action!");

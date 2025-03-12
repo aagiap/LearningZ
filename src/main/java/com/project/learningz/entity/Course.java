@@ -55,6 +55,9 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private CourseStatus courseStatus;
 
+    @Column(name = "notes", columnDefinition = "NVARCHAR(MAX)")
+    private String note;
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Chapter> chapters;
 }

@@ -142,6 +142,11 @@
                         <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}"/>
                         <button type="submit" class="view-btn" title="View Documents List"><i class="fa-solid fa-file"></i></button>
                     </form>
+                    <form action="/teacher/quizzes" method="get">
+<!--                        <input type="hidden" name="userId" th:value="${user.getId()}">-->
+                        <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}"/>
+                        <button type="submit" class="view-btn" title="View Quizzes List"><i class="fa-solid fa-file"></i></button>
+                    </form>
                 </div>
             </td>
         </tr>

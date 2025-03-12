@@ -24,6 +24,12 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
 
+    <style>
+        .btn {
+            border-radius: 8px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -277,14 +283,14 @@
                                     <span class="nav-text">📋 List </span>
                                 </a>
                                 <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- All Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Super Admin</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Admin Courses</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- VIP Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Casual Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Teachers</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">- Marketers</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">All Users</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Super Admin</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Users Manager</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Courses Manager</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">VIP Students</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Casual Students</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Teachers</a></li>
+                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Marketers</a></li>
                                 </ul>
                             </li>
 
@@ -336,10 +342,18 @@
                                     <label>Username</label>
                                     <input th:field="*{username}" type="text" class="form-control" readonly required>
                                 </div>
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <input th:field="*{userStatus}" type="text" class="form-control" readonly required>
+<!--                                <div class="form-group">-->
+<!--                                    <label>Status</label>-->
+<!--                                    <input th:field="*{userStatus}" type="text" class="form-control" readonly required>-->
 
+<!--                                </div>-->
+                                <div class="form-group">
+                                    <label for="status" class="form-label">Role</label>
+                                    <select class="form-control" id="status" th:field="*{userStatus}" required
+                                            style="border-radius: 5px;">
+                                        <option value="ACTIVE">ACTIVE</option>
+                                        <option value="BANNED">BANNED</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
