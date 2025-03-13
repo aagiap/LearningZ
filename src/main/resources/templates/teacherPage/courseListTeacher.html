@@ -27,7 +27,12 @@
             <button onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
             <br>
             <ul>
-                <li><a href="#">📊 Dashboard</a></li>
+                <li>
+                    <a href="#" onclick="viewDashBoard(this)">📊 Dashboard</a>
+                    <form action="/teacher/dashboard" id="viewDashboard">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
                 <li><a href="/teacher">📚 Courses Management</a></li>
                 <li>
                     <a href="#" onclick="viewSubjectList(this)">📖 Subjects List</a>
@@ -65,6 +70,10 @@
             <select id="subjectFilter" name="subjectId">
                 <option value="0">All Subjects</option>
                 <option th:each="subject : ${subjectList}" th:value="${subject.getId()}" th:text="${subject.getName()}"></option>
+            </select>
+            <select name="gradeId" id="gradeFilter">
+                <option value="0">All Grade</option>
+                <option th:each="grade : ${gradeList}" th:value="${grade.getId()}" th:text="${grade.getName()}"></option>
             </select>
             <input type="submit" value="Search">
         </form>
@@ -201,6 +210,10 @@
     }
     function viewSubjectList(e){
         let form = document.querySelector('#viewSubjectList')
+        form.submit();
+    }
+    function viewDashBoard(e){
+        let form = document.querySelector('#viewDashboard');
         form.submit();
     }
 </script>

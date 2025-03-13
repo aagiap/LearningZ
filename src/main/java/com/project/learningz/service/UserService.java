@@ -1,6 +1,7 @@
 package com.project.learningz.service;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.dto.UserDetailDTO;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -152,6 +153,10 @@ public class UserService {
             throw new IllegalArgumentException("User cannot be null");
         }
         userRepository.save(user);
+    }
+
+    public List<UserDetailDTO> getTop3UserByTeacherId(int userId) {
+        return userRepository.getTop3UserByTeacherId(userId);
     }
 
 }

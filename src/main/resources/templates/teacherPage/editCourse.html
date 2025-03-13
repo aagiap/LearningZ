@@ -25,7 +25,12 @@
             <button onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
             <br>
             <ul>
-                <li><a href="#">📊 Dashboard</a></li>
+                <li>
+                    <a href="#" onclick="viewDashBoard(this)">📊 Dashboard</a>
+                    <form action="/teacher/dashboard" id="viewDashboard">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
                 <li><a href="/teacher">📚 Courses Management</a></li>
                 <li>
                     <a href="#" onclick="viewSubjectList(this)">📖 Subjects List</a>
@@ -33,6 +38,7 @@
                         <input type="number" name="userId" th:value="${user.getId()}" hidden>
                     </form>
                 </li>
+                <li><a href="/teacher/questionList">❓ Question List</a></li>
             </ul>
         </div>
 
@@ -65,23 +71,19 @@
         <input type="text" name="title" th:value="${course.title}" required>
 
         <label>Subject:</label>
-        <select id="subject" name="subjectId">
-            <option th:each="subject : ${subjectList}" th:value="${subject.getId()}" th:selected="${course.subject.getId() == subject.getId()}" th:text="${subject.getName()}"></option>
-        </select>
+        <input name="subjectName" th:value="${course.getSubject().getName()}" readonly>
+        <input type="hidden" name="subjectId" th:value="${course.getSubject().getId()}">
 
         <label>Grade:</label>
-        <select name="gradeId" required>
-            <option value="1" th:selected="${course.getGrade().getId() == 1}">Grade 10</option>
-            <option value="2" th:selected="${course.getGrade().getId() == 2}">Grade 11</option>
-            <option value="3" th:selected="${course.getGrade().getId() == 3}">Grade 12</option>
-        </select>
+        <input name="gradeName" th:value="${course.getGrade().getName()}" readonly>
+        <input type="hidden" name="gradeId" th:value="${course.getGrade().getId()}">
 
         <label>Status:</label>
         <div th:if="${numberOfLessons == 0}">
             <p style="color: red;"> <b>Add lessons to activate course</b></p>
             <input th:value="${statusList.get(1)}" name="status" readonly>
         </div>
-        <select th:if="${numberOfLessons != 0}" name="status" required>
+        <select th:if="${numberOfLessons != 0}" name="status" required disabled>
             <option th:value="${statusList.get(0)}" th:selected="${course.getCourseStatus() == statusList.get(0)}" th:text="${statusList.get(0)}"></option>
             <option th:value="${statusList.get(1)}" th:selected="${course.getCourseStatus() == statusList.get(1)}" th:text="${statusList.get(1)}"></option>
         </select>
@@ -97,7 +99,7 @@
 
         <div class="btn-group">
             <button type="submit" class="save-btn">Save</button>
-            <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+            <button type="button" class="cancel-btn" onclick="closeEditForm()">Exit</button>
         </div>
 
         <a href="/teacher" id="returnCourseList" hidden></a>
@@ -168,6 +170,10 @@
     }
     function viewSubjectList(e){
         let form = document.querySelector('#viewSubjectList')
+        form.submit();
+    }
+    function viewDashBoard(e){
+        let form = document.querySelector('#viewDashboard');
         form.submit();
     }
 </script>

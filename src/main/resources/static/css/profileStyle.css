@@ -38,10 +38,20 @@
 }
 
 .profileInfo-info {
-    background-color: #ffffff;
+    width: 70%;
+    margin: auto;
+    border: none;
     padding: 20px;
-    border-radius: 10px;
-    flex: 2;
+    background: #fff;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
 }
 
 .profileInfo-info h2 {
@@ -133,4 +143,19 @@
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
+}
+#vipButton{
+    background-color: #007c91;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+    animation: glowing-border 1.5s infinite alternate;
+}
+@keyframes glowing-border {
+    0% { box-shadow: 0 0 5px #00f; }
+    50% { box-shadow: 0 0 20px #00f, 0 0 30px #0ff; }
+    100% { box-shadow: 0 0 5px #00f; }
 }
