@@ -1,6 +1,7 @@
 package com.project.learningz.service;
 
 
+import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.entity.Quiz;
 import com.project.learningz.repository.QuizRepository;
@@ -41,8 +42,8 @@ public class QuizService {
         return quizRepository.findByCourseId(courseId);
     }
 
-    public List<Quiz> getQuizzesByLessonId(Integer lessonId) {
-        return quizRepository.findByLessonId(lessonId);
+    public List<QuizDetailDTO> getQuizzesByLessonId(Integer lessonId) {
+        return quizRepository.findQuizzesByLessonId(lessonId);
     }
 
 }

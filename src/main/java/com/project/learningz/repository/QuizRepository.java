@@ -1,5 +1,6 @@
 package com.project.learningz.repository;
 
+import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.entity.Quiz;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -64,14 +65,15 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
             "WHERE co.id = :courseId")
     List<Quiz> findByCourseId(@Param("courseId") int courseId);
 
-    @Query("SELECT q " +
+    @Query("SELECT new com.project.learningz.dto.QuizDetailDTO(q.id, q.totalQuestions,q.timeLimit, q.title, co.title, s.name, c.chapterTitle, l.title, g.name) " +
             "FROM Quiz q " +
             "JOIN q.lesson l " +
             "JOIN l.chapter c " +
             "JOIN c.course co " +
             "JOIN co.grade g " +
-            "WHERE l.id = :lessonId")
-    List<Quiz> findByLessonId(@Param("lessonId") Integer lessonId);
+            "JOIN co.subject s " +
+            "WHERE q.id = :lessonId")
+    List<QuizDetailDTO> findQuizzesByLessonId(@Param("lessonId") Integer lessonId);
 
 
 }

@@ -75,4 +75,22 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
                                            @Param("lesson") String lesson,
                                            Pageable pageable);
 
+    @Query("""
+                SELECT new com.project.learningz.dto.QuestionDetailDTO(
+                    q.id, q.content, q.correctOption, 
+                    co.title, s.name, ch.chapterTitle, l.title, g.name
+                )
+                FROM QuestionBank q
+                JOIN QuizQuestion qq ON q.id = qq.question.id
+                JOIN Quiz qu ON qq.quiz.id = qu.id
+                JOIN qu.lesson l
+                JOIN l.chapter ch
+                JOIN ch.course co
+                JOIN co.subject s
+                JOIN co.grade g
+                WHERE (qq.quiz.id = :quizId)
+            """)
+    List<QuestionDetailDTO> getQuestionByQuizId(@Param("quizId") Integer quizId);
+
+
 }

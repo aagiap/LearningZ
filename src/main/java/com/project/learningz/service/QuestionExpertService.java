@@ -32,5 +32,9 @@ public class QuestionExpertService {
         return questionExpertRepository.filterQuestion(grade, course, subject, chapter, lesson, pageable);
     }
 
+    public List<QuestionDetailDTO> filterQuestionByQuizId(Integer quizId) {
+        return questionExpertRepository.getQuestionByQuizId(quizId);
+    }
+
 
 }
