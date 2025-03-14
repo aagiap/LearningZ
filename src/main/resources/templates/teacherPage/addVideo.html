@@ -25,7 +25,12 @@
             <button onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
             <br>
             <ul>
-                <li><a href="#">📊 Dashboard</a></li>
+                <li>
+                    <a href="#" onclick="viewDashBoard(this)">📊 Dashboard</a>
+                    <form action="/teacher/dashboard" id="viewDashboard">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
                 <li><a href="/teacher">📚 Courses Management</a></li>
                 <li>
                     <a href="#" onclick="viewSubjectList(this)">📖 Subjects List</a>
@@ -33,6 +38,7 @@
                         <input type="number" name="userId" th:value="${user.getId()}" hidden>
                     </form>
                 </li>
+                <li><a href="/teacher/questionList">❓ Question List</a></li>
             </ul>
         </div>
 
@@ -69,7 +75,7 @@
 
         <div class="btn-group">
             <button type="submit" class="create-btn">Create</button>
-            <button type="button" class="cancel-btn" onclick="closeEditForm()">Cancel</button>
+            <button type="button" class="cancel-btn" onclick="closeEditForm()">Exit</button>
         </div>
     </form>
     <div class="video-container">
@@ -141,6 +147,11 @@
 
     function viewSubjectList(e) {
         let form = document.querySelector('#viewSubjectList')
+        form.submit();
+    }
+
+    function viewDashBoard(e){
+        let form = document.querySelector('#viewDashboard');
         form.submit();
     }
 </script>

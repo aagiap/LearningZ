@@ -131,15 +131,33 @@
     <div class="profileInfo">
         <div class="profileInfo-avatar">
             <img th:src="@{${avatarUrl}}" alt="Avatar">
-            <h3 id="username" th:text="${username}"></h3>
-            <p id="role" th:text="${role}"></p>
+            <h3 id="username"><b th:text="${username}"></b></h3>
+            <p id="role"><b th:text="${role}"></b></p>
         </div>
         <div class="profileInfo-info">
             <h2>Personal Information</h2>
-            <p id="email" th:text="'Email:' + ${email}"></p>
-            <p id="phoneNumber"
-               th:text="'Phone number:' + (${phoneNumber != null} ? ${phoneNumber} : 'Not uploaded')"></p>
-            <p id="vip_status">VIP: Còn lại 1 ngày</p>
+            <table>
+                <tr>
+                    <td><b>Email</b></td>
+                    <td th:text="${email}"></td>
+                </tr>
+                <tr>
+                    <td><b>Phone Number</b></td>
+                    <td th:text="(${phoneNumber != null} ? ${phoneNumber} : 'Not uploaded')"></td>
+                </tr>
+                <tr th:if="${membership != null}">
+                    <td><b>VIP Package</b></td>
+                    <td>
+                        <span th:text="${membership.getVipPackage().getPackageName()}"></span>
+                        <span><b th:text="'(Days remain: ' + ${dayMembershipRemain} + ')'"></b></span>
+                    </td>
+                </tr>
+                <tr th:if="${membership == null}">
+                    <td><b>VIP Package</b></td>
+                    <td>Not registered. <button id="vipButton" onclick="vipRegister(this)">Register VIP</button></td>
+                </tr>
+            </table>
+            <a href="/vip-packages" id="vipRegister" hidden>Register VIP Membership</a>
             <button class="edit-profile-btn" onclick="location.href='/home/profile/profile_edit'">Edit Profile</button>
         </div>
     </div>
@@ -149,10 +167,11 @@
             <div class="course-list-container">
                 <ul id="courseList">
                     <li th:each="course : ${courseList}" class="course-item">
-                        <div class="course-title" th:text="${course.getTitle()}"></div>
+                        <div class="course-title" ><b th:text="${course.getTitle()}"></b></div>
                         <div class="course-view">
                             <button onclick="viewCourseDetails(this)">View details</button>
-                            <a hidden id="viewCourseDetailsRequest" th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
+                            <a hidden id="viewCourseDetailsRequest"
+                               th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
                         </div>
                     </li>
                 </ul>
@@ -171,18 +190,22 @@
     }
 
     // Đóng dropdown khi click ra ngoài
-    document.addEventListener("click", function(event) {
+    document.addEventListener("click", function (event) {
         var avatarContainer = document.querySelector(".avatar-container");
         var dropdown = document.getElementById("dropdownMenu");
         if (!avatarContainer.contains(event.target)) {
             dropdown.style.display = "none";
         }
     });
+
     function viewCourseDetails(button) {
         let link = button.parentElement.querySelector("#viewCourseDetailsRequest");
         if (link) {
             link.click();
         }
+    }
+    function vipRegister(e){
+        document.querySelector("#vipRegister").click();
     }
 </script>
 </body>

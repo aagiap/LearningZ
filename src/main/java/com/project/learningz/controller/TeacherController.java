@@ -45,6 +45,9 @@ public class TeacherController {
     @Autowired
     private SubjectService subjectService;
 
+    @Autowired
+    private GradeService gradeService;
+
     @GetMapping(path = "/teacher")
     public String courseList(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -77,13 +80,16 @@ public class TeacherController {
         subjectList = subjectService.getAllSubjects();
         model.addAttribute("subjectList", subjectList);
 
+        List<Grade> gradeList = gradeService.getAllGrades();
+        model.addAttribute("gradeList", gradeList);
         return "/teacherPage/courseListTeacher";
     }
 
     @GetMapping(path = "/teacher/search")
     public String courseListSearch(Model model,
                                    @RequestParam("courseSearchKey") String courseSearchKey,
-                                   @RequestParam("subjectId") int subjectId) {
+                                   @RequestParam("subjectId") int subjectId,
+                                   @RequestParam("gradeId") int gradeId) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = new User();
         String email;
@@ -102,7 +108,7 @@ public class TeacherController {
             user = userService.findByUsername(username);
         }
         List<CourseDetailsDTO> courseList = new ArrayList<>();
-        courseList = courseService.findCourses(user.getId(), subjectId, courseSearchKey);
+        courseList = courseService.findCourses(user.getId(), subjectId, gradeId,courseSearchKey);
         if(courseList.isEmpty()){
             model.addAttribute("user",user);
             model.addAttribute("notification","Empty List");
@@ -114,6 +120,9 @@ public class TeacherController {
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
         model.addAttribute("subjectList", subjectList);
+
+        List<Grade> gradeList = gradeService.getAllGrades();
+        model.addAttribute("gradeList", gradeList);
 
         return "/teacherPage/courseListTeacher";
     }
@@ -788,5 +797,23 @@ public class TeacherController {
         }
         model.addAttribute("user", userService.getUserById(userId));
         return "/teacherPage/addSubject";
+    }
+
+    @GetMapping(path = "teacher/dashboard")
+    public String teacherDashboard(Model model,
+                                   @RequestParam("userId") int userId){
+        model.addAttribute("user", userService.getUserById(userId));
+        model.addAttribute("totalCourses", courseService.getTotalCoursesByUserId(userId));
+        model.addAttribute("totalVideos", courseService.getTotalVideosByUserId(userId));
+        model.addAttribute("totalDocs", courseService.getTotalDocsByUserId(userId));
+        model.addAttribute("totalStudents", courseService.getTotalStudentsByUserId(userId));
+        model.addAttribute("totalActiveCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.ACTIVE));
+        model.addAttribute("totalInactiveCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.INACTIVE));
+        model.addAttribute("totalPendingCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.PENDING));
+        model.addAttribute("top3Courses", courseService.getTop3CoursesListByUserId(userId));
+        model.addAttribute("top3Student", userService.getTop3UserByTeacherId(userId));
+        model.addAttribute("courseScoreList", courseService.getCourseAndScoreByUserId(userId));
+        model.addAttribute("courseLearnedList", courseService.getCourseLearnedStatsByUserId(userId));
+        return "teacherPage/Dashboard";
     }
 }

@@ -50,4 +50,8 @@ public class MembershipService {
         }
         userMembershipRepository.save(userMembership);
     }
+
+    public UserMembership findByUserID(int userID) {
+        return userMembershipRepository.findTopByUserOrderByExpirationDateDesc(userRepository.findById(userID));
+    }
 }

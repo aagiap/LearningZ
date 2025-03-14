@@ -4,6 +4,7 @@ import com.project.learningz.constant.Role;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.Grade;
 import com.project.learningz.entity.User;
+import com.project.learningz.entity.UserMembership;
 import com.project.learningz.repository.UserRepository;
 import com.project.learningz.service.*;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,9 @@ public class ProfileController {
 
     @Autowired
     private GradeService gradeService;
+
+    @Autowired
+    private MembershipService membershipService;
 
     @GetMapping(path = "/home/profile")
     public String profile(Model model) {
@@ -86,6 +92,17 @@ public class ProfileController {
         List<Grade> grades = gradeService.getAllGrades();
         model.addAttribute("grades", grades);
 
+        UserMembership membership = new UserMembership();
+        long dayMemberShipRemain;
+        membership = membershipService.findByUserID(user.getId());
+        if(membership != null){
+            if(membership.getExpirationDate().isAfter(LocalDate.now())){
+                dayMemberShipRemain = ChronoUnit.DAYS.between(LocalDate.now(),membership.getExpirationDate());
+                model.addAttribute("dayMembershipRemain", dayMemberShipRemain);
+            }
+        }
+
+        model.addAttribute("membership", membershipService.findByUserID(user.getId()));
         model.addAttribute("courseIdList", courseIdList);
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);

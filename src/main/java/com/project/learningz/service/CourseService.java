@@ -3,6 +3,8 @@ package com.project.learningz.service;
 import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.CourseDetailsDTO;
 import com.project.learningz.dto.TopCourseDTO;
+import com.project.learningz.dto.CourseLearnedStatsDTO;
+import com.project.learningz.dto.CourseStatsDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.specification.CourseSpecification;
@@ -72,18 +74,32 @@ public class CourseService {
         return courseRepository.allCoursesByUserID(userId);
     }
 
-    public List<CourseDetailsDTO> findCourses(int userId, int subjectId, String courseSearchKey) {
+    public List<CourseDetailsDTO> findCourses(int userId, int subjectId, int gradeId, String courseSearchKey) {
         if(subjectId != 0){
-            if(courseSearchKey != null && !courseSearchKey.isEmpty()){
-                return courseRepository.findCourses(userId, subjectId,courseSearchKey);
-            }else {
-                return courseRepository.findCourses(userId, subjectId, "");
+            if(gradeId == 0){
+                if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                    return courseRepository.findCourses(userId, subjectId,courseSearchKey);
+                }else {
+                    return courseRepository.findCourses(userId, subjectId, "");
+                }
+            }else{
+                if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                    return courseRepository.findCourses(userId, subjectId, gradeId,courseSearchKey);
+                }else {
+                    return courseRepository.findCourses(userId, subjectId, gradeId,"");
+                }
             }
-        }else{
+        }else if(gradeId == 0){
             if(courseSearchKey != null && !courseSearchKey.isEmpty()){
                 return courseRepository.findCourses(userId, courseSearchKey);
             }else{
                 return courseRepository.findCourses(userId, "");
+            }
+        }else{
+            if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                return courseRepository.findCoursesWithGrade(userId, gradeId, courseSearchKey);
+            }else{
+                return courseRepository.findCoursesWithGrade(userId, gradeId,"");
             }
         }
     }
@@ -206,5 +222,37 @@ public class CourseService {
 
     public void saveCourse(Course course) {
         courseRepository.save(course);
+    }
+
+    public int getTotalCoursesByUserId(int userId) {
+        return courseRepository.getTotalCoursesByUserId(userId);
+    }
+
+    public int getTotalVideosByUserId(int userId) {
+        return courseRepository.getTotalVideosByUserId(userId);
+    }
+
+    public int getTotalDocsByUserId(int userId) {
+        return courseRepository.getTotalDocsByUserId(userId);
+    }
+
+    public int getTotalStudentsByUserId(int userId) {
+        return courseRepository.getTotalStudentsByUserId(userId);
+    }
+
+    public int getTotalCourseWithStatusByUserId(int userId, CourseStatus status) {
+        return courseRepository.getTotalCourseWithStatusByUserId(userId, status);
+    }
+
+    public List<Course> getTop3CoursesListByUserId(int userId){
+        return courseRepository.getTop3CoursesListByUserId(userId);
+    }
+
+    public List<CourseStatsDTO> getCourseAndScoreByUserId(int userId){
+        return courseRepository.getCourseAndScoreByUserId(userId);
+    }
+
+    public List<CourseLearnedStatsDTO> getCourseLearnedStatsByUserId(int userId){
+        return courseRepository.getCourseLearnedStatsByUserId(userId);
     }
 }
