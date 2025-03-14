@@ -155,6 +155,21 @@
                             <div class="user-menu" id="userMenu">
                                 <ul>
                                     <li>Hello, <span id="username" th:text="${username}"></span></li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''MARKETING_TEAM'')')}">
+                                        <a href="/marketer/dashboard">Marketer HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''TEACHER'')')}">
+                                        <a href="/teacher">Teacher HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_USER_MANAGER'')')}">
+                                        <a href="/admin/users/dashboard">Admin User HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_COURSE_MANAGER'')')}">
+                                        <a href="/admin/courses/dashboard">Admin Course HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_USER_MANAGER'')')}">
+                                        <a href="/super_admin/dashboard">Admin HomePage</a>
+                                    </li>
                                     <li><a href="/home/profile">Profile</a></li>
                                     <li><a href="/home/change_password">Change Password</a></li>
                                     <li><a href="/logout">Sign Out</a></li>
