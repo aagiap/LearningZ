@@ -154,6 +154,13 @@ public class CourseController {
 
         int numberOfFeedbacks = usersCourseService.countReviewByCourseId(courseId);
         model.addAttribute("numberOfFeedbacks", numberOfFeedbacks);
+
+        Integer numberOfVideos = courseService.numberOfVideos(courseId);
+        Integer numberOfPDFs = courseService.numberOfPDFs(courseId);
+        Integer numberOfChapters = courseService.numberOfChapter(courseId);
+        model.addAttribute("numberOfChapters", numberOfChapters);
+        model.addAttribute("numberOfVideos", numberOfVideos);
+        model.addAttribute("numberOfPDFs", numberOfPDFs);
         return "course/course_details";
     }
 

@@ -255,4 +255,14 @@ public class CourseService {
     public List<CourseLearnedStatsDTO> getCourseLearnedStatsByUserId(int userId){
         return courseRepository.getCourseLearnedStatsByUserId(userId);
     }
+
+    public Integer numberOfChapter(Integer courseId){
+        return courseRepository.numberOfChapter(courseId);
+    }
+    public Integer numberOfVideos(Integer courseId){
+        return courseRepository.numberOfVideos(courseId);
+    }
+    public Integer numberOfPDFs(Integer courseId){
+        return courseRepository.numberOfPDFs(courseId);
+    }
 }

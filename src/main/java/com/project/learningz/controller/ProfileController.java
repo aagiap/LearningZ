@@ -1,5 +1,6 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.MembershipStatus;
 import com.project.learningz.constant.Role;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.Grade;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -92,6 +94,8 @@ public class ProfileController {
         List<Grade> grades = gradeService.getAllGrades();
         model.addAttribute("grades", grades);
 
+        List<UserMembership> userMemberships = membershipService.findUserMembershipByUserId(user.getId());
+        model.addAttribute("userMemberships", userMemberships);
         UserMembership membership = new UserMembership();
         long dayMemberShipRemain;
         membership = membershipService.findByUserID(user.getId());
@@ -209,4 +213,28 @@ public class ProfileController {
         }
         return "profile/profile_edit";
     }
+
+    @PostMapping("/home/profile/deactivateVipPackages")
+    public String deactivateMembership(@RequestParam("membershipId") Integer membershipId, RedirectAttributes redirectAttributes) {
+        try {
+            UserMembership membership = membershipService.findById(membershipId);
+            if (membership != null && membership.getStatus() == MembershipStatus.ACTIVE) {
+                User user = membership.getUser();
+                membership.setStatus(MembershipStatus.CANCELED);
+                membershipService.save(membership);
+                boolean stillHasVIP = membershipService.hasActiveOrCancelableVIP(user.getId());
+                if (!stillHasVIP) {
+                    user.setRole(Role.STUDENT);
+                    userService.save(user);
+                }
+                redirectAttributes.addFlashAttribute("success", "Membership deactivated successfully.");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Membership cannot be deactivated.");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred while deactivating the membership.");
+        }
+        return "redirect:/home/profile";
+    }
+
 }

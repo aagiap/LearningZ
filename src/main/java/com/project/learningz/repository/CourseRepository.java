@@ -145,7 +145,12 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
             "ORDER BY COUNT(uc.user) DESC")
     List<Object[]> getTop5PopularCoursesWithEnrollments(Pageable pageable);
 
-
+    @Query("SELECT COUNT (c) FROM Chapter c WHERE c.course.id = :courseId")
+    Integer numberOfChapter(Integer courseId);
+    @Query("SELECT COUNT (v) FROM Video v WHERE v.lesson.chapter.course.id= :courseId")
+    Integer numberOfVideos(Integer courseId);
+    @Query("SELECT COUNT (f) FROM PDF f WHERE f.lesson.chapter.course.id= :courseId")
+    Integer numberOfPDFs(Integer courseId);
     @Query("""
     SELECT COUNT(c.id)
     FROM Course AS c

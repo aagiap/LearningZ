@@ -4,9 +4,11 @@ import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
 import com.project.learningz.service.UserManagementService;
+import com.project.learningz.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,6 +31,8 @@ public class UserManagementController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserManagementRepository userManagementRepository;
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping("/userlist_role")
@@ -245,5 +249,15 @@ public class UserManagementController {
         }
     }
 
+    @PutMapping("/ban")
+    public ResponseEntity<String> banUser(@RequestParam("userId") Integer userId) {
+        boolean banned = userService.banUserById(userId);
+        User user = userService.getUserById(userId);
+        if (banned) {
+            return ResponseEntity.ok("Banned User " + user.getUsername() + " successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot banned this User!");
+        }
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.project.learningz.service;
 
+import com.project.learningz.constant.MembershipStatus;
 import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import com.project.learningz.entity.UserMembership;
@@ -54,4 +55,36 @@ public class MembershipService {
     public UserMembership findByUserID(int userID) {
         return userMembershipRepository.findTopByUserOrderByExpirationDateDesc(userRepository.findById(userID));
     }
+
+    public List<UserMembership> findUserMembershipByUserId(Integer userId) {
+        return userMembershipRepository.findByUserId(userId);
+    }
+    public boolean hasActiveOrCancelableVIP(Integer userId) {
+        List<UserMembership> memberships = userMembershipRepository.findByUserId(userId);
+        for (UserMembership membership : memberships) {
+            if ((membership.getStatus() == MembershipStatus.ACTIVE || membership.getStatus() == MembershipStatus.CANCELED) &&
+                    membership.getExpirationDate().isAfter(LocalDate.now())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public UserMembership findById(Integer UserMembershipId){
+        return userMembershipRepository.findById(UserMembershipId).get();
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Ho_Chi_Minh")
+    @Transactional
+    public void changeMembershipStatus() {
+        List<UserMembership> userMembershipList = userMembershipRepository.findAll();
+        LocalDate today = LocalDate.now();
+        for (UserMembership userMembership : userMembershipList) {
+            if (userMembership.getExpirationDate().isBefore(today) && userMembership.getStatus() != MembershipStatus.EXPIRED) {
+                userMembership.setStatus(MembershipStatus.EXPIRED);
+                userMembershipRepository.save(userMembership);
+            }
+        }
+    }
+
 }

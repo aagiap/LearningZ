@@ -8,6 +8,7 @@ import com.mservice.models.QueryStatusTransactionResponse;
 import com.mservice.processor.CreateOrderMoMo;
 import com.mservice.processor.QueryTransactionStatus;
 import com.project.learningz.config.MomoProperties;
+import com.project.learningz.constant.MembershipStatus;
 import com.project.learningz.constant.Role;
 import com.project.learningz.entity.Grade;
 import com.project.learningz.entity.User;
@@ -168,6 +169,7 @@ public class VipRegisterController {
                 userMembership.setUser(userLoggin);
                 userMembership.setVipPackage(vipPackage);
                 userMembership.setRegistrationDate(LocalDate.now());
+                userMembership.setStatus(MembershipStatus.ACTIVE);
                 userMembershipService.save(userMembership);
                 updateAuthentication(userLoggin);
                 model.addAttribute("success", "Payment successfully!");

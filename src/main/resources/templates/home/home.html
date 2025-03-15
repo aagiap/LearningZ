@@ -167,8 +167,8 @@
                                     <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_COURSE_MANAGER'')')}">
                                         <a href="/admin/courses/dashboard">Admin Course HomePage</a>
                                     </li>
-                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_USER_MANAGER'')')}">
-                                        <a href="/super_admin/dashboard">Admin HomePage</a>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN'')')}">
+                                        <a href="/super_admin/dashboard">Super Admin HomePage</a>
                                     </li>
                                     <li><a href="/home/profile">Profile</a></li>
                                     <li><a href="/home/change_password">Change Password</a></li>

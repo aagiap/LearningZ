@@ -1,6 +1,7 @@
 package com.project.learningz.service;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.constant.UserStatus;
 import com.project.learningz.dto.UserDetailDTO;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -159,4 +161,14 @@ public class UserService {
         return userRepository.getTop3UserByTeacherId(userId);
     }
 
+    public boolean banUserById(Integer userId){
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setUserStatus(UserStatus.BANNED);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 }
