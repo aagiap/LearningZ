@@ -68,8 +68,28 @@ public class DoQuizController {
 
         String avatarUrl = userService.getAvtByUsername(username);
         model.addAttribute("avatarUrl", avatarUrl);
+
         QuizJoinToGradeDTO quizJoinToGradeDTO = quizService.getQuizJoinToGradeDTOById(quizId);
         QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId,quizId);
+        Integer numAtempts;
+        if(quizResult == null) {
+             numAtempts = 0;
+        } else{
+             numAtempts = quizResult.getNumAtempts();
+        }
+        String quizType = String.valueOf(quiz.getLesson().getQuizType());
+        if(quizType.equals("EXAM")){
+            model.addAttribute("message", "This is an exam, you only have " + quizResultService.getMaxAttempts() + " attempt");
+            System.out.println(123);
+            if(quizResultService.isMaxAttempts(userId, quizId)){
+                model.addAttribute("message", "You have reached the maximum number of attempts");
+                model.addAttribute("Block", "Block");
+            }
+        }
+Integer minScoreToPass = quizResultService.getMinScoreToPass();
+        model.addAttribute("minScoreToPass", minScoreToPass);
+
+        model.addAttribute("numAtempts", numAtempts);
         model.addAttribute("quizResult", quizResult);
         model.addAttribute("quiz", quizJoinToGradeDTO);
         session.setAttribute("quiz", quiz);

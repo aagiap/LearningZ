@@ -24,4 +24,10 @@ public class QuizResult {
 
     @Column(name = "max_score",nullable = false)
     private Float maxScore;
+
+    @Column(name = "num_atempts",nullable = false)
+    private Integer numAtempts;
+
+    @Column(name = "result_status",nullable = false)
+    private String resultStatus;
 }

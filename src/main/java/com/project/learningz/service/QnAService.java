@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.BufferedReader;
@@ -16,7 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -119,14 +119,16 @@ public class QnAService {
         }
     }
 
-    private String readFixedTextFile() throws IOException {
-        // Read .txt file from resources
-        ClassPathResource resource = new ClassPathResource("document/PromptAI.txt");
+    public String readFixedTextFile() throws IOException {
+        Path filePath = Path.of("document/PromptAI.txt");
 
-        try (InputStream inputStream = resource.getInputStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            return reader.lines().collect(Collectors.joining("\n"));
+        // Kiểm tra nếu file không tồn tại
+        if (!Files.exists(filePath)) {
+            return "File không tồn tại!";
         }
+
+        return Files.lines(filePath, StandardCharsets.UTF_8)
+                .collect(Collectors.joining("\n"));
     }
 
     private Map<String, Object> buildRequest(String question) {

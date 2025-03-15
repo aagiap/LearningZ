@@ -65,8 +65,9 @@ public class LearningController {
         String progress = usersCourseService.progressStatus(userId, courseId);
         List<Course> courses = courseService.findCoursesByGradeId(course.getGrade().getId());
 
+        Integer minScoreToPass = quizResultService.getMinScoreToPass();
+        model.addAttribute("minScoreToPass", minScoreToPass);
         model.addAttribute("username", username);
-
         String avatarUrl = userService.getAvtByUsername(username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("courses", courses);

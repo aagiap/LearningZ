@@ -113,7 +113,7 @@
         <div class="sideLeft">
             <div>
                 <h4 style="text-align: center; color: #1C3B5C">Your progress</h4>
-                <p style=" opacity: 0.5">Complete quizzes on 8 points to record progress</p>
+                <p style=" opacity: 0.5" th:text="${'Complete quizzes on ' + minScoreToPass + ' points to record progress'}"></p>
             </div>
             <div>
                 <p th:text="'Pass quiz: '+${progress}"
@@ -159,13 +159,14 @@
         </table>
     </div>
     <div class="col-lg-3" style="margin-top: 48px;padding: inherit;">
-        <div class="related-courses">
+        <div class="related-courses" >
             <div class="related-header" style="width: 100%; text-align: center">
                 <span class="header-icon">🌱</span>
                 RELATED COURSES
                 <span class="header-icon">🌱</span>
             </div>
-            <div class="courses-list" th:each="course : ${courses}">
+            <div style="max-height: 60vh;overflow-y: auto">
+            <div class="courses-list" th:each="course : ${courses}" >
                 <a th:href="@{/course/details/{id}(id=${course.id})}" class="course-item"
                    style="display: flex; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
                     <img class="course-image-list" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
@@ -174,29 +175,14 @@
                     </div>
                 </a>
             </div>
+            </div>
         </div>
     </div>
 </div>
 
 
-<!--<button id="scrollTopBtn" class="scroll-to-top">↑</button>-->
+
 <script>
-    // Lấy nút cuộn lên
-    const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    // Hiện nút cuộn lên khi người dùng cuộn trang xuống
-    window.onscroll = function () {
-        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-            scrollTopBtn.style.display = 'block'; // Hiện nút
-        } else {
-            scrollTopBtn.style.display = 'none'; // Ẩn nút
-        }
-    };
-
-    // Khi nhấn nút, cuộn lên đầu trang
-    scrollTopBtn.onclick = function () {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    };
 
 </script>
 </body>
