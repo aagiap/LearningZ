@@ -5,7 +5,7 @@
     <title>Start quiz</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
     <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
-    <link rel="stylesheet" href="/css/DoQuiz.css">
+    <link rel="stylesheet" href="/css/StartQuiz.css">
     <style>
         <!-- -->
         <!-- -->
@@ -99,10 +99,18 @@
     <div class="question ml-sm-5 pl-sm-5 pt-2">
         <div class="py-2 h5"><b th:text="${session.quiz.lesson.getTitle() + ': ' + session.quiz.getTitle()}"></b></div>
         <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+            <label class="options" th:if="${message != null}">
+                <i class="fas fa-tag"></i>
+                <span th:text="${message}" style="color: red"></span>
+            </label>
             <label class="options" th:if="${quizResult != null}">
                 <i class="fas fa-tag"></i>
-                <span th:classappend="${quizResult.getMaxScore() >=8 ? 'text-success' : 'text-danger'}"
+                <span th:classappend="${quizResult.getMaxScore() >= minScoreToPass ? 'text-success' : 'text-danger'}"
                       th:text="${'Highest score: '+ quizResult.getMaxScore()}"></span>
+            </label>
+            <label class="options">
+                <i class="fas fa-tag"></i>
+                <span th:text="${'Time attempt: ' + numAtempts}"></span>
             </label>
             <label class="options">
                 <i class="fas fa-tag"></i>
@@ -124,7 +132,7 @@
             <div class="d-flex ">
           <button class="btn btn-success" type="button" onclick="history.back()">Back</button>
             </div>
-            <div class="d-flex ">
+            <div class="d-flex " th:if="${Block == null}">
                 <button class="btn btn-success">Start</button>
             </div>
         </div>

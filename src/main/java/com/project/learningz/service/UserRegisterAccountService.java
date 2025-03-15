@@ -3,7 +3,9 @@ package com.project.learningz.service;
 
 import com.project.learningz.constant.Role;
 import com.project.learningz.constant.UserStatus;
+import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.entity.User;
+import com.project.learningz.repository.SystemSettingRepository;
 import com.project.learningz.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class UserRegisterAccountService {
 
     @Autowired
     private LocalDateTime codeGenerationTime;
+
+    @Autowired
+    private SystemSettingRepository systemSettingRepository;
 
 
     public boolean checkExistEmail(String email) {
@@ -56,10 +61,15 @@ public class UserRegisterAccountService {
         return String.valueOf(code);
     }
 
+    public Float expireTime() {
+        SystemSetting systemSetting = systemSettingRepository.findBySettingName("Expired time (second)");
+        return Float.parseFloat(String.valueOf(systemSetting.getSettingValue()));
+    }
+
     public boolean isCodeExpired(LocalDateTime codeGenerationTime) {
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(codeGenerationTime, now);
-        return duration.toMinutes() >= 3;
+        return duration.toSeconds() >= expireTime();
     }
 
 

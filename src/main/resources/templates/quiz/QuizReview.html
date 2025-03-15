@@ -112,13 +112,7 @@
         </div>
 
         <div class="right-section">
-            <div class="result-container">
-                <div class="result-details">
-                    <p><strong>Score:</strong> <span th:text="${score}"></span></p>
-                    <p><strong>Correct Answers:</strong> <span th:text="${correctAnswers}"></span></p>
-                    <p><strong>Total Questions:</strong> <span th:text="${totalQuestions}"></span></p>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>
@@ -126,6 +120,13 @@
 <form action="/Exam/SubmitQuiz" method="post">
     <div style="display: flex;justify-content:center">
         <div style="position: absolute;margin-right: 75%">
+            <div class="result-container">
+                <div class="result-details">
+                    <p><strong>Score:</strong> <span th:text="${score}"></span></p>
+                    <p><strong>Correct Answers:</strong> <span th:text="${correctAnswers}"></span></p>
+                    <p><strong>Total Questions:</strong> <span th:text="${totalQuestions}"></span></p>
+                </div>
+            </div>
             <div class="box-container">
                 <div>
                     <h5 style="text-align: center;">Continue learning</h5>
@@ -134,10 +135,6 @@
                             <a th:href="@{/learning/lesson(lessonId=${quiz.lesson.id},chapterId=${quiz.lesson.chapter.getId()})}"
                                th:text="'Lesson: ' + ${quiz.lesson.getTitle()}" style="color: #07294d"></a>
                         </li>
-                        <!--                        <li>-->
-                        <!--                            <a th:href="@{/course/chapterLessonList(courseId=${quiz.lesson.chapter.course.getId()})}"-->
-                        <!--                               th:text="'Course: ' + ${quiz.lesson.chapter.course.getTitle()}"></a>-->
-                        <!--                        </li>-->
                     </ul>
                 </div>
             </div>

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "Quizzes")
-public class Quiz {
+public class Quiz implements Serializable {
     @Id
     @Column(name = "quiz_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

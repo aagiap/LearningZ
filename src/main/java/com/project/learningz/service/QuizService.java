@@ -4,7 +4,9 @@ package com.project.learningz.service;
 import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.entity.Quiz;
+import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.repository.QuizRepository;
+import com.project.learningz.repository.SystemSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ public class QuizService {
 
     @Autowired
     private QuizRepository quizRepository;
+
 
     public Quiz getQuizById(Integer quizId) {
         return quizRepository.findById(quizId).orElse(null);
@@ -45,5 +48,6 @@ public class QuizService {
     public List<QuizDetailDTO> getQuizzesByLessonId(Integer lessonId) {
         return quizRepository.findQuizzesByLessonId(lessonId);
     }
+
 
 }

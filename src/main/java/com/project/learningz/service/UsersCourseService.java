@@ -33,6 +33,9 @@ public class UsersCourseService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private QuizResultService quizResultService;
+
     public Map<Integer, Double> getAverageRatingByCourse() {
         List<Object[]> results = userCourseRepository.findAverageRatingByCourse();
         Map<Integer, Double> averageRatings = new HashMap<>();
@@ -80,7 +83,7 @@ public class UsersCourseService {
         int count = 0;
         List<QuizResult> quizResults = quizResults(userId);
         for (QuizResult quizResult : quizResults) {
-            if (quizResult.getMaxScore() >= 8) {
+            if (quizResult.getMaxScore() >= quizResultService.getMinScoreToPass()) {
                 count++;
             }
         }
@@ -96,7 +99,7 @@ public class UsersCourseService {
         //List<QuizResult> quizResults = quizResults(userId);
         List<QuizResult> quizResults = quizResultRepository.getQuizResultInCourse(userId, courseId);
         for (QuizResult quizResult : quizResults) {
-            if (quizResult.getMaxScore() >= 8) {
+            if (quizResult.getResultStatus().equals("Pass")) {
                 count++;
             }
         }

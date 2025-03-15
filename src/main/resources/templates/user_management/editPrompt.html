@@ -3,7 +3,7 @@
 <head>
     <!-- Title Meta -->
     <meta charset="utf-8"/>
-    <title>User list</title>
+    <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A fully responsive premium admin dashboard template"/>
     <meta name="author" content="Techzaa"/>
@@ -18,12 +18,16 @@
     <!-- App css (Require in all Page) -->
     <link href="/css/app.min.css" rel="stylesheet" type="text/css"/>
 
+    <link rel="stylesheet" href="/css/UserManagement.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
 
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
+        .btn {
+            border-radius: 8px;
+        }
+
         .sub-navbar-nav {
             padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
         }
@@ -46,78 +50,143 @@
             font-weight: bold;
         }
 
-        h3 {
-            text-align: center; /* Căn giữa */
-            font-size: 24px; /* Kích thước chữ */
-            font-weight: bold; /* Độ đậm */
-            color: #0d47a1; /* Màu xanh đậm */
-            margin-top: 20px; /* Khoảng cách phía trên */
-            margin-bottom: 20px; /* Khoảng cách phía dưới */
-            padding: 10px 0; /* Thêm padding để không quá sát */
-            border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
-            display: inline-block; /* Giữ nội dung gọn gàng */
+        /* Định dạng cho phần summary */
+        .summary-box {
+            padding-top: 20px;
+            max-width: 1000px;
+            margin-left: 70px; /* Hoặc một khoảng cách phù hợp */
+            text-align: left;
         }
 
-        .image-content {
-            width: 100%; /* Đảm bảo ảnh phủ toàn bộ chiều rộng */
-            height: 200px; /* Chiều cao cố định */
-            overflow: hidden; /* Cắt phần thừa nếu ảnh quá lớn */
-        }
-
-        .image-content img {
-            width: 100%; /* Phủ toàn bộ chiều rộng */
-            height: 100%; /* Chiều cao luôn bằng 50px */
-            object-fit: cover; /* Cắt ảnh để vừa vặn như banner */
-        }
-
-        /* Căn giữa nội dung, tạo padding đẹp hơn */
-        .container-fluid-content {
-            max-width: 900px; /* Giữ nội dung gọn trong khung đẹp */
-            margin: auto;
-            padding-top: 50px;
-        }
-
-        /* Bảng hiển thị thông tin gọn gàng */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        td {
-            padding: 10px 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        td:first-child {
+        /* Tiêu đề của summary */
+        .summary-box p {
+            font-size: 18px;
             font-weight: bold;
-            color: #07294d;
-            width: 150px;
+            margin-bottom: 15px;
+            margin-left: 20px;
+            color: #ed5b1b;
+            text-align: left;
         }
 
-        /* Nút Back đẹp hơn */
-        .btn-secondary {
-            background-color: #ccc;
-            color: #07294d;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
+        .summary-box table {
+            min-width: 500px;
+            width: 50%;
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
+            margin-top: 15px;
+            border-radius: 8px; /* Bo góc */
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+        }
+
+        .summary-box table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Màu cho hàng lẻ */
+        }
+
+        .summary-box table th,
+        .summary-box table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-box table th {
+            background-color: #083768;
+            color: whitesmoke;
+        }
+
+
+        /* Định dạng đường link */
+        .summary-box a {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #083768;
+            padding: 8px;
+            transition: 0.3s;
+        }
+
+        /* Hover hiệu ứng */
+        .summary-box a:hover {
+            color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Định dạng cho phần summary */
+        .summary-box2 {
+            padding-top: 20px;
+            max-width: 1000px;
+            text-align: left;
+            /*margin-right: 20px;*/
+        }
+
+        /* Tiêu đề của summary */
+        .summary-box2 p {
+            font-size: 18px;
             font-weight: bold;
+            margin-bottom: 15px;
+            /*margin-left: 20px;*/
+            color: #ed5b1b;
+            text-align: left;
         }
 
-        .btn-secondary:hover {
-            background-color: #bbb;
+        .summary-box2 table {
+            min-width: 500px;
+            width: 70%;
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
+            margin-top: 15px;
+            border-radius: 8px; /* Bo góc */
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
         }
 
-        .btn {
-            border-radius: 8px;
+        .summary-box2 table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Màu cho hàng lẻ */
         }
+
+        .summary-box2 table th,
+        .summary-box2 table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .summary-box2 table th {
+            background-color: #083768;
+            color: whitesmoke;
+        }
+
+        /* Hover hiệu ứng */
+        .summary-box2 a:hover {
+            color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .summary-container {
+            display: flex;
+            justify-content: space-between; /* Để hai div cách đều nhau */
+        }
+
+        .summary-box, .summary-box2 {
+            flex: 1; /* Cả hai div chiếm cùng một không gian */
+        }
+
+        /* Responsive bảng trên màn hình nhỏ */
+        @media screen and (max-width: 768px) {
+            .table {
+                font-size: 12px;
+            }
+
+            .table thead th,
+            .table tbody td {
+                padding: 8px;
+            }
+        }
+
 
     </style>
 </head>
 
 <body>
-
+<th:block th:replace="~{common/chat-with-ai :: chat}"></th:block>
 <!-- START Wrapper -->
 <div class="wrapper">
 
@@ -358,19 +427,26 @@
                     <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
+                                   th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                Users</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
+                                   th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User
+                                Manager</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
+                                   th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course
+                                Manager</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
+                                   th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP
+                                Students</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
+                                   th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual
+                                Students</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
+                                   th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a>
+                            </li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
+                                   th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -380,37 +456,43 @@
                        aria-expanded="false" aria-controls="sidebarCoursesMenu">
                         <span class="nav-text">📋 Course List </span>
                     </a>
-                    <div class="collapse" id="sidebarCoursesMenu">
+                    <div class="collapse show" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
+                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
+                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
+                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
+                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
+                                courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
+                                   th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
+                                courses</a></li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/edit-prompt">
-                        <span class="nav-icon">
-                            <i class="fa-solid fa-robot"></i>
-                        </span>
+        <span class="nav-icon">
+            <i class="fa-solid fa-robot"></i>
+        </span>
                         <span class="nav-text"> Prompt AI </span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/system-setting">
-                        <span class="nav-icon">
-                            <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
-                        </span>
+        <span class="nav-icon">
+            <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
+        </span>
                         <span class="nav-text"> System setting </span>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>
@@ -418,104 +500,191 @@
 
     <!-- ==================================================== -->
     <!-- Start right Content here -->
-    <!-- ==================================================== -->
     <div class="page-content">
-        <div class="image-content text-center">
-            <img class="img-fluid" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
-        </div>
-        <!-- Start Container Fluid -->
-        <div class="container-fluid-content" style="padding-top: 50px">
-            <!-- Ảnh Avatar -->
-            <div class="form-wrapper">
-                <h2 class="text-center">Course Detail</h2>
 
-                <div class="row mt-3">
-                    <table>
-                        <tr>
-                            <td>Title</td>
-                            <td th:text="${course.title}"></td>
-                        </tr>
-                        <tr>
-                            <td>Grade</td>
-                            <td th:text="${course.grade.name}"></td>
-                        </tr>
-                        <tr>
-                            <td>Subject</td>
-                            <td th:text="${course.subject.name}"></td>
-                        </tr>
-                        <tr>
-                            <td>Created by</td>
-                            <td th:text="${course.createdBy.username}"></td>
-                        </tr>
-                        <tr>
-                            <td>Status</td>
-                            <td th:text="${course.courseStatus.name()}"></td>
-                        </tr>
-                        <tr>
-                            <td>Description</td>
-                            <td th:text="${course.description}"></td>
-                        </tr>
-                        <tr>
-                            <td>Drive Link</td>
-                            <td th:text="${course.courseDriveLink}"></td>
-                        </tr>
-                    </table>
-                </div>
+        <div class="summary-container">
+            <style>
 
-                <!-- Nút hành động -->
-                <div class="form-actions text-center mt-4">
-                    <th:block th:if="${course.courseStatus.name() == 'PENDING'}">
-                        <form action="/admin/approve" method="post" style="display:inline;" onsubmit="return confirmAction(event, this);">
-                            <input type="hidden" name="id" th:value="${course.id}"/>
-                            <input type="hidden" name="status" th:value="${course.courseStatus}"/>
-                            <input type="hidden" name="action" class="action-field"/>
-                            <input type="hidden" name="feedbackInput" id="feedbackInput"/> <!-- Input feedback ẩn -->
 
-                            <button type="submit" class="btn btn-link text-success" title="Approve" value="approve"
-                                    onclick="setAction(event, this);" style="background-color: #0c4128; color: whitesmoke !important;">
-                                Approve
-                            </button>
-                            <button type="submit" class="btn btn-link text-danger" title="Reject" value="reject"
-                                    onclick="setAction(event, this);" style="background-color: red; color: whitesmoke !important;">
-                                Reject
-                            </button>
-                        </form>
-                    </th:block>
-                    <button type="button" class="btn btn-secondary" style="background-color: #ccc; color: #07294d"
-                            onclick="history.back();">
-                        Back
-                    </button>
-                </div>
+                .summary-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
 
-                <script>
-                    function setAction(event, button) {
-                        event.preventDefault();
-                        let form = button.closest("form");
-                        form.querySelector(".action-field").value = button.value; // Cập nhật action chính xác
+                /* Cải thiện container chính */
+                .container- {
+                    margin-top: 80px;
+                    width: 85%;
+                    margin: 40px auto;
+                    padding: 30px;
+                    background-color: #ffffff;
+                    border-radius: 12px;
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+                    transition: transform 0.3s, box-shadow 0.3s;
+                }
 
-                        if (button.value === "reject") {
-                            let feedbackInput = prompt("Please enter feedback before rejecting:");
-                            if (!feedbackInput) {
-                                alert("You must provide feedback to reject the course.");
-                                return;
-                            }
-                            document.getElementById("feedbackInput").value = feedbackInput; // Gán feedback vào input ẩn
-                        }
+                .container-:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+                }
 
-                        if (confirm(button.value === "approve" ?
-                            "Are you sure you want to approve this course?" :
-                            "Are you sure you want to reject this course?")) {
-                            form.submit();
-                        }
+                /* Cải thiện tiêu đề */
+                .container- form h2 {
+                    color: #2c3e50;
+                    margin-bottom: 25px;
+                    font-size: 28px;
+                    font-weight: 600;
+                    border-bottom: 2px solid #3498db;
+                    padding-bottom: 12px;
+                    position: relative;
+                    margin-top: 30px;
+                    border-radius: 5px;
+                }
+
+                .container- form h2::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    width: 80px;
+                    height: 4px;
+                    background-color: #3498db;
+                    border-radius: 2px;
+                }
+
+                /* Cải thiện thông báo */
+                .container- form p {
+                    background-color: rgba(46, 204, 113, 0.1);
+                    padding: 15px 18px;
+                    border-radius: 8px;
+                    border-left: 5px solid #2ecc71;
+                    margin-bottom: 25px;
+                    font-size: 16px;
+                    color: #27ae60 !important;
+                    font-weight: 500;
+                    box-shadow: 0 2px 5px rgba(46, 204, 113, 0.1);
+                }
+
+                /* Cải thiện form */
+                .container- form {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                /* Cải thiện textarea */
+                .container- textarea {
+                    width: 100%;
+                    min-height: 400px;
+                    padding: 18px;
+                    margin-bottom: 25px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    font-family: 'Courier New', Courier, monospace;
+                    font-size: 16px;
+                    line-height: 1.6;
+                    resize: vertical;
+                    transition: border 0.3s, box-shadow 0.3s;
+                    background-color: #f8f9fa;
+                    margin: 0;
+                }
+
+                .container- textarea:focus {
+                    outline: none;
+                    border-color: #3498db;
+                    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+                    background-color: #ffffff;
+                }
+
+                /* Cải thiện nút lưu */
+                .container- button {
+                    align-self: flex-end;
+                    background-color: #3498db;
+                    color: white;
+                    border: none;
+                    padding: 14px 35px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .container- button:hover {
+                    background-color: #2980b9;
+                    transform: translateY(-3px);
+                    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+                }
+
+                .container- button:active {
+                    transform: translateY(0);
+                    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+                }
+
+                .container- button::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(
+                            90deg,
+                            rgba(255, 255, 255, 0) 0%,
+                            rgba(255, 255, 255, 0.2) 50%,
+                            rgba(255, 255, 255, 0) 100%
+                    );
+                    transition: left 0.7s;
+                }
+
+                .container- button:hover::before {
+                    left: 100%;
+                }
+
+                /* Responsive */
+                @media (max-width: 992px) {
+                    .container- {
+                        width: 90%;
                     }
-                </script>
+                }
 
-            </div>
+                @media (max-width: 768px) {
+                    .container- {
+                        width: 95%;
+                        padding: 25px;
+                        margin: 20px auto;
+                    }
+
+                    .container- form h2 {
+                        font-size: 24px;
+                    }
+
+                    .container- textarea {
+                        min-height: 300px;
+                    }
+
+                    .container- button {
+                        width: 100%;
+                        padding: 12px;
+                    }
+                }
+            </style>
+
+            <div class="container-">
+
+                <form action="/admin/save-prompt" method="post">
+                    <h2>Edit  Prompt AI</h2>
+                    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+                    <textarea name="content" th:text="${content}"></textarea><br>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div><!-- end row -->
         </div>
         <!-- End Container Fluid -->
 
     </div>
-    <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
 
