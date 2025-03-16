@@ -463,7 +463,7 @@
                                                         th:data-bs-target="'#collapse' + ${chapIndex.index}"
                                                         aria-expanded="false"
                                                         th:aria-controls="'collapse' + ${chapIndex.index}">
-                                                    <span th:text="${chapter.chapterTitle}"></span>
+                                                    <span th:text=" 'Chapter ' + ${chapter.chapterOrder} + ': ' + ${chapter.chapterTitle}"></span>
                                                 </button>
                                             </h2>
                                             <div th:id="'collapse' + ${chapIndex.index}"
