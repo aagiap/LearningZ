@@ -148,14 +148,23 @@ td {
     background-color: #007c91;
     color: white;
     border: none;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
     font-size: 16px;
+    margin: 10px 2px;
     cursor: pointer;
     border-radius: 5px;
-    outline: none;
+    margin-left: 20px;
     animation: glowing-border 1.5s infinite alternate;
 }
 @keyframes glowing-border {
-    0% { box-shadow: 0 0 5px #00f; }
-    50% { box-shadow: 0 0 20px #00f, 0 0 30px #0ff; }
-    100% { box-shadow: 0 0 5px #00f; }
+    0% { box-shadow: 0 0 5px #f19d38; }
+    50% { box-shadow: 0 0 20px #f19d38, 0 0 30px #f19d38; }
+    100% { box-shadow: 0 0 5px #f19d38; }
+}
+
+#vipButton, .edit-profile-btn{
+    margin-top: 20px;
+    margin-bottom: -10px;
 }
