@@ -154,11 +154,12 @@
                 </tr>
                 <tr th:if="${membership == null}">
                     <td><b>VIP Package</b></td>
-                    <td>Not registered. <button id="vipButton" onclick="vipRegister(this)">Register VIP</button></td>
+                    <td>Not registered</td>
                 </tr>
             </table>
             <a href="/vip-packages" id="vipRegister" hidden>Register VIP Membership</a>
             <button class="edit-profile-btn" onclick="location.href='/home/profile/profile_edit'">Edit Profile</button>
+            <button th:if="${membership == null}" id="vipButton" onclick="vipRegister(this)">Register VIP</button>
         </div>
     </div>
     <div class="course-list">
