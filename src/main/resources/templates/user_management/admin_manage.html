@@ -411,7 +411,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
+                    <a class="nav-link" href="/super_admin/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -427,19 +427,19 @@
                     <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
                         </ul>
                     </div>
                 </li>
@@ -452,15 +452,15 @@
                     <div class="collapse show" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
+                                   th:href="@{/super_admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
+                                   th:href="@{/super_admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
+                                   th:href="@{/super_admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
+                                   th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
+                                   th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -483,64 +483,64 @@
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Registered accounts</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span th:text="${sumOfUsers}"></span></a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">User Manager</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span th:text="${sumOfAdminUsers}"></span></a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Course Manager</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfAdminCourses}"></span></a></td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">VIP Student</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfVipUsers}"></span></a></td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Casual Student</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfCasualUsers}"></span></a></td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Teacher</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfTeacherUsers}"></span></a></td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Marketer</a></td>
                         <td>
-                            <a th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfMarketerUsers}"></span></a></td>
                     </tr>
@@ -578,51 +578,51 @@
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Total of courses</a></td>
                         <td>
-                            <a th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${totalCourses}"></span></a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Active courses</a></td>
                         <td>
-                            <a th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfActiveCourses}"></span></a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Inactive courses</a></td>
                         <td>
-                            <a th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfInactiveCourses}"></span></a></td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Pending courses</a>
                         </td>
                         <td>
-                            <a th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfPendingCourses}"></span></a>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <a th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;">Rejected courses</a>
                         </td>
                         <td>
-                            <a th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                            <a th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="text-decoration: none; color: inherit;"><span
                                     th:text="${sumOfRejectedCourses}"></span></a>
                         </td>

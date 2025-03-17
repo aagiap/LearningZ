@@ -14,7 +14,7 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
 
     @Query("""
                 SELECT new com.project.learningz.dto.QuestionDetailDTO(
-                    q.id, q.content, q.correctOption, 
+                    q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4,
                     co.title, s.name, ch.chapterTitle, l.title, g.name
                 )
                 FROM QuestionBank q
@@ -30,7 +30,7 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
 
     @Query("""
                 SELECT new com.project.learningz.dto.QuestionDetailDTO(
-                    q.id, q.content, q.correctOption, 
+                    q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4,
                     co.title, s.name, ch.chapterTitle, l.title, g.name
                 )
                 FROM QuestionBank q
@@ -41,17 +41,16 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
                 JOIN ch.course co
                 JOIN co.subject s
                 JOIN co.grade g
-                WHERE LOWER(q.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                OR LOWER(g.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                OR LOWER(co.title) LIKE LOWER(CONCAT('%', :keyword, '%'))            
-                OR LOWER(ch.chapterTitle) LIKE LOWER(CONCAT('%', :keyword, '%')) 
-                OR LOWER(l.title) LIKE LOWER(CONCAT('%', :keyword, '%'))  
+                WHERE LOWER(q.content) LIKE LOWER(CONCAT('%', :keyword, '%'))  
+                AND qu.id = :quizId
             """)
-    Page<QuestionDetailDTO> searchAllQuestionsByKeyword(@Param("keyword") String keyword, Pageable pageable);
+    Page<QuestionDetailDTO> searchAllQuestionsByQuizIdKeyword(@Param("keyword") String keyword,
+                                                              @Param("quizId") Integer quizId,
+                                                              Pageable pageable);
 
     @Query("""
                 SELECT new com.project.learningz.dto.QuestionDetailDTO(
-                    q.id, q.content, q.correctOption, 
+                    q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4, 
                     co.title, s.name, ch.chapterTitle, l.title, g.name
                 )
                 FROM QuestionBank q
@@ -77,7 +76,7 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
 
     @Query("""
                 SELECT new com.project.learningz.dto.QuestionDetailDTO(
-                    q.id, q.content, q.correctOption, 
+                    q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4, 
                     co.title, s.name, ch.chapterTitle, l.title, g.name
                 )
                 FROM QuestionBank q
@@ -90,7 +89,27 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
                 JOIN co.grade g
                 WHERE (qq.quiz.id = :quizId)
             """)
-    List<QuestionDetailDTO> getQuestionByQuizId(@Param("quizId") Integer quizId);
+    Page<QuestionDetailDTO> getQuestionsByQuizId(@Param("quizId") Integer quizId,
+                                                 Pageable pageable);
+
+    @Query("""
+                SELECT new com.project.learningz.dto.QuestionDetailDTO(
+                    q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4,
+                    co.title, s.name, ch.chapterTitle, l.title, g.name
+                )
+                FROM QuestionBank q
+                JOIN QuizQuestion qq ON q.id = qq.question.id
+                JOIN Quiz qu ON qq.quiz.id = qu.id
+                JOIN qu.lesson l
+                JOIN l.chapter ch
+                JOIN ch.course co
+                JOIN co.subject s
+                JOIN co.grade g
+                WHERE (q.id = :questionId)            
+            """)
+    QuestionDetailDTO getDetailQuestions(@Param("questionId") Integer questionId);
+
+    QuestionBank getQuestionBankById(@Param("questionId") Integer questionId);
 
 
 }

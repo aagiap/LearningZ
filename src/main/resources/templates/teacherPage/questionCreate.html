@@ -24,37 +24,30 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-        .add-user-form {
-            display: none;
+        .btn {
+            border-radius: 8px;
         }
 
-        #addUserCheck:checked + .add-user-form {
+        .sub-navbar-nav {
+            padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
+        }
+
+        .sub-navbar-nav li {
+            margin-left: 40px; /* Thụt vào từng mục */
+            list-style-type: none; /* Bỏ dấu chấm mặc định */
+        }
+
+        .sub-nav-link {
             display: block;
+            padding: 5px 10px;
+            color: rgba(216, 223, 13, 0.93);
+            text-decoration: none;
+            transition: 0.3s;
         }
 
-        #addUserCheck:checked ~ .user-list {
-            margin-top: 250px; /* Điều chỉnh khoảng cách khi form hiển thị */
-        }
-
-        .add-user-form {
-            position: relative; /* Để h4 có thể đặt chồng lên viền */
-            border: 2px solid #0d47a1; /* Viền xanh đậm */
-            border-radius: 10px; /* Bo góc */
-            padding: 20px;
-            margin: 20px auto;
-            width: 400px; /* Điều chỉnh độ rộng */
-            background-color: #ffffff;
-        }
-
-        .form-title {
-            position: absolute;
-            top: -15px; /* Dịch lên trên viền */
-            left: 20px;
-            background: white; /* Giữ nền trắng để đè lên viền */
-            padding: 0 10px; /* Tạo khoảng cách 2 bên */
+        .sub-nav-link:hover {
+            color: #176e0e;
             font-weight: bold;
-            color: #0d47a1;
-            font-size: 18px;
         }
 
         h3 {
@@ -276,12 +269,12 @@
     <div class="main-nav">
         <!-- Sidebar Logo -->
         <div class="logo-box">
-            <a href="index.html" class="logo-dark">
+            <a href="/home" class="logo-dark">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
 
             </a>
-            <a href="index.html" class="logo-light">
+            <a href="/home" class="logo-light">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo light">
             </a>
@@ -298,7 +291,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
+                    <a class="nav-link" href="/super_admin/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -307,21 +300,47 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button"
-                       aria-expanded="false" aria-controls="sidebarProducts">
-                                   <span class="nav-icon">
-                                       <iconify-icon icon="solar:user-bold"></iconify-icon>
-                                   </span>
-                        <span class="nav-text"> Question list </span>
+                    <a class="nav-link menu-arrow" href="#sidebarUsersMenu" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarUsersMenu">
+                        <span class="nav-text">📋 User List </span>
                     </a>
-                    <div class="collapse" id="sidebarProducts">
+                    <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/teacher/questionList">List</a>
-                            </li>
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/teacher">Create</a>
-                            </li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoursesMenu" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarCoursesMenu">
+                        <span class="nav-text">📋 Course List </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoursesMenu">
+                        <ul class="nav sub-navbar-nav">
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -334,173 +353,103 @@
     <!-- Start right Content here -->
     <!-- ==================================================== -->
     <div class="page-content">
+
+        <!-- Start Container Fluid -->
         <div class="container-fluid" style="padding-top: 50px">
-            <div class="container">
-                <h3 class="mt-3">Question List</h3>
 
-                <div th:if="${errorMessage}" class="alert alert-danger">
-                    <span th:text="${errorMessage}"></span>
-                </div>
-
-                <div th:if="${successMessage}" class="alert alert-success">
-                    <span th:text="${successMessage}"></span>
-                </div>
-
-                <div class="mb-3 d-flex align-items-center">
-                    <button class="btn btn-success"
-                            style="background-color: #0d47a1; width: 200px; color: whitesmoke"
-                            onclick="window.location.href='/teacher/import'">
-                        Import New Question
-                    </button>
-
-                    <div class="flex-grow-1 d-flex justify-content-center">
-                        <form method="get" action="/teacher/questionList" class="d-flex" style="max-width: 400px;">
-                            <input type="text" name="keyword" id="keyword" th:value="${keyword}"
-                                   class="form-control me-2" placeholder="Search questions...">
-                            <button type="submit" class="btn btn-primary"
-                                    style="background-color: #0d47a1; color: whitesmoke">Search
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <!-- Danh sách câu hỏi -->
-                    <div class="col-lg-9">
-
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th style="background-color: #0d47a1; color: white;">#</th>
-                                <th style="background-color: #0d47a1; color: white;">Content</th>
-                                <th style="background-color: #0d47a1; color: white;">Correct Option</th>
-                                <th style="background-color: #0d47a1; color: white;">Grade</th>
-                                <th style="background-color: #0d47a1; color: white;">Subject</th>
-                                <th style="background-color: #0d47a1; color: white;">Course Title</th>
-                                <th style="background-color: #0d47a1; color: white;">Chapter Title</th>
-                                <th style="background-color: #0d47a1; color: white;">Lesson Title</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="question, index : ${questions}">
-                                <td th:text="${index.count}"></td>
-                                <td th:text="${question.content}"></td>
-                                <td th:text="${question.correctOption}"></td>
-                                <td th:text="${question.grade}"></td>
-                                <td th:text="${question.subject}"></td>
-                                <td th:text="${question.courseTitle}"></td>
-                                <td th:text="${question.chapterTitle}"></td>
-                                <td th:text="${question.lessonTitle}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Sidebar (Bộ lọc câu hỏi) -->
-                    <div class="col-lg-3">
-                        <div class="card p-3 shadow-sm">
-                            <h5 class="text-center">Filter Questions</h5>
-                            <form method="post" action="/teacher/questionList">
-                                <div class="mb-3">
-                                    <label for="grade" class="form-label">Grade</label>
-                                    <select name="grade" id="grade" class="form-select">
-                                        <option value="">All</option>
-                                        <option th:each="g : ${grades}" th:value="${g}" th:text="${g}"
-                                                th:selected="${g == selectedGrade}"></option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="subject" class="form-label">Subject</label>
-                                    <select name="subject" id="subject" class="form-select">
-                                        <option value="">All</option>
-                                        <option th:each="s : ${subjects}" th:value="${s}" th:text="${s}"
-                                                th:selected="${s == selectedSubject}"></option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="course" class="form-label">Course</label>
-                                    <select name="course" id="course" class="form-select">
-                                        <option value="">All</option>
-                                        <option th:each="c : ${courses}" th:value="${c}" th:text="${c}"
-                                                th:selected="${c == selectedCourse}"></option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="chapter" class="form-label">Chapter</label>
-                                    <select name="chapter" id="chapter" class="form-select">
-                                        <option value="">All</option>
-                                        <option th:each="ch : ${chapters}" th:value="${ch}" th:text="${ch}"
-                                                th:selected="${ch == selectedChapter}"></option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="lesson" class="form-label">Lesson</label>
-                                    <select name="lesson" id="lesson" class="form-select">
-                                        <option value="">All</option>
-                                        <option th:each="l : ${lessons}" th:value="${l}" th:text="${l}"
-                                                th:selected="${l == selectedLesson}"></option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <div th:if="${errorMessage}" class="alert alert-danger">
+                <span th:text="${errorMessage}"></span>
             </div>
+
+            <div th:if="${successMessage}" class="alert alert-success">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <div class="add-user-form">
+                <h4 class="form-title">Add New User</h4>
+                <form th:action="@{/teacher/{quizId}/createQuestion(quizId=${currentQuiz.quizId})}" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Content</label>
+                                <input type="text" class="form-control" id="content" name="content" required
+                                       oninvalid="this.setCustomValidity('Please fill in this field')"
+                                       oninput="this.setCustomValidity('')">
+                            </div>
+                            <div class="mb-3">
+                                <label for="option1" class="form-label">Correct Option</label>
+                                <input type="text" class="form-control" id="option1" name="option1" required
+                                       oninvalid="this.setCustomValidity('Please fill in this field')"
+                                       oninput="this.setCustomValidity('')">
+                            </div>
+                            <div class="mb-3">
+                                <label for="option2" class="form-label">Option 2</label>
+                                <input type="text" class="form-control" id="option2" name="option2" required
+                                       oninvalid="this.setCustomValidity('Please fill in this field')"
+                                       oninput="this.setCustomValidity('')">
+                            </div>
+                            <div class="mb-3">
+                                <label for="option3" class="form-label">Option 3</label>
+                                <input type="text" class="form-control" id="option3" name="option3" required
+                                       oninvalid="this.setCustomValidity('Please fill in this field')"
+                                       oninput="this.setCustomValidity('')">
+                            </div>
+                            <div class="mb-3">
+                                <label for="option4" class="form-label">Option 4</label>
+                                <input type="text" class="form-control" id="option4" name="option4" required
+                                       oninvalid="this.setCustomValidity('Please fill in this field')"
+                                       oninput="this.setCustomValidity('')">
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lessonTitle" class="form-label">Lesson Title</label>
+                                <input type="text" class="form-control" th:value="${currentQuiz.lessonTitle}" id="lessonTitle" name="lessonTitle" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="chapterTitle" class="form-label">Chapter Title</label>
+                                <input type="text" class="form-control" th:value="${currentQuiz.chapterTitle}" id="chapterTitle" name="chapterTitle" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="courseTitle" class="form-label">Course Title</label>
+                                <input type="text" class="form-control" th:value="${currentQuiz.courseTitle}" id="courseTitle" name="courseTitle" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="grade" class="form-label">Grade</label>
+                                <input type="text" class="form-control" th:value="${currentQuiz.grade}" id="grade" name="grade" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" th:value="${currentQuiz.subject}" id="subject" name="grade" readonly required>
+                            </div>
+                        </div>
+
+                        <div class="form-actions text-center mt-4">
+                            <button type="button" class="btn btn-secondary"
+                                    style="background-color: #ccc; color: #07294d"
+                                    th:onclick="history.back()">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-info"
+                                    style="background-color: #083768; color:#fbf8f8;">Save
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
         </div>
-        <div class="d-flex justify-content-center mt-3">
-            <form id="paginationForm" th:action="@{/teacher/questionList}" method="post">
-                <input type="hidden" name="grade" th:value="${selectedGrade}">
-                <input type="hidden" name="subject" th:value="${selectedSubject}">
-                <input type="hidden" name="course" th:value="${selectedCourse}">
-                <input type="hidden" name="chapter" th:value="${selectedChapter}">
-                <input type="hidden" name="lesson" th:value="${selectedLesson}">
-                <input type="hidden" name="page" id="pageInput" value="0">
-            </form>
-
-            <ul class="pagination">
-                <li class="page-item" th:if="${currentPage > 0}">
-                    <a class="page-link" href="#" th:attr="onclick='submitPage(0)'">First</a>
-                </li>
-                <li class="page-item" th:if="${currentPage > 0}">
-                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + (${currentPage - 1}) + ')'">Previous</a>
-                </li>
-
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                    th:classappend="${currentPage == i} ? 'active' : ''">
-                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + ${i} + ')'" th:text="${i + 1}"></a>
-                </li>
-
-                <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + (${currentPage + 1}) + ')'">Next</a>
-                </li>
-                <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + (${totalPages - 1}) + ')'">Last</a>
-                </li>
-            </ul>
-
-            <script>
-                function submitPage(page) {
-                    document.getElementById('pageInput').value = page;
-                    document.getElementById('paginationForm').submit();
-                }
-            </script>
-
-
-        </div>
-
+        <!-- End Container Fluid -->
 
     </div>
-
     <!-- ==================================================== -->
     <!-- End Page Content -->
     <!-- ==================================================== -->
 
-
 </div>
-
-
 <!-- END Wrapper -->
 
 <!-- Vendor Javascript (Require in all Page) -->
@@ -519,4 +468,3 @@
 
 </body>
 </html>
-
