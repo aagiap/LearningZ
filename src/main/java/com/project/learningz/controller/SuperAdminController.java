@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/super_admin")
 public class SuperAdminController {
 
     @Autowired
@@ -93,7 +93,7 @@ public class SuperAdminController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 
-        return "redirect:/admin/userlist_role?role=" + (role != null ? role : "") +
+        return "redirect:/super_admin/userlist_role?role=" + (role != null ? role : "") +
                 "&sort=" + sort +
                 "&order=" + order +
                 "&keyword=" + (keyword != null ? keyword : "");
@@ -134,13 +134,13 @@ public class SuperAdminController {
         try {
             userManagementService.createUser(username, email, password, phone, role);
             redirectAttributes.addFlashAttribute("successMessage", "User has created successfully!");
-            return "redirect:/admin/userlist_role?role=" + (role != null ? role : "") +
+            return "redirect:/super_admin/userlist_role?role=" + (role != null ? role : "") +
                     "&sort=" + sort +
                     "&order=" + order +
                     "&keyword=" + (keyword != null ? keyword : "");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/admin/create";
+            return "redirect:/super_admin/create";
         }
     }
 
@@ -163,7 +163,7 @@ public class SuperAdminController {
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
                 if (user.getPassword().length() < 6) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Password must be at least 6 characters");
-                    return "redirect:/admin/" + user.getId();
+                    return "redirect:/super_admin/" + user.getId();
                 }
                 updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
             } else {
@@ -171,7 +171,7 @@ public class SuperAdminController {
             }
             userManagementService.updateUser(updatedUser);
         }
-        return "redirect:/admin/userlist_role?role=" + (role != null ? role : "") +
+        return "redirect:/super_admin/userlist_role?role=" + (role != null ? role : "") +
                 "&sort=" + sort +
                 "&order=" + order +
                 "&keyword=" + (keyword != null ? keyword : "");
@@ -206,7 +206,7 @@ public class SuperAdminController {
             return "user_management/admin_user_detail";
         } else {
             model.addAttribute("error", "User not found");
-            return "redirect:/admin/dashboard";
+            return "redirect:/super_admin/dashboard";
         }
     }
 
@@ -335,7 +335,7 @@ public class SuperAdminController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error processing request: " + e.getMessage());
         }
 
-        return "redirect:/admin/view?status=" + status +
+        return "redirect:/super_admin/view?status=" + status +
                 "&sort=" + sort +
                 "&order=" + order +
                 "&keyword=" + keyword;

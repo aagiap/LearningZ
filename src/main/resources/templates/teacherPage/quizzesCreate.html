@@ -1,10 +1,706 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Create</title>
+    <!-- Title Meta -->
+    <meta charset="utf-8"/>
+    <title>User list</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully responsive premium admin dashboard template"/>
+    <meta name="author" content="Techzaa"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <!-- Vendor css (Require in all Page) -->
+    <link href="/css/vendor.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Icons css (Require in all Page) -->
+    <link href="/css/icons.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- App css (Require in all Page) -->
+    <link href="/css/app.min.css" rel="stylesheet" type="text/css"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+    <!-- Theme Config js (Require in all Page) -->
+    <script src="/js/config.js"></script>
+    <style>
+        .btn {
+            border-radius: 8px;
+        }
+
+        .sub-navbar-nav {
+            padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
+        }
+
+        .sub-navbar-nav li {
+            margin-left: 40px; /* Thụt vào từng mục */
+            list-style-type: none; /* Bỏ dấu chấm mặc định */
+        }
+
+        .sub-nav-link {
+            display: block;
+            padding: 5px 10px;
+            color: rgba(216, 223, 13, 0.93);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sub-nav-link:hover {
+            color: #176e0e;
+            font-weight: bold;
+        }
+
+        h3 {
+            text-align: center; /* Căn giữa */
+            font-size: 24px; /* Kích thước chữ */
+            font-weight: bold; /* Độ đậm */
+            color: #0d47a1; /* Màu xanh đậm */
+            margin-top: 20px; /* Khoảng cách phía trên */
+            margin-bottom: 20px; /* Khoảng cách phía dưới */
+            padding: 10px 0; /* Thêm padding để không quá sát */
+            border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
+            display: inline-block; /* Giữ nội dung gọn gàng */
+        }
+
+        .first-part {
+            max-width: 800px; /* Giới hạn chiều rộng */
+            margin: 0 auto 20px; /* Căn giữa và tạo khoảng cách với phần tiếp theo */
+            padding: 20px; /* Khoảng cách bên trong */
+            border: 2px solid #ddd; /* Viền màu xám nhạt */
+            border-radius: 8px; /* Bo góc */
+            background-color: #f9f9f9; /* Màu nền nhẹ */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+        }
+
+        .first-part h4 {
+            font-size: 22px;
+            color: #333; /* Màu chữ tối */
+            margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
+        }
+
+        .first-part p {
+            font-size: 16px;
+            color: #555; /* Màu chữ xám nhẹ */
+            margin: 5px 0; /* Khoảng cách giữa các dòng */
+        }
+
+        .first-part span {
+            font-weight: bold; /* Làm đậm thông tin quan trọng */
+            color: #61616a; /* Màu xanh dương để làm nổi bật */
+        }
+
+
+        .question-container {
+            max-width: 800px;
+            margin: 0 auto; /* Căn giữa theo chiều ngang */
+            padding: 20px; /* Tạo khoảng cách bên trong */
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .question-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .question-block {
+            border: 2px solid #ddd; /* Viền xám nhạt */
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px; /* Bo góc */
+            background-color: #c7d7e4; /* Màu nền nhẹ */
+        }
+
+
+        label {
+            font-weight: bold;
+            margin-top: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #101013;
+            background-color: #c7d7e4;
+        }
+
+        /* Căn chỉnh phần đáp án */
+        .answer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Chia thành 2 cột */
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .answer-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer-box label {
+            font-weight: bold;
+        }
+
+        .answer-box:nth-child(1), /* Option A */
+        .answer-box:nth-child(3) { /* Option C */
+            text-align: left;
+        }
+
+        .answer-box:nth-child(2), /* Option B */
+        .answer-box:nth-child(4) { /* Option D */
+            text-align: right;
+        }
+
+        /* Định dạng chung cho container chứa các nút */
+        .quiz-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa */
+            align-items: center;
+            gap: 10px; /* Khoảng cách giữa các nút */
+            margin-top: 15px;
+        }
+
+        /* Định dạng nút */
+        .quiz-buttons button {
+            padding: 6px 14px; /* Giảm chiều cao */
+            font-size: 14px; /* Nhỏ hơn một chút */
+            border: none;
+            border-radius: 3px; /* Làm dẹt hơn */
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Nút thêm câu hỏi */
+        .add-question-btn {
+            background: #ff9800; /* Màu cam */
+            color: white;
+            font-weight: bold;
+        }
+
+        .add-question-btn:hover {
+            background: #e68900;
+        }
+
+        /* Nút tạo quiz */
+        .create-quiz-btn {
+            background: #4CAF50; /* Màu xanh lá */
+            color: white;
+            font-weight: bold;
+        }
+
+        .create-quiz-btn:hover {
+            background: #3d8b40;
+        }
+
+        /* Nút hủy (Cancel) */
+        .cancel-btn {
+            background: #61616a;
+            color: white;
+            padding: 6px 14px; /* Giảm chiều cao */
+            font-size: 14px;
+            border-radius: 3px; /* Dẹt hơn */
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background: #d32f2f;
+        }
+
+
+    </style>
 </head>
+
 <body>
+
+<!-- START Wrapper -->
+<div class="wrapper">
+
+    <!-- ========== Topbar Start ========== -->
+    <header class="topbar" style="box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="d-flex align-items-center">
+                    <!-- Menu Toggle Button -->
+                    <div class="topbar-item">
+                        <button type="button" class="button-toggle-menu me-2">
+                            <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Menu Toggle Button -->
+                    <a class="navbar-brand" href="/home">
+                        <img src="/image/learningz.png" alt="Logo" width="60px">
+                        <a style="font-size: 24px; font-weight: bold;">
+                            Learning<span style="font-size: 30px; color: blue;">Z</span>
+                        </a>
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+
+                    <!-- Theme Color (Light/Dark) -->
+                    <div class="topbar-item">
+                        <button type="button" class="topbar-button" id="light-dark-mode">
+                            <iconify-icon icon="solar:moon-bold-duotone" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Theme Setting -->
+                    <div class="topbar-item d-none d-md-flex">
+                        <button type="button" class="topbar-button" id="theme-settings-btn" data-bs-toggle="offcanvas"
+                                data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
+                            <iconify-icon icon="solar:settings-bold-duotone" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- User -->
+                    <div class="dropdown topbar-item">
+                        <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+    <span class="d-flex align-items-center">
+        <img class="rounded-circle" width="32" th:src="@{${avatarUrl}}" alt="User Avatar">
+    </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- Hiển thị tên người dùng -->
+                            <h6 class="dropdown-header">Welcome <span th:text="${username}">User</span>!</h6>
+
+                            <a class="dropdown-item" href="/home/profile">
+                                <i class="bx bx-user-circle text-muted fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="/home/change_password">
+                                <i class="bx bx-key text-muted fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Change Password</span>
+                            </a>
+
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <i class="bx bx-log-out fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Right Sidebar (Theme Settings) -->
+    <div>
+        <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
+            <div class="d-flex align-items-center bg-primary p-3 offcanvas-header">
+                <h5 class="text-white m-0">Theme Settings</h5>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body p-0">
+                <div data-simplebar class="h-100">
+                    <div class="p-3 settings-bar">
+
+                        <div>
+                            <h5 class="mb-3 font-16 fw-semibold">Color Scheme</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-bs-theme"
+                                       id="layout-color-light" value="light">
+                                <label class="form-check-label" for="layout-color-light">Light</label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-dark"
+                                       value="dark">
+                                <label class="form-check-label" for="layout-color-dark">Dark</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Topbar Color</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-topbar-color"
+                                       id="topbar-color-light" value="light">
+                                <label class="form-check-label" for="topbar-color-light">Light</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-topbar-color"
+                                       id="topbar-color-dark" value="dark">
+                                <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Menu Color</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-color"
+                                       id="leftbar-color-light" value="light">
+                                <label class="form-check-label" for="leftbar-color-light">
+                                    Light
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-color"
+                                       id="leftbar-color-dark" value="dark">
+                                <label class="form-check-label" for="leftbar-color-dark">
+                                    Dark
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Sidebar Size</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-default" value="default">
+                                <label class="form-check-label" for="leftbar-size-default">
+                                    Default
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small" value="condensed">
+                                <label class="form-check-label" for="leftbar-size-small">
+                                    Condensed
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-hidden"
+                                       value="hidden">
+                                <label class="form-check-label" for="leftbar-hidden">
+                                    Hidden
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small-hover-active" value="sm-hover-active">
+                                <label class="form-check-label" for="leftbar-size-small-hover-active">
+                                    Small Hover Active
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small-hover" value="sm-hover">
+                                <label class="form-check-label" for="leftbar-size-small-hover">
+                                    Small Hover
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="offcanvas-footer border-top p-3 text-center">
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-danger w-100" id="reset-layout">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========== Topbar End ========== -->
+
+    <!-- ========== App Menu Start ========== -->
+    <div class="main-nav">
+        <!-- Sidebar Logo -->
+        <div class="logo-box">
+            <a href="/home" class="logo-dark">
+                <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
+                <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
+
+            </a>
+            <a href="/home" class="logo-light">
+                <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
+                <img src="/image/learningz.png" class="logo-lg" alt="logo light">
+            </a>
+        </div>
+
+        <!-- Menu Toggle Button (sm-hover) -->
+        <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
+            <iconify-icon icon="solar:double-alt-arrow-right-bold-duotone" class="button-sm-hover-icon"></iconify-icon>
+        </button>
+
+        <div class="scrollbar" data-simplebar>
+            <ul class="navbar-nav" id="navbar-nav">
+
+                <li class="menu-title">General</li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/super_admin/dashboard">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Dashboard </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarUsersMenu" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarUsersMenu">
+                        <span class="nav-text">📋 User List </span>
+                    </a>
+                    <div class="collapse show" id="sidebarUsersMenu">
+                        <ul class="nav sub-navbar-nav">
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                Users</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User
+                                Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course
+                                Manager</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP
+                                Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual
+                                Students</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a>
+                            </li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoursesMenu" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarCoursesMenu">
+                        <span class="nav-text">📋 Course List </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoursesMenu">
+                        <ul class="nav sub-navbar-nav">
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
+                                courses</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- ========== App Menu End ========== -->
+
+    <!-- ==================================================== -->
+    <!-- Start right Content here -->
+    <!-- ==================================================== -->
+    <div class="page-content">
+
+        <!-- Start Container Fluid -->
+        <div class="container-fluid" style="padding-top: 50px">
+
+            <div th:if="${errorMessage}" class="alert alert-danger">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <div class="first-part">
+                <h4 class="form-title">Add New Quiz</h4>
+                <p>Lesson: <span th:text="${lesson.getTitle()}"></span></p>
+                <p>Chapter: <span th:text="${lesson.getChapter().chapterTitle}"></span></p>
+                <p>Course: <span th:text="${lesson.getChapter().getCourse().title}"></span></p>
+                <p>Grade: <span th:text="${lesson.getChapter().getCourse().getGrade().name}"></span></p>
+                <p>Subject: <span th:text="${lesson.getChapter().getCourse().getSubject().name}"></span></p>
+            </div>
+
+            <div class="add-user-form">
+
+                <form th:action="@{/teacher/{lessonId}/quizzesCreate(lessonId=${lessonId})}" method="post">
+                    <div class="question-container">
+
+                        <div class="answer-box">
+                            <label>Quiz Title:</label>
+                            <input type="text" name="quizTitle" required>
+                        </div>
+
+                        <div class="answer-box">
+                            <label>Time Limit (mins):</label>
+                            <input type="text" name="timeLimit" required>
+                        </div>
+
+                        <div class="answer-box">
+                            <label>Total Questions:</label>
+                            <input type="text" id="totalQuestions" name="totalQuestions" value="1" readonly>
+                        </div>
+
+                        <div class="question-block">
+                            <label style="font-size: 22px">Question 1:</label>
+                            <input type="text" name="question[]" placeholder="Enter question" required>
+
+                            <div class="answer-grid">
+                                <div class="answer-box">
+                                    <label>Option A:</label>
+                                    <input type="text" name="optionA[]" oninput="updateSelectOptions(this)" required>
+                                </div>
+
+                                <div class="answer-box">
+                                    <label>Option B:</label>
+                                    <input type="text" name="optionB[]" oninput="updateSelectOptions(this)" required>
+                                </div>
+
+                                <div class="answer-box">
+                                    <label>Option C:</label>
+                                    <input type="text" name="optionC[]" oninput="updateSelectOptions(this)" required>
+                                </div>
+
+                                <div class="answer-box">
+                                    <label>Option D:</label>
+                                    <input type="text" name="optionD[]" oninput="updateSelectOptions(this)" required>
+                                </div>
+                            </div>
+
+                            <label>Correct Answer:</label>
+                            <select name="correctAnswer[]">
+                                <option value="">A</option>
+                                <option value="">B</option>
+                                <option value="">C</option>
+                                <option value="">D</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Nhóm nút được căn chỉnh lại -->
+                    <div class="quiz-buttons">
+                        <!-- Nút thêm câu hỏi -->
+                        <button type="button" class="cancel-btn" onclick="window.history.back();">Cancel</button>
+                        <!-- Nút tạo quiz -->
+                        <button type="submit" class="create-quiz-btn">Create Quiz</button>
+
+                        <button type="button" class="add-question-btn" onclick="addQuestion()">Add Question</button>
+                    </div>
+
+                </form>
+            </div>
+            <script>
+                function addQuestion() {
+                    const container = document.querySelector(".question-container");
+                    const questionCount = container.getElementsByClassName("question-block").length + 1; // Đếm câu hỏi mới
+                    const newQuestion = document.createElement("div");
+                    newQuestion.classList.add("question-block");
+
+                    newQuestion.innerHTML = `
+                    <label style="font-size: 22px">Question ${questionCount}:</label>
+                    <input type="text" name="question[]" placeholder="Enter question" required>
+
+                    <div class="answer-grid">
+                        <div class="answer-box">
+                            <label>Option A:</label>
+                            <input type="text" name="optionA[]" oninput="updateSelectOptions(this)" required>
+                        </div>
+                        <div class="answer-box">
+                            <label>Option B:</label>
+                            <input type="text" name="optionB[]" oninput="updateSelectOptions(this)" required>
+                        </div>
+                        <div class="answer-box">
+                            <label>Option C:</label>
+                            <input type="text" name="optionC[]" oninput="updateSelectOptions(this)" required>
+                        </div>
+                        <div class="answer-box">
+                            <label>Option D:</label>
+                            <input type="text" name="optionD[]" oninput="updateSelectOptions(this)" required>
+                        </div>
+                    </div>
+
+                    <label>Correct Answer:</label>
+                    <select name="correctAnswer[]">
+                        <option value="">A</option>
+                        <option value="">B</option>
+                        <option value="">C</option>
+                        <option value="">D</option>
+                    </select>
+                    `;
+
+                    container.appendChild(newQuestion);
+
+                    // Reset giá trị các input để tránh bị trùng
+                    const inputs = newQuestion.querySelectorAll("input");
+                    inputs.forEach(input => input.value = "");
+
+                    // Cập nhật Total Questions
+                    document.getElementById("totalQuestions").value = questionCount;
+                }
+
+                // Hàm cập nhật value của option trong select
+                function updateSelectOptions(inputElement) {
+                    const questionBlock = inputElement.closest(".question-block"); // Tìm khối câu hỏi cha
+                    const options = questionBlock.querySelectorAll("select[name='correctAnswer[]'] option");
+
+                    options[0].value = questionBlock.querySelector("input[name='optionA[]']").value || "";
+                    options[1].value = questionBlock.querySelector("input[name='optionB[]']").value || "";
+                    options[2].value = questionBlock.querySelector("input[name='optionC[]']").value || "";
+                    options[3].value = questionBlock.querySelector("input[name='optionD[]']").value || "";
+                }
+
+
+            </script>
+
+
+        </div>
+        <!-- End Container Fluid -->
+
+    </div>
+    <!-- ==================================================== -->
+    <!-- End Page Content -->
+    <!-- ==================================================== -->
+
+</div>
+<!-- END Wrapper -->
+
+<!-- Vendor Javascript (Require in all Page) -->
+<script src="/js/vendor.js"></script>
+
+<!-- App Javascript (Require in all Page) -->
+<script src="/js/app.js"></script>
+
+<!-- Vector Map Js -->
+<script src="/vendor/jsvectormap/js/jsvectormap.min.js"></script>
+<script src="/vendor/jsvectormap/maps/world-merc.js"></script>
+<script src="/vendor/jsvectormap/maps/world.js"></script>
+
+<!-- Dashboard Js -->
+<script src="/js/pages/dashboard.js"></script>
 
 </body>
 </html>

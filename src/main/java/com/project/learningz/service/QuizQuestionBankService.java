@@ -2,6 +2,7 @@ package com.project.learningz.service;
 
 import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.repository.QuizQuestionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,10 @@ public class QuizQuestionBankService {
             questionBank.setOption3(option.get(2));
             questionBank.setOption4(option.get(3));
         }
+    }
+
+    @Transactional
+    public void deleteQuestionByQuizIdAndQuestionId(Integer quizId, Integer questionId) {
+        quizQuestionRepository.deleteByQuizIdAndQuestionId(quizId, questionId);
     }
 }

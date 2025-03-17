@@ -342,7 +342,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
+                    <a class="nav-link" href="/super_admin/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -358,19 +358,19 @@
                     <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All Users</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User Manager</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course Manager</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">VIP Students</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Casual Students</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Teachers</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
+                                   th:href="@{/super_admin/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Marketers</a></li>
                         </ul>
                     </div>
                 </li>
@@ -383,15 +383,15 @@
                     <div class="collapse" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
+                                   th:href="@{/super_admin/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
+                                   th:href="@{/super_admin/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
+                                   th:href="@{/super_admin/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
+                                   th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending courses</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
+                                   th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -465,7 +465,7 @@
                 <!-- Nút hành động -->
                 <div class="form-actions text-center mt-4">
                     <th:block th:if="${course.courseStatus.name() == 'PENDING'}">
-                        <form action="/admin/approve" method="post" style="display:inline;" onsubmit="return confirmAction(event, this);">
+                        <form action="/super_admin/approve" method="post" style="display:inline;" onsubmit="return confirmAction(event, this);">
                             <input type="hidden" name="id" th:value="${course.id}"/>
                             <input type="hidden" name="status" th:value="${course.courseStatus}"/>
                             <input type="hidden" name="action" class="action-field"/>

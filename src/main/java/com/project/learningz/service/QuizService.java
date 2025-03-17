@@ -3,11 +3,13 @@ package com.project.learningz.service;
 
 import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
+import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
-import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.repository.QuizRepository;
-import com.project.learningz.repository.SystemSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,6 @@ public class QuizService {
 
     @Autowired
     private QuizRepository quizRepository;
-
 
     public Quiz getQuizById(Integer quizId) {
         return quizRepository.findById(quizId).orElse(null);
@@ -45,8 +46,16 @@ public class QuizService {
         return quizRepository.findByCourseId(courseId);
     }
 
-    public List<QuizDetailDTO> getQuizzesByLessonId(Integer lessonId) {
-        return quizRepository.findQuizzesByLessonId(lessonId);
+    public Page<QuizDetailDTO> getQuizzesByLessonIdAndKey(Integer lessonId, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (lessonId != null && keyword != null) {
+            return quizRepository.findQuizzesByLessonIdAndKey(lessonId, keyword, pageable);
+        }
+        return quizRepository.getAllQuizzesDTO(lessonId, pageable);
+    }
+
+    public QuizDetailDTO getQuizDetailById(Integer quizId) {
+        return quizRepository.findQuizzesByQuizId(quizId);
     }
 
 

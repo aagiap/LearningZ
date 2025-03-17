@@ -334,7 +334,7 @@
     <!-- Start right Content here -->
     <!-- ==================================================== -->
     <div class="page-content">
-        <div class="container-fluid" style="padding-top: 50px">
+        <div class="container-fluid" style="padding-top: 30px">
             <div class="container">
                 <h3 class="mt-3">Question List</h3>
 
@@ -349,12 +349,12 @@
                 <div class="mb-3 d-flex align-items-center">
                     <button class="btn btn-success"
                             style="background-color: #0d47a1; width: 200px; color: whitesmoke"
-                            onclick="window.location.href='/teacher/import'">
-                        Import New Question
+                            th:onclick="|window.location.href='/teacher/${quizId}/createQuestion'|">
+                        Add New Question
                     </button>
 
                     <div class="flex-grow-1 d-flex justify-content-center">
-                        <form method="get" action="/teacher/questionList" class="d-flex" style="max-width: 400px;">
+                        <form method="get" th:action="@{/teacher/questions/{quizId}(quizId=${quizId})}" class="d-flex" style="max-width: 400px;">
                             <input type="text" name="keyword" id="keyword" th:value="${keyword}"
                                    class="form-control me-2" placeholder="Search questions...">
                             <button type="submit" class="btn btn-primary"
@@ -364,138 +364,127 @@
                     </div>
                 </div>
 
+                <!-- Danh sách câu hỏi -->
+                <div class="table-responsive w-100"> <!-- Đảm bảo bảng full width và cuộn nếu cần -->
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th style="background-color: #0d47a1; color: white;">#</th>
+                            <th style="background-color: #0d47a1; color: white;">Content</th>
+                            <th style="background-color: #0d47a1; color: white;">Correct Option</th>
+                            <th style="background-color: #0d47a1; color: white;">Grade</th>
+                            <th style="background-color: #0d47a1; color: white;">Subject</th>
+                            <th style="background-color: #0d47a1; color: white;">Course Title</th>
+                            <th style="background-color: #0d47a1; color: white;">Chapter Title</th>
+                            <th style="background-color: #0d47a1; color: white;">Lesson Title</th>
+                            <th style="background-color: #0d47a1; color: white;">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="question, index : ${questions}">
+                            <td th:text="${index.count}"></td>
+                            <td th:text="${question.content}"></td>
+                            <td th:text="${question.correctOption}"></td>
+                            <td th:text="${question.grade}"></td>
+                            <td th:text="${question.subject}"></td>
+                            <td th:text="${question.courseTitle}"></td>
+                            <td th:text="${question.chapterTitle}"></td>
+                            <td th:text="${question.lessonTitle}"></td>
+                            <td>
+                                <a th:href="@{/teacher/questions/{quizId}/{questionId}(quizId=${quizId}, questionId=${question.questionId})}"
+                                   class="text-primary" title="View">
+                                    <i class="fas fa-eye" style="color: #0d47a1"></i>
+                                </a>
 
-                <div class="row">
-                    <!-- Danh sách câu hỏi -->
-                    <div class="col-lg-9">
+                                <a href="javascript:void(0);" class="text-danger" title="Delete"
+                                   th:onclick="'confirmDelete(' + ${question.questionId} + ', ' + ${quizId} + ')'">
+                                    <i class="fas fa-trash" style="color: #c82333; margin-left: 10px;"></i>
+                                </a>
 
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th style="background-color: #0d47a1; color: white;">#</th>
-                                <th style="background-color: #0d47a1; color: white;">Content</th>
-                                <th style="background-color: #0d47a1; color: white;">Correct Option</th>
-                                <th style="background-color: #0d47a1; color: white;">Grade</th>
-                                <th style="background-color: #0d47a1; color: white;">Subject</th>
-                                <th style="background-color: #0d47a1; color: white;">Course Title</th>
-                                <th style="background-color: #0d47a1; color: white;">Chapter Title</th>
-                                <th style="background-color: #0d47a1; color: white;">Lesson Title</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="question, index : ${questions}">
-                                <td th:text="${index.count}"></td>
-                                <td th:text="${question.content}"></td>
-                                <td th:text="${question.correctOption}"></td>
-                                <td th:text="${question.grade}"></td>
-                                <td th:text="${question.subject}"></td>
-                                <td th:text="${question.courseTitle}"></td>
-                                <td th:text="${question.chapterTitle}"></td>
-                                <td th:text="${question.lessonTitle}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                <!-- Form xóa riêng cho từng câu hỏi -->
+                                <form th:id="'deleteForm-' + ${question.questionId}"
+                                      th:action="@{/teacher/{quizId}/{questionId}/deleteQuestion(quizId=${quizId}, questionId=${question.questionId})}"
+                                      method="post">
+                                    <input type="hidden" name="questionId" th:value="${question.questionId}">
+                                    <input type="hidden" name="quizId" th:value="${quizId}">
+                                </form>
 
-                    <!-- Sidebar (Bộ lọc câu hỏi) -->
-<!--                    <div class="col-lg-3">-->
-<!--                        <div class="card p-3 shadow-sm">-->
-<!--                            <h5 class="text-center">Filter Questions</h5>-->
-<!--                            <form method="post" action="/teacher/questionList">-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="grade" class="form-label">Grade</label>-->
-<!--                                    <select name="grade" id="grade" class="form-select">-->
-<!--                                        <option value="">All</option>-->
-<!--                                        <option th:each="g : ${grades}" th:value="${g}" th:text="${g}"-->
-<!--                                                th:selected="${g == selectedGrade}"></option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="subject" class="form-label">Subject</label>-->
-<!--                                    <select name="subject" id="subject" class="form-select">-->
-<!--                                        <option value="">All</option>-->
-<!--                                        <option th:each="s : ${subjects}" th:value="${s}" th:text="${s}"-->
-<!--                                                th:selected="${s == selectedSubject}"></option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="course" class="form-label">Course</label>-->
-<!--                                    <select name="course" id="course" class="form-select">-->
-<!--                                        <option value="">All</option>-->
-<!--                                        <option th:each="c : ${courses}" th:value="${c}" th:text="${c}"-->
-<!--                                                th:selected="${c == selectedCourse}"></option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="chapter" class="form-label">Chapter</label>-->
-<!--                                    <select name="chapter" id="chapter" class="form-select">-->
-<!--                                        <option value="">All</option>-->
-<!--                                        <option th:each="ch : ${chapters}" th:value="${ch}" th:text="${ch}"-->
-<!--                                                th:selected="${ch == selectedChapter}"></option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="lesson" class="form-label">Lesson</label>-->
-<!--                                    <select name="lesson" id="lesson" class="form-select">-->
-<!--                                        <option value="">All</option>-->
-<!--                                        <option th:each="l : ${lessons}" th:value="${l}" th:text="${l}"-->
-<!--                                                th:selected="${l == selectedLesson}"></option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-<!--                                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>-->
-<!--                            </form>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Nút First -->
+                            <li th:class="${questions.first} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link"
+                                   th:href="@{/teacher/questions/{quizId}(quizId=${quizId}, page=0, size=${questions.size}, keyword=${keyword})}">
+                                    First
+                                </a>
+                            </li>
+
+                            <!-- Nút Previous -->
+                            <li th:class="${questions.first} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link"
+                                   th:href="@{/teacher/questions/{quizId}(quizId=${quizId}, page=${questions.number - 1}, size=${questions.size}, keyword=${keyword})}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span> <!-- << -->
+                                </a>
+                            </li>
+
+                            <!-- Hiển thị các số trang -->
+                            <li th:each="i : ${#numbers.sequence(0, questions.totalPages - 1)}"
+                                th:if="${i >= questions.number - 2 and i <= questions.number + 2}"
+                                th:class="${i == questions.number} ? 'page-item active' : 'page-item'">
+                                <a class="page-link"
+                                   th:href="@{/teacher/questions/{quizId}(quizId=${quizId}, page=${i}, size=${questions.size}, keyword=${keyword})}"
+                                   th:text="${i + 1}"></a>
+                            </li>
+
+                            <!-- Hiển thị dấu "..." nếu cần -->
+                            <li th:if="${questions.number < questions.totalPages - 3}" class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+
+                            <!-- Nút Next -->
+                            <li th:class="${questions.last} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link"
+                                   th:href="@{/teacher/questions/{quizId}(quizId=${quizId}, page=${questions.number + 1}, size=${questions.size}, keyword=${keyword})}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span> <!-- >> -->
+                                </a>
+                            </li>
+
+                            <!-- Nút Last -->
+                            <li th:class="${questions.last} ? 'page-item disabled' : 'page-item'">
+                                <a class="page-link"
+                                   th:href="@{/teacher/questions/{quizId}(quizId=${quizId}, page=${questions.totalPages - 1}, size=${questions.size}, keyword=${keyword})}">
+                                    Last
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
+                <script>
+                    function confirmDelete(questionId) {
+                        if (confirm("Are you sure you want to delete this item?")) {
+                            document.getElementById("deleteForm-" + questionId).submit();
+                        }
+                    }
+                </script>
+
             </div>
         </div>
-<!--        <div class="d-flex justify-content-center mt-3">-->
-<!--            <form id="paginationForm" th:action="@{/teacher/questionList}" method="post">-->
-<!--                <input type="hidden" name="grade" th:value="${selectedGrade}">-->
-<!--                <input type="hidden" name="subject" th:value="${selectedSubject}">-->
-<!--                <input type="hidden" name="course" th:value="${selectedCourse}">-->
-<!--                <input type="hidden" name="chapter" th:value="${selectedChapter}">-->
-<!--                <input type="hidden" name="lesson" th:value="${selectedLesson}">-->
-<!--                <input type="hidden" name="page" id="pageInput" value="0">-->
-<!--            </form>-->
-
-<!--            <ul class="pagination">-->
-<!--                <li class="page-item" th:if="${currentPage > 0}">-->
-<!--                    <a class="page-link" href="#" th:attr="onclick='submitPage(0)'">First</a>-->
-<!--                </li>-->
-<!--                <li class="page-item" th:if="${currentPage > 0}">-->
-<!--                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + (${currentPage - 1}) + ')'">Previous</a>-->
-<!--                </li>-->
-
-<!--                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"-->
-<!--                    th:classappend="${currentPage == i} ? 'active' : ''">-->
-<!--                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + ${i} + ')'" th:text="${i + 1}"></a>-->
-<!--                </li>-->
-
-<!--                <li class="page-item" th:if="${currentPage < totalPages - 1}">-->
-<!--                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + (${currentPage + 1}) + ')'">Next</a>-->
-<!--                </li>-->
-<!--                <li class="page-item" th:if="${currentPage < totalPages - 1}">-->
-<!--                    <a class="page-link" href="#" th:attr="onclick='submitPage(' + (${totalPages - 1}) + ')'">Last</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-
-<!--            <script>-->
-<!--                function submitPage(page) {-->
-<!--                    document.getElementById('pageInput').value = page;-->
-<!--                    document.getElementById('paginationForm').submit();-->
-<!--                }-->
-<!--            </script>-->
-
-
-        </div>
-
-
     </div>
 
-    <!-- ==================================================== -->
-    <!-- End Page Content -->
-    <!-- ==================================================== -->
+
+</div>
+
+<!-- ==================================================== -->
+<!-- End Page Content -->
+<!-- ==================================================== -->
 
 
 </div>
