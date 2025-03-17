@@ -477,7 +477,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/edit-prompt">
+                    <a class="nav-link" href="/super_admin/edit-prompt">
         <span class="nav-icon">
             <i class="fa-solid fa-robot"></i>
         </span>
@@ -485,7 +485,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/system-setting">
+                    <a class="nav-link" href="/super_admin/system-setting">
         <span class="nav-icon">
             <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
         </span>
@@ -674,7 +674,7 @@
 
             <div class="container-">
 
-                <form action="/admin/save-prompt" method="post">
+                <form action="/super_admin/save-prompt" method="post">
                     <h2>Edit  Prompt AI</h2>
                     <p th:if="${message}" th:text="${message}" style="color: green;"></p>
                     <textarea name="content" th:text="${content}"></textarea><br>

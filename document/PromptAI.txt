@@ -20,4 +20,4 @@ Questions about VIP package:
 
 Course related questions:
 - Search: if you don't know, tell students to go to home, select "course", there they can filter courses and search by name, subject, grade and teacher name
-- For any other questions, please contact course manager Loc
+- For any other questions, please contact course manager Loc.

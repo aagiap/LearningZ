@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/super_admin")
 public class PromptAIController {
 
     @Autowired

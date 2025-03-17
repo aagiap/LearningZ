@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/super_admin")
 public class SystemSettingController {
     @Autowired
     private SystemSettingService systemSettingService;

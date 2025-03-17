@@ -477,7 +477,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/edit-prompt">
+                    <a class="nav-link" href="/super_admin/edit-prompt">
         <span class="nav-icon">
             <i class="fa-solid fa-robot"></i>
         </span>
@@ -485,7 +485,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/system-setting">
+                    <a class="nav-link" href="/super_admin/system-setting">
         <span class="nav-icon">
             <iconify-icon icon="solar:settings-bold-duotone"></iconify-icon>
         </span>
@@ -688,7 +688,7 @@
                             <span th:text="${message}"></span>
                         </div>
 
-                        <form id="settingsForm" th:action="@{/admin/update-system-setting}" method="post" onsubmit="return confirmSubmit()">
+                        <form id="settingsForm" th:action="@{/super_admin/update-system-setting}" method="post" onsubmit="return confirmSubmit()">
                             <div class="settings-list" style="display: flex; flex-wrap: wrap;">
                                 <!-- Loop through system settings -->
                                 <div th:each="setting, status : ${systemSettings}" class="setting-item">
