@@ -80,9 +80,4 @@ public class QuestionExpertService {
         questionExpertRepository.save(question);
     }
 
-    public List<QuestionDetailDTO> filterQuestionByQuizId(Integer quizId) {
-        return questionExpertRepository.getQuestionByQuizId(quizId);
-    }
-
-
 }

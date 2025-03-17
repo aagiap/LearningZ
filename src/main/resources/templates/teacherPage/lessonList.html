@@ -425,7 +425,7 @@
                                 <button type="submit" class="view-btn" title="View Documents List"><i
                                         class="fa-solid fa-file"></i></button>
                             </form>
-                            <form action="/teacher/quizzes" method="get">
+                            <form th:action="@{/teacher/{lessonId}/quizzes(lessonId=${lesson.lessonId})}" method="get">
                                 <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}"/>
                                 <button type="submit" class="view-btn" title="View Quizzes List"><i
                                         class="fa-solid fa-question"></i></button>
