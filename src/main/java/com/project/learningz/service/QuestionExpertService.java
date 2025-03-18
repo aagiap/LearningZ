@@ -1,12 +1,10 @@
 package com.project.learningz.service;
 
 import com.project.learningz.dto.QuestionDetailDTO;
-import com.project.learningz.entity.QuestionBank;
-import com.project.learningz.entity.Quiz;
-import com.project.learningz.entity.QuizQuestion;
-import com.project.learningz.entity.QuizQuestionId;
+import com.project.learningz.entity.*;
 import com.project.learningz.repository.QuestionExpertRepository;
 import com.project.learningz.repository.QuizQuestionRepository;
+import com.project.learningz.repository.SystemSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +21,8 @@ public class QuestionExpertService {
     QuestionExpertRepository questionExpertRepository;
     @Autowired
     private QuizQuestionRepository quizQuestionRepository;
+    @Autowired
+    private SystemSettingRepository systemSettingRepository;
 
     public Page<QuestionDetailDTO> filterQuestionByQuizIdAndKeyword(Integer quizId, String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -78,6 +78,11 @@ public class QuestionExpertService {
         question.setOption4(questionBank.getOption4());
         question.setOption1(questionBank.getOption1());
         questionExpertRepository.save(question);
+    }
+
+    public Integer getMaxQuestionsInQuiz() {
+        SystemSetting systemSetting = systemSettingRepository.findBySettingName("Max question in quiz");
+        return systemSetting.getSettingValue();
     }
 
 }
