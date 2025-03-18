@@ -52,6 +52,10 @@ public class QuizzezForTeacherController {
     private QuizRepository quizRepository;
     @Autowired
     private QuizQuestionRepository quizQuestionRepository;
+    @Autowired
+    private SystemSettingService systemSettingService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/{lessonId}/quizzes")
     public String getAllQuizzes(@PathVariable Integer lessonId,
@@ -74,6 +78,10 @@ public class QuizzezForTeacherController {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
 
+        Lesson lesson = lessonService.getLessonById(lessonId);
+        Integer chapterId = lesson.getChapter().getId();
+        User user1 = userManagementService.findUserByUsername(username);
+
         Page<QuizDetailDTO> quizzes = quizService.getQuizzesByLessonIdAndKey(lessonId, keyword, page, size);
 
         model.addAttribute("username", username);
@@ -83,6 +91,9 @@ public class QuizzezForTeacherController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
+        model.addAttribute("chapterId", chapterId);
+        model.addAttribute("userId", user1.getId());
+        model.addAttribute("user", user1);
 
         return "teacherPage/quizzesList";
     }
@@ -107,6 +118,10 @@ public class QuizzezForTeacherController {
         if (avatarUrl == null) {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
+        User user1 = userManagementService.findUserByUsername(username);
+
+        Quiz quiz = quizService.getQuizById(quizId);
+        Integer lessonId = quiz.getLesson().getId();
 
         Page<QuestionDetailDTO> questions = questionService.filterQuestionByQuizIdAndKeyword(quizId, keyword, page, size);
 
@@ -117,6 +132,9 @@ public class QuizzezForTeacherController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
+        model.addAttribute("lessonId", lessonId);
+        model.addAttribute("user", user1);
+
 
         return "teacherPage/questionsOfQuiz";
     }
@@ -139,6 +157,8 @@ public class QuizzezForTeacherController {
         if (avatarUrl == null) {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
+        User user1 = userManagementService.findUserByUsername(username);
+
 
         List<String> lessons = lessonService.getAllLessonInQuestions();
 
@@ -151,6 +171,8 @@ public class QuizzezForTeacherController {
         model.addAttribute("question", question);
         model.addAttribute("lessons", lessons);
         model.addAttribute("selectedLesson", question.getLessonTitle());
+        model.addAttribute("user", user1);
+
 
         return "teacherPage/questionDetail";
     }
@@ -164,6 +186,9 @@ public class QuizzezForTeacherController {
         if (question != null) {
             quizQuestionBankService.deleteQuestionByQuizIdAndQuestionId(quizId, questionId);
             questionService.deleteQuestion(questionId);
+            Quiz quiz = quizService.getQuizById(quizId);
+            quiz.setTotalQuestions(quiz.getTotalQuestions() - 1);
+            quizRepository.save(quiz);
             redirectAttributes.addFlashAttribute("successMessage", "Question deleted successfully.");
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Question not found.");
@@ -191,7 +216,8 @@ public class QuizzezForTeacherController {
     public String createQuestionForm(@PathVariable Integer quizId,
                                      @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                      @AuthenticationPrincipal OAuth2User userOAuth2,
-                                     Model model) {
+                                     Model model,
+                                     RedirectAttributes attributes) {
         String username = null;
 
         if (user != null) {
@@ -204,12 +230,20 @@ public class QuizzezForTeacherController {
         if (avatarUrl == null) {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
+        User user1 = userManagementService.findUserByUsername(username);
+
 
         QuizDetailDTO currentQuiz = quizService.getQuizDetailById(quizId);
+        Integer numQuestionInQuiz = currentQuiz.getTotalQuestions();
+        if (numQuestionInQuiz == questionService.getMaxQuestionsInQuiz()) {
+            attributes.addFlashAttribute("errorMessage", "This quiz has already reached the maximum number of questions. Cannot create a new one.");
+            return "redirect:/teacher/questions/" + quizId;
+        }
 
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("currentQuiz", currentQuiz);
+        model.addAttribute("user", user1);
 
         return "teacherPage/questionCreate";
     }
@@ -237,7 +271,8 @@ public class QuizzezForTeacherController {
     public String createQuizForm(@PathVariable Integer lessonId,
                                  @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                  @AuthenticationPrincipal OAuth2User userOAuth2,
-                                 Model model) {
+                                 Model model,
+                                 RedirectAttributes attributes) {
         String username = null;
 
         if (user != null) {
@@ -251,12 +286,21 @@ public class QuizzezForTeacherController {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
 
+        User user1 = userManagementService.findUserByUsername(username);
+
+
         Lesson lesson = lessonService.getLessonById(lessonId);
+        System.out.println(lesson.getId());
+        Integer numQuizzes = lesson.getQuizzes().size();
+        System.out.println("numQuizz" + numQuizzes);
         Chapter chapter = lesson.getChapter();
         Course course = chapter.getCourse();
         Grade grade = course.getGrade();
         Subject subject = course.getSubject();
-
+        if (numQuizzes == quizService.getMaxQuizInLesson()) {
+            attributes.addFlashAttribute("errorMessage", "This lesson has already reached the maximum number of quizzes. Cannot create a new one.");
+            return "redirect:/teacher/" + lessonId + "/quizzes";
+        }
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("lesson", lesson);
@@ -264,6 +308,7 @@ public class QuizzezForTeacherController {
         model.addAttribute("course", course);
         model.addAttribute("grade", grade);
         model.addAttribute("subject", subject);
+        model.addAttribute("user", user1);
 
         return "teacherPage/quizzesCreate";
     }
@@ -315,7 +360,7 @@ public class QuizzezForTeacherController {
 
         }
         attributes.addFlashAttribute("successMessage", "Quiz has created successfully");
-        attributes.addAttribute("lessonId", lessonId);
+        attributes.addFlashAttribute("lessonId", lessonId);
         return "redirect:/teacher/" + lessonId + "/quizzes";
     }
 

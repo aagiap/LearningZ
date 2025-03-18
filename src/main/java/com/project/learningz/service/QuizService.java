@@ -5,7 +5,9 @@ import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
+import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.repository.QuizRepository;
+import com.project.learningz.repository.SystemSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,8 @@ public class QuizService {
 
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private SystemSettingRepository systemSettingRepository;
 
     public Quiz getQuizById(Integer quizId) {
         return quizRepository.findById(quizId).orElse(null);
@@ -56,6 +60,11 @@ public class QuizService {
 
     public QuizDetailDTO getQuizDetailById(Integer quizId) {
         return quizRepository.findQuizzesByQuizId(quizId);
+    }
+
+    public Integer getMaxQuizInLesson() {
+        SystemSetting systemSetting = systemSettingRepository.findBySettingName("Max quiz in lesson");
+        return systemSetting.getSettingValue();
     }
 
 

@@ -307,7 +307,7 @@
                                    </span>
                         <span class="nav-text"> Dashboard </span>
                         <form action="/teacher/dashboard" id="viewDashboard">
-<!--                            <input type="hidden" name="userId" th:value="${user.getId()}">-->
+                            <input type="hidden" name="userId" th:value="${user.getId()}">
                         </form>
                     </a>
                 </li>
@@ -328,23 +328,14 @@
                                    </span>
                         <span class="nav-text">Subject List</span>
                         <form action="/teacher/subject" id="viewSubjectList">
-<!--                            <input type="number" name="userId" th:value="${userId.getId()}" hidden>-->
+                            <input type="number" name="userId" th:value="${user.getId()}" hidden>
                         </form>
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{teacher/{lessonId}/quizzes(lessonId=${lessonId})}">Quizzes</a>
-                                   <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
-                                   </span>
-                        <span class="nav-text">Quizzes</span>
-                    </a>
-                </li>
 
             </ul>
         </div>
-
     </div>
     <!-- ========== App Menu End ========== -->
 
@@ -379,6 +370,14 @@
                         </button>
                     </form>
                 </div>
+
+                <button class="btn ms-3"
+                        style="width: 200px; background-color: #0d47a1; color: white; border-color: #083768;"
+                        th:onclick="|window.location.href='@{/teacher/chapter/lesson(chapterId=${chapterId}, userId=${userId})}'|">
+                    Return Lesson List
+                </button>
+
+
             </div>
 
             <div class="user-list">

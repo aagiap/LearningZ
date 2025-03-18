@@ -88,6 +88,10 @@ public class UserManagementService {
         return userRepository.findById(id);
     }
 
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public void updateUser(User user) {
         Optional<User> userOptional = userRepository.findById(user.getId());
         if (userOptional.isPresent()) {

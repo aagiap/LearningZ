@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="/css/UserManagement.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
@@ -115,8 +118,9 @@
         .summary-box2 {
             padding-top: 20px;
             max-width: 1000px;
+            margin-left: 70px; /* Hoặc một khoảng cách phù hợp */
+            margin-top: 20px;
             text-align: left;
-            /*margin-right: 20px;*/
         }
 
         /* Tiêu đề của summary */
@@ -167,6 +171,35 @@
 
         .summary-box, .summary-box2 {
             flex: 1; /* Cả hai div chiếm cùng một không gian */
+        }
+
+        .charts-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Căn giữa theo chiều dọc */
+            gap: 20px;
+        }
+
+        .chart-container {
+            flex: 1; /* Mặc định chia đều */
+            margin-left: 40px;
+            margin-top: 20px;
+        }
+
+        .chart-container h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+
+        .chart-container:first-child { /* userChart */
+            flex: 1.8; /* Chiếm nhiều không gian hơn */
+        }
+
+        .chart-container:last-child { /* courseChart */
+            flex: 1.2; /* Nhỏ hơn userChart */
+            max-width: 40%; /* Hoặc giới hạn tối đa chiều rộng */
         }
 
         /* Responsive bảng trên màn hình nhỏ */
@@ -502,6 +535,18 @@
     <!-- Start right Content here -->
     <div class="page-content">
 
+        <div class="charts-wrapper">
+            <div class="chart-container">
+                <h3>User Chart</h3>
+                <canvas id="userChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Course Chart</h3>
+                <canvas id="courseChart"></canvas>
+            </div>
+        </div>
+
+
         <div class="summary-container">
             <div class="summary-box">
                 <p>The summary of Accounts</p>
@@ -576,29 +621,8 @@
                 </table>
             </div>
 
-            <div class="summary-box2">
-                <p>The 10 most recently registered accounts</p>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="user, index : ${users}">
-                        <td th:text="${index.count}"></td>
-                        <td th:text="${user.username}"></td>
-                        <td th:text="${user.email}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="summary-container">
             <div class="summary-box">
+
                 <p>The summary of Courses</p>
                 <table>
                     <tr>
@@ -657,6 +681,29 @@
                         </td>
                     </tr>
                 </table>
+
+            </div>
+        </div>
+
+        <div class="summary-container">
+            <div class="summary-box2">
+                <p>The 10 most recently registered accounts</p>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user, index : ${users}">
+                        <td th:text="${index.count}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div> <!-- end row -->
 
             <div class="summary-box2">
@@ -696,6 +743,111 @@
 
 </div>
 <!-- END Wrapper -->
+<script th:inline="javascript">
+    var totalUsers = /*[[${sumOfUsers}]]*/ 0;
+    var sumOfAdminUsers = /*[[${sumOfAdminUsers}]]*/ 0;
+    var sumOfAdminCourses = /*[[${sumOfAdminCourses}]]*/ 0;
+    var sumOfVipUsers = /*[[${sumOfVipUsers}]]*/ 0;
+    var sumOfCasualUsers = /*[[${sumOfCasualUsers}]]*/ 0;
+    var sumOfTeacherUsers = /*[[${sumOfTeacherUsers}]]*/ 0;
+    var sumOfMarketerUsers = /*[[${sumOfMarketerUsers}]]*/ 0;
+
+    var totalCourses = /*[[${totalCourses}]]*/ 0;
+    var sumOfActiveCourses = /*[[${sumOfActiveCourses}]]*/ 0;
+    var sumOfInactiveCourses = /*[[${sumOfInactiveCourses}]]*/ 0;
+    var sumOfPendingCourses = /*[[${sumOfPendingCourses}]]*/ 0;
+    var sumOfRejectedCourses = /*[[${sumOfRejectedCourses}]]*/ 0;
+
+    function calculatePercentage(value, total) {
+        return total === 0 ? 0 : ((value / total) * 100).toFixed(2); // Giữ 2 số thập phân
+    }
+
+    var userData = [
+        calculatePercentage(sumOfAdminUsers, totalUsers),
+        calculatePercentage(sumOfAdminCourses, totalUsers),
+        calculatePercentage(sumOfVipUsers, totalUsers),
+        calculatePercentage(sumOfCasualUsers, totalUsers),
+        calculatePercentage(sumOfTeacherUsers, totalUsers),
+        calculatePercentage(sumOfMarketerUsers, totalUsers)
+    ];
+
+    var courseData = [
+        calculatePercentage(sumOfActiveCourses, totalCourses),
+        calculatePercentage(sumOfInactiveCourses, totalCourses),
+        calculatePercentage(sumOfPendingCourses, totalCourses),
+        calculatePercentage(sumOfRejectedCourses, totalCourses)
+    ];
+</script>
+
+
+<script>
+    // Biểu đồ tài khoản
+    var ctxUser = document.getElementById('userChart').getContext('2d');
+    var userChart = new Chart(ctxUser, {
+        type: 'bar',
+        data: {
+            labels: ['User Manager', 'Course Manager', 'VIP Student', 'Casual Student', 'Teacher', 'Marketer'],
+            datasets: [{
+                label: 'Percentage of Accounts (%)',
+                data: userData,
+                backgroundColor: ['#33FF57', '#3357FF', '#F3C623', '#FF33A6', '#23C6F3', '#9B59B6']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + "%"; // Thêm dấu % vào trục y
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + "%"; // Hiển thị phần trăm trong tooltip
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+    var ctxCourse = document.getElementById('courseChart').getContext('2d');
+    var courseChart = new Chart(ctxCourse, {
+        type: 'doughnut',
+        data: {
+            labels: ['Active', 'Inactive', 'Pending', 'Rejected'],
+            datasets: [{
+                data: courseData,
+                backgroundColor: ['#33FF57', '#616161', '#F3C623', '#FF3333']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + "%";
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+
+
 
 <!-- Vendor Javascript (Require in all Page) -->
 <script src="/js/vendor.js"></script>

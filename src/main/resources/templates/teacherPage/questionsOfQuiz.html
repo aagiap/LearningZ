@@ -276,12 +276,12 @@
     <div class="main-nav">
         <!-- Sidebar Logo -->
         <div class="logo-box">
-            <a href="index.html" class="logo-dark">
+            <a href="/home" class="logo-dark">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
 
             </a>
-            <a href="index.html" class="logo-light">
+            <a href="/home" class="logo-light">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo light">
             </a>
@@ -298,33 +298,39 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
+                    <a class="nav-link" href="#" onclick="viewDashBoard(this)">
                                    <span class="nav-icon">
-                                        <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
+                                        <i class="fa-solid fa-chart-line"></i>
                                    </span>
                         <span class="nav-text"> Dashboard </span>
+                        <form action="/teacher/dashboard" id="viewDashboard">
+                            <input type="hidden" name="userId" th:value="${user.getId()}">
+                        </form>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button"
-                       aria-expanded="false" aria-controls="sidebarProducts">
+                    <a class="nav-link" href="/teacher">
                                    <span class="nav-icon">
-                                       <iconify-icon icon="solar:user-bold"></iconify-icon>
+                                        <i class="fa-regular fa-book"></i>
                                    </span>
-                        <span class="nav-text"> Question list </span>
+                        <span class="nav-text">Courses Management</span>
                     </a>
-                    <div class="collapse" id="sidebarProducts">
-                        <ul class="nav sub-navbar-nav">
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/teacher/questionList">List</a>
-                            </li>
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/teacher">Create</a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="viewSubjectList(this)">
+                                   <span class="nav-icon">
+                                        <i class="fa-light fa-book-open"></i>
+                                   </span>
+                        <span class="nav-text">Subject List</span>
+                        <form action="/teacher/subject" id="viewSubjectList">
+                            <input type="number" name="userId" th:value="${user.getId()}" hidden>
+                        </form>
+                    </a>
+                </li>
+
+
             </ul>
         </div>
     </div>
@@ -354,7 +360,8 @@
                     </button>
 
                     <div class="flex-grow-1 d-flex justify-content-center">
-                        <form method="get" th:action="@{/teacher/questions/{quizId}(quizId=${quizId})}" class="d-flex" style="max-width: 400px;">
+                        <form method="get" th:action="@{/teacher/questions/{quizId}(quizId=${quizId})}" class="d-flex"
+                              style="max-width: 400px;">
                             <input type="text" name="keyword" id="keyword" th:value="${keyword}"
                                    class="form-control me-2" placeholder="Search questions...">
                             <button type="submit" class="btn btn-primary"
@@ -362,6 +369,12 @@
                             </button>
                         </form>
                     </div>
+
+                    <button class="btn ms-3"
+                            style="width: 200px; background-color: #0d47a1; color: white; border-color: #083768;"
+                            th:onclick="|window.location.href='@{/teacher/{lessonId}/quizzes(lessonId=${lessonId})}'|">
+                        Return Lesson List
+                    </button>
                 </div>
 
                 <!-- Danh sách câu hỏi -->
@@ -487,7 +500,18 @@
 <!-- ==================================================== -->
 
 
-</div>
+<script>
+    function viewSubjectList(e) {
+        let form = document.querySelector('#viewSubjectList')
+        form.submit();
+    }
+
+    function viewDashBoard(e) {
+        let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+</script>
 
 
 <!-- END Wrapper -->
