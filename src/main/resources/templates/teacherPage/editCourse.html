@@ -343,17 +343,22 @@
                 <label>Status:</label>
                 <div th:if="${numberOfLessons == 0}">
                     <p style="color: red;"><b>Add lessons to activate course</b></p>
-                    <input th:value="${statusList.get(1)}" name="status" readonly>
                 </div>
-                <select th:if="${numberOfLessons != 0}" name="status" required disabled>
+                <select name="status" required disabled>
                     <option th:value="${statusList.get(0)}"
                             th:selected="${course.getCourseStatus() == statusList.get(0)}"
                             th:text="${statusList.get(0)}"></option>
                     <option th:value="${statusList.get(1)}"
                             th:selected="${course.getCourseStatus() == statusList.get(1)}"
                             th:text="${statusList.get(1)}"></option>
+                    <option th:value="${statusList.get(2)}"
+                            th:selected="${course.getCourseStatus() == statusList.get(2)}"
+                            th:text="${statusList.get(2)}"></option>
+                    <option th:value="${statusList.get(3)}"
+                            th:selected="${course.getCourseStatus() == statusList.get(3)}"
+                            th:text="${statusList.get(3)}"></option>
                 </select>
-
+                <input type="hidden" name="status" th:value="${course.getCourseStatus()}">
                 <label>Logo:</label>
                 <div class="image-preview-container">
                     <img th:src="${course.getCourseImageUrl()}" id="logoPreview" alt="Course Logo">

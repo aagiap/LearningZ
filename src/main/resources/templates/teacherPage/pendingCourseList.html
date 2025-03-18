@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
+    <title>Pending Course List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course List</title>
-    <link rel="stylesheet" th:href="@{/css/courseListTeacherStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/pendingCourseListStyle.css}">
     <!-- Thư viện jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables -->
@@ -55,7 +54,6 @@
 
     </style>
 </head>
-
 <body>
 <!-- START Wrapper -->
 <div class="wrapper">
@@ -313,18 +311,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="pendingCourseList(this)">
-                                   <span class="nav-icon">
-                                        <i class="fa-regular fa-clock"></i>
-                                   </span>
-                        <span class="nav-text">Pending Course List</span>
-                    </a>
-                    <form action="/teacher/pendingCourseList" id="formPendingCourseList">
-                        <input type="hidden" name="userId" th:value="${user.getId()}">
-                    </form>
-                </li>
-
             </ul>
         </div>
     </div>
@@ -333,105 +319,21 @@
     <!-- ==================================================== -->
     <!-- Start right Content here -->
     <!-- ==================================================== -->
-
     <div class="page-content">
         <div class="container">
-            <h2>Course List</h2>
-
-            <div class="filter-section">
-                <form action="/teacher/search">
-                    <input name="courseSearchKey" type="text" id="searchInput" placeholder="Search course by name">
-                    <select id="subjectFilter" name="subjectId">
-                        <option value="0">All Subjects</option>
-                        <option th:each="subject : ${subjectList}" th:value="${subject.getId()}"
-                                th:text="${subject.getName()}"></option>
-                    </select>
-                    <select name="gradeId" id="gradeFilter">
-                        <option value="0">All Grade</option>
-                        <option th:each="grade : ${gradeList}" th:value="${grade.getId()}"
-                                th:text="${grade.getName()}"></option>
-                    </select>
-                    <input type="submit" value="Search">
-                </form>
-
-                <form action="/teacher/add_course" method="get">
-                    <input type="number" name="userId" th:value="${user.getId()}" hidden>
-                    <button type="submit">+ Add New Course</button>
-                </form>
-
+            <h3 style="text-align: center;">Pending Course List</h3>
+            <div class="pendingCourseList" th:if="${pendingCourseList != null or !pendingCourseList.isEmpty()}">
+                <div class="pendingCourse" th:each="course:${pendingCourseList}">
+                    <p th:text="${course.getTitle()}"></p>
+                    <div>
+                        <button class="note-btn" onclick="showPopup(this)"><i class="fa-solid fa-note-sticky"
+                                                                              title="Note"></i></button>
+                        <button class="fix-btn" title="Change note" onclick="showEditNote(this)"><i
+                                class="fa-solid fa-wrench"></i></button>
+                        <span class="note-text" th:text="${course.getNote()}"></span>
+                    </div>
+                </div>
             </div>
-
-            <table th:if="${notification}">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Subject</th>
-                    <th>Grade</th>
-                    <th>Chapters</th>
-                    <th>Lessons</th>
-                    <th>Status</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${notification}" colspan="9" style="text-align: center;"></td>
-                </tr>
-                </tbody>
-            </table>
-            <table th:if="${courseList}" id="listTable">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Subject</th>
-                    <th>Grade</th>
-                    <th>Chapters</th>
-                    <th>Lessons</th>
-                    <th>Status</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="course:${courseList}">
-                    <td th:text="${course.getId()}"></td>
-                    <td th:text="${course.getTitle()}"></td>
-                    <td th:text="${course.getSubject()}"></td>
-                    <td th:text="${course.getGradeName()}"></td>
-                    <td th:text="${course.getNumberOfChapters()}"></td>
-                    <td th:text="${course.getNumberOfLessons()}"></td>
-                    <td th:text="${course.getCourseStatus()}"></td>
-                    <td>
-                        <button class="desc-btn" onclick="showPopup(this)"><i class="fa-solid fa-bars-staggered"></i>
-                        </button>
-                        <span class="description-text" hidden th:text="${course.getDescription()}"></span>
-                    </td>
-                    <td class="actions">
-                        <div class="top-actions">
-                            <form action="/teacher/edit" method="POST" style="display: inline">
-                                <input type="hidden" name="numberOfLessons" th:value="${course.getNumberOfLessons()}">
-                                <input type="hidden" name="courseId" th:value="${course.getId()}"/>
-                                <button type="submit" class="edit-btn" title="Edit"><i
-                                        class="fa-solid fa-pen-to-square"></i></button>
-                            </form>
-                            <button onclick="viewCourseDetails(this)" title="Students View"><i
-                                    class="fa-solid fa-chalkboard-user"></i></button>
-                            <a hidden id="viewCourseDetailsRequest"
-                               th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
-                            <form action="/teacher/chapter" method="GET">
-                                <input type="hidden" name="userId" th:value="${user.getId()}">
-                                <input type="hidden" name="courseId" th:value="${course.getId()}"/>
-                                <button type="submit" class="view-btn" title="View chapters list"><i
-                                        class="fa-solid fa-bookmark"></i></button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
             <div id="descPopup" class="popup hidden">
                 <div class="popup-content">
                     <span class="close-btn" onclick="closePopup()">&times;</span>
@@ -460,31 +362,6 @@
 <!-- Dashboard Js -->
 <script src="/js/pages/dashboard.js"></script>
 <script>
-    function showPopup(button) {
-        document.getElementById("popupText").textContent = button.nextElementSibling.textContent;
-        document.getElementById("descPopup").classList.remove("hidden");
-    }
-
-    function closePopup() {
-        document.getElementById("descPopup").classList.add("hidden");
-    }
-
-    $(document).ready(function () {
-        $('#listTable').DataTable({
-            "pageLength": 5,
-            "lengthChange": false,
-            "info": false,
-            "searching": false
-        });
-    });
-
-    function viewCourseDetails(button) {
-        let link = button.parentElement.querySelector("#viewCourseDetailsRequest");
-        if (link) {
-            link.click();
-        }
-    }
-
     function viewSubjectList(e) {
         let form = document.querySelector('#viewSubjectList')
         form.submit();
@@ -494,7 +371,14 @@
         let form = document.querySelector('#viewDashboard');
         form.submit();
     }
+    function showPopup(button) {
+        document.getElementById("popupText").textContent = button.parentElement.querySelector(".note-text").textContent;
+        document.getElementById("descPopup").classList.remove("hidden");
+    }
+
+    function closePopup() {
+        document.getElementById("descPopup").classList.add("hidden");
+    }
 </script>
 </body>
-
 </html>

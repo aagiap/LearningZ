@@ -135,6 +135,7 @@ public class TeacherController {
 
         List<CourseStatus> statusList = new ArrayList<>();
         statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
 
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
@@ -161,6 +162,13 @@ public class TeacherController {
                                @RequestParam("description") String description){
         List<CourseStatus> statusList = new ArrayList<>();
         statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+
+        Course course = courseService.getCourseById(id);
+        String oldTitle = course.getTitle();
+        String oldDescription = course.getDescription();
+        String oldCourseImageUrl = course.getCourseImageUrl();
+
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
         if(title.isEmpty() || title.trim().isEmpty()){
@@ -171,6 +179,7 @@ public class TeacherController {
                 courseService.updateCourse(id, createdByUseID, courseDriveLink, title,
                         subjectId, gradeId, courseStatus, courseImageUrl, description);
             }catch(Exception e){
+                e.printStackTrace();
                 model.addAttribute("error","Course Update Failed");
                 model.addAttribute("subjectList", subjectList);
                 model.addAttribute("user",userService.getUserById(createdByUseID));
@@ -179,7 +188,14 @@ public class TeacherController {
                 return "/teacherPage/editCourse";
             }
             model.addAttribute("course",courseService.findByCourseId(id));
-            model.addAttribute("notification","Update Course Successfully");
+
+            //check change to send correct notification
+            if(courseService.checkUpdateChange(id, title, description, courseService.findByCourseId(id).getCourseImageUrl(),
+                    oldTitle, oldDescription, oldCourseImageUrl)){
+                model.addAttribute("notification","Your course update is now pending approval from the admin.");
+            }else{
+                model.addAttribute("notification","Everything is up-to-date");
+            }
         }
         model.addAttribute("subjectList", subjectList);
         model.addAttribute("statusList", statusList);
@@ -193,6 +209,7 @@ public class TeacherController {
         User user = userService.findById(userId);
         List<CourseStatus> statusList = new ArrayList<>();
         statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
 
@@ -215,6 +232,7 @@ public class TeacherController {
         User user = userService.findById(createdById);
         List<CourseStatus> statusList = new ArrayList<>();
         statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
 
@@ -237,7 +255,7 @@ public class TeacherController {
         model.addAttribute("statusList", statusList);
         model.addAttribute("user", user);
         model.addAttribute("createdById",user.getId());
-        model.addAttribute("notification","Course Creation Successfully");
+        model.addAttribute("notification","Course Creation Successfully. Add chapter and lesson to active course");
         return "/teacherPage/addCourse";
     }
 
@@ -300,6 +318,10 @@ public class TeacherController {
                                 @RequestParam("description") String description,
                                 @RequestParam("userId") int userId){
         String error = chapterService.checkUpdate(id,courseId,order,title);
+        Chapter chapter = chapterService.getChapterById(id);
+        int oldOrder = chapter.getChapterOrder();
+        String oldTitle = chapter.getChapterTitle();
+        String oldDescription = chapter.getDescription();
         if(error.equals("")){
             try{
                 chapterService.updateChapter(id,order,title,description, chapterDriveLink);
@@ -310,8 +332,12 @@ public class TeacherController {
                 model.addAttribute("chapter", chapterService.getChapterById(id));
                 return "/teacherPage/editChapter";
             }
-            model.addAttribute("notification","Chapter Update Successfully");
             model.addAttribute("chapter", chapterService.getChapterById(id));
+            if(chapterService.checkUpdateChapter(id, oldOrder, oldTitle, oldDescription)){
+                model.addAttribute("notification","Your chapter update is now pending approval from the admin");
+            }else{
+                model.addAttribute("notification","Everything is up-to-date");
+            }
         }else{
             model.addAttribute("error",error);
             model.addAttribute("chapter", chapterService.getChapterById(id));
@@ -352,7 +378,7 @@ public class TeacherController {
             model.addAttribute("user",userService.getUserById(userId));
             return "/teacherPage/addChapter";
         }
-        model.addAttribute("notification","Chapter Creation Successfully");
+        model.addAttribute("notification","Your chapter creation is now pending approval from the admin");
         model.addAttribute("courseId", courseId);
         model.addAttribute("user",userService.getUserById(userId));
         return "/teacherPage/addChapter";
@@ -428,6 +454,10 @@ public class TeacherController {
                                @RequestParam("userId") int userId){
         List<QuizType> typeList = new ArrayList<>();
         typeList.add(QuizType.PRACTICE);typeList.add(QuizType.EXAM);
+        Lesson lesson = lessonService.getLessonById(lessonId);
+        String oldTitle = lesson.getTitle();
+        String oldDescription = lesson.getDescription();
+        QuizType oldQuizType = lesson.getQuizType();
         if(lessonTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
             model.addAttribute("chapterId",chapterId);
@@ -449,7 +479,12 @@ public class TeacherController {
             model.addAttribute("lesson",lessonService.getLessonById(lessonId));
             model.addAttribute("quizTypeList",quizType);
             model.addAttribute("chapterId",chapterId);
-            model.addAttribute("notification","Update Chapter Successfully");
+
+            if(lessonService.checkUpdateLesson(lessonId,oldTitle,oldDescription,oldQuizType)){
+                model.addAttribute("notification", "Your lesson update is now pending approval from the admin");
+            }else{
+                model.addAttribute("notification","Everything is up-to-date");
+            }
         }
         model.addAttribute("user",userService.getUserById(userId));
         return "teacherPage/editLesson";
@@ -485,7 +520,7 @@ public class TeacherController {
                 model.addAttribute("chapterId",chapterId);
                 model.addAttribute("error","Lesson Creation Failed");
             }
-            model.addAttribute("notification","Lesson Creation Successfully");
+            model.addAttribute("notification","Your lesson creation is now pending approval from the admin");
             model.addAttribute("chapterId",chapterId);
         }
         List<QuizType> typeList = new ArrayList<>();
@@ -559,7 +594,7 @@ public class TeacherController {
                 model.addAttribute("user",userService.getUserById(userId));
                 return "/teacherPage/addVideo";
             }
-            model.addAttribute("notification", "Video Creation Successfully");
+            model.addAttribute("notification", "Video Creation is now pending approval from the admin");
             model.addAttribute("lessonId", lessonId);
             model.addAttribute("user",userService.getUserById(userId));
             return "/teacherPage/addVideo";
@@ -588,6 +623,11 @@ public class TeacherController {
                               @RequestParam("videoTitle") String videoTitle,
                               @RequestParam("videoUrl") MultipartFile videoUrl,
                               @RequestParam("userId") int userId) {
+
+        Video video = videoService.getVideoById(videoId);
+        String oldVideoTitle = video.getTitle();
+        String oldVideoUrl = video.getFileUrl();
+
         if(videoTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
         }else{
@@ -595,15 +635,19 @@ public class TeacherController {
                 videoService.updateVideo(lessonId,videoId,videoTitle,videoUrl);
             }catch(Exception e){
                 model.addAttribute("error","Video Update Failed");
-                Video video = videoService.getVideoById(videoId);
-                model.addAttribute("video", video);
+                Video updatedVideo = videoService.getVideoById(videoId);
+                model.addAttribute("video", updatedVideo);
                 model.addAttribute("user", userService.getUserById(userId));
                 return "/teacherPage/editVideo";
             }
-            model.addAttribute("notification","Video Update Successfully");
+            if(videoService.checkVideoUpdate(videoId, oldVideoTitle, oldVideoUrl)){
+                model.addAttribute("notification", "Video Update is now pending approval from the admin");
+            }else{
+                model.addAttribute("notification", "Everything is up-to-date");
+            }
         }
-        Video video = videoService.getVideoById(videoId);
-        model.addAttribute("video", video);
+        Video updatedVideo = videoService.getVideoById(videoId);
+        model.addAttribute("video", updatedVideo);
         model.addAttribute("user", userService.getUserById(userId));
         return "/teacherPage/editVideo";
     }
@@ -672,7 +716,7 @@ public class TeacherController {
                 model.addAttribute("user", userService.getUserById(userId));
                 return "/teacherPage/addDoc";
             }
-            model.addAttribute("notification","Document Creation Successfully");
+            model.addAttribute("notification","Document Creation is now pending approval from the admin");
             model.addAttribute("lessonId",lessonId);
             model.addAttribute("user", userService.getUserById(userId));
             return "/teacherPage/addDoc";
@@ -701,6 +745,11 @@ public class TeacherController {
                             @RequestParam("docTitle") String docTitle,
                             @RequestParam("docUrl") MultipartFile docUrl,
                             @RequestParam("userId") int userId) {
+
+        PDF oldPdf = pdfService.getPdfById(docId);
+        String oldTitle = oldPdf.getTitle();
+        String oldDocumentUrl = oldPdf.getFileUrl();
+
         if(docTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
         }else{
@@ -713,7 +762,11 @@ public class TeacherController {
                 model.addAttribute("user", userService.getUserById(userId));
                 return "/teacherPage/editDoc";
             }
-            model.addAttribute("notification","Document Update Successfully");
+            if(pdfService.checkDocumentUpdate(docId, oldTitle, oldDocumentUrl)){
+                model.addAttribute("notification","Document Update is now pending approval from the admin");
+            }else{
+                model.addAttribute("notification","Everything is up-to-date");
+            }
         }
         PDF pdf = pdfService.getPdfById(docId);
         model.addAttribute("pdf", pdf);
@@ -815,5 +868,15 @@ public class TeacherController {
         model.addAttribute("courseScoreList", courseService.getCourseAndScoreByUserId(userId));
         model.addAttribute("courseLearnedList", courseService.getCourseLearnedStatsByUserId(userId));
         return "teacherPage/Dashboard";
+    }
+
+    @GetMapping(path = "teacher/pendingCourseList")
+    public String pendingCourseList(Model model,
+                                    @RequestParam("userId") int userId){
+        model.addAttribute("user", userService.getUserById(userId));
+        List<Course> pendingCourseList = new ArrayList<>();
+        pendingCourseList = courseService.pendingCourseListByUserId(userId);
+        model.addAttribute("pendingCourseList", pendingCourseList);
+        return "/teacherPage/pendingCourseList";
     }
 }

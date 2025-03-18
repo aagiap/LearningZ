@@ -24,6 +24,9 @@ public class PdfService {
     @Autowired
     private GoogleDriveService googleDriveService;
 
+    @Autowired
+    private CourseService courseService;
+
     public PDF getPdfById(int id) {
         return pdfRepository.getPdfById(id);
     }
@@ -67,12 +70,26 @@ public class PdfService {
         String fileUrl = googleDriveService.uploadFileDocument(file,
                 lessonService.getLessonById(lessonId).getDocumentFolderLink());
         pdf.setFileUrl(fileUrl);
+
+        courseService.setPendingCourse(lessonService.getLessonById(lessonId).getChapter().getCourse().getId(),
+                "add new document for lesson in chapter " +
+                        lessonService.getLessonById(lessonId).getChapter().getChapterOrder() + ".");
+
         pdfRepository.save(pdf);
     }
 
     @Transactional
     public void updateDoc(int lessonId ,int docId, String title, MultipartFile file) throws GeneralSecurityException, IOException {
+        int countChange = 0;
+        String courseNote = "";
+
         PDF pdf = pdfRepository.getPdfById(docId);
+
+        if(!pdf.getTitle().equalsIgnoreCase(title)){
+            countChange++;
+            courseNote += "change title for document in lesson of chapter " +
+                    lessonService.getLessonById(lessonId).getChapter().getChapterOrder() + " to " + title  + ".";
+        }
         pdf.setTitle(title);
         pdf.setLesson(lessonService.getLessonById(lessonId));
         String docUrl;
@@ -83,7 +100,26 @@ public class PdfService {
             String[] oldDocUrlString = oldDocUrl.split("/");
             googleDriveService.deleteFile(oldDocUrlString[5]);
             pdf.setFileUrl(docUrl);
+            countChange++;
+            courseNote += "change document for lesson in chapter " +
+                    lessonService.getLessonById(lessonId).getChapter().getChapterOrder() + ".";
+        }
+
+        if(countChange != 0){
+            courseService.setPendingCourse(lessonService.getLessonById(lessonId).getChapter().getCourse().getId(),
+                    courseNote);
         }
         pdfRepository.save(pdf);
+    }
+
+    public boolean checkDocumentUpdate(int docId, String oldTitle, String oldDocumentUrl){
+        PDF pdf = pdfRepository.getPdfById(docId);
+        if(!pdf.getTitle().equalsIgnoreCase(oldTitle)){
+            return true;
+        }
+        if(!pdf.getFileUrl().equalsIgnoreCase(oldDocumentUrl)){
+            return true;
+        }
+        return false;
     }
 }
