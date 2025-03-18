@@ -3,8 +3,8 @@ package com.project.learningz.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -17,30 +17,43 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
-    private Post post; // Quan hệ với Post
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Quan hệ với User
+    private User user;
 
     @Column(name = "content", columnDefinition = "NVARCHAR(255)")
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Comment parent; // Quan hệ reply (nếu có)
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> replies; // Danh sách comment con
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private LocalDateTime commentDate;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private int likeCount = 0;
+
+    @Transient // Không lưu vào database, chỉ để hiển thị trên giao diện
+    private boolean isLiked;
 
     @PreUpdate
     public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.commentDate = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.commentDate = LocalDateTime.now();
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
+
+    public void setLiked(boolean liked) {
+        this.isLiked = liked;
     }
 }

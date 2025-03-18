@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                         authorize.requestMatchers(STATIC_RESOURCE).permitAll()
                                 .requestMatchers("/", "/login").permitAll()
                                 .requestMatchers("/home/**").authenticated()
+                                .requestMatchers("/comments/**").authenticated()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN", "ADMIN_USER_MANAGER", "ADMIN_COURSE_MANAGER")
                                 .requestMatchers("/super_admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/marketer/**").hasRole("MARKETING_TEAM")

@@ -58,7 +58,7 @@ p {
     font-weight: 400;
     line-height: 28px;
     color: #505050;
-    margin: 0px;
+    margin: 0;
 }
 .bg_cover {
     background-position: center center;
@@ -2952,8 +2952,11 @@ p {
 ======================================================*/
 
 .single-blog {
-    overflow: hidden;
+
     border-radius: 5px;
+    overflow: visible;
+
+
 }
 .single-blog .blog-thum img {
     width: 100%;
@@ -2974,9 +2977,7 @@ p {
 .single-blog .blog-cont a:hover h3 {
     color: #ffc600;
 }
-.single-blog .blog-cont ul {
-    padding: 20px 0;
-}
+
 .single-blog .blog-cont ul li {
     display: inline-block;
     margin-right: 30px;
@@ -2992,7 +2993,9 @@ p {
     color: #ffc600;
     margin-right: 5px;
 }
-.single-blog .blog-cont p {}
+.single-blog .blog-cont p {
+    white-space: pre-line;
+}
 .sidebar {}
 .sidebar .sidebar-create {
     width: 100%;
@@ -3088,6 +3091,7 @@ p {
 .post-content a {
     color: black;
     text-decoration: none;
+    white-space: pre-line;
 }
 .post-content a:hover {
     color: black;
@@ -3104,7 +3108,6 @@ p {
     transition: all 0.4s linear;
 }
 .blog-details .cont ul {
-    padding: 20px 0;
 }
 .blog-details .cont ul li {
     display: inline-block;
@@ -3164,10 +3167,10 @@ p {
     color: #000;
 }
 .blog-details .cont .blog-comment ul {
-    padding: 0;
+
 }
 .blog-details .cont .blog-comment ul li {
-    margin-top: 30px;
+
     margin-right: 0;
 }
 .blog-details .cont .blog-comment ul li .replay {
@@ -3183,11 +3186,11 @@ p {
 .blog-comment .comment .comment-description p {
     word-break: break-word;
     overflow-wrap: break-word;
-    white-space: normal;
+    white-space: pre-line;
     display: block;
     max-width: 100%;
-}
 
+}
 
 .blog-comment .comment .comment-author {
     display: -moz-flex;
@@ -3238,130 +3241,64 @@ p {
     resize: none;
     padding-top: 20px;
 }
-.like-button {
-    background: none;
-    border: none;
-    color: #666;
-    font-size: 16px;
+.post-info {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.ellipsis-menu {
+    position: absolute;
+    right: 0;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 5px;
 }
 
-.like-button .like-count {
-    margin-left: -5px;
-    margin-right: -5px
-}
-
-.like-button:focus {
+.ellipsis-icon {
+    font-size: 22px;
+    cursor: pointer;
+    padding: 10px;
+    user-select: none;
     outline: none;
+
 }
 
-.like-button.liked {
-    color: #007bff;
-}
 
-.like-button i {
-    transition: transform 0.2s ease;
-}
-
-.like-button.liked i {
-    transform: scale(1.2);
-}
-
-/*=====================================================
-    31. CONTACT PAGE css 
-======================================================*/
-
-.contact-from {
-    background-color: #fff;
-    padding: 50px;
+.menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    min-width: 150px;
+    z-index: 100;
+    overflow: hidden;
 }
-.contact-from .main-form {}
-.contact-from .main-form .single-form {
-    margin-top: 20px;
-}
-.contact-from .main-form .single-form input, .contact-from .main-form .single-form textarea {
+
+.menu li {
+    list-style: none;
     width: 100%;
-    height: 50px;
-    padding: 0 20px;
-    border: 1px solid #a1a1a1;
-    border-radius: 5px;
+}
+
+.menu li a, .menu li button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    text-align: left;
+    text-decoration: none;
     color: #8a8a8a;
-    font-size: 15px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
 }
-.contact-from .main-form .single-form textarea {
-    padding-top: 10px;
-    height: 100px;
-    resize: none;
+
+.menu li a:hover, .menu li button:hover {
+    background: #f0f0f0;
 }
-.form-group {
-    margin: 0;
-}
-.list-unstyled li {
-    font-size: 13px;
-    margin-left: 2px;
-    margin-top: 5px;
-    color: #f00;
-}
-p.form-message.success, p.form-message.error {
-    font-size: 16px;
-    color: #353535;
-    background: #ddd;
-    padding: 10px 15px;
-    margin-left: 15px;
-    margin-top: 15px;
-}
-.contact-address {
-    background-color: #fff;
-    padding: 20px 50px 50px;
-    border-radius: 5px;
-}
-.contact-address ul li {
-    padding-top: 30px;
-}
-.contact-address ul li .single-address {
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-.contact-address ul li .single-address .icon i {
-    width: 50px;
-    line-height: 50px;
-    border-radius: 50%;
-    border: 1px solid #07294d;
-    color: #07294d;
-    font-size: 24px;
-    text-align: center;
-}
-.contact-address ul li .single-address .cont {
-    padding-left: 20px;
-}
-.contact-address ul li .single-address .cont p {}
-.map {}
-.map #contact-map {
-    width: 100%;
-    height: 225px;
-}
-.map.map-big #contact-map {
-    width: 100%;
-    height: 415px;
-}
-.contact-address .contact-heading {
-    padding-top: 35px;
-}
-.contact-address .contact-heading h5 {
-    padding-bottom: 15px;
-}
+
 /*=====================================================
     32. TEACHER 2 PAGE css 
 ======================================================*/
