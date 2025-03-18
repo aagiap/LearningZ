@@ -68,15 +68,53 @@ public class ChapterService {
 
     @Transactional
     public void updateChapter(int chapterId, int order, String title, String description, String chapterDriveLink) throws GeneralSecurityException, IOException {
+        //add note for course note when sth change
+        int countChange = 0;
+        String courseNote = "";
         Chapter chapter = getChapterById(chapterId);
+
+        if (chapter.getChapterOrder() != order) {
+            countChange++;
+            courseNote += "change chapter order from " + chapter.getChapterOrder() + " to " + order + ".";
+        }
         chapter.setChapterOrder(order);
+
+        if (!chapter.getChapterTitle().equalsIgnoreCase(title)) {
+            countChange++;
+            courseNote += "change chapter title of chapter " + order + " from " + chapter.getChapterTitle() + " to " + title + ".";
+        }
         chapter.setChapterTitle(title);
+
+        if(!chapter.getDescription().equalsIgnoreCase(description)){
+            countChange++;
+            courseNote += "change chapter description of chapter " + order + " to " + description + ".";
+        }
         chapter.setDescription(description);
+
         if(chapterDriveLink != null && !chapterDriveLink.trim().isEmpty()) {
             googleDriveService.renameFolder(chapterDriveLink,
                     "Chapter " + order + ": " + title);
         }
+
+        if(countChange != 0){
+            courseService.setPendingCourse(chapterRepository.findChapterById(chapterId).getCourse().getId(),
+                    courseNote);
+        }
         chapterRepository.save(chapter);
+    }
+
+    public boolean checkUpdateChapter(int chapterId, int chapterOrder, String chapterTitle, String description){
+        Chapter chapter = getChapterById(chapterId);
+        if(chapter.getChapterOrder() != chapterOrder){
+            return true;
+        }
+        if(!chapter.getChapterTitle().equalsIgnoreCase(chapterTitle)){
+            return true;
+        }
+        if(!chapter.getDescription().equalsIgnoreCase(description)){
+            return true;
+        }
+        return false;
     }
 
     public String checkCreate(int courseId, int order, String title) {
@@ -115,6 +153,7 @@ public class ChapterService {
                     .createFolder("Chapter " + order + ": " + title,courseService.getCourseById(courseId).getCourseDriveLink());
             chapter.setChapterDriveLink(chapterDriveLink);
         }
+        courseService.setPendingCourse(courseId, "add chapter " + order + ": " + title + ".");
         chapterRepository.save(chapter);
     }
 

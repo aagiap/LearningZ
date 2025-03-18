@@ -89,16 +89,53 @@ public class LessonService {
     public void updateLesson(int lessonId, int chapterId, String lessonDriveLink,
                              String documentFolderLink, String videoFolderLink, String quizImageLink,
                              String lessonTitle, QuizType quizType, String description) throws GeneralSecurityException, IOException {
+        int countChange = 0;
+        String courseNote = "";
+
         Lesson lesson = lessonRepository.findLessonById(lessonId);
+
+        if(!lesson.getTitle().equalsIgnoreCase(lessonTitle)){
+            countChange++;
+            courseNote += "change lesson title to " + lessonTitle + ".";
+        }
         lesson.setTitle(lessonTitle);
+
+        if(lesson.getQuizType() != quizType){
+            countChange++;
+            courseNote += "change quiz type to " + quizType + ".";
+        }
         lesson.setQuizType(quizType);
+
+        if(!lesson.getDescription().equalsIgnoreCase(description)){
+            countChange++;
+            courseNote += "change description to " + description + ".";
+        }
         lesson.setDescription(description);
 
         if(lessonDriveLink!= null && !lessonDriveLink.isEmpty()){
             googleDriveService.renameFolder(lessonDriveLink, lessonTitle);
         }
 
+        if(countChange != 0){
+            courseService.setPendingCourse(chapterRepository.findChapterById(chapterId).getCourse().getId(),
+                    "Change lesson of chapter " + chapterRepository.findChapterById(chapterId).getChapterOrder()
+                    + ":" + courseNote);
+        }
         lessonRepository.save(lesson);
+    }
+
+    public boolean checkUpdateLesson(int lessonId, String chapterTitle, String description, QuizType quizType){
+        Lesson lesson = lessonRepository.findLessonById(lessonId);
+        if(!lesson.getTitle().equalsIgnoreCase(chapterTitle)){
+            return true;
+        }
+        if(!lesson.getDescription().equalsIgnoreCase(description)){
+            return true;
+        }
+        if(lesson.getQuizType() != quizType){
+            return true;
+        }
+        return false;
     }
 
     @Transactional
@@ -120,6 +157,8 @@ public class LessonService {
             String quizImageLink = googleDriveService.createFolder("Quiz Images",lessonDriveLink);
             lesson.setQuizImageLink(quizImageLink);
         }
+        courseService.setPendingCourse(chapterRepository.findChapterById(chapterId).getCourse().getId(),
+                "add lesson for chapter " + chapterRepository.findChapterById(chapterId).getChapterOrder() + "." );
         lessonRepository.save(lesson);
     }
 

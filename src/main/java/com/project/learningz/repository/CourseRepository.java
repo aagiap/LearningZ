@@ -275,4 +275,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     c.courseStatus, c.title, c.description, c.courseDriveLink
 """)
     List<CourseDetailsDTO> findCoursesWithGrade(int id, int gradeId, String keyWord);
+
+    @Query("""
+    SELECT c FROM Course AS c    
+    WHERE c.createdBy.id = ?1 AND c.courseStatus = ?2
+""")
+    List<Course> pendingCourseListByUserId(int userId, CourseStatus status);
 }

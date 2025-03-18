@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Pending Course List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course</title>
-    <link rel="stylesheet" th:href="@{/css/editCourseStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/pendingCourseListStyle.css}">
     <!-- Thư viện jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables -->
@@ -311,15 +311,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/teacher/quizzes">
-                                   <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
-                                   </span>
-                        <span class="nav-text">Quizzes</span>
-                    </a>
-                </li>
-
             </ul>
         </div>
     </div>
@@ -330,70 +321,30 @@
     <!-- ==================================================== -->
     <div class="page-content">
         <div class="container">
-            <h2>Edit Course</h2>
-
-            <form action="/teacher/edit/update" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="id" th:value="${course.getId()}">
-                <input type="hidden" name="createdByUserId" th:value="${course.getCreatedBy().getId()}">
-                <input type="hidden" name="courseDriveLink" th:value="${course.getCourseDriveLink()}"/>
-                <label>Title:</label>
-                <input type="text" name="title" th:value="${course.title}" required>
-
-                <label>Subject:</label>
-                <input name="subjectName" th:value="${course.getSubject().getName()}" readonly>
-                <input type="hidden" name="subjectId" th:value="${course.getSubject().getId()}">
-
-                <label>Grade:</label>
-                <input name="gradeName" th:value="${course.getGrade().getName()}" readonly>
-                <input type="hidden" name="gradeId" th:value="${course.getGrade().getId()}">
-
-                <label>Status:</label>
-                <div th:if="${numberOfLessons == 0}">
-                    <p style="color: red;"><b>Add lessons to activate course</b></p>
+            <h3 style="text-align: center;">Pending Course List</h3>
+            <div class="pendingCourseList" th:if="${pendingCourseList != null or !pendingCourseList.isEmpty()}">
+                <div class="pendingCourse" th:each="course:${pendingCourseList}">
+                    <p th:text="${course.getTitle()}"></p>
+                    <div>
+                        <button class="note-btn" onclick="showPopup(this)"><i class="fa-solid fa-note-sticky"
+                                                                              title="Note"></i></button>
+                        <button class="fix-btn" title="Change note" onclick="showEditNote(this)"><i
+                                class="fa-solid fa-wrench"></i></button>
+                        <span class="note-text" th:text="${course.getNote()}"></span>
+                    </div>
                 </div>
-                <select name="status" required disabled>
-                    <option th:value="${statusList.get(0)}"
-                            th:selected="${course.getCourseStatus() == statusList.get(0)}"
-                            th:text="${statusList.get(0)}"></option>
-                    <option th:value="${statusList.get(1)}"
-                            th:selected="${course.getCourseStatus() == statusList.get(1)}"
-                            th:text="${statusList.get(1)}"></option>
-                    <option th:value="${statusList.get(2)}"
-                            th:selected="${course.getCourseStatus() == statusList.get(2)}"
-                            th:text="${statusList.get(2)}"></option>
-                    <option th:value="${statusList.get(3)}"
-                            th:selected="${course.getCourseStatus() == statusList.get(3)}"
-                            th:text="${statusList.get(3)}"></option>
-                </select>
-                <input type="hidden" name="status" th:value="${course.getCourseStatus()}">
-                <label>Logo:</label>
-                <div class="image-preview-container">
-                    <img th:src="${course.getCourseImageUrl()}" id="logoPreview" alt="Course Logo">
-                </div>
-                <input name="courseImageUrl" type="file" id="courseLogo" accept="image/*"
-                       onchange="previewImage(event)">
-
-                <label>Description:</label>
-                <textarea name="description" rows="3" th:text="${course.description}"></textarea>
-
-                <div class="btn-group">
-                    <button type="submit" class="save-btn">Save</button>
-                    <button type="button" class="cancel-btn" onclick="closeEditForm()">Exit</button>
-                </div>
-
-                <a href="/teacher" id="returnCourseList" hidden></a>
-            </form>
-            <!-- Hiển thị lỗi -->
-            <div th:if="${error}" class="error-messages">
-                <p th:text="${error}">
             </div>
-
-            <!-- Hiển thị thông báo thành công -->
-            <div th:if="${notification}" class="success-message">
-                <p th:text="${notification}"></p>
+            <div id="descPopup" class="popup hidden">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+                    <p id="popupText"></p>
+                </div>
             </div>
         </div>
     </div>
+    <!-- ==================================================== -->
+    <!-- End Page Content -->
+    <!-- ==================================================== -->
 </div>
 <!-- END Wrapper -->
 
@@ -411,52 +362,6 @@
 <!-- Dashboard Js -->
 <script src="/js/pages/dashboard.js"></script>
 <script>
-    function closeEditForm() {
-        document.querySelector('#returnCourseList').click();
-    }
-
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('logoPreview');
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const avatarBtn = document.querySelector(".expertAvatar button");
-        const avatarDropdown = document.querySelector(".expertAvatar");
-
-        avatarBtn.addEventListener("click", function (event) {
-            event.stopPropagation();
-            avatarDropdown.classList.toggle("active");
-        });
-
-        // Ẩn menu khi click bên ngoài
-        document.addEventListener("click", function () {
-            avatarDropdown.classList.remove("active");
-        });
-
-        avatarDropdown.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-    });
-    $(document).ready(function () {
-        $('#listTable').DataTable({
-            "pageLength": 5, // Hiển thị 5 hàng mỗi trang
-            "lengthChange": false, // Ẩn dropdown chọn số hàng
-            "info": false, // Ẩn thông tin số dòng
-            "searching": false
-        });
-    });
-
     function viewSubjectList(e) {
         let form = document.querySelector('#viewSubjectList')
         form.submit();
@@ -466,7 +371,14 @@
         let form = document.querySelector('#viewDashboard');
         form.submit();
     }
-</script>
+    function showPopup(button) {
+        document.getElementById("popupText").textContent = button.parentElement.querySelector(".note-text").textContent;
+        document.getElementById("descPopup").classList.remove("hidden");
+    }
 
+    function closePopup() {
+        document.getElementById("descPopup").classList.add("hidden");
+    }
+</script>
 </body>
 </html>

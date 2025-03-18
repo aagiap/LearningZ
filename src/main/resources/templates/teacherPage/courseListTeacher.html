@@ -314,12 +314,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/teacher/quizzes">
+                    <a class="nav-link" href="#" onclick="pendingCourseList(this)">
                                    <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
+                                        <i class="fa-regular fa-clock"></i>
                                    </span>
-                        <span class="nav-text">Quizzes</span>
+                        <span class="nav-text">Pending Course List</span>
                     </a>
+                    <form action="/teacher/pendingCourseList" id="formPendingCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
                 </li>
 
             </ul>
@@ -489,6 +492,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function pendingCourseList(e){
+        let form = document.querySelector('#formPendingCourseList');
         form.submit();
     }
 </script>

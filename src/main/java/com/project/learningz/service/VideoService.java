@@ -24,6 +24,9 @@ public class VideoService {
     @Autowired
     private LessonService lessonService;
 
+    @Autowired
+    private CourseService courseService;
+
     public Video getVideoById(int videoId) {
         return videoRepository.getVideoById(videoId);
     }
@@ -67,12 +70,26 @@ public class VideoService {
                 lessonService.getLessonById(lessonId).getVideoFolderLink());
         video.setFileUrl(videoUrl);
         video.setLesson(lessonService.getLessonById(lessonId));
+
+        courseService.setPendingCourse(lessonService.getLessonById(lessonId).getChapter().getCourse().getId(),
+                "add new video for lesson in chapter " + lessonService.getLessonById(lessonId).getChapter().getChapterOrder() + ".");
+
         videoRepository.save(video);
     }
 
     @Transactional
     public void updateVideo(int lessonId, int videoId, String videoTitle, MultipartFile videoFile) throws GeneralSecurityException, IOException {
+        int countChange = 0;
+        String courseNote = "";
+
         Video video = videoRepository.getVideoById(videoId);
+
+        if(!video.getTitle().equalsIgnoreCase(videoTitle)){
+            countChange++;
+            courseNote += "change title for video in lesson of chapter " +
+                    lessonService.getLessonById(lessonId).getChapter().getChapterOrder() +
+                    " to " + videoTitle + ".";
+        }
         video.setTitle(videoTitle);
         String videoUrl;
         if (videoFile != null && !videoFile.isEmpty()) {
@@ -82,10 +99,30 @@ public class VideoService {
             String[] oldVideoUrlString = oldVideoUrl.split("/");
             googleDriveService.deleteFile(oldVideoUrlString[5]);
             video.setFileUrl(videoUrl);
+            countChange++;
+            courseNote += "change video for lesson in chapter "
+                    + lessonService.getLessonById(lessonId).getChapter().getChapterOrder() + ".";
         }
         video.setLesson(lessonService.getLessonById(lessonId));
+
+        if(countChange != 0){
+            courseService.setPendingCourse(lessonService.getLessonById(lessonId).getChapter().getCourse().getId(),
+                    courseNote);
+        }
         videoRepository.save(video);
     }
+
+    public boolean checkVideoUpdate(int videoId, String oldTitle, String oldVideoUrl){
+        Video video = videoRepository.getVideoById(videoId);
+        if(!video.getFileUrl().equals(oldVideoUrl)){
+            return true;
+        }
+        if(!video.getTitle().equalsIgnoreCase(oldTitle)){
+            return true;
+        }
+        return false;
+    }
+
     public Video findByVideoId(Integer videoId) {
         return videoRepository.findByVideoId(videoId);
     }
