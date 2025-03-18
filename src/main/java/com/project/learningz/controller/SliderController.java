@@ -1,12 +1,22 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.entity.Comment;
+import com.project.learningz.entity.Post;
 import com.project.learningz.entity.Slider;
 import com.project.learningz.entity.User;
+import com.project.learningz.repository.CommentRepository;
+import com.project.learningz.repository.PostRepository;
+import com.project.learningz.repository.SliderRepository;
 import com.project.learningz.repository.UserRepository;
+import com.project.learningz.service.CommentService;
 import com.project.learningz.service.GoogleDriveService;
+import com.project.learningz.service.PostService;
 import com.project.learningz.service.SliderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +41,18 @@ public class SliderController {
 
     @Autowired
     private GoogleDriveService googleDriveService;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private CommentService commentService;
 
     private static final String REDIRECT_SLIDERS = "redirect:/marketer/slider";
 
@@ -195,5 +217,99 @@ public class SliderController {
         sliderService.toggleVisibility(id);
         return "redirect:/marketer/slider?page=" + page;
     }
+    @GetMapping("/report/post")
+    public String showReportedPosts(@RequestParam(defaultValue = "0") int page, Model model) {
+        int size = 2;
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Post> reportedPosts = postRepository.findByReportedTrue(pageable);
+
+        getAuthenticatedUserInfo(model);
+        model.addAttribute("reportedPosts", reportedPosts.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", reportedPosts.getTotalPages());
+
+        return "marketer/manage_post";
+    }
+
+
+    @GetMapping("/approve/post/{postId}")
+    public String approvePost(@PathVariable Integer postId, @RequestParam(defaultValue = "0") int page) {
+        postRepository.findById(postId).ifPresent(post -> {
+            post.setReported(false);
+            postRepository.save(post);
+        });
+
+        int totalReportedPosts = (int) postRepository.countByReportedTrue();
+        int size = 2;
+        int totalPages = (int) Math.ceil((double) totalReportedPosts / size);
+
+        if (page >= totalPages && page > 0) {
+            page--;
+        }
+
+        return "redirect:/marketer/report/post?page=" + page;
+    }
+
+
+    @GetMapping("/delete/post/{postId}")
+    public String deletePost(@PathVariable int postId, @RequestParam(defaultValue = "0") int page) {
+        postService.deletePost(postId);
+
+        int totalPosts = (int) postService.countReportedPosts();
+        int size = 2;
+        int totalPages = (int) Math.ceil((double) totalPosts / size);
+
+        if (page >= totalPages && page > 0) {
+            page--;
+        }
+        return "redirect:/marketer/report/post?page=" + page;
+    }
+    @GetMapping("/report/comment")
+    public String showReportedComments(@RequestParam(defaultValue = "0") int page, Model model) {
+        int size = 2;
+        Pageable pageable = PageRequest.of(page, size, Sort.by("commentDate").descending());
+        Page<Comment> reportedComments = commentRepository.findByReportedTrue(pageable);
+
+        getAuthenticatedUserInfo(model);
+        model.addAttribute("reportedComments", reportedComments.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", reportedComments.getTotalPages());
+
+        return "marketer/manage_comment";
+    }
+
+    @GetMapping("/approve/comment/{commentId}")
+    public String approveComment(@PathVariable Integer commentId, @RequestParam(defaultValue = "0") int page) {
+        commentRepository.findById(commentId).ifPresent(comment -> {
+            comment.setReported(false);
+            commentRepository.save(comment);
+        });
+
+        int totalReportedComments = (int) commentRepository.countByReportedTrue();
+        int size = 2;
+        int totalPages = (int) Math.ceil((double) totalReportedComments / size);
+
+        if (page >= totalPages && page > 0) {
+            page--;
+        }
+
+        return "redirect:/marketer/report/comment?page=" + page;
+    }
+
+    @GetMapping("/delete/comment/{commentId}")
+    public String deleteComment(@PathVariable int commentId, @RequestParam(defaultValue = "0") int page) {
+        commentService.deleteComment(commentId);
+
+        int totalComments = (int) commentService.countReportedComments();
+        int size = 2;
+        int totalPages = (int) Math.ceil((double) totalComments / size);
+
+        if (page >= totalPages && page > 0) {
+            page--;
+        }
+
+        return "redirect:/marketer/report/comment?page=" + page;
+    }
+
 
 }

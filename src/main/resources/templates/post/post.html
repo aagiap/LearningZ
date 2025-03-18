@@ -290,7 +290,7 @@
                     </form>
                   </li>
                   <li th:if="${post.user.id != userId}">
-                    <a href="#">Report</a>
+                    <a href="#" th:onclick="|reportPost(${post.postId})|">Report</a>
                   </li>
                 </ul>
               </li>
@@ -465,6 +465,12 @@
         document.removeEventListener("click", hideMenu);
       }
     });
+  }
+  function reportPost(postId) {
+    fetch(`/reports/post/${postId}`, { method: "POST" })
+            .then(response => response.text())
+            .then(() => alert("Bài viết đã được báo cáo!"))
+            .catch(error => console.error("Lỗi:", error));
   }
 </script>
 </body>

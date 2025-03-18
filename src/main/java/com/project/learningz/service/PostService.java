@@ -59,4 +59,7 @@ public class PostService {
             postRepository.deleteById(postId);
         }
     }
+    public long countReportedPosts() {
+        return postRepository.countByReportedTrue();
+    }
 }

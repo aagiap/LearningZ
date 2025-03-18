@@ -32,7 +32,7 @@ public class Comment {
     @Column(nullable = false)
     private int likeCount = 0;
 
-    @Transient // Không lưu vào database, chỉ để hiển thị trên giao diện
+    @Transient
     private boolean isLiked;
 
     @PreUpdate
@@ -56,4 +56,6 @@ public class Comment {
     public void setLiked(boolean liked) {
         this.isLiked = liked;
     }
+
+    private boolean reported = false;
 }

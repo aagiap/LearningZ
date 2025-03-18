@@ -66,4 +66,7 @@ public class CommentService {
                 .map(post -> commentRepository.findByPost(post, Sort.by(Sort.Direction.DESC, "likeCount")))
                 .orElse(List.of());
     }
+    public long countReportedComments() {
+        return commentRepository.countByReportedTrue();
+    }
 }

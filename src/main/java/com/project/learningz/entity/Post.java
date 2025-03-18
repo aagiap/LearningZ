@@ -44,4 +44,6 @@ public class Post {
         this.updatedAt = LocalDateTime.now();
     }
 
+    private boolean reported = false;
+
 }

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE " +
@@ -16,5 +18,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findByGradeAndSubject(@Param("gradeId") Integer gradeId,
                                      @Param("subjectId") Integer subjectId,
                                      Pageable pageable);
-
+    Page<Post> findByReportedTrue(Pageable pageable);
+    long countByReportedTrue();
 }
