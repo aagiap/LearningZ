@@ -101,7 +101,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     @Query("SELECT c FROM Course c WHERE c.id = ?1")
     Course findByCourseId(int courseId);
 
-    List<Course> findCoursesByGradeId(int gradeId);
+    @Query("SELECT c FROM Course c WHERE c.grade.id = :gradeId and c.courseStatus='ACTIVE'")
+    List<Course> findCoursesByGradeId(@Param("gradeId") int gradeId);
 
     @Query("""
                 SELECT DISTINCT co.title

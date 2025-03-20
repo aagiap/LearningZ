@@ -100,32 +100,84 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Lấy trạng thái đã lưu từ localStorage
+        const quizId = "[[${quiz.id}]]"; // Lấy quizId từ Thymeleaf
+        loadAnswers(quizId);
+
+        const options = document.querySelectorAll('input[type="radio"]');
+        options.forEach(option => {
+            option.addEventListener("change", function () {
+                saveAnswer(quizId, this);
+            });
+        });
+    });
+
+    function saveAnswer(quizId, option) {
+        let index = option.getAttribute("data-index");
+        let value = option.value;
+
+        // Đọc dữ liệu từ localStorage (nếu có)
+        let storedData = JSON.parse(localStorage.getItem("quiz_answers")) || {};
+
+        // Cập nhật dữ liệu của quiz hiện tại
+        if (!storedData[quizId]) {
+            storedData[quizId] = {};
+        }
+        storedData[quizId][index] = value;
+
+        // Lưu lại vào localStorage
+        localStorage.setItem("quiz_answers", JSON.stringify(storedData));
+    }
+
+    function loadAnswers(quizId) {
+        let storedData = JSON.parse(localStorage.getItem("quiz_answers")) || {};
+        let answers = storedData[quizId] || {};
+
+        document.querySelectorAll('input[type="radio"]').forEach(option => {
+            let index = option.getAttribute("data-index");
+            if (answers[index] && option.value === answers[index]) {
+                option.checked = true;
+            }
+        });
+    }
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const quizId = "[[${quizId}]]"; // Lấy quizId từ Thymeleaf
         let savedSelections = JSON.parse(localStorage.getItem("selectedBoxes")) || {};
 
-        // Duyệt qua tất cả radio button để gán sự kiện change
-        document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
-            let index = radio.getAttribute("data-index");
-
-            // Nếu box này đã được chọn trước đó, áp dụng class "selected"
-            if (savedSelections[index]) {
+        // Kiểm tra nếu có dữ liệu đã lưu cho quizId hiện tại
+        if (savedSelections[quizId]) {
+            savedSelections[quizId].forEach(index => {
                 let box = document.getElementById("box-" + index);
                 if (box) {
                     box.classList.add("selected");
                 }
-            }
+            });
+        }
 
-            // Lưu trạng thái vào localStorage khi chọn radio button
+        document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
+            let index = radio.getAttribute("data-index");
+
             radio.addEventListener("change", function () {
                 let box = document.getElementById("box-" + index);
                 if (box) {
                     box.classList.add("selected");
-                    savedSelections[index] = true; // Đánh dấu đã chọn
-                    localStorage.setItem("selectedBoxes", JSON.stringify(savedSelections));
                 }
+
+                if (!savedSelections[quizId]) {
+                    savedSelections[quizId] = [];
+                }
+                if (!savedSelections[quizId].includes(index)) {
+                    savedSelections[quizId].push(index);
+                }
+
+                localStorage.setItem("selectedBoxes", JSON.stringify(savedSelections));
             });
         });
     });
+
 
 
     // Hàm cuộn đến câu hỏi tương ứng khi nhấn vào box
@@ -139,18 +191,19 @@
 </script>
 <script>
     let countdownElement = document.getElementById('countdown');
-    let startTime, endTime;
+    const quizId = "[[${quizId}]]"; // Lấy quizId từ Thymeleaf
+    let endTime;
 
     function startTimer() {
-        let storedEndTime = localStorage.getItem('endTime');
+        let storedTimes = JSON.parse(localStorage.getItem("quizTimers")) || {};
 
-        if (storedEndTime) {
-            endTime = parseInt(storedEndTime);
+        if (storedTimes[quizId]) {
+            endTime = storedTimes[quizId];
         } else {
             let timeLimit = parseInt(document.getElementById('timeLimitInput').value) || 0;
-            startTime = Date.now();
-            endTime = startTime + timeLimit * 1000;
-            localStorage.setItem('endTime', endTime);
+            endTime = Date.now() + timeLimit * 1000;
+            storedTimes[quizId] = endTime;
+            localStorage.setItem("quizTimers", JSON.stringify(storedTimes));
         }
 
         updateCountdown();
@@ -171,13 +224,18 @@
             setTimeout(updateCountdown, 100);
         } else {
             countdownElement.textContent = "00:00";
-            localStorage.removeItem('endTime'); // Xóa bộ đếm khi hết giờ
+
+            let storedTimes = JSON.parse(localStorage.getItem("quizTimers")) || {};
+            delete storedTimes[quizId];
+            localStorage.setItem("quizTimers", JSON.stringify(storedTimes));
+
             document.forms[0].action = '/Exam/SubmitQuizByTime';
             document.forms[0].submit();
         }
     }
 
     window.onload = startTimer;
+
 </script>
 </body>
 </html>

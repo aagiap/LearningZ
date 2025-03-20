@@ -117,7 +117,13 @@
         </div>
     </div>
 </div>
-
+<script>
+    function removeTimeLimit() {
+        localStorage.removeItem('timeLeft');
+        localStorage.removeItem('endTime');
+        localStorage.removeItem('selectedBoxes');
+    }
+</script>
 </body>
 <style>
     .result-container {

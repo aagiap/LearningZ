@@ -460,6 +460,11 @@
 <!-- Dashboard Js -->
 <script src="/js/pages/dashboard.js"></script>
 <script>
+    function pendingCourseList(e){
+        let form = document.querySelector('#formPendingCourseList');
+        form.submit();
+    }
+
     function showPopup(button) {
         document.getElementById("popupText").textContent = button.nextElementSibling.textContent;
         document.getElementById("descPopup").classList.remove("hidden");

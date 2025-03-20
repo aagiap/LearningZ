@@ -101,6 +101,7 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
         Quiz quiz = quizService.getQuizById(quizId);
         List<QuestionBank> questionBankList = quizQuestionBankService.findQuestionBankByQuizId(quizId);
         int timeLimitSeconds = quiz.getTimeLimit() * 60;
+        model.addAttribute("quizId", quizId);
         model.addAttribute("quiz", quiz);
         model.addAttribute("timeLimitSeconds", timeLimitSeconds);
         session.setAttribute("quiz", quiz);
@@ -118,18 +119,23 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
         int answeredQuestions = quizReviewService.countAnsweredQuestions(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
+        Quiz quiz = (Quiz) session.getAttribute("quiz");
+        Integer quizId = quiz.getId();
         model.addAttribute("quizSubmitionList", quizSubmitionList);
         if(answeredQuestions == totalQuestions){
+            model.addAttribute("quizId", quizId);
             session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
             model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" / " + totalQuestions);
             return "/quiz/QuizProgressWarning";
         }else if (answeredQuestions < totalQuestions){
+            model.addAttribute("quizId", quizId);
             session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
             model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" / " + totalQuestions);
             return "/quiz/QuizProgressWarning";
         }else {
+            model.addAttribute("quizId", quizId);
             session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
             model.addAttribute("warningMessage", "You have not answered any question");
