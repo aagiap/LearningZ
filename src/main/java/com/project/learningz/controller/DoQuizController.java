@@ -11,13 +11,16 @@ import com.project.learningz.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -42,8 +45,8 @@ public class DoQuizController {
     private UsersCourseService usersCourseService;
 
     @GetMapping("/StartQuiz")
-    public String startQuiz(@RequestParam("quizId") Integer quizId, Model model,HttpSession session,
-                            @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+    public String startQuiz(@RequestParam("quizId") Integer quizId, Model model, HttpSession session,
+                            @AuthenticationPrincipal User user,
                             @AuthenticationPrincipal OAuth2User userOAuth2) {
         String username = null;
         if (user != null) {
@@ -70,23 +73,22 @@ public class DoQuizController {
         model.addAttribute("avatarUrl", avatarUrl);
 
         QuizJoinToGradeDTO quizJoinToGradeDTO = quizService.getQuizJoinToGradeDTOById(quizId);
-        QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId,quizId);
+        QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId, quizId);
         Integer numAtempts;
-        if(quizResult == null) {
-             numAtempts = 0;
-        } else{
-             numAtempts = quizResult.getNumAtempts();
+        if (quizResult == null) {
+            numAtempts = 0;
+        } else {
+            numAtempts = quizResult.getNumAtempts();
         }
         String quizType = String.valueOf(quiz.getLesson().getQuizType());
-        if(quizType.equals("EXAM")){
+        if (quizType.equals("EXAM")) {
             model.addAttribute("message", "This is an exam, you only have " + quizResultService.getMaxAttempts() + " attempt");
-            System.out.println(123);
-            if(quizResultService.isMaxAttempts(userId, quizId)){
+            if (quizResultService.isMaxAttempts(userId, quizId)) {
                 model.addAttribute("message", "You have reached the maximum number of attempts");
                 model.addAttribute("Block", "Block");
             }
         }
-Integer minScoreToPass = quizResultService.getMinScoreToPass();
+        Integer minScoreToPass = quizResultService.getMinScoreToPass();
         model.addAttribute("minScoreToPass", minScoreToPass);
 
         model.addAttribute("numAtempts", numAtempts);
@@ -98,6 +100,7 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
 
     @GetMapping("/DoQuiz")
     public String doQuiz(@RequestParam("quizId") Integer quizId, Model model, HttpSession session) {
+
         Quiz quiz = quizService.getQuizById(quizId);
         List<QuestionBank> questionBankList = quizQuestionBankService.findQuestionBankByQuizId(quizId);
         int timeLimitSeconds = quiz.getTimeLimit() * 60;
@@ -105,38 +108,69 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
         model.addAttribute("quiz", quiz);
         model.addAttribute("timeLimitSeconds", timeLimitSeconds);
         session.setAttribute("quiz", quiz);
-        if(session.getAttribute("questionBankList")!=null){
-            model.addAttribute("questionBankList", (List<QuestionBank>) session.getAttribute("questionBankList"));
-        }else{
-            model.addAttribute("questionBankList", questionBankList);
-            session.setAttribute("questionBankList", questionBankList);
+
+//        if(session.getAttribute("questionBankList")!=null){
+//            model.addAttribute("questionBankList", (List<QuestionBank>) session.getAttribute("questionBankList"));
+//        }else{
+//            model.addAttribute("questionBankList", questionBankList);
+//            session.setAttribute("questionBankList", questionBankList);
+//        }
+
+        Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
+
+        if (quizHistory == null) {
+            quizHistory = new HashMap<>();
+            session.setAttribute("quizHistory", quizHistory);
         }
+
+        if (!quizHistory.containsKey(quizId)) {
+            quizHistory.put(quizId, questionBankList);
+        }
+        for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
+            if (entry.getKey().equals(quizId)) {
+                model.addAttribute("questionBankList", entry.getValue());
+            }
+        }
+
         return "/quiz/DoQuiz";
     }
 
     @PostMapping("/CheckProgress")
-    public String checkProgress(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO, Model model,HttpSession session){
+    public String checkProgress(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO, Model model, HttpSession session) {
         int answeredQuestions = quizReviewService.countAnsweredQuestions(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
+        model.addAttribute("quizSubmitionList", quizSubmitionList);
         Quiz quiz = (Quiz) session.getAttribute("quiz");
         Integer quizId = quiz.getId();
         model.addAttribute("quizSubmitionList", quizSubmitionList);
-        if(answeredQuestions == totalQuestions){
+
+
+        Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
+        for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
+            if (entry.getKey().equals(quizId)) {
+                model.addAttribute("questionBankList", entry.getValue());
+            }
+        }
+        Map<Integer, QuizSubmitionListDTO> quizHistorySubmit = (Map<Integer, QuizSubmitionListDTO>) session.getAttribute("quizHistorySubmit");
+        if (quizHistorySubmit == null) {
+            quizHistorySubmit = new HashMap<>();
+            session.setAttribute("quizHistorySubmit", quizHistorySubmit);
+        }
+        quizHistorySubmit.put(quiz.getId(), quizSubmitionListDTO);
+
+        if (answeredQuestions == totalQuestions) {
             model.addAttribute("quizId", quizId);
-            session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
-            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" / " + totalQuestions);
+            model.addAttribute("warningMessage", "You have answered " + answeredQuestions + " / " + totalQuestions);
             return "/quiz/QuizProgressWarning";
-        }else if (answeredQuestions < totalQuestions){
+        } else if (answeredQuestions < totalQuestions) {
             model.addAttribute("quizId", quizId);
-            session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
-            model.addAttribute("warningMessage", "You have answered "+ answeredQuestions +" / " + totalQuestions);
+            model.addAttribute("warningMessage", "You have answered " + answeredQuestions + " / " + totalQuestions);
             return "/quiz/QuizProgressWarning";
-        }else {
+        } else {
             model.addAttribute("quizId", quizId);
-            session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
             model.addAttribute("warningTitle", "Score Exam ?");
             model.addAttribute("warningMessage", "You have not answered any question");
             return "/quiz/QuizProgressWarning";
@@ -145,10 +179,16 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
 
     @PostMapping("/SubmitQuiz")
     public String submitQuiz(Model model, HttpSession session,
-                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                             @AuthenticationPrincipal User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
-        QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
         Quiz quiz = (Quiz) session.getAttribute("quiz");
+        Map<Integer, QuizSubmitionListDTO> quizHistorySubmit = (Map<Integer, QuizSubmitionListDTO>) session.getAttribute("quizHistorySubmit");
+        QuizSubmitionListDTO quizSubmitionListDTO = null;
+        for (Map.Entry<Integer, QuizSubmitionListDTO> entry : quizHistorySubmit.entrySet()) {
+            if (entry.getKey().equals(quiz.getId())) {
+                quizSubmitionListDTO = entry.getValue();
+            }
+        }
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
@@ -169,7 +209,7 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
         model.addAttribute("avatarUrl", avatarUrl);
         quizResultService.saveResult(userId, quiz.getId(), score);
 
-        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
         model.addAttribute("totalQuestions", totalQuestions);
@@ -177,8 +217,8 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
     }
 
     @PostMapping("/SubmitQuizByTime")
-    public String submitQuizByTime(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO,Model model, HttpSession session,
-                                   @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+    public String submitQuizByTime(@ModelAttribute QuizSubmitionListDTO quizSubmitionListDTO, Model model, HttpSession session,
+                                   @AuthenticationPrincipal User user,
                                    @AuthenticationPrincipal OAuth2User userOAuth2) {
         Quiz quiz = (Quiz) session.getAttribute("quiz");
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
@@ -204,13 +244,18 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
         model.addAttribute("totalQuestions", totalQuestions);
-        session.setAttribute("quizSubmitionListDTO", quizSubmitionListDTO);
+        Map<Integer, QuizSubmitionListDTO> quizHistorySubmit = (Map<Integer, QuizSubmitionListDTO>) session.getAttribute("quizHistorySubmit");
+        if (quizHistorySubmit == null) {
+            quizHistorySubmit = new HashMap<>();
+            session.setAttribute("quizHistorySubmit", quizHistorySubmit);
+        }
+        quizHistorySubmit.put(quiz.getId(), quizSubmitionListDTO);
         return "/quiz/QuizResult";
     }
 
     @GetMapping("/QuizReview")
     public String quizReview(Model model, HttpSession session,
-                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                             @AuthenticationPrincipal User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
         String username = null;
         if (user != null) {
@@ -227,16 +272,36 @@ Integer minScoreToPass = quizResultService.getMinScoreToPass();
         String avatarUrl = userService.getAvtByUsername(username);
         model.addAttribute("avatarUrl", avatarUrl);
 
-        QuizSubmitionListDTO quizSubmitionListDTO = (QuizSubmitionListDTO) session.getAttribute("quizSubmitionListDTO");
+
+        Quiz quiz = (Quiz) session.getAttribute("quiz");
+
+        Map<Integer, QuizSubmitionListDTO> quizHistorySubmit = (Map<Integer, QuizSubmitionListDTO>) session.getAttribute("quizHistorySubmit");
+        QuizSubmitionListDTO quizSubmitionListDTO = null;
+        for (Map.Entry<Integer, QuizSubmitionListDTO> entry : quizHistorySubmit.entrySet()) {
+            if (entry.getKey().equals(quiz.getId())) {
+                quizSubmitionListDTO = entry.getValue();
+            }
+        }
+
+
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
         List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
-        Quiz quiz = (Quiz) session.getAttribute("quiz");
-        List<QuestionBank> questionBankList = (List<QuestionBank>) session.getAttribute("questionBankList");
+
+        Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
+        for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
+            if (entry.getKey().equals(quiz.getId())) {
+                model.addAttribute("questionBankList", entry.getValue());
+            }
+        }
+
+
         //session.invalidate();
+//        session.removeAttribute("questionBankList");
+//        session.removeAttribute("quiz");
+//        session.removeAttribute("quizSubmitionListDTO");
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);
-        model.addAttribute("questionBankList",questionBankList);
         model.addAttribute("quiz", quiz);
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);
