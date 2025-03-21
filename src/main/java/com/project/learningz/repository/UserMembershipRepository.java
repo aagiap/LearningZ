@@ -14,6 +14,6 @@ public interface UserMembershipRepository extends JpaRepository<UserMembership, 
 
     UserMembership findTopByUserOrderByExpirationDateDesc(User user);
 
-    @Query("SELECT um FROM UserMembership um where um.user.id= :userId")
+    @Query("SELECT um FROM UserMembership um where um.user.id= :userId ORDER BY um.registrationDate DESC")
     List<UserMembership> findByUserId(Integer userId);
 }
