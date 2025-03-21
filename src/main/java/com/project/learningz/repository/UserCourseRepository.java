@@ -4,6 +4,7 @@ import com.project.learningz.dto.CourseReviewDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.UsersCourse;
 import com.project.learningz.entity.UsersCourseId;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -74,4 +75,11 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
     SELECT uc.course.id FROM UsersCourse uc WHERE uc.user.id = ?1
     """)
     List<Integer> courseIdListByUserId(Integer userId);
+
+    @Query("SELECT uc.course, COUNT(uc.course.id) AS enrollCount " +
+            "FROM UsersCourse uc " +
+            "WHERE uc.course.courseStatus = 'ACTIVE' " +
+            "GROUP BY uc.course " +
+            "ORDER BY enrollCount DESC")
+    List<Object[]> findTopCourses(Pageable pageable);
 }

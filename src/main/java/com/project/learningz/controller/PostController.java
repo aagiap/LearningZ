@@ -1,5 +1,6 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.Role;
 import com.project.learningz.entity.*;
 import com.project.learningz.service.*;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,7 @@ public class PostController {
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", postPage.getTotalPages());
+
 
         model.addAttribute("grades", gradeService.getAllGrades());
         model.addAttribute("subjects", subjectService.getAllSubjects());
@@ -195,13 +197,12 @@ public class PostController {
 
         List<Comment> comments = commentService.getCommentsByPost(postId);
 
-        // Lấy thông tin người dùng hiện tại
         User user = getCurrentUser();
 
         if (user != null) {
             for (Comment comment : comments) {
                 boolean isLiked = commentLikeService.isLikedByUser(comment, user);
-                comment.setLiked(isLiked); // Gán trạng thái like cho comment
+                comment.setLiked(isLiked);
             }
         }
 
@@ -212,7 +213,7 @@ public class PostController {
         model.addAttribute("grade", post.getGrade());
         model.addAttribute("subject", post.getSubject());
 
-        addUserInfoToModel(model); // Truyền thông tin user vào model
+        addUserInfoToModel(model);
         return "post/single_post";
     }
 
@@ -221,13 +222,19 @@ public class PostController {
         User user = getCurrentUser();
         Post post = postService.findById(id);
 
-        if (post != null && user != null && post.getUser().getId().equals(user.getId())) {
-            postService.deletePost(id);
-        } else {
-            model.addAttribute("error", "Bạn không có quyền xóa bài viết này!");
+        if (post != null && user != null) {
+            boolean isAuthor = post.getUser().getId().equals(user.getId());
+            boolean isAdminOrMarketing = user.getRole() == Role.ADMIN || user.getRole() == Role.MARKETING_TEAM;
+
+            if (isAuthor || isAdminOrMarketing) {
+                postService.deletePost(id);
+            } else {
+                model.addAttribute("error", "You don't have permission to delete this post");
+            }
         }
         return "redirect:/post";
     }
+
 
     private User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -246,6 +253,7 @@ public class PostController {
         User user = getCurrentUser();
         if (user != null) {
             model.addAttribute("username", user.getUsername());
+            model.addAttribute("userRole", user.getRole().name());
             model.addAttribute("avatarUrl", user.getAvtUrl() != null ? user.getAvtUrl() : "/static/image/AvartaDefault.jpg");
             model.addAttribute("userId", user.getId());
             model.addAttribute("isLoggedIn", true);

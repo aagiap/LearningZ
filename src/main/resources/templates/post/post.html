@@ -281,14 +281,17 @@
               <li class="ellipsis-menu">
                 <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
                 <ul class="menu">
+
                   <li th:if="${post.user.id == userId}">
                     <a th:href="@{/post/edit/{id}(id=${post.postId})}">Edit</a>
                   </li>
-                  <li th:if="${post.user.id == userId}">
+
+                  <li th:if="${post.user.id == userId or userRole == 'ADMIN' or userRole == 'MARKETING_TEAM'}">
                     <form th:action="@{/post/delete/{id}(id=${post.postId})}" method="post">
-                      <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Delete</button>
+                      <button type="submit" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
                     </form>
                   </li>
+
                   <li th:if="${post.user.id != userId}">
                     <a href="#" th:onclick="|reportPost(${post.postId})|">Report</a>
                   </li>
@@ -305,27 +308,40 @@
           </div>
         </div>
 
-        <!-- Phân trang, chỉ hiển thị nếu có bài viết -->
         <nav th:if="${not #lists.isEmpty(posts)}" class="courses-pagination mt-50">
           <ul class="pagination justify-content-lg-end justify-content-center">
+            <li class="page-item" th:if="${currentPage > 1}">
+              <a class="page-link" th:href="@{/post(page=0)}" aria-label="First">
+                <i class="fa fa-angle-double-left"></i>
+              </a>
+            </li>
+            <!-- Nút "Trang trước" -->
             <li class="page-item" th:if="${currentPage > 0}">
-              <a th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">
+              <a class="page-link" th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">
                 <i class="fa fa-angle-left"></i>
               </a>
             </li>
-
-            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            <!-- Hai trang trước trang hiện tại -->
+            <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                th:if="${i >= 0 and i < totalPages}"
                 th:class="'page-item ' + (${i == currentPage} ? 'active' : '')">
               <a class="page-link" th:href="@{/post(page=${i})}" th:text="${i + 1}"></a>
             </li>
 
             <li class="page-item" th:if="${currentPage < totalPages - 1}">
-              <a th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">
+              <a class="page-link" th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">
                 <i class="fa fa-angle-right"></i>
+              </a>
+            </li>
+            <!-- Nút "Đi tới trang cuối cùng" -->
+            <li class="page-item" th:if="${currentPage < totalPages - 1}">
+              <a class="page-link" th:href="@{/post(page=${totalPages - 1})}" aria-label="Last">
+                <i class="fa fa-angle-double-right"></i>
               </a>
             </li>
           </ul>
         </nav>
+
       </div>
 
       <!-- Sidebar -->

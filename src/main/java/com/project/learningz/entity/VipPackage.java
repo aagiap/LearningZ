@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +29,22 @@ public class VipPackage {
     @Column(name = "duration", nullable = false)
     private Integer duration;
 
-    //    @NotNull
 //    @Column(name = "price", nullable = false, precision = 13, scale = 2)
 //    private BigDecimal price;
     @NotNull
     @Column(name = "price", nullable = false)
     private long price;
 
+    @Column(name = "discounted_price")
+    private Long discountedPrice;
+
     @OneToMany(mappedBy = "vipPackage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserMembership> userMemberships = new ArrayList<>();
 
+    public long getFinalPrice() {
+        return (discountedPrice != null && discountedPrice > 0) ? discountedPrice : price;
+    }
+    @Column(name = "status", nullable = false)
+    private Boolean status;
 
 }

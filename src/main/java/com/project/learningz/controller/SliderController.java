@@ -1,17 +1,10 @@
 package com.project.learningz.controller;
 
-import com.project.learningz.entity.Comment;
-import com.project.learningz.entity.Post;
-import com.project.learningz.entity.Slider;
-import com.project.learningz.entity.User;
+import com.project.learningz.entity.*;
 import com.project.learningz.repository.CommentRepository;
 import com.project.learningz.repository.PostRepository;
-import com.project.learningz.repository.SliderRepository;
 import com.project.learningz.repository.UserRepository;
-import com.project.learningz.service.CommentService;
-import com.project.learningz.service.GoogleDriveService;
-import com.project.learningz.service.PostService;
-import com.project.learningz.service.SliderService;
+import com.project.learningz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,9 +18,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/marketer")
@@ -53,6 +53,12 @@ public class SliderController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private MonthlyStatisticService monthlyStatisticService;
+
+    @Autowired
+    private VipPackageService vipPackageService;
 
     private static final String REDIRECT_SLIDERS = "redirect:/marketer/slider";
 
@@ -102,12 +108,6 @@ public class SliderController {
         model.addAttribute("hasResults", !sliderPage.isEmpty());
 
         return "marketer/slider";
-    }
-
-    @GetMapping("/dashboard")
-    public String showDashboard(Model model) {
-        getAuthenticatedUserInfo(model);
-        return "/marketer/dashboard";
     }
 
     // Hiển thị form thêm slider
@@ -227,6 +227,7 @@ public class SliderController {
         model.addAttribute("reportedPosts", reportedPosts.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", reportedPosts.getTotalPages());
+        model.addAttribute("hasResults", !reportedPosts.isEmpty());
 
         return "marketer/manage_post";
     }
@@ -274,6 +275,8 @@ public class SliderController {
         model.addAttribute("reportedComments", reportedComments.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", reportedComments.getTotalPages());
+        model.addAttribute("hasResults", !reportedComments.isEmpty());
+
 
         return "marketer/manage_comment";
     }
@@ -311,5 +314,145 @@ public class SliderController {
         return "redirect:/marketer/report/comment?page=" + page;
     }
 
+    @GetMapping("/dashboard")
+    public String getDashboard(Model model) {
+        getAuthenticatedUserInfo(model);
 
+        int currentYear = LocalDate.now().getYear();
+        int currentMonth = LocalDate.now().getMonthValue();
+        int previousYear = (currentMonth == 1) ? currentYear - 1 : currentYear;
+        int previousMonth = (currentMonth == 1) ? 12 : currentMonth - 1;
+
+        MonthlyStatistic currentStat = monthlyStatisticService.getMonthlyStatistic(currentYear, currentMonth);
+        MonthlyStatistic previousStat = monthlyStatisticService.getMonthlyStatistic(previousYear, previousMonth);
+
+        model.addAttribute("usersChange", calculateChange(currentStat.getTotalUsersRegistered(), previousStat.getTotalUsersRegistered()));
+        model.addAttribute("coursesChange", calculateChange(currentStat.getTotalCoursesRegistered(), previousStat.getTotalCoursesRegistered()));
+        model.addAttribute("visitsChange", calculateChange(currentStat.getTotalVisits(), previousStat.getTotalVisits()));
+        model.addAttribute("revenueChange", calculateChange(currentStat.getTotalRevenue().intValue(), previousStat.getTotalRevenue().intValue()));
+
+        model.addAttribute("usersChangeIcon", getChangeIcon(currentStat.getTotalUsersRegistered(), previousStat.getTotalUsersRegistered()));
+        model.addAttribute("coursesChangeIcon", getChangeIcon(currentStat.getTotalCoursesRegistered(), previousStat.getTotalCoursesRegistered()));
+        model.addAttribute("visitsChangeIcon", getChangeIcon(currentStat.getTotalVisits(), previousStat.getTotalVisits()));
+        model.addAttribute("revenueChangeIcon", getChangeIcon(currentStat.getTotalRevenue().intValue(), previousStat.getTotalRevenue().intValue()));
+
+        model.addAttribute("currentStat", currentStat);
+        model.addAttribute("previousStat", previousStat);
+        System.out.println("Current Users: " + currentStat.getTotalUsersRegistered());
+        System.out.println("Previous Users: " + previousStat.getTotalUsersRegistered());
+
+        System.out.println("Current Courses: " + currentStat.getTotalCoursesRegistered());
+        System.out.println("Previous Courses: " + previousStat.getTotalCoursesRegistered());
+
+        System.out.println("Current Visits: " + currentStat.getTotalVisits());
+        System.out.println("Previous Visits: " + previousStat.getTotalVisits());
+
+        System.out.println("Current Revenue: " + currentStat.getTotalRevenue());
+        System.out.println("Previous Revenue: " + previousStat.getTotalRevenue());
+        List<MonthlyStatistic> statistics = monthlyStatisticService.getStatisticsForYear(currentYear);
+
+        Map<Integer, BigDecimal> revenueMap = new HashMap<>();
+        for (MonthlyStatistic stat : statistics) {
+            revenueMap.put(stat.getMonth(), stat.getTotalRevenue());
+        }
+
+        List<BigDecimal> revenueData = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            revenueData.add(revenueMap.getOrDefault(i, BigDecimal.ZERO));
+        }
+
+        model.addAttribute("revenueData", revenueData);
+        return "marketer/dashboard";
+    }
+
+    private String calculateChange(int current, int previous) {
+        if (previous == 0) return "+100%";
+        double change = ((double) (current - previous) / previous) * 100;
+        return String.format("%.1f%%", change);
+    }
+
+    private String getChangeIcon(int current, int previous) {
+        return (current >= previous) ? "bx bxs-up-arrow text-success" : "bx bxs-down-arrow text-danger";
+    }
+
+    @GetMapping("/coupon")
+    public String listVipPackages(Model model) {
+        getAuthenticatedUserInfo(model);
+        model.addAttribute("vipPackages", vipPackageService.getAllVipPackages());
+        return "marketer/coupon";
+    }
+
+    @GetMapping("/coupon/edit/{id}")
+    public String editVipPackage(@PathVariable Integer id, Model model) {
+        getAuthenticatedUserInfo(model);
+        VipPackage vipPackage = vipPackageService.getVipPackageById(id);
+        if (vipPackage == null) {
+            return "redirect:/marketer/coupon";
+        }
+        model.addAttribute("vipPackage", vipPackage);
+        return "marketer/edit_coupon";
+    }
+
+    @PostMapping("/coupon/update/{id}")
+    public String updateVipPackage(@PathVariable Integer id,
+                                   @RequestParam String packageName,
+                                   @RequestParam int duration,
+                                   @RequestParam long price,
+                                   @RequestParam(required = false) Long discountedPrice,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            VipPackage vipPackage = vipPackageService.findById(id);
+            if (vipPackage == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Gói VIP không tồn tại!");
+                return "redirect:/marketer/coupon/edit/" + id;
+            }
+
+            if (discountedPrice != null && (discountedPrice < 0 || discountedPrice > price)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Giá sau khi giảm không hợp lệ!");
+                return "redirect:/marketer/coupon/edit/" + id;
+            }
+
+            vipPackage.setPackageName(packageName);
+            vipPackage.setDuration(duration);
+            vipPackage.setPrice(price);
+            vipPackage.setDiscountedPrice(discountedPrice);
+
+            vipPackageService.save(vipPackage);
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật gói VIP thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi cập nhật gói VIP!");
+        }
+        return "redirect:/marketer/coupon";
+    }
+
+    @GetMapping("/coupon/toggleVisibility/{id}")
+    public String toggleVipPackageVisibility(@PathVariable Integer id) {
+        vipPackageService.toggleVisibility(id);
+        return "redirect:/marketer/coupon";
+    }
+    @GetMapping("/coupon/delete/{id}")
+    public String deleteVipPackage(@PathVariable Integer id) {
+        vipPackageService.deleteById(id);
+        return "redirect:/marketer/coupon";
+    }
+    @GetMapping("/add_coupon")
+    public String showAddForm(Model model) {
+        getAuthenticatedUserInfo(model);
+        model.addAttribute("vipPackage", new VipPackage());
+        return "marketer/add_coupon";
+    }
+    @PostMapping("/add_coupon")
+    public String addVipPackage(@ModelAttribute VipPackage vipPackage, RedirectAttributes redirectAttributes) {
+
+        if (vipPackage.getDiscountedPrice() != null && vipPackage.getDiscountedPrice() > vipPackage.getPrice()) {
+            redirectAttributes.addFlashAttribute("error", "Giá sau khi giảm không được lớn hơn giá gốc!");
+            return "redirect:/marketer/add_coupon";
+        }
+
+        vipPackageService.save(vipPackage);
+        redirectAttributes.addFlashAttribute("success", "Thêm gói VIP thành công!");
+        return "redirect:/marketer/coupon";
+    }
 }
+
+

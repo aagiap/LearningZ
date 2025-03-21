@@ -7,7 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Nationalized;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -57,5 +60,9 @@ public class User {
     @Column(name = "user_status")
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
+
+    @Column(name = "created_at", updatable = false, nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
 }

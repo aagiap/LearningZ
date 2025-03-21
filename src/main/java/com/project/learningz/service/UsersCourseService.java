@@ -11,6 +11,8 @@ import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -178,5 +180,14 @@ public class UsersCourseService {
 
     public List<Integer> courseIdListByUserId(Integer userId){
         return userCourseRepository.courseIdListByUserId(userId);
+    }
+
+    public List<Course> getTopCourses() {
+        Pageable topFive = PageRequest.of(0, 5);
+        List<Object[]> results = userCourseRepository.findTopCourses(topFive);
+
+        return results.stream()
+                .map(obj -> (Course) obj[0])
+                .toList();
     }
 }

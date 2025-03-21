@@ -250,7 +250,24 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoupons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCoupons">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:leaf-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Coupons </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoupons">
+                        <ul class="nav sub-navbar-nav">
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/coupon">List</a>
+                            </li>
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/add_coupon">Add</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarInvoice" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoice">
                                    <span class="nav-icon">
@@ -292,6 +309,7 @@
                             </div>
                         </div>
 
+                        <!-- Thống kê tổng số tài khoản đăng ký -->
                         <div class="col-md-6">
                             <div class="card overflow-hidden">
                                 <div class="card-body">
@@ -300,24 +318,26 @@
                                             <div class="avatar-md bg-soft-primary rounded">
                                                 <iconify-icon icon="solar:cart-5-bold-duotone" class="avatar-title fs-32 text-primary"></iconify-icon>
                                             </div>
-                                        </div> <!-- end col -->
+                                        </div>
                                         <div class="col-6 text-end">
-                                            <p class="text-muted mb-0 text-truncate">Total Orders</p>
-                                            <h3 class="text-dark mt-1 mb-0">13, 647</h3>
-                                        </div> <!-- end col -->
-                                    </div> <!-- end row-->
-                                </div> <!-- end card body -->
+                                            <p class="text-muted mb-0 text-truncate">Total Users</p>
+                                            <h3 class="text-dark mt-1 mb-0" th:text="${currentStat.totalUsersRegistered}">0</h3>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-footer py-2 bg-light bg-opacity-50">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-success"> <i class="bx bxs-up-arrow fs-12"></i> 2.3%</span>
-                                            <span class="text-muted ms-1 fs-12">Last Week</span>
+                                            <span th:class="${usersChangeIcon}" class="fs-12"></span>
+                                            <span class="text-muted ms-1 fs-12" th:text="${usersChange}">0%</span>
                                         </div>
                                         <a href="#!" class="text-reset fw-semibold fs-12">View More</a>
                                     </div>
-                                </div> <!-- end card body -->
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thống kê tổng số khóa học đăng ký -->
                         <div class="col-md-6">
                             <div class="card overflow-hidden">
                                 <div class="card-body">
@@ -326,24 +346,26 @@
                                             <div class="avatar-md bg-soft-primary rounded">
                                                 <i class="bx bx-award avatar-title fs-24 text-primary"></i>
                                             </div>
-                                        </div> <!-- end col -->
+                                        </div>
                                         <div class="col-6 text-end">
-                                            <p class="text-muted mb-0 text-truncate">New Leads</p>
-                                            <h3 class="text-dark mt-1 mb-0">9, 526</h3>
-                                        </div> <!-- end col -->
-                                    </div> <!-- end row-->
-                                </div> <!-- end card body -->
+                                            <p class="text-muted mb-0 text-truncate">Total Courses</p>
+                                            <h3 class="text-dark mt-1 mb-0" th:text="${currentStat.totalCoursesRegistered}">0</h3>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-footer py-2 bg-light bg-opacity-50">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-success"> <i class="bx bxs-up-arrow fs-12"></i> 8.1%</span>
-                                            <span class="text-muted ms-1 fs-12">Last Month</span>
+                                            <span th:class="${coursesChangeIcon}" class="fs-12"></span>
+                                            <span class="text-muted ms-1 fs-12" th:text="${coursesChange}">0%</span>
                                         </div>
                                         <a href="#!" class="text-reset fw-semibold fs-12">View More</a>
                                     </div>
-                                </div> <!-- end card body -->
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thống kê lượt truy cập -->
                         <div class="col-md-6">
                             <div class="card overflow-hidden">
                                 <div class="card-body">
@@ -352,24 +374,26 @@
                                             <div class="avatar-md bg-soft-primary rounded">
                                                 <i class="bx bxs-backpack avatar-title fs-24 text-primary"></i>
                                             </div>
-                                        </div> <!-- end col -->
+                                        </div>
                                         <div class="col-6 text-end">
-                                            <p class="text-muted mb-0 text-truncate">Deals</p>
-                                            <h3 class="text-dark mt-1 mb-0">976</h3>
-                                        </div> <!-- end col -->
-                                    </div> <!-- end row-->
-                                </div> <!-- end card body -->
+                                            <p class="text-muted mb-0 text-truncate">Total Visits</p>
+                                            <h3 class="text-dark mt-1 mb-0" th:text="${currentStat.totalVisits}">0</h3>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-footer py-2 bg-light bg-opacity-50">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-danger"> <i class="bx bxs-down-arrow fs-12"></i> 0.3%</span>
-                                            <span class="text-muted ms-1 fs-12">Last Month</span>
+                                            <span th:class="${visitsChangeIcon}" class="fs-12"></span>
+                                            <span class="text-muted ms-1 fs-12" th:text="${visitsChange}">0%</span>
                                         </div>
                                         <a href="#!" class="text-reset fw-semibold fs-12">View More</a>
                                     </div>
-                                </div> <!-- end card body -->
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thống kê tổng doanh thu -->
                         <div class="col-md-6">
                             <div class="card overflow-hidden">
                                 <div class="card-body">
@@ -378,26 +402,26 @@
                                             <div class="avatar-md bg-soft-primary rounded">
                                                 <i class="bx bx-dollar-circle avatar-title text-primary fs-24"></i>
                                             </div>
-                                        </div> <!-- end col -->
+                                        </div>
                                         <div class="col-6 text-end">
-                                            <p class="text-muted mb-0 text-truncate">Booked Revenue</p>
-                                            <h3 class="text-dark mt-1 mb-0">$123.6k</h3>
-                                        </div> <!-- end col -->
-                                    </div> <!-- end row-->
-                                </div> <!-- end card body -->
+                                            <p class="text-muted mb-0 text-truncate">Revenue</p>
+                                            <h3 class="text-dark mt-1 mb-0" th:text="'$' + ${currentStat.totalRevenue}"></h3>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-footer py-2 bg-light bg-opacity-50">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
-                                            <span class="text-danger"> <i class="bx bxs-down-arrow fs-12"></i> 10.6%</span>
-                                            <span class="text-muted ms-1 fs-12">Last Month</span>
+                                            <span th:class="${revenueChangeIcon}" class="fs-12"></span>
+                                            <span class="text-muted ms-1 fs-12" th:text="${revenueChange}">0%</span>
                                         </div>
                                         <a href="#!" class="text-reset fw-semibold fs-12">View More</a>
                                     </div>
-                                </div> <!-- end card body -->
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
-                </div> <!-- end col -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-xxl-7">
                     <div class="card">
@@ -405,16 +429,19 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <h4 class="card-title">Performance</h4>
                                 <div>
-                                    <button type="button" class="btn btn-sm btn-outline-light">ALL</button>
-                                    <button type="button" class="btn btn-sm btn-outline-light">1M</button>
-                                    <button type="button" class="btn btn-sm btn-outline-light">6M</button>
-                                    <button type="button" class="btn btn-sm btn-outline-light active">1Y</button>
+                                    <button type="button" class="btn btn-sm btn-outline-light" id="btn-ALL">ALL</button>
+                                    <button type="button" class="btn btn-sm btn-outline-light" id="btn-1M">1M</button>
+                                    <button type="button" class="btn btn-sm btn-outline-light active" id="btn-1Y">1Y</button>
                                 </div>
                             </div> <!-- end card-title-->
 
                             <div dir="ltr">
                                 <div id="dash-performance-chart" class="apex-charts"></div>
                             </div>
+                            <div id="revenueChart" th:data-revenue="${revenueData}"></div>
+                            <p>Data check: <span th:text="${revenueData}"></span></p>
+
+
                         </div> <!-- end card body -->
                     </div> <!-- end card -->
                 </div> <!-- end col -->
@@ -559,9 +586,14 @@
 <script src="/vendor/jsvectormap/js/jsvectormap.min.js"></script>
 <script src="/vendor/jsvectormap/maps/world-merc.js"></script>
 <script src="/vendor/jsvectormap/maps/world.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 <!-- Dashboard Js -->
 <script src="/js/pages/dashboard.js"></script>
-
+<script th:inline="javascript">
+    var revenueData = /*[[${revenueData}]]*/ [];
+    console.log("Dữ liệu doanh thu từ Thymeleaf:", revenueData);
+</script>
 </body>
 </html>

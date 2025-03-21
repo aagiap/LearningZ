@@ -256,7 +256,24 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoupons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCoupons">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:leaf-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Coupons </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoupons">
+                        <ul class="nav sub-navbar-nav">
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/coupon">List</a>
+                            </li>
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/add_coupon">Add</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarInvoice" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoice">
                                    <span class="nav-icon">
@@ -366,26 +383,39 @@
                         <div th:if="${hasResults}" class="card-footer border-top">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-end mb-0">
+                                    <!-- Nút "Đi tới trang đầu tiên" -->
+                                    <li class="page-item" th:if="${currentPage > 1}">
+                                        <a class="page-link" th:href="@{/marketer/slider(keyword=${keyword}, page=0)}">
+                                            <<
+                                        </a>
+                                    </li>
+
+                                    <!-- Nút "Trang trước" -->
                                     <li class="page-item" th:if="${currentPage > 0}">
-                                        <a class="page-link"
-                                           th:href="@{/marketer/slider(keyword=${keyword}, page=${currentPage - 1})}">
-                                            Previous
+                                        <a class="page-link" th:href="@{/marketer/slider(keyword=${keyword}, page=${currentPage - 1})}">
+                                            <
                                         </a>
                                     </li>
 
-                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                        class="page-item"
-                                        th:classappend="${i == currentPage} ? 'active'">
-                                        <a class="page-link"
-                                           th:href="@{/marketer/slider(keyword=${keyword}, page=${i})}"
-                                           th:text="${i + 1}">
+                                    <!-- Hiển thị số trang (tối đa 5 trang quanh trang hiện tại) -->
+                                    <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                                        th:if="${i >= 0 and i < totalPages}"
+                                        th:class="'page-item ' + (${i == currentPage} ? 'active' : '')">
+                                        <a class="page-link" th:href="@{/marketer/slider(keyword=${keyword}, page=${i})}" th:text="${i + 1}">
                                         </a>
                                     </li>
 
+                                    <!-- Nút "Trang sau" -->
                                     <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                                        <a class="page-link"
-                                           th:href="@{/marketer/slider(keyword=${keyword}, page=${currentPage + 1})}">
-                                            Next
+                                        <a class="page-link" th:href="@{/marketer/slider(keyword=${keyword}, page=${currentPage + 1})}">
+                                            >
+                                        </a>
+                                    </li>
+
+                                    <!-- Nút "Đi tới trang cuối cùng" -->
+                                    <li class="page-item" th:if="${currentPage < totalPages - 2}">
+                                        <a class="page-link" th:href="@{/marketer/slider(keyword=${keyword}, page=${totalPages - 1})}">
+                                            >>
                                         </a>
                                     </li>
                                 </ul>
