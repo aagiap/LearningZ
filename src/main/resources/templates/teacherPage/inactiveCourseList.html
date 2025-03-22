@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Pending Course List</title>
+    <title>Inactive Course List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/pendingCourseListStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/inactiveCourseListStyle.css}">
     <!-- Thư viện jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables -->
@@ -311,6 +311,18 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
+                                   <span class="nav-icon">
+                                        <i class="fa-regular fa-clock"></i>
+                                   </span>
+                        <span class="nav-text">Inactive Course List</span>
+                    </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
+
             </ul>
         </div>
     </div>
@@ -321,15 +333,54 @@
     <!-- ==================================================== -->
     <div class="page-content">
         <div class="container">
-            <h3 style="text-align: center;">Pending Course List</h3>
-            <div class="pendingCourseList" th:if="${pendingCourseList != null or !pendingCourseList.isEmpty()}">
-                <div class="pendingCourse" th:each="course:${pendingCourseList}">
+            <h3 style="text-align: center;">Inactive/Rejected Course List</h3>
+            <div class="pendingCourseList" th:if="${inactiveCourseList}">
+                <div class="pendingCourse" th:each="course:${inactiveCourseList}">
                     <p th:text="${course.getTitle()}"></p>
                     <div>
+                        <form action="/teacher/inactiveCourseList/upload" method="POST">
+                            <input type="hidden" name="courseId" th:value="${course.getId()}">
+                            <input type="hidden" name="userId" th:value="${user.getId()}">
+                            <input type="hidden" name="courseNote" th:value="${course.getNote()}">
+                            <button type="submit" class="upload-btn" title="Send Active Course Request"
+                                    th:disabled="${course.getNote() == null or course.getNote().trim().isEmpty()}">
+                                <i class="fa-solid fa-upload"></i>
+                            </button>
+                        </form>
                         <button class="note-btn" onclick="showPopup(this)"><i class="fa-solid fa-note-sticky"
                                                                               title="Note"></i></button>
-                        <button class="fix-btn" title="Change note" onclick="showEditNote(this)"><i
-                                class="fa-solid fa-wrench"></i></button>
+                        <form action="/teacher/inactiveCourseList/editNote" method="get">
+                            <input type="hidden" name="userId" th:value="${user.getId()}">
+                            <input type="hidden" name="courseId" th:value="${course.getId()}">
+                            <button type="submit" class="fix-btn" title="Change note">
+                                <i class="fa-solid fa-wrench"></i></button>
+                        </form>
+                        <span class="note-text" th:text="${course.getNote()}"></span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="rejectedCourseList" th:if="${rejectedCourseList}">
+                <div class="rejectedCourse" th:each="course:${rejectedCourseList}">
+                    <p th:text="${course.getTitle()}"></p>
+                    <div>
+                        <form action="/teacher/inactiveCourseList/upload" method="POST">
+                            <input type="hidden" name="courseId" th:value="${course.getId()}">
+                            <input type="hidden" name="userId" th:value="${user.getId()}">
+                            <input type="hidden" name="courseNote" th:value="${course.getNote()}">
+                            <button type="submit" class="upload-btn" title="Send Active Course Request"
+                                    th:disabled="${course.getNote() == null or course.getNote().trim().isEmpty()}">
+                                <i class="fa-solid fa-upload"></i>
+                            </button>
+                        </form>
+                        <button class="note-btn" onclick="showPopup(this)"><i class="fa-solid fa-note-sticky"
+                                                                              title="Note"></i></button>
+                        <form action="/teacher/inactiveCourseList/editNote" method="get">
+                            <input type="hidden" name="userId" th:value="${user.getId()}">
+                            <input type="hidden" name="courseId" th:value="${course.getId()}">
+                            <button type="submit" class="fix-btn" title="Change note">
+                                <i class="fa-solid fa-wrench"></i></button>
+                        </form>
                         <span class="note-text" th:text="${course.getNote()}"></span>
                     </div>
                 </div>
@@ -378,6 +429,11 @@
 
     function closePopup() {
         document.getElementById("descPopup").classList.add("hidden");
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
+        form.submit();
     }
 </script>
 </body>

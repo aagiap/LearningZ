@@ -312,7 +312,17 @@
                     </a>
                 </li>
 
-
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
+                                   <span class="nav-icon">
+                                        <i class="fa-regular fa-clock"></i>
+                                   </span>
+                        <span class="nav-text">Inactive Course List</span>
+                    </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
 
             </ul>
         </div>
@@ -343,7 +353,10 @@
                         <input type="hidden" name="userId" th:value="${user.getId()}">
                         <input type="number" name="courseId" th:value="${courseId}" hidden>
                     </form>
-                    <button id="addLesson" onclick="addLessonRequest()">+ Add New Lesson</button>
+                    <button id="addLesson" onclick="addLessonRequest(this)"
+                            th:data-max-lessons="${system_setting.get(3).getSettingValue()}"
+                            th:data-current-lessons="${numberOfLessons}"
+                            th:disabled="${course.getCourseStatus() == statusList.get(0)}">+ Add New Lesson</button>
                     <form action="/teacher/chapter/lesson/addLesson" method="get" id="addLessonRequest">
                         <input type="hidden" name="userId" th:value="${user.getId()}">
                         <input type="number" name="chapterId" th:value="${chapterId}" hidden>
@@ -402,8 +415,9 @@
                             <form action="/teacher/chapter/lesson/edit" method="POST" style="display: inline">
                                 <input type="hidden" name="userId" th:value="${user.getId()}">
                                 <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}"/>
-                                <button type="submit" class="edit-btn" title="Edit"><i
-                                        class="fa-solid fa-pen-to-square"></i>
+                                <button type="submit" class="edit-btn"
+                                        title="Edit" th:disabled="${course.getCourseStatus() == statusList.get(0)}">
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                             </form>
                             <form action="/teacher/chapter/lesson/videos" method="get">
@@ -418,7 +432,7 @@
                                 <button type="submit" class="view-btn" title="View Documents List"><i
                                         class="fa-solid fa-file"></i></button>
                             </form>
-                            <form th:action="@{/teacher/{lessonId}/quizzes(lessonId=${lesson.lessonId})}" method="get">
+                            <form action="/teacher/quizzes" method="get">
                                 <input type="hidden" name="lessonId" th:value="${lesson.getLessonId()}"/>
                                 <button type="submit" class="view-btn" title="View Quizzes List"><i
                                         class="fa-solid fa-question"></i></button>
@@ -466,8 +480,15 @@
         document.getElementById("descPopup").classList.add("hidden"); // Ẩn popup khi bấm nút đóng
     }
 
-    function addLessonRequest() {
-        document.querySelector('#addLessonRequest').submit();
+    function addLessonRequest(e) {
+        let maxLessons = parseInt(e.getAttribute("data-max-lessons"));
+        let currentLessons = parseInt(e.getAttribute("data-current-lessons"));
+        if(currentLessons >= maxLessons){
+            alert("The number of lessons has reached the limit!" + "(" + maxLessons + ")");
+        }
+        else{
+            document.querySelector('#addLessonRequest').submit();
+        }
     }
 
     function returnChapter() {
@@ -507,6 +528,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 </script>

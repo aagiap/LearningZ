@@ -311,7 +311,17 @@
                     </a>
                 </li>
 
-
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
+                                   <span class="nav-icon">
+                                        <i class="fa-regular fa-clock"></i>
+                                   </span>
+                        <span class="nav-text">Inactive Course List</span>
+                    </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
 
             </ul>
         </div>
@@ -409,6 +419,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 </script>

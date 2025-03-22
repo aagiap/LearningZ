@@ -34,7 +34,12 @@
     gap: 10px;
     padding: 20px;
 }
-
+.rejectedCourseList{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
 .pendingCourse {
     display: flex;
     justify-content: space-between;
@@ -56,7 +61,27 @@
     font-weight: bold;
 }
 
-.note-btn{
+.rejectedCourse{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ea9e9e;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.rejectedCourse :hover{
+    background-color: #874b4b;
+}
+
+.rejectedCourse p{
+    font-size: 16px;
+    font-weight: bold;
+}
+.note-btn, .upload-btn, .fix-btn{
     background: none;
     border: none;
     cursor: pointer;
@@ -64,15 +89,7 @@
     color: #555;
 }
 
-.fix-btn{
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #555;
-}
-
-.note-btn .fix-btn:hover {
+.note-btn .fix-btn, .upload-btn:hover {
     color: #000;
 }
 
@@ -89,6 +106,12 @@
     width: 200px;
 }
 
-.pendingCourse div {
-    position: relative;
+.pendingCourse div, .rejectedCourse div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

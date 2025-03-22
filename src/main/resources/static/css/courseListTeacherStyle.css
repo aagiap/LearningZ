@@ -24,7 +24,7 @@ table {
 }
 
 thead {
-    background-color: #f8f9fa; /* Màu nền header */
+    background-color: #7c6415; /* Màu nền header */
     font-weight: bold;
     text-align: center;
 }
@@ -36,7 +36,7 @@ th, td {
 }
 
 th {
-    color: #6c757d;
+    color: white;
 }
 
 td {
@@ -88,14 +88,14 @@ h2{
 }
 
 .filter-section input[type="submit"] {
-    background-color: #007bff;
+    background-color: #ffc107;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .filter-section input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #927c3a;
 }
 
 #addCourse {
@@ -162,4 +162,8 @@ h2{
 /* Căn chỉnh biểu tượng bên trong nút */
 .actions button i {
     font-size: 16px;
+}
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

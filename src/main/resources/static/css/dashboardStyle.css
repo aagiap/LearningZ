@@ -201,6 +201,9 @@ td, th {
 #pending{
     background-color: #f5e48c;
 }
+#rejected{
+    background-color: #c75b58;
+}
 .charts-container {
     display: flex;
     justify-content: space-around;

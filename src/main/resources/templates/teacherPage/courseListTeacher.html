@@ -314,13 +314,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="pendingCourseList(this)">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
                                    <span class="nav-icon">
                                         <i class="fa-regular fa-clock"></i>
                                    </span>
-                        <span class="nav-text">Pending Course List</span>
+                        <span class="nav-text">Inactive Course List</span>
                     </a>
-                    <form action="/teacher/pendingCourseList" id="formPendingCourseList">
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
                         <input type="hidden" name="userId" th:value="${user.getId()}">
                     </form>
                 </li>
@@ -414,8 +414,9 @@
                             <form action="/teacher/edit" method="POST" style="display: inline">
                                 <input type="hidden" name="numberOfLessons" th:value="${course.getNumberOfLessons()}">
                                 <input type="hidden" name="courseId" th:value="${course.getId()}"/>
-                                <button type="submit" class="edit-btn" title="Edit"><i
-                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button type="submit" class="edit-btn"
+                                        title="Edit" th:disabled="${course.getCourseStatus() == statusList.get(0)}">
+                                    <i class="fa-solid fa-pen-to-square"></i></button>
                             </form>
                             <button onclick="viewCourseDetails(this)" title="Students View"><i
                                     class="fa-solid fa-chalkboard-user"></i></button>
@@ -424,6 +425,8 @@
                             <form action="/teacher/chapter" method="GET">
                                 <input type="hidden" name="userId" th:value="${user.getId()}">
                                 <input type="hidden" name="courseId" th:value="${course.getId()}"/>
+                                <input type="hidden" name="numberOfChapters" th:value="${course.getNumberOfChapters()}">
+                                <input type="hidden" name="numberOfLessons" th:value="${course.getNumberOfLessons()}">
                                 <button type="submit" class="view-btn" title="View chapters list"><i
                                         class="fa-solid fa-bookmark"></i></button>
                             </form>
@@ -460,11 +463,6 @@
 <!-- Dashboard Js -->
 <script src="/js/pages/dashboard.js"></script>
 <script>
-    function pendingCourseList(e){
-        let form = document.querySelector('#formPendingCourseList');
-        form.submit();
-    }
-
     function showPopup(button) {
         document.getElementById("popupText").textContent = button.nextElementSibling.textContent;
         document.getElementById("descPopup").classList.remove("hidden");
@@ -497,6 +495,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 </script>

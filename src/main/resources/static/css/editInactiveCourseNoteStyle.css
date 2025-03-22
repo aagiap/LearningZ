@@ -1,0 +1,112 @@
+body{
+    background-color: #f9f7f7;
+}
+p {
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+}
+.container {
+    width: 70%;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 30px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    border-top: 6px solid #e0a800;
+    margin-top: 80px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 24px;
+    color: grey;
+    margin-bottom: 25px;
+}
+
+input, select, textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-group button {
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.save-btn {
+    background: #e0a800;
+    color: white;
+}
+
+.save-btn:hover {
+    background: #222529;
+}
+
+.cancel-btn {
+    background: #eff2f6;
+    color: black;
+}
+
+.cancel-btn:hover {
+    background: gray;
+}
+
+.error-messages {
+    color: red;
+    background: #ffe6e6;
+    border: 1px solid red;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.success-message {
+    color: green;
+    background: #e6ffe6;
+    border: 1px solid green;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+}
+.hidden {
+    display: none;
+}
+button {
+    background-color: #ffc107; /* Màu vàng */
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e0a800;
+}
