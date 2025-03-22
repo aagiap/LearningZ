@@ -28,26 +28,9 @@
             border-radius: 8px;
         }
 
-        .sub-navbar-nav {
-            padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
-        }
-
         .sub-navbar-nav li {
             margin-left: 40px; /* Thụt vào từng mục */
             list-style-type: none; /* Bỏ dấu chấm mặc định */
-        }
-
-        .sub-nav-link {
-            display: block;
-            padding: 5px 10px;
-            color: rgba(216, 223, 13, 0.93);
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .sub-nav-link:hover {
-            color: #176e0e;
-            font-weight: bold;
         }
 
         h3 {
@@ -323,6 +306,17 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
+                                   <span class="nav-icon">
+                                        <i class="fa-regular fa-clock"></i>
+                                   </span>
+                        <span class="nav-text">Inactive Course List</span>
+                    </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
+                </li>
 
             </ul>
         </div>
@@ -408,12 +402,12 @@
 
                         <div class="form-actions text-center mt-4">
                             <button type="button" class="btn btn-secondary"
-                                    style="background-color: #ccc; color: #07294d"
+                                    style="background-color: #ccc; color: #ffc107"
                                     th:onclick="history.back()">
                                 Cancel
                             </button>
                             <button type="submit" class="btn btn-info"
-                                    style="background-color: #083768; color:#fbf8f8;">Save
+                                    style="background-color: #ffc107; color:#fbf8f8;">Save
                             </button>
                         </div>
 
@@ -440,6 +434,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 

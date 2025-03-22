@@ -24,9 +24,6 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-        .btn {
-            border-radius: 8px;
-        }
 
         .sub-navbar-nav {
             padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
@@ -61,6 +58,66 @@
             border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
             display: inline-block; /* Giữ nội dung gọn gàng */
         }
+
+        /* Form chính */
+        .add-user-form {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            margin: 5px auto; /* Căn giữa form */
+            position: relative;
+        }
+
+        /* Tiêu đề form */
+        .add-user-form .form-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #083768;
+            background: #f0f8ff; /* Nền nhạt để nổi bật */
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Các trường input */
+        .form-control {
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            padding: 10px;
+            transition: all 0.3s ease-in-out;
+            font-size: 14px;
+        }
+
+        /* Hiệu ứng khi focus vào input */
+        .form-control:focus {
+            border-color: #083768;
+            box-shadow: 0px 0px 10px rgba(8, 55, 104, 0.4);
+            outline: none;
+        }
+
+        /* Select box */
+        .form-control select {
+            appearance: none;
+        }
+
+        /* Các nút */
+        .btn {
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Hover button */
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
 
     </style>
 </head>
@@ -302,7 +359,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarUsersMenu" data-bs-toggle="collapse" role="button"
                        aria-expanded="false" aria-controls="sidebarUsersMenu">
-                        <span class="nav-text">📋 User List </span>
+                        <span class="nav-text">🧑‍💼 User Management </span>
                     </a>
                     <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
@@ -334,7 +391,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarCoursesMenu" data-bs-toggle="collapse" role="button"
                        aria-expanded="false" aria-controls="sidebarCoursesMenu">
-                        <span class="nav-text">📋 Course List </span>
+                        <span class="nav-text">📚 Course Management </span>
                     </a>
                     <div class="collapse show" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
@@ -349,9 +406,6 @@
                                 courses</a></li>
                             <li><a class="sub-nav-link"
                                    th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
-                                courses</a></li>
-                            <li><a class="sub-nav-link"
-                                   th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
                                 courses</a></li>
                         </ul>
                     </div>
@@ -438,8 +492,24 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email" required>
+                                <div id="email-error" class="text-danger mt-1" style="display: none;">Email must be in the format example@domain.com</div>
                             </div>
                         </div>
+
+                        <script>
+                            document.getElementById('email').addEventListener('input', function () {
+                                const emailInput = this.value;
+                                const emailError = document.getElementById('email-error');
+                                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                                if (!emailPattern.test(emailInput)) {
+                                    emailError.style.display = 'block';
+                                } else {
+                                    emailError.style.display = 'none';
+                                }
+                            });
+                        </script>
+
 
                         <div class="form-actions text-center mt-4">
                             <button type="button" class="btn btn-secondary"

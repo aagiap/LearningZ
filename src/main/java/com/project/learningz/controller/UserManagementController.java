@@ -5,7 +5,6 @@ import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
 import com.project.learningz.service.UserManagementService;
 import com.project.learningz.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -103,7 +101,7 @@ public class UserManagementController {
         long sumOfCasualUsers = userManagementService.getNumberOfCasualStudentUsers();
         long sumOfTeacherUsers = userManagementService.getNumberOfTeacherUsers();
         long sumOfMarketerUsers = userManagementService.getNumberOfMarketerUsers();
-        List<User> usersLatest = userManagementService.getTenLatestUsers();
+        List<User> usersLatest = userManagementService.getFiveLatestUsers();
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("sumOfUsers", sumOfUsers);
