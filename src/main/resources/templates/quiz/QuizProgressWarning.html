@@ -35,7 +35,7 @@
 
 </div>
 <div>
-    <th:block th:each="question, questionStat : ${session.questionBankList}">
+    <th:block th:each="question, questionStat : ${questionBankList}">
         <div class="container- mt-sm-5 my-1" th:id="'question-' + ${questionStat.index}">
             <span th:text="'Question ' + ${questionStat.index + 1}"></span>
 

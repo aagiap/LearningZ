@@ -118,10 +118,30 @@
     </div>
 </div>
 <script>
-    function removeTimeLimit() {
-        localStorage.removeItem('timeLeft');
-        localStorage.removeItem('endTime');
-        localStorage.removeItem('selectedBoxes');
+    window.onload = function() {
+        myFunction();
+    };
+
+    function myFunction() {
+        const quizId = "[[${session.quiz.id}]]";
+        let storedData = JSON.parse(localStorage.getItem("quiz_answers")) || {};
+
+        if (storedData[quizId]) {
+            delete storedData[quizId]; // Xóa dữ liệu quiz này
+        }
+
+        localStorage.setItem("quiz_answers", JSON.stringify(storedData));
+
+
+        // Xóa selectedBoxes của quiz hiện tại
+        let savedSelections = JSON.parse(localStorage.getItem("selectedBoxes")) || {};
+        delete savedSelections[quizId];
+        localStorage.setItem("selectedBoxes", JSON.stringify(savedSelections));
+
+        // Xóa thời gian của quiz hiện tại
+        let storedTimes = JSON.parse(localStorage.getItem("quizTimers")) || {};
+        delete storedTimes[quizId];
+        localStorage.setItem("quizTimers", JSON.stringify(storedTimes));
     }
 </script>
 </body>
