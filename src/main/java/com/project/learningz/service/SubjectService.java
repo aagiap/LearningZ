@@ -41,6 +41,26 @@ public class SubjectService {
         subjectRepository.save(subject);
     }
 
+    public boolean checkSubjectNameExistsWhenAdd(String subjectName) {
+        List<Subject> subjectList = subjectRepository.findAll();
+        for(Subject subject : subjectList) {
+            if(subject.getName().equalsIgnoreCase(subjectName.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkSubjectNameExistsWhenEdit(String subjectName, int subjectId) {
+        List<Subject> subjectList = subjectRepository.findAll();
+        for(Subject subject : subjectList) {
+            if(subject.getName().equalsIgnoreCase(subjectName.trim()) && !getSubjectById(subjectId).getName().equalsIgnoreCase(subjectName.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<String> getAllSubjectInQuestions() {
         return subjectRepository.getAllSubjects();
     }

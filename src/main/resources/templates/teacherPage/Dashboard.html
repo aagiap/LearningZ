@@ -315,12 +315,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/teacher/quizzes">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
                                    <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
+                                        <i class="fa-regular fa-clock"></i>
                                    </span>
-                        <span class="nav-text">Quizzes</span>
+                        <span class="nav-text">Inactive Course List</span>
                     </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
                 </li>
 
             </ul>
@@ -352,11 +355,14 @@
                                     th:text="${totalInactiveCourses}"></span></div>
                             <div class="card" id="pending">Pending courses <br> <span
                                     th:text="${totalPendingCourses}"></span></div>
+                            <div class="card" id="rejected">Rejected courses <br> <span
+                                    th:text="${totalRejectedCourses}"></span></div>
                         </div>
                         <div class="pieChart">
                             <span id="totalActiveCourses" th:text="${totalActiveCourses}" hidden></span>
                             <span id="totalInactiveCourses" th:text="${totalInactiveCourses}" hidden></span>
                             <span id="totalPendingCourses" th:text="${totalPendingCourses}" hidden></span>
+                            <span id="totalRejectedCourses" th:text="${totalRejectedCourses}" hidden></span>
                             <div class="chart-container">
                                 <canvas id="courseChart">
                                 </canvas>
@@ -511,6 +517,7 @@
     let totalActiveCourses = Number(document.querySelector("#totalActiveCourses").textContent);
     let totalInactiveCourses = Number(document.querySelector("#totalInactiveCourses").textContent);
     let totalPendingCourses = Number(document.querySelector("#totalPendingCourses").textContent);
+    let totalRejectedCourses = Number(document.querySelector("#totalRejectedCourses").textContent);
 
     // Initialize Pie Chart using Chart.js
     document.addEventListener("DOMContentLoaded", function () {
@@ -518,10 +525,10 @@
         new Chart(ctx, {
             type: "pie",
             data: {
-                labels: ["Active", "Inactive", "Pending"],
+                labels: ["Active", "Inactive", "Pending", "Rejected"],
                 datasets: [{
-                    data: [totalActiveCourses, totalInactiveCourses, totalPendingCourses],
-                    backgroundColor: ["#cbeaf8", "#f1f0fd", "#f5e48c"],
+                    data: [totalActiveCourses, totalInactiveCourses, totalPendingCourses, totalRejectedCourses],
+                    backgroundColor: ["#cbeaf8", "#f1f0fd", "#f5e48c", "#c75b58"],
                 }],
             },
             options: {
@@ -705,6 +712,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 </script>

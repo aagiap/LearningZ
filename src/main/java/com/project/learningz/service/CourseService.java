@@ -110,36 +110,12 @@ public class CourseService {
 
     @Transactional
     public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, int subjectId, int gradeId, CourseStatus courseStatus, MultipartFile courseImageUrl, String description) throws GeneralSecurityException, IOException {
-        //add note to course when sth change
-        String courseNote = "";
-        int countChange = 0;
         Course course = courseRepository.findById(courseId).orElse(null);
-
-        //if course has just been created, add old note of create new course in course note
-        if(course.getNote() != null){
-            if(course.getNote().contains("Create new")){
-                courseNote += course.getNote();
-            }
-        }
-
-        if(!title.equalsIgnoreCase(course.getTitle())){
-            countChange++;
-            courseNote += "set new title to '" + title + " '.";
-        }
         course.setTitle(title);
         course.setSubject(subjectService.getSubjectById(subjectId));
 
         if(courseDriveLink != null && !courseDriveLink.isEmpty()){
             googleDriveService.renameFolder(courseDriveLink, title);
-        }
-
-        if(!description.equalsIgnoreCase(course.getDescription())){
-            countChange++;
-            if(course.getDescription().trim().isEmpty()){
-                courseNote += "add description: " + description + ".";
-            }else{
-                courseNote += "set new description to '" + description + " '.";
-            }
         }
         course.setGrade(gradeService.findById(gradeId));
         course.setDescription(description);
@@ -148,39 +124,53 @@ public class CourseService {
             if(course.getCourseImageUrl() != null){
                 if(course.getCourseImageUrl().contains("https://lh3.googleusercontent.com/d/")){
                     String[] oldCourseImageSplit = course.getCourseImageUrl().split("https://lh3.googleusercontent.com/d/");
-                    googleDriveService.deleteFile(oldCourseImageSplit[1]);
+                    if(googleDriveService.fiLeExists(oldCourseImageSplit[1])){
+                        googleDriveService.deleteFile(oldCourseImageSplit[1]);
+                    }
                 }
             }
-            countChange++;
-            courseNote += "change course image.";
             String newCourseImage = googleDriveService.uploadFileCourseImage(courseImageUrl);
             course.setCourseImageUrl(newCourseImage);
-        }
-
-        //change course status to pending and set note to admin to check change if sth change
-        if(countChange != 0){
-            course.setNote(courseNote);
-            course.setCourseStatus(CourseStatus.PENDING);
         }
         courseRepository.save(course);
     }
 
-    public List<Course> findCoursesByGradeId(int gradeId) {
-        return courseRepository.findCoursesByGradeId(gradeId);
+    @Transactional
+    public void updateInactiveCourseNote(int courseId, String courseNote){
+        Course course = courseRepository.findById(courseId).orElse(null);
+        course.setNote(courseNote);
+        courseRepository.save(course);
     }
 
-    public boolean checkUpdateChange(int courseId,String title, String description, String courseImageUrl,
-                                     String oldTitle, String oldDescription, String oldCourseImageUrl){
-        if(!title.equalsIgnoreCase(oldTitle)){
-            return true;
-        }
-        if(!courseImageUrl.equalsIgnoreCase(oldCourseImageUrl)){
-            return true;
-        }
-        if(!description.equalsIgnoreCase(oldDescription)){
-            return true;
+    @Transactional
+    public void uploadCourse(int courseId){
+        Course course = courseRepository.findById(courseId).orElse(null);
+        course.setCourseStatus(CourseStatus.PENDING);
+        courseRepository.save(course);
+    }
+
+    public boolean checkExistCourseTitleWhenEdit(String title, int courseId){
+        List<Course> courseList = courseRepository.findAll();
+        for(int i = 0; i < courseList.size(); i++){
+            if(title.trim().equalsIgnoreCase(courseList.get(i).getTitle()) && !getCourseById(courseId).getTitle().equalsIgnoreCase(title.trim())){
+                return true;
+            }
         }
         return false;
+    }
+
+    public boolean checkExistCourseTitleWhenAdd(String title){
+        List<Course> courseList = courseRepository.findAll();
+        for(int i = 0; i < courseList.size(); i++){
+            if(title.trim().equalsIgnoreCase(courseList.get(i).getTitle())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Course> findCoursesByGradeId(int gradeId) {
+        return courseRepository.findCoursesByGradeId(gradeId);
     }
 
     @Transactional
@@ -198,8 +188,7 @@ public class CourseService {
             String imageUrl = googleDriveService.uploadFileCourseImage(courseImageUrl);
             newCourse.setCourseImageUrl(imageUrl);
         }
-        newCourse.setNote("Create new " + subjectService.getSubjectById(subjectId).getName() +
-                " course named: " + title + " of " + gradeService.findById(gradeId).getName() + ".");
+        newCourse.setCourseStatus(CourseStatus.INACTIVE);
         courseRepository.save(newCourse);
     }
 
@@ -207,20 +196,12 @@ public class CourseService {
         return courseRepository.getAllCourse();
     }
 
-    @Transactional
-    public void setPendingCourse(int courseId, String note){
-        Course course = courseRepository.findById(courseId).orElse(null);
-        course.setCourseStatus(CourseStatus.PENDING);
-        if(course.getNote() != null){
-            course.setNote(course.getNote() + note);
-        }else{
-            course.setNote(note);
-        }
-        courseRepository.save(course);
+    public List<Course> inactiveCourseListByUserId(int userId){
+        return courseRepository.getCourseListByUserIdAndStatus(userId, CourseStatus.INACTIVE);
     }
 
-    public List<Course> pendingCourseListByUserId(int userId){
-        return courseRepository.pendingCourseListByUserId(userId, CourseStatus.PENDING);
+    public List<Course> rejectedCourseListByUserId(int userId){
+        return courseRepository.getCourseListByUserIdAndStatus(userId, CourseStatus.REJECTED);
     }
 
     public List<Course> searchCourseByStatusAndKeyword(CourseStatus status, String keyword, String sortField, String sortOrder) {

@@ -313,12 +313,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/teacher/quizzes">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
                                    <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
+                                        <i class="fa-regular fa-clock"></i>
                                    </span>
-                        <span class="nav-text">Quizzes</span>
+                        <span class="nav-text">Inactive Course List</span>
                     </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
                 </li>
 
             </ul>
@@ -346,7 +349,10 @@
                         Return Course List
                     </button>
                     <a href="/teacher" hidden id="returnCourse">Return Course</a>
-                    <button id="addChapter" onclick="addChapterRequest()">+ Add New Chapter</button>
+                    <button id="addChapter" onclick="addChapterRequest(this)"
+                            th:data-max-chapters="${system_setting.get(2).getSettingValue()}"
+                            th:data-current-chapters="${numberOfChapters}"
+                            th:disabled="${course.getCourseStatus() == statusList.get(0)}">+ Add New Chapter</button>
                     <form action="/teacher/chapter/addChapter" method="get" id="addChapterRequest">
                         <input type="hidden" name="userId" th:value="${user.getId()}">
                         <input type="number" name="courseId" th:value="${courseId}" hidden>
@@ -402,8 +408,9 @@
                             <form action="/teacher/chapter/edit" method="POST" style="display: inline">
                                 <input type="hidden" name="userId" th:value="${user.getId()}">
                                 <input type="hidden" name="chapterId" th:value="${chapter.getId()}"/>
-                                <button type="submit" class="edit-btn" title="Edit"><i
-                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button type="submit" class="edit-btn"
+                                        title="Edit" th:disabled="${course.getCourseStatus() == statusList.get(0)}">
+                                    <i class="fa-solid fa-pen-to-square"></i></button>
                             </form>
                             <form action="/teacher/chapter/lesson" method="get">
                                 <input type="hidden" name="userId" th:value="${user.getId()}">
@@ -454,8 +461,14 @@
         document.getElementById("descPopup").classList.add("hidden"); // Ẩn popup khi bấm nút đóng
     }
 
-    function addChapterRequest() {
-        document.querySelector('#addChapterRequest').submit();
+    function addChapterRequest(e) {
+        let maxChapters = parseInt(e.getAttribute("data-max-chapters"));
+        let currentChapters = parseInt(e.getAttribute("data-current-chapters"));
+        if(currentChapters >= maxChapters){
+            alert("The number of chapters has reached the limit!" + "(" + maxChapters + ")");
+        }else{
+            document.querySelector('#addChapterRequest').submit();
+        }
     }
 
     function returnCourse() {
@@ -495,6 +508,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 </script>

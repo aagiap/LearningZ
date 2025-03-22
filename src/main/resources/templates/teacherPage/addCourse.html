@@ -312,12 +312,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/teacher/quizzes">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
                                    <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
+                                        <i class="fa-regular fa-clock"></i>
                                    </span>
-                        <span class="nav-text">Quizzes</span>
+                        <span class="nav-text">Inactive Course List</span>
                     </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
                 </li>
 
             </ul>
@@ -353,8 +356,8 @@
 
                 <label>Status:</label>
                 <p style="color: red;">
-                    <b>Add lessons to activate course</b></p>
-                <input th:value="${statusList.get(3)}" name="status" readonly>
+                    <b>Upload to pend approval to active course from admin</b></p>
+                <input th:value="${statusList.get(1)}" name="status" readonly>
 
                 <label>Logo</label>
                 <input type="file" name="courseImageUrl" id="courseImage" accept="image/*"
@@ -457,6 +460,11 @@
 
     function viewDashBoard(e) {
         let form = document.querySelector('#viewDashboard');
+        form.submit();
+    }
+
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
 </script>

@@ -280,5 +280,5 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     SELECT c FROM Course AS c    
     WHERE c.createdBy.id = ?1 AND c.courseStatus = ?2
 """)
-    List<Course> pendingCourseListByUserId(int userId, CourseStatus status);
+    List<Course> getCourseListByUserIdAndStatus(int userId, CourseStatus status);
 }

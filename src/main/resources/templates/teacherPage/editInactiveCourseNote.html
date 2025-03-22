@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Edit Course Note</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add new chapter</title>
-    <link rel="stylesheet" th:href="@{/css/addChapterStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/editInactiveCourseNoteStyle.css}">
     <!-- Thư viện jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables -->
@@ -333,29 +333,26 @@
     <!-- ==================================================== -->
     <div class="page-content">
         <div class="container">
-            <h2>Add new chapter</h2>
+            <h2>Edit Note</h2>
 
-            <form action="/teacher/chapter/addChapter/create" method="post">
+            <form action="/teacher/inactiveCourseList/editNote/updateNote" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="userId" th:value="${user.getId()}">
-                <input type="hidden" name="courseId" th:value="${courseId}">
-
-                <label>Order:</label>
-                <input type="number" name="order" required>
+                <input type="hidden" name="courseId" th:value="${course.getId()}">
 
                 <label>Title:</label>
-                <input type="text" name="title" required>
+                <input type="text" name="courseTitle" th:value="${course.getTitle()}" readonly>
 
-                <label>Description:</label>
-                <textarea name="description"></textarea>
+                <label>Note:</label>
+                <textarea name="courseNote" rows="4" th:text="${course.getNote()}"></textarea>
 
                 <div class="btn-group">
-                    <button type="submit" class="create-btn">Create</button>
+                    <button type="submit" class="save-btn">Save</button>
                     <button type="button" class="cancel-btn" onclick="closeEditForm()">Exit</button>
                 </div>
             </form>
             <!-- Hiển thị lỗi -->
             <div th:if="${error}" class="error-messages">
-                <p th:text="${error}">
+                <p th:text="${error}"></p>
             </div>
 
             <!-- Hiển thị thông báo thành công -->
@@ -363,12 +360,15 @@
                 <p th:text="${notification}"></p>
             </div>
 
-            <form action="/teacher/chapter" method="get" id="returnChapterList">
+            <form action="/teacher/inactiveCourseList" method="get" id="returnInactiveCourseList">
                 <input type="hidden" name="userId" th:value="${user.getId()}">
-                <input type="number" name="courseId" th:value="${courseId}" hidden>
             </form>
+
         </div>
     </div>
+    <!-- ==================================================== -->
+    <!-- End Page Content -->
+    <!-- ==================================================== -->
 </div>
 <!-- END Wrapper -->
 
@@ -386,37 +386,6 @@
 <!-- Dashboard Js -->
 <script src="/js/pages/dashboard.js"></script>
 <script>
-    function closeEditForm() {
-        document.querySelector('#returnChapterList').submit();
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const avatarBtn = document.querySelector(".expertAvatar button");
-        const avatarDropdown = document.querySelector(".expertAvatar");
-
-        avatarBtn.addEventListener("click", function (event) {
-            event.stopPropagation();
-            avatarDropdown.classList.toggle("active");
-        });
-
-        // Ẩn menu khi click bên ngoài
-        document.addEventListener("click", function () {
-            avatarDropdown.classList.remove("active");
-        });
-
-        avatarDropdown.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-    });
-    $(document).ready(function () {
-        $('#listTable').DataTable({
-            "pageLength": 5, // Hiển thị 5 hàng mỗi trang
-            "lengthChange": false, // Ẩn dropdown chọn số hàng
-            "info": false, // Ẩn thông tin số dòng
-            "searching": false
-        });
-    });
-
     function viewSubjectList(e) {
         let form = document.querySelector('#viewSubjectList')
         form.submit();
@@ -426,12 +395,14 @@
         let form = document.querySelector('#viewDashboard');
         form.submit();
     }
-
     function inactiveCourseList(e){
         let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
+    function closeEditForm(e){
+        let form = document.querySelector('#returnInactiveCourseList');
+        form.submit();
+    }
 </script>
-
 </body>
 </html>

@@ -312,12 +312,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/teacher/quizzes">
+                    <a class="nav-link" href="#" onclick="inactiveCourseList(this)">
                                    <span class="nav-icon">
-                                        <i class="fa-regular fa-lightbulb"></i>
+                                        <i class="fa-regular fa-clock"></i>
                                    </span>
-                        <span class="nav-text">Quizzes</span>
+                        <span class="nav-text">Inactive Course List</span>
                     </a>
+                    <form action="/teacher/inactiveCourseList" id="formInactiveCourseList">
+                        <input type="hidden" name="userId" th:value="${user.getId()}">
+                    </form>
                 </li>
 
             </ul>
@@ -447,6 +450,10 @@
         form.submit();
     }
 
+    function inactiveCourseList(e){
+        let form = document.querySelector('#formInactiveCourseList');
+        form.submit();
+    }
 </script>
 
 </body>

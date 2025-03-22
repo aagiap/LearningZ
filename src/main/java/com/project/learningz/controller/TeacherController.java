@@ -8,7 +8,6 @@ import com.project.learningz.dto.LessonDetailDTO;
 import com.project.learningz.entity.*;
 import com.project.learningz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -48,6 +47,9 @@ public class TeacherController {
     @Autowired
     private GradeService gradeService;
 
+    @Autowired
+    private SystemSettingService systemSettingService;
+
     @GetMapping(path = "/teacher")
     public String courseList(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -79,6 +81,11 @@ public class TeacherController {
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
         model.addAttribute("subjectList", subjectList);
+
+        List<CourseStatus> statusList = new ArrayList<>();
+        statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+        model.addAttribute("statusList", statusList);
 
         List<Grade> gradeList = gradeService.getAllGrades();
         model.addAttribute("gradeList", gradeList);
@@ -117,13 +124,17 @@ public class TeacherController {
             model.addAttribute("courseList",courseList);
         }
 
+        List<CourseStatus> statusList = new ArrayList<>();
+        statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+        model.addAttribute("statusList", statusList);
+
         List<Subject> subjectList = new ArrayList<>();
         subjectList = subjectService.getAllSubjects();
         model.addAttribute("subjectList", subjectList);
 
         List<Grade> gradeList = gradeService.getAllGrades();
         model.addAttribute("gradeList", gradeList);
-
         return "/teacherPage/courseListTeacher";
     }
 
@@ -174,6 +185,9 @@ public class TeacherController {
         if(title.isEmpty() || title.trim().isEmpty()){
             model.addAttribute("error","Please fill title");
             model.addAttribute("course",courseService.findByCourseId(id));
+        }else if(courseService.checkExistCourseTitleWhenEdit(title, id)){
+            model.addAttribute("error","Title Already Exists");
+            model.addAttribute("course",courseService.findByCourseId(id));
         }else{
             try{
                 courseService.updateCourse(id, createdByUseID, courseDriveLink, title,
@@ -188,14 +202,7 @@ public class TeacherController {
                 return "/teacherPage/editCourse";
             }
             model.addAttribute("course",courseService.findByCourseId(id));
-
-            //check change to send correct notification
-            if(courseService.checkUpdateChange(id, title, description, courseService.findByCourseId(id).getCourseImageUrl(),
-                    oldTitle, oldDescription, oldCourseImageUrl)){
-                model.addAttribute("notification","Your course update is now pending approval from the admin.");
-            }else{
-                model.addAttribute("notification","Everything is up-to-date");
-            }
+            model.addAttribute("notification","Update change successfully");
         }
         model.addAttribute("subjectList", subjectList);
         model.addAttribute("statusList", statusList);
@@ -238,24 +245,26 @@ public class TeacherController {
 
         if(title.isEmpty() || title.trim().isEmpty()){
             model.addAttribute("error","Please fill title");
-            return "/teacherPage/addCourse";
-        }
-        try{
-            courseService.createCourse(createdById, gradeId, subjectId, title, courseStatus, description, courseImageUrl);
-        }catch(Exception e){
-            e.printStackTrace();
-            model.addAttribute("subjectList", subjectList);
-            model.addAttribute("statusList", statusList);
-            model.addAttribute("user", user);
-            model.addAttribute("createdById",user.getId());
-            model.addAttribute("error","Course Creation Failed");
-            return "/teacherPage/addCourse";
+        }else if(courseService.checkExistCourseTitleWhenAdd(title)){
+            model.addAttribute("error","Title Already Exists");
+        }else{
+            try{
+                courseService.createCourse(createdById, gradeId, subjectId, title, courseStatus, description, courseImageUrl);
+            }catch(Exception e){
+                e.printStackTrace();
+                model.addAttribute("subjectList", subjectList);
+                model.addAttribute("statusList", statusList);
+                model.addAttribute("user", user);
+                model.addAttribute("createdById",user.getId());
+                model.addAttribute("error","Course Creation Failed");
+                return "/teacherPage/addCourse";
+            }
+            model.addAttribute("notification","Course Creation Successfully");
         }
         model.addAttribute("subjectList", subjectList);
         model.addAttribute("statusList", statusList);
         model.addAttribute("user", user);
         model.addAttribute("createdById",user.getId());
-        model.addAttribute("notification","Course Creation Successfully. Add chapter and lesson to active course");
         return "/teacherPage/addCourse";
     }
 
@@ -263,16 +272,28 @@ public class TeacherController {
     public String chapterList(Model model,
                               @RequestParam("userId") int userId,
                               @RequestParam("courseId") int courseId){
+
+        List<CourseDetailsDTO> courseList = courseService.findCourses(userId, 0, 0,
+                courseService.findByCourseId(courseId).getTitle());
+
         List<ChapterDetailDTO> chapterList = new ArrayList<>();
         chapterList = chapterService.allChaptersByCourseId(courseId);
         if(chapterList.isEmpty()){
+            model.addAttribute("course", courseService.findByCourseId(courseId));
             model.addAttribute("courseId", courseId);
             model.addAttribute("notification","Empty List");
         }else {
+            model.addAttribute("course", courseService.findByCourseId(courseId));
             model.addAttribute("courseId", courseId);
             model.addAttribute("chapterList",chapterList);
         }
+        List<CourseStatus> statusList = new ArrayList<>();
+        statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+        model.addAttribute("statusList", statusList);
         model.addAttribute("user",userService.getUserById(userId));
+        model.addAttribute("system_setting", systemSettingService.getAllSystemSetting());
+        model.addAttribute("numberOfChapters", courseList.get(0).getNumberOfChapters());
         return "/teacherPage/chapterList";
     }
 
@@ -281,6 +302,10 @@ public class TeacherController {
                                     int courseId,
                                     String chapterSearchKey,
                                     @RequestParam("userId") int userId) {
+
+        List<CourseDetailsDTO> courseList = courseService.findCourses(userId, 0, 0,
+                courseService.findByCourseId(courseId).getTitle());
+
         List<ChapterDetailDTO> chapterList = new ArrayList<>();
         if (chapterSearchKey != null) {
             chapterList = chapterService.findChapters(courseId,chapterSearchKey);
@@ -294,7 +319,15 @@ public class TeacherController {
             model.addAttribute("courseId", courseId);
             model.addAttribute("chapterList",chapterList);
         }
+        List<CourseStatus> statusList = new ArrayList<>();
+        statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+        model.addAttribute("statusList", statusList);
+        model.addAttribute("course", courseService.findByCourseId(courseId));
         model.addAttribute("user",userService.getUserById(userId));
+        model.addAttribute("system_setting", systemSettingService.getAllSystemSetting());
+        model.addAttribute("numberOfChapters", courseList.get(0).getNumberOfChapters());
+        model.addAttribute("numberOfLessons", courseList.get(0).getNumberOfLessons());
         return "/teacherPage/chapterList";
     }
 
@@ -318,10 +351,6 @@ public class TeacherController {
                                 @RequestParam("description") String description,
                                 @RequestParam("userId") int userId){
         String error = chapterService.checkUpdate(id,courseId,order,title);
-        Chapter chapter = chapterService.getChapterById(id);
-        int oldOrder = chapter.getChapterOrder();
-        String oldTitle = chapter.getChapterTitle();
-        String oldDescription = chapter.getDescription();
         if(error.equals("")){
             try{
                 chapterService.updateChapter(id,order,title,description, chapterDriveLink);
@@ -332,16 +361,11 @@ public class TeacherController {
                 model.addAttribute("chapter", chapterService.getChapterById(id));
                 return "/teacherPage/editChapter";
             }
-            model.addAttribute("chapter", chapterService.getChapterById(id));
-            if(chapterService.checkUpdateChapter(id, oldOrder, oldTitle, oldDescription)){
-                model.addAttribute("notification","Your chapter update is now pending approval from the admin");
-            }else{
-                model.addAttribute("notification","Everything is up-to-date");
-            }
+            model.addAttribute("notification","Update changes successfully");
         }else{
             model.addAttribute("error",error);
-            model.addAttribute("chapter", chapterService.getChapterById(id));
         }
+        model.addAttribute("chapter", chapterService.getChapterById(id));
         model.addAttribute("user",userService.getUserById(userId));
         return "/teacherPage/editChapter";
     }
@@ -362,23 +386,29 @@ public class TeacherController {
                                     @RequestParam("title") String title,
                                     @RequestParam("description") String description,
                                     @RequestParam("userId") int userId){
+
+        List<CourseDetailsDTO> courseList = courseService.findCourses(userId, 0, 0,
+                courseService.findByCourseId(courseId).getTitle());
+
         String error = chapterService.checkCreate(courseId,order,title);
         if(error.equals("")){
             try{
                 chapterService.createChapter(courseId, order, title, description);
             }catch(Exception e){
+                e.printStackTrace();
                 model.addAttribute("error","Chapter Creation Failed");
                 model.addAttribute("courseId", courseId);
                 model.addAttribute("user",userService.getUserById(userId));
+                model.addAttribute("system_setting", systemSettingService.getAllSystemSetting());
                 return "/teacherPage/addChapter";
             }
-        }else{
-            model.addAttribute("error",error);
-            model.addAttribute("courseId", courseId);
-            model.addAttribute("user",userService.getUserById(userId));
-            return "/teacherPage/addChapter";
+            model.addAttribute("notification","Create chapter successfully");
+        }else if(courseList.get(0).getNumberOfChapters() >= systemSettingService.getAllSystemSetting().get(2).getSettingValue()){
+            model.addAttribute("error","The number of chapters has reached the limit (" + systemSettingService.getAllSystemSetting().get(2).getSettingValue() + ")");
         }
-        model.addAttribute("notification","Your chapter creation is now pending approval from the admin");
+        else{
+            model.addAttribute("error",error);
+        }
         model.addAttribute("courseId", courseId);
         model.addAttribute("user",userService.getUserById(userId));
         return "/teacherPage/addChapter";
@@ -388,6 +418,9 @@ public class TeacherController {
     public String lessonList(Model model,
                              @RequestParam("chapterId") int chapterId,
                              @RequestParam("userId") int userId){
+
+        List<LessonDetailDTO> lessonListOfChapter = lessonService.allLessonsByChapterId(chapterId);
+        
         List<LessonDetailDTO> lessonList = new ArrayList<>();
         lessonList = lessonService.allLessonsByChapterId(chapterId);
         if(lessonList.isEmpty()){
@@ -399,7 +432,14 @@ public class TeacherController {
             model.addAttribute("chapterId", chapterId);
             model.addAttribute("lessonList",lessonList);
         }
+        model.addAttribute("course", courseService.findByCourseId(chapterService.getChapterById(chapterId).getCourse().getId()));
+        List<CourseStatus> statusList = new ArrayList<>();
+        statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+        model.addAttribute("statusList", statusList);
         model.addAttribute("user",userService.getUserById(userId));
+        model.addAttribute("system_setting", systemSettingService.getAllSystemSetting());
+        model.addAttribute("numberOfLessons", lessonListOfChapter.size());
         return "/teacherPage/lessonList";
     }
 
@@ -408,6 +448,9 @@ public class TeacherController {
                                    @RequestParam("chapterId") int chapterId,
                                    @RequestParam("lessonSearchKey") String lessonSearchKey,
                                    @RequestParam("userId") int userId){
+
+        List<LessonDetailDTO> lessonListOfChapter = lessonService.allLessonsByChapterId(chapterId);
+
         List<LessonDetailDTO> lessonList = new ArrayList<>();
         if(lessonSearchKey.trim().equals("")){
             lessonSearchKey = "";
@@ -422,7 +465,14 @@ public class TeacherController {
             model.addAttribute("chapterId", chapterId);
             model.addAttribute("lessonList",lessonList);
         }
+        model.addAttribute("course", courseService.findByCourseId(chapterService.getChapterById(chapterId).getCourse().getId()));
+        List<CourseStatus> statusList = new ArrayList<>();
+        statusList.add(CourseStatus.ACTIVE);statusList.add(CourseStatus.INACTIVE);
+        statusList.add(CourseStatus.REJECTED);statusList.add(CourseStatus.PENDING);
+        model.addAttribute("statusList", statusList);
         model.addAttribute("user",userService.getUserById(userId));
+        model.addAttribute("system_setting", systemSettingService.getAllSystemSetting());
+        model.addAttribute("numberOfLessons", lessonListOfChapter.size());
         return "/teacherPage/lessonList";
     }
 
@@ -454,15 +504,8 @@ public class TeacherController {
                                @RequestParam("userId") int userId){
         List<QuizType> typeList = new ArrayList<>();
         typeList.add(QuizType.PRACTICE);typeList.add(QuizType.EXAM);
-        Lesson lesson = lessonService.getLessonById(lessonId);
-        String oldTitle = lesson.getTitle();
-        String oldDescription = lesson.getDescription();
-        QuizType oldQuizType = lesson.getQuizType();
         if(lessonTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
-            model.addAttribute("chapterId",chapterId);
-            model.addAttribute("lesson",lessonService.getLessonById(lessonId));
-            model.addAttribute("quizTypeList",quizType);
         }else{
             try {
                 lessonService.updateLesson(lessonId,chapterId,lessonDriveLink,documentFolderLink,videoFolderLink,
@@ -476,16 +519,11 @@ public class TeacherController {
                 model.addAttribute("user",userService.getUserById(userId));
                 return "/teacherPage/editLesson";
             }
-            model.addAttribute("lesson",lessonService.getLessonById(lessonId));
-            model.addAttribute("quizTypeList",quizType);
-            model.addAttribute("chapterId",chapterId);
-
-            if(lessonService.checkUpdateLesson(lessonId,oldTitle,oldDescription,oldQuizType)){
-                model.addAttribute("notification", "Your lesson update is now pending approval from the admin");
-            }else{
-                model.addAttribute("notification","Everything is up-to-date");
-            }
+            model.addAttribute("notification","Update changes successfully");
         }
+        model.addAttribute("lesson",lessonService.getLessonById(lessonId));
+        model.addAttribute("quizTypeList",quizType);
+        model.addAttribute("chapterId",chapterId);
         model.addAttribute("user",userService.getUserById(userId));
         return "teacherPage/editLesson";
     }
@@ -509,10 +547,15 @@ public class TeacherController {
                                    @RequestParam("quizType") QuizType quizType,
                                    @RequestParam("description") String description,
                                    @RequestParam("userId") int userId){
+
+        List<LessonDetailDTO> lessonListOfChapter = lessonService.allLessonsByChapterId(chapterId);
+
         if(lessonTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
-            model.addAttribute("chapterId",chapterId);
-        }else{
+        } else if (lessonListOfChapter.size() >= systemSettingService.getAllSystemSetting().get(3).getSettingValue()) {
+            model.addAttribute("error", "The number of lessons has reached the limit!" +
+                    "(" + systemSettingService.getAllSystemSetting().get(3).getSettingValue() + ")");
+        } else{
             try{
                 lessonService.createLesson(chapterId,lessonTitle,quizType,description);
             }catch(Exception e){
@@ -520,13 +563,13 @@ public class TeacherController {
                 model.addAttribute("chapterId",chapterId);
                 model.addAttribute("error","Lesson Creation Failed");
             }
-            model.addAttribute("notification","Your lesson creation is now pending approval from the admin");
-            model.addAttribute("chapterId",chapterId);
+            model.addAttribute("notification","Create Lesson Successfully");
         }
         List<QuizType> typeList = new ArrayList<>();
         typeList.add(QuizType.PRACTICE);typeList.add(QuizType.EXAM);
         model.addAttribute("quizTypeList",typeList);
         model.addAttribute("user",userService.getUserById(userId));
+        model.addAttribute("chapterId",chapterId);
         return "/teacherPage/addLesson";
     }
 
@@ -537,14 +580,12 @@ public class TeacherController {
         List<Video> videoList = new ArrayList<>();
         videoList = videoService.getVideoListByLessonId(lessonId);
         if(videoList.isEmpty()){
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
-            model.addAttribute("lessonId", lessonId);
             model.addAttribute("notification","Empty Video");
         }else{
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
-            model.addAttribute("lessonId",lessonId);
             model.addAttribute("videoList",videoList);
         }
+        model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
+        model.addAttribute("lessonId", lessonId);
         model.addAttribute("user",userService.getUserById(userId));
         return "/teacherPage/videoList";
     }
@@ -557,14 +598,12 @@ public class TeacherController {
         List<Video> videoList = new ArrayList<>();
         videoList = videoService.findVideo(lessonId, keyWord);
         if(videoList.isEmpty()){
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
-            model.addAttribute("lessonId", lessonId);
             model.addAttribute("notification","Empty Video");
         }else{
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
-            model.addAttribute("lessonId",lessonId);
             model.addAttribute("videoList",videoList);
         }
+        model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
+        model.addAttribute("lessonId",lessonId);
         model.addAttribute("user",userService.getUserById(userId));
         return "/teacherPage/videoList";
     }
@@ -594,16 +633,13 @@ public class TeacherController {
                 model.addAttribute("user",userService.getUserById(userId));
                 return "/teacherPage/addVideo";
             }
-            model.addAttribute("notification", "Video Creation is now pending approval from the admin");
-            model.addAttribute("lessonId", lessonId);
-            model.addAttribute("user",userService.getUserById(userId));
-            return "/teacherPage/addVideo";
+            model.addAttribute("notification", "Create video successfully");
         } else {
-            model.addAttribute("lessonId", lessonId);
             model.addAttribute("error", error);
-            model.addAttribute("user",userService.getUserById(userId));
-            return "/teacherPage/addVideo";
         }
+        model.addAttribute("lessonId", lessonId);
+        model.addAttribute("user",userService.getUserById(userId));
+        return "/teacherPage/addVideo";
     }
 
     @PostMapping(path = "/teacher/chapter/lesson/videos/edit")
@@ -623,11 +659,6 @@ public class TeacherController {
                               @RequestParam("videoTitle") String videoTitle,
                               @RequestParam("videoUrl") MultipartFile videoUrl,
                               @RequestParam("userId") int userId) {
-
-        Video video = videoService.getVideoById(videoId);
-        String oldVideoTitle = video.getTitle();
-        String oldVideoUrl = video.getFileUrl();
-
         if(videoTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
         }else{
@@ -640,11 +671,7 @@ public class TeacherController {
                 model.addAttribute("user", userService.getUserById(userId));
                 return "/teacherPage/editVideo";
             }
-            if(videoService.checkVideoUpdate(videoId, oldVideoTitle, oldVideoUrl)){
-                model.addAttribute("notification", "Video Update is now pending approval from the admin");
-            }else{
-                model.addAttribute("notification", "Everything is up-to-date");
-            }
+            model.addAttribute("notification", "Update change successfully");
         }
         Video updatedVideo = videoService.getVideoById(videoId);
         model.addAttribute("video", updatedVideo);
@@ -660,13 +687,11 @@ public class TeacherController {
         pdfList = pdfService.findListByLessonId(lessonId);
         if(pdfList.isEmpty()){
             model.addAttribute("notification","Empty Document");
-            model.addAttribute("lessonId",lessonId);
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
         }else{
-            model.addAttribute("lessonId",lessonId);
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
             model.addAttribute("pdfList",pdfList);
         }
+        model.addAttribute("lessonId",lessonId);
+        model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
         model.addAttribute("user",userService.getUserById(userId));
         return "/teacherPage/docList";
     }
@@ -680,13 +705,11 @@ public class TeacherController {
         pdfList = pdfService.findDocs(lessonId, docSearchKey);
         if(pdfList.isEmpty()){
             model.addAttribute("notification","Empty Document");
-            model.addAttribute("lessonId",lessonId);
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
         }else{
-            model.addAttribute("lessonId",lessonId);
-            model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
             model.addAttribute("pdfList",pdfList);
         }
+        model.addAttribute("lessonId",lessonId);
+        model.addAttribute("chapterId",lessonService.getLessonById(lessonId).getChapter().getId());
         model.addAttribute("user", userService.getUserById(userId));
         return "/teacherPage/docList";
     }
@@ -717,15 +740,12 @@ public class TeacherController {
                 return "/teacherPage/addDoc";
             }
             model.addAttribute("notification","Document Creation is now pending approval from the admin");
-            model.addAttribute("lessonId",lessonId);
-            model.addAttribute("user", userService.getUserById(userId));
-            return "/teacherPage/addDoc";
         }else{
-            model.addAttribute("lessonId",lessonId);
             model.addAttribute("error",error);
-            model.addAttribute("user", userService.getUserById(userId));
-            return "/teacherPage/addDoc";
         }
+        model.addAttribute("lessonId",lessonId);
+        model.addAttribute("user", userService.getUserById(userId));
+        return "/teacherPage/addDoc";
     }
 
     @PostMapping(path = "/teacher/chapter/lesson/docs/edit")
@@ -745,11 +765,6 @@ public class TeacherController {
                             @RequestParam("docTitle") String docTitle,
                             @RequestParam("docUrl") MultipartFile docUrl,
                             @RequestParam("userId") int userId) {
-
-        PDF oldPdf = pdfService.getPdfById(docId);
-        String oldTitle = oldPdf.getTitle();
-        String oldDocumentUrl = oldPdf.getFileUrl();
-
         if(docTitle.trim().isEmpty()){
             model.addAttribute("error","Empty Title");
         }else{
@@ -762,11 +777,7 @@ public class TeacherController {
                 model.addAttribute("user", userService.getUserById(userId));
                 return "/teacherPage/editDoc";
             }
-            if(pdfService.checkDocumentUpdate(docId, oldTitle, oldDocumentUrl)){
-                model.addAttribute("notification","Document Update is now pending approval from the admin");
-            }else{
-                model.addAttribute("notification","Everything is up-to-date");
-            }
+            model.addAttribute("notification","Update changes successfully");
         }
         PDF pdf = pdfService.getPdfById(docId);
         model.addAttribute("pdf", pdf);
@@ -821,7 +832,9 @@ public class TeacherController {
                                 @RequestParam("description") String description){
         if(subjectName.trim().isEmpty()){
             model.addAttribute("error","Please fill subject name");
-        }else{
+        } else if (subjectService.checkSubjectNameExistsWhenEdit(subjectName, subjectId)) {
+            model.addAttribute("error","Subject name already exists");
+        } else{
             subjectService.updateSubject(subjectId, subjectName, description);
             model.addAttribute("notification","Subject Update Successfully");
         }
@@ -844,7 +857,9 @@ public class TeacherController {
                                     @RequestParam("description") String description){
         if(subjectName.trim().isEmpty()){
             model.addAttribute("error","Please fill subject name");
-        }else{
+        } else if (subjectService.checkSubjectNameExistsWhenAdd(subjectName)) {
+            model.addAttribute("error","Subject name already exists");
+        } else{
             subjectService.createSubject(subjectName, description);
             model.addAttribute("notification","Subject Creation Successfully");
         }
@@ -863,6 +878,7 @@ public class TeacherController {
         model.addAttribute("totalActiveCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.ACTIVE));
         model.addAttribute("totalInactiveCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.INACTIVE));
         model.addAttribute("totalPendingCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.PENDING));
+        model.addAttribute("totalRejectedCourses", courseService.getTotalCourseWithStatusByUserId(userId, CourseStatus.REJECTED));
         model.addAttribute("top3Courses", courseService.getTop3CoursesListByUserId(userId));
         model.addAttribute("top3Student", userService.getTop3UserByTeacherId(userId));
         model.addAttribute("courseScoreList", courseService.getCourseAndScoreByUserId(userId));
@@ -870,13 +886,60 @@ public class TeacherController {
         return "teacherPage/Dashboard";
     }
 
-    @GetMapping(path = "teacher/pendingCourseList")
-    public String pendingCourseList(Model model,
+    @GetMapping(path = "teacher/inactiveCourseList")
+    public String inactiveCourseList(Model model,
                                     @RequestParam("userId") int userId){
         model.addAttribute("user", userService.getUserById(userId));
-        List<Course> pendingCourseList = new ArrayList<>();
-        pendingCourseList = courseService.pendingCourseListByUserId(userId);
-        model.addAttribute("pendingCourseList", pendingCourseList);
-        return "/teacherPage/pendingCourseList";
+        List<Course> inactiveCourseList = new ArrayList<>();
+        inactiveCourseList = courseService.inactiveCourseListByUserId(userId);
+        List<Course> rejectedeCourseList = new ArrayList<>();
+        rejectedeCourseList = courseService.rejectedCourseListByUserId(userId);
+        model.addAttribute("rejectedCourseList", rejectedeCourseList);
+        model.addAttribute("inactiveCourseList", inactiveCourseList);
+        return "teacherPage/inactiveCourseList";
+    }
+
+    @GetMapping(path = "teacher/inactiveCourseList/editNote")
+    public String editInactiveCourseNote(Model model,
+                                         @RequestParam("userId") int userId,
+                                         @RequestParam("courseId") int courseId){
+        model.addAttribute("user", userService.getUserById(userId));
+        model.addAttribute("course", courseService.getCourseById(courseId));
+        return "/teacherPage/editInactiveCourseNote";
+    }
+
+    @PostMapping(path = "/teacher/inactiveCourseList/editNote/updateNote")
+    public String updateInactiveCourseNote(Model model,
+                                           @RequestParam("userId") int userId,
+                                           @RequestParam("courseId") int courseId,
+                                           @RequestParam("courseNote") String courseNote){
+
+        if(courseNote.trim().isEmpty()){
+            model.addAttribute("error","Please fill course note");
+        }else{
+            courseService.updateInactiveCourseNote(courseId, courseNote);
+            model.addAttribute("notification","Update Course Note Successfully");
+        }
+        model.addAttribute("user", userService.getUserById(userId));
+        model.addAttribute("course", courseService.getCourseById(courseId));
+        return "/teacherPage/editInactiveCourseNote";
+    }
+
+    @PostMapping(path = "teacher/inactiveCourseList/upload")
+    public String activateCourse(Model model,
+                               @RequestParam("courseId") int courseId,
+                               @RequestParam("userId") int userId,
+                               @RequestParam("courseNote") String courseNote){
+        if(courseNote == null || courseNote.trim().isEmpty()){
+            model.addAttribute("error","Please fill course note before uploading");
+        }else{
+            courseService.uploadCourse(courseId);
+            model.addAttribute("notification","Your course is now pending approval from admin");
+        }
+        model.addAttribute("user", userService.getUserById(userId));
+        List<Course> inactiveCourseList = new ArrayList<>();
+        inactiveCourseList = courseService.inactiveCourseListByUserId(userId);
+        model.addAttribute("inactiveCourseList", inactiveCourseList);
+        return "/teacherPage/inactiveCourseList";
     }
 }
