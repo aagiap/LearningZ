@@ -353,7 +353,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarUsersMenu" data-bs-toggle="collapse" role="button"
                        aria-expanded="false" aria-controls="sidebarUsersMenu">
-                        <span class="nav-text">📋 User List </span>
+                        <span class="nav-text">🧑‍💼 User Management </span>
                     </a>
                     <div class="collapse show" id="sidebarUsersMenu">
                         <ul class="nav sub-navbar-nav">
@@ -385,7 +385,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarCoursesMenu" data-bs-toggle="collapse" role="button"
                        aria-expanded="false" aria-controls="sidebarCoursesMenu">
-                        <span class="nav-text">📋 Course List </span>
+                        <span class="nav-text">📚 Course Management </span>
                     </a>
                     <div class="collapse show" id="sidebarCoursesMenu">
                         <ul class="nav sub-navbar-nav">
@@ -400,9 +400,6 @@
                                 courses</a></li>
                             <li><a class="sub-nav-link"
                                    th:href="@{/super_admin/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
-                                courses</a></li>
-                            <li><a class="sub-nav-link"
-                                   th:href="@{/super_admin/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
                                 courses</a></li>
                         </ul>
                     </div>

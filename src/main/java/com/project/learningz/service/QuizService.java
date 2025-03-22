@@ -67,5 +67,13 @@ public class QuizService {
         return systemSetting.getSettingValue();
     }
 
+    public void updateQuiz(Quiz quiz) {
+        Quiz updatedQuiz = quizRepository.getQuizById(quiz.getId());
+        updatedQuiz.setTotalQuestions(quiz.getTotalQuestions());
+        updatedQuiz.setTimeLimit(quiz.getTimeLimit());
+        updatedQuiz.setTitle(quiz.getTitle());
+        quizRepository.save(updatedQuiz);
+    }
+
 
 }

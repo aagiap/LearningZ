@@ -23,6 +23,8 @@
 
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         .btn {
             border-radius: 8px;
@@ -50,84 +52,263 @@
             font-weight: bold;
         }
 
-        h3 {
-            text-align: center; /* Căn giữa */
-            font-size: 24px; /* Kích thước chữ */
-            font-weight: bold; /* Độ đậm */
-            color: #0d47a1; /* Màu xanh đậm */
-            margin-top: 20px; /* Khoảng cách phía trên */
-            margin-bottom: 20px; /* Khoảng cách phía dưới */
-            padding: 10px 0; /* Thêm padding để không quá sát */
-            border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
-            display: inline-block; /* Giữ nội dung gọn gàng */
-        }
-
-        .summary-box {
-            padding-top: 20px;
-            max-width: 1000px;
-            margin-left: 70px; /* Hoặc một khoảng cách phù hợp */
-            text-align: left;
-        }
-
-        /* Tiêu đề của summary */
-        .summary-box p {
+        .warning-about-course {
+            background-color: #ffebcc; /* Màu nền cam nhạt */
+            color: #7a4100; /* Màu chữ cam đậm */
+            padding: 20px;
+            border: 2px solid #ff9800; /* Viền cam nổi bật */
+            border-radius: 10px; /* Bo góc mềm mại */
+            margin: 15px 0;
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 15px;
-            margin-left: 20px;
-            color: #ed5b1b;
-            text-align: left;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bóng đổ làm nổi khối */
+            transition: transform 0.2s ease-in-out;
         }
 
-        .summary-box table {
-            min-width: 500px;
-            width: 50%;
-            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
-            margin-top: 15px;
-            border-radius: 8px; /* Bo góc */
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+        .warning-about-course:hover {
+            transform: scale(1.02); /* Hiệu ứng phóng to nhẹ khi hover */
         }
 
-        .summary-box table tr:nth-child(odd) {
-            background-color: #f8f9fa; /* Màu cho hàng lẻ */
+        .warning-about-course p {
+            margin: 10px 0;
         }
 
-        .summary-box table th,
-        .summary-box table td {
-            padding: 10px;
-            border: 1px solid #ddd;
+        .warning-about-course span {
+            font-size: 22px; /* Chữ to hơn */
+            font-weight: bold; /* In đậm */
+            color: #d84315; /* Màu đỏ cam nổi bật */
         }
 
-        .summary-box table th {
-            background-color: #083768;
-            color: whitesmoke;
-        }
-
-
-        /* Định dạng đường link */
-        .summary-box a {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
+        .warning-about-course a {
+            color: #d84315;
+            font-weight: bold;
             text-decoration: none;
-            color: #083768;
-            padding: 8px;
-            transition: 0.3s;
+            border-bottom: 2px solid #d84315; /* Gạch chân dạng viền dưới */
+            padding-bottom: 2px;
+            transition: all 0.3s ease-in-out;
         }
 
-        /* Hover hiệu ứng */
-        .summary-box a:hover {
-            color: #0056b3;
-            transform: scale(1.05);
+        .warning-about-course a:hover {
+            color: white;
+            background-color: #d84315; /* Màu nền cam khi hover */
+            border-radius: 5px;
+            padding: 5px 10px;
         }
 
-        .container-fluid-content {
+        /* Chart lớn hơn, chiếm 2 phần */
+        .chart-container {
+            flex: 2;
+            text-align: center;
             display: flex;
-            gap: 20px; /* Khoảng cách giữa 2 box */
-            width: 100%;
-            max-width: 1200px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
+        #courseChart {
+            width: 450px !important;
+            height: 450px !important;
+        }
+
+
+        /* Tổng container */
+        .summary-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .summary-container:hover {
+            transform: scale(1.02);
+        }
+
+        /* Bố cục chính: chart 2 phần - user 1 phần */
+        .summary-card {
+            display: flex;
+            flex-direction: row;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        /* Chart lớn hơn, chiếm 2 phần */
+        .chart-container {
+            flex: 2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #userChartRole {
+            width: 500px !important;
+            height: 500px !important;
+        }
+
+        /* Danh sách user, chiếm 1 phần */
+
+        /* Thẻ user */
+        .detail-user a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Hover hiệu ứng nổi lên */
+        .detail-user a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Danh sách user, chiếm 1 phần */
+        .detail-course {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 170px;
+        }
+
+        /* Thẻ user */
+        .detail-course a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Hover hiệu ứng nổi lên */
+        .detail-course a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .all-course{
+            background: #8e7df4;
+        }
+
+        .inactive-course{
+            background: #d3c8c8;
+        }
+
+        .active-course{
+            background: #27e349;
+        }
+
+        .pending-course{
+            background: #f8d838;
+        }
+
+        /* ====== Tổng thể Container ====== */
+        .summary-container-table {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            margin-left: 140px;
+            margin-right: 140px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+
+        }
+
+        .summary-container-table:hover {
+            transform: scale(1.02);
+        }
+
+        /* ====== Tiêu đề bảng ====== */
+        .latest-user p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* ====== Bảng ====== */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* ====== Tiêu đề bảng (thead) ====== */
+        .table thead {
+            background: linear-gradient(45deg, #083768, #00c6ff);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .table th {
+            padding: 12px;
+            text-align: center;
+        }
+
+        /* ====== Ô dữ liệu (td) ====== */
+        .table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* ====== Màu nền xen kẽ ====== */
+        .table tbody tr:nth-child(even) {
+            background: #eceff3;
+        }
+
+        /* ====== Hover trên hàng ====== */
+        /*.table tbody tr:hover {*/
+        /*    background: rgba(0, 123, 255, 0.1);*/
+        /*    transition: 0.3s ease-in-out;*/
+        /*}*/
+
+        /* ====== Badge trạng thái ====== */
+        .badge {
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ffc107;
+            color: black;
+        }
+
+        .badge-danger {
+            background: #dc3545;
+            color: white;
+        }
+
 
         /* Responsive bảng trên màn hình nhỏ */
         @media screen and (max-width: 768px) {
@@ -398,9 +579,6 @@
                             <li><a class="sub-nav-link"
                                    th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
                                 courses</a></li>
-                            <li><a class="sub-nav-link"
-                                   th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Rejected
-                                courses</a></li>
                         </ul>
                     </div>
                 </li>
@@ -414,96 +592,73 @@
     <div class="page-content">
         <div class="container-fluid-content" style="padding-top: 30px">
 
-            <div class="summary-box">
-                <p>The summary of Courses</p>
-                <table>
-                    <tr>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">Total of courses</a></td>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;"><span
-                                    th:text="${totalCourses}"></span></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">Active courses</a></td>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;"><span
-                                    th:text="${sumOfActiveCourses}"></span></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">Inactive courses</a></td>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;"><span
+            <th:block th:if="${sumOfPendingCourses > 0}">
+                <div class="warning-about-course">
+                    <p>There are <span th:text="${sumOfPendingCourses}"></span> courses needing approval!</p>
+                    <p>Please click <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">HERE</a> to navigate to the course approval page.</p>
+                </div>
+            </th:block>
+
+            <div class="summary-container">
+                <div class="summary-card">
+                    <div class="chart-container">
+                        <h3 style="margin-bottom: 40px">Pie chart for Course Management</h3>
+                        <canvas id="courseChart"></canvas>
+                    </div>
+
+                    <div class="detail-course">
+
+                        <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card all-course">Total: <span
+                                th:text="${totalCourses}"></span></a>
+
+                        <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card active-course">Active Courses<span
+                                th:text="${sumOfActiveCourses}"></span></a>
+
+                        <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card inactive-course">Inactive
+                            Courses<span
                                     th:text="${sumOfInactiveCourses}"></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">Pending courses</a>
-                        </td>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;"><span
+
+                        <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card pending-course">Pending
+                            Courses: <span
                                     th:text="${sumOfPendingCourses}"></span></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;">Rejected courses</a>
-                        </td>
-                        <td>
-                            <a th:href="@{/admin/courses/view(status='REJECTED', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                               style="text-decoration: none; color: inherit;"><span
-                                    th:text="${sumOfRejectedCourses}"></span></a>
-                        </td>
-                    </tr>
-                </table>
 
-            </div> <!-- end row -->
+                    </div>
+                </div>
+            </div>
 
-            <div class="summary-box">
-                <p>Top 5 courses with the most student enrollments</p>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Grade</th>
-                        <th>Subject</th>
-                        <th>Created By</th>
-                        <th>Status</th>
-                        <th>Enrollment Count</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="course, index : ${courses}">
-                        <td th:text="${index.count}"></td>
-                        <td th:text="${course.course.title}"></td>
-                        <td th:text="${course.course.grade.name}"></td>
-                        <td th:text="${course.course.subject.name}"></td>
-                        <td th:text="${course.course.createdBy.username}"></td>
-                        <td th:text="${course.course.courseStatus.name()}"></td>
-                        <td th:text="${course.enrollmentCount}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-
-            </div> <!-- end row -->
+            <div class="summary-container-table">
+                <div class="latest-user">
+                    <p>Top 5 courses with the most student enrollments</p>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Grade</th>
+                            <th>Subject</th>
+                            <th>Created By</th>
+                            <th>Status</th>
+                            <th>Enrollment Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="course, index : ${courses}">
+                            <td th:text="${index.count}"></td>
+                            <td th:text="${course.course.title}"></td>
+                            <td th:text="${course.course.grade.name}"></td>
+                            <td th:text="${course.course.subject.name}"></td>
+                            <td th:text="${course.course.createdBy.username}"></td>
+                            <td th:text="${course.course.courseStatus.name()}"></td>
+                            <td th:text="${course.enrollmentCount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- end row -->
+            </div>
 
             <!-- End Container Fluid -->
 
@@ -513,6 +668,47 @@
     </div>
 </div>
 <!-- END Wrapper -->
+
+<script th:inline="javascript">
+    var courseData = [
+        /*[[${sumOfActiveCourses}]]*/ 0,
+        /*[[${sumOfInactiveCourses}]]*/ 0,
+        /*[[${sumOfPendingCourses}]]*/ 0,
+    ];
+</script>
+
+<script>
+    var courseChart = new Chart(document.getElementById('courseChart').getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: ['Active', 'Inactive', 'Pending'],
+            datasets: [{
+                data: courseData,
+                backgroundColor: ['#27e349', '#616161', '#f8d838']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 30, // Tăng khoảng cách giữa chart và legend
+                        boxWidth: 25, // Giảm kích thước ô vuông màu
+                        font: {
+                            size: 14 // Điều chỉnh kích thước font
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: t => t.raw + " users"
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 <!-- Vendor Javascript (Require in all Page) -->
 <script src="/js/vendor.js"></script>

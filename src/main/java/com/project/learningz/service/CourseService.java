@@ -256,6 +256,10 @@ public class CourseService {
         return courseRepository.getCourseLearnedStatsByUserId(userId);
     }
 
+    public List<Course> getPendingCourse(){
+        return courseRepository.getAllCoursesByStatus(CourseStatus.PENDING);
+    }
+
     public Integer numberOfChapter(Integer courseId){
         return courseRepository.numberOfChapter(courseId);
     }

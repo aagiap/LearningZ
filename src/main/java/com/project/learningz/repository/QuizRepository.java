@@ -103,6 +103,6 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
     Page<QuizDetailDTO> getAllQuizzesDTO(@Param("lessonId") Integer lessonId,
                                          Pageable pageable);
 
-
+    Quiz getQuizById(Integer quizId);
 
 }

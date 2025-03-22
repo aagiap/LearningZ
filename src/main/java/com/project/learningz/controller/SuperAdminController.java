@@ -278,7 +278,8 @@ public class SuperAdminController {
         long sumOfCasualUsers = userManagementService.getNumberOfCasualStudentUsers();
         long sumOfTeacherUsers = userManagementService.getNumberOfTeacherUsers();
         long sumOfMarketerUsers = userManagementService.getNumberOfMarketerUsers();
-        List<User> usersLatest = userManagementService.getTenLatestUsers();
+        List<User> usersLatest = userManagementService.getFiveLatestUsers();
+
 
         Integer sumOfActiveCourses = courseService.sumOfCourseByStatus(CourseStatus.ACTIVE);
         Integer sumOfInactiveCourses = courseService.sumOfCourseByStatus(CourseStatus.INACTIVE);

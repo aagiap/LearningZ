@@ -24,13 +24,8 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-        .btn {
-            border-radius: 8px;
-        }
-
-        .sub-navbar-nav li {
-            margin-left: 40px; /* Thụt vào từng mục */
-            list-style-type: none; /* Bỏ dấu chấm mặc định */
+        .form-group label {
+            padding-left: 10px; /* Đẩy label vào trong */
         }
 
         h3 {
@@ -44,163 +39,6 @@
             border-bottom: 2px solid #0d47a1; /* Viền dưới tạo điểm nhấn */
             display: inline-block; /* Giữ nội dung gọn gàng */
         }
-
-        .first-part {
-            max-width: 800px; /* Giới hạn chiều rộng */
-            margin: 0 auto 20px; /* Căn giữa và tạo khoảng cách với phần tiếp theo */
-            padding: 20px; /* Khoảng cách bên trong */
-            border: 2px solid #ddd; /* Viền màu xám nhạt */
-            border-radius: 8px; /* Bo góc */
-            background-color: #f9f9f9; /* Màu nền nhẹ */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-        }
-
-        .first-part h4 {
-            font-size: 22px;
-            color: #333; /* Màu chữ tối */
-            margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
-        }
-
-        .first-part p {
-            font-size: 16px;
-            color: #555; /* Màu chữ xám nhẹ */
-            margin: 5px 0; /* Khoảng cách giữa các dòng */
-        }
-
-        .first-part span {
-            font-weight: bold; /* Làm đậm thông tin quan trọng */
-            color: #61616a; /* Màu xanh dương để làm nổi bật */
-        }
-
-
-        .question-container {
-            max-width: 800px;
-            margin: 0 auto; /* Căn giữa theo chiều ngang */
-            padding: 20px; /* Tạo khoảng cách bên trong */
-        }
-
-        .form-title {
-            text-align: center;
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .question-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .question-block {
-            border: 2px solid #ddd; /* Viền xám nhạt */
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px; /* Bo góc */
-            background-color: #c7d7e4; /* Màu nền nhẹ */
-        }
-
-
-        label {
-            font-weight: bold;
-            margin-top: 5px;
-            display: block;
-            text-align: left;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #101013;
-            background-color: #c7d7e4;
-        }
-
-        /* Căn chỉnh phần đáp án */
-        .answer-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Chia thành 2 cột */
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .answer-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .answer-box label {
-            font-weight: bold;
-        }
-
-        .answer-box:nth-child(1), /* Option A */
-        .answer-box:nth-child(3) { /* Option C */
-            text-align: left;
-        }
-
-        .answer-box:nth-child(2), /* Option B */
-        .answer-box:nth-child(4) { /* Option D */
-            text-align: right;
-        }
-
-        /* Định dạng chung cho container chứa các nút */
-        .quiz-buttons {
-            display: flex;
-            justify-content: center; /* Căn giữa */
-            align-items: center;
-            gap: 10px; /* Khoảng cách giữa các nút */
-            margin-top: 15px;
-        }
-
-        /* Định dạng nút */
-        .quiz-buttons button {
-            padding: 6px 14px; /* Giảm chiều cao */
-            font-size: 14px; /* Nhỏ hơn một chút */
-            border: none;
-            border-radius: 3px; /* Làm dẹt hơn */
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        /* Nút thêm câu hỏi */
-        .add-question-btn {
-            background: #ff9800; /* Màu cam */
-            color: white;
-            font-weight: bold;
-        }
-
-        .add-question-btn:hover {
-            background: #e68900;
-        }
-
-        /* Nút tạo quiz */
-        .create-quiz-btn {
-            background: #4CAF50; /* Màu xanh lá */
-            color: white;
-            font-weight: bold;
-        }
-
-        .create-quiz-btn:hover {
-            background: #3d8b40;
-        }
-
-        /* Nút hủy (Cancel) */
-        .cancel-btn {
-            background: #61616a;
-            color: white;
-            padding: 6px 14px; /* Giảm chiều cao */
-            font-size: 14px;
-            border-radius: 3px; /* Dẹt hơn */
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .cancel-btn:hover {
-            background: #d32f2f;
-        }
-
 
     </style>
 </head>
@@ -484,234 +322,92 @@
     <!-- Start right Content here -->
     <!-- ==================================================== -->
     <div class="page-content">
-
-        <!-- Start Container Fluid -->
         <div class="container-fluid" style="padding-top: 50px">
+            <div class="form-wrapper">
+                <h2 class="text-center">Quiz Detail</h2>
 
-            <div th:if="${errorMessage}" class="alert alert-danger">
-                <span th:text="${errorMessage}"></span>
-            </div>
+                <form th:object="${quiz}" method="post"
+                      th:action="@{/teacher/{lessonId}/{quizId}/updateQuiz(quizId=${quizId}, lessonId=${lessonId})}"
+                      enctype="multipart/form-data">
 
-            <div th:if="${successMessage}" class="alert alert-success">
-                <span th:text="${successMessage}"></span>
-            </div>
-
-            <div class="first-part">
-                <h4 class="form-title">Add New Quiz</h4>
-                <p>Lesson: <span th:text="${lesson.title}"></span></p>
-                <p>Chapter: <span th:text="${lesson.getChapter().chapterTitle}"></span></p>
-                <p>Course: <span th:text="${lesson.getChapter().getCourse().title}"></span></p>
-                <p>Grade: <span th:text="${lesson.getChapter().getCourse().getGrade().name}"></span></p>
-                <p>Subject: <span th:text="${lesson.getChapter().getCourse().getSubject().name}"></span></p>
-            </div>
-
-            <div class="add-user-form">
-
-                <form th:action="@{/teacher/{lessonId}/quizzesCreate(lessonId=${lessonId})}" method="post">
-                    <div class="question-container">
-
-                        <div class="answer-box">
-                            <label>Quiz Title:</label>
-                            <input type="text" name="quizTitle" required>
-                        </div>
-
-                        <div class="answer-box">
-                            <label>Time Limit (mins):</label>
-                            <input type="text" name="timeLimit" required>
-                        </div>
-
-                        <div class="answer-box">
-                            <label>Total Questions:</label>
-                            <input type="text" id="totalQuestions" name="totalQuestions" value="1" readonly>
-                        </div>
-
-                        <div class="question-block">
-                            <label style="font-size: 22px">Question 1:</label>
-                            <input type="text" name="question[]" placeholder="Enter question" required>
-
-                            <div class="answer-grid">
-                                <div class="answer-box">
-                                    <label>Option A:</label>
-                                    <input type="text" name="optionA[]" oninput="updateSelectOptions(this)" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-section">
+                                <div class="form-group mb-3">
+                                    <label>Title</label>
+                                    <input th:field="*{title}" type="text" class="form-control" required>
                                 </div>
-
-                                <div class="answer-box">
-                                    <label>Option B:</label>
-                                    <input type="text" name="optionB[]" oninput="updateSelectOptions(this)" required>
+                                <div class="form-group mb-3">
+                                    <label>Time limit</label>
+                                    <input th:field="*{timeLimit}" type="text" class="form-control" required>
                                 </div>
-
-                                <div class="answer-box">
-                                    <label>Option C:</label>
-                                    <input type="text" name="optionC[]" oninput="updateSelectOptions(this)" required>
+                                <div class="form-group mb-3">
+                                    <label>Total questions</label>
+                                    <input th:field="*{totalQuestions}" type="text" class="form-control" readonly
+                                           required>
                                 </div>
-
-                                <div class="answer-box">
-                                    <label>Option D:</label>
-                                    <input type="text" name="optionD[]" oninput="updateSelectOptions(this)" required>
+                                <div class="form-group mb-3">
+                                    <label>Lesson</label>
+                                    <input th:field="*{lessonTitle}" type="text" class="form-control" readonly required>
                                 </div>
                             </div>
-
-                            <label>Correct Answer:</label>
-                            <select name="correctAnswer[]">
-                                <option value="">A</option>
-                                <option value="">B</option>
-                                <option value="">C</option>
-                                <option value="">D</option>
-                            </select>
                         </div>
 
-                        <input type="hidden" id="maxQuestionsInQuiz" th:value="${maxQuestionsInQuiz}">
 
+                        <!-- Cột Phải -->
+                        <div class="col-md-6">
+                            <div class="form-section">
+                                <div class="form-group mb-3">
+                                    <label>Chapter</label>
+                                    <input th:field="*{chapterTitle}" type="text" class="form-control" readonly
+                                           required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Subject</label>
+                                    <input th:field="*{subject}" type="text" class="form-control" readonly required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Grade</label>
+                                    <input th:field="*{grade}" type="text" class="form-control" readonly required>
+                                </div>
 
-
+                                <div class="form-group mb-3">
+                                    <label>Course</label>
+                                    <input th:field="*{courseTitle}" type="text" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Nhóm nút được căn chỉnh lại -->
-                    <div class="quiz-buttons">
-                        <!-- Nút thêm câu hỏi -->
-                        <button type="button" class="cancel-btn" onclick="window.history.back();">Cancel</button>
-                        <!-- Nút tạo quiz -->
-                        <button type="submit" class="create-quiz-btn">Create Quiz</button>
-
-                        <button type="button" class="add-question-btn" onclick="addQuestion()">Add Question</button>
+                    <!-- Nút hành động -->
+                    <div class="form-actions text-center mt-4">
+                        <button type="button" class="btn btn-secondary" style="background-color: #ccc; color: #806412"
+                                th:onclick="window.history.back()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-info" style="background-color: #ffc107; color:#fbf8f8;">
+                            Save
+                        </button>
                     </div>
 
                 </form>
             </div>
-            <script>
-                function addQuestion() {
-                    const container = document.querySelector(".question-container");
-                    const questionCount = container.getElementsByClassName("question-block").length + 1; // Đếm câu hỏi mới
-                    const maxQuestionsInQuiz = parseInt(document.getElementById("maxQuestionsInQuiz").value); // Lấy max từ input hidden
-
-                    if (questionCount > maxQuestionsInQuiz) {
-                        document.getElementById("warningModal").style.display = "flex"; // Hiện form cảnh báo
-                        return; // Dừng lại nếu vượt quá giới hạn
-                    }
-                    const newQuestion = document.createElement("div");
-                    newQuestion.classList.add("question-block");
-
-                    newQuestion.innerHTML = `
-                    <label style="font-size: 22px">Question ${questionCount}:</label>
-                    <input type="text" name="question[]" placeholder="Enter question" required>
-
-                    <div class="answer-grid">
-                        <div class="answer-box">
-                            <label>Option A:</label>
-                            <input type="text" name="optionA[]" oninput="updateSelectOptions(this)" required>
-                        </div>
-                        <div class="answer-box">
-                            <label>Option B:</label>
-                            <input type="text" name="optionB[]" oninput="updateSelectOptions(this)" required>
-                        </div>
-                        <div class="answer-box">
-                            <label>Option C:</label>
-                            <input type="text" name="optionC[]" oninput="updateSelectOptions(this)" required>
-                        </div>
-                        <div class="answer-box">
-                            <label>Option D:</label>
-                            <input type="text" name="optionD[]" oninput="updateSelectOptions(this)" required>
-                        </div>
-                    </div>
-
-                    <label>Correct Answer:</label>
-                    <select name="correctAnswer[]">
-                        <option value="">A</option>
-                        <option value="">B</option>
-                        <option value="">C</option>
-                        <option value="">D</option>
-                    </select>
-                    `;
-
-                    container.appendChild(newQuestion);
-
-                    // Reset giá trị các input để tránh bị trùng
-                    const inputs = newQuestion.querySelectorAll("input");
-                    inputs.forEach(input => input.value = "");
-
-                    // Cập nhật Total Questions
-                    document.getElementById("totalQuestions").value = questionCount;
-                }
-
-                // Hàm cập nhật value của option trong select
-                function updateSelectOptions(inputElement) {
-                    const questionBlock = inputElement.closest(".question-block"); // Tìm khối câu hỏi cha
-                    const options = questionBlock.querySelectorAll("select[name='correctAnswer[]'] option");
-
-                    options[0].value = questionBlock.querySelector("input[name='optionA[]']").value || "";
-                    options[1].value = questionBlock.querySelector("input[name='optionB[]']").value || "";
-                    options[2].value = questionBlock.querySelector("input[name='optionC[]']").value || "";
-                    options[3].value = questionBlock.querySelector("input[name='optionD[]']").value || "";
-                }
-
-
-            </script>
-
 
         </div>
-        <!-- End Container Fluid -->
-
     </div>
-    <!-- ==================================================== -->
-    <!-- End Page Content -->
-    <!-- ==================================================== -->
+
 
 </div>
+
+<!-- ==================================================== -->
+<!-- End Page Content -->
+<!-- ==================================================== -->
+
+
+</div>
+
+
 <!-- END Wrapper -->
-
-<!-- Form cảnh báo -->
-<div id="warningModal" class="modal">
-    <div class="modal-content">
-        <p>Bạn đã đạt số lượng câu hỏi tối đa trong một quiz!</p>
-        <button onclick="closeWarning()">OK</button>
-    </div>
-</div>
-
-<script>
-    function closeWarning() {
-        document.getElementById("warningModal").style.display = "none";
-    }
-</script>
-
-<style>
-    /* CSS cho form cảnh báo */
-    .modal {
-        display: none; /* Ẩn mặc định */
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        width: 350px;
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal button {
-        margin-top: 10px;
-        padding: 8px 16px;
-        background-color: #ff4d4d;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .modal button:hover {
-        background-color: #cc0000;
-    }
-</style>
-
-
-
 
 <script>
     function viewSubjectList(e) {
@@ -724,7 +420,7 @@
         form.submit();
     }
 
-    function inactiveCourseList(e) {
+    function inactiveCourseList(e){
         let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
@@ -747,3 +443,4 @@
 
 </body>
 </html>
+

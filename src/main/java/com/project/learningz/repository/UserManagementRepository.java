@@ -1,6 +1,7 @@
 package com.project.learningz.repository;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.constant.UserStatus;
 import com.project.learningz.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -66,5 +67,12 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'ADMIN_COURSE_MANAGER'")
     long countAdminCourseManageUsers();
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.userStatus = 'BANNED'")
+    long countBannedUsers();
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.userStatus = 'ACTIVE'")
+    long countActiveUsers();
+
 
 }
