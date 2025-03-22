@@ -197,7 +197,6 @@
                     <th>Registration Date</th>
                     <th>Expiration Date</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -211,13 +210,6 @@
                         <span class="btn btn-success btn-sm" th:if="${membership.status.name() == 'ACTIVE'}">Active</span>
                         <span class="btn btn-warning text-dark btn-sm" th:if="${membership.status.name() == 'CANCELED'}">Canceled</span>
                         <span class="btn btn-danger btn-sm" th:if="${membership.status.name() == 'EXPIRED'}">Expired</span>
-                    </td>
-
-                    <td>
-                        <form th:if="${membership.status.name() == 'ACTIVE'}" action="/home/profile/deactivateVipPackages" method="post" onsubmit="return confirmDeactivation(event, this)">
-                            <input type="hidden" name="membershipId" th:value="${membership.id}">
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Deactivate</button>
-                        </form>
                     </td>
                 </tr>
                 </tbody>
@@ -248,14 +240,6 @@
     }
     function vipRegister(e){
         document.querySelector("#vipRegister").click();
-    }
-</script>
-<script>
-    function confirmDeactivation(event, form) {
-        event.preventDefault();
-        if (confirm("If you deactivate this package, you won't receive a refund, but your VIP Membership will remain active until its expiration date.\n")) {
-            form.submit();
-        }
     }
 </script>
 </body>

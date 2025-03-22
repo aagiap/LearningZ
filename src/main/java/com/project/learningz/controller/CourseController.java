@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -59,7 +60,7 @@ public class CourseController {
                              @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("title").ascending());
         Page<Course> pageCourse = courseService.getCoursesPaging(gradeId, subjectId, keyword, pageable);
         Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
 
@@ -99,7 +100,7 @@ public class CourseController {
                                     @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                     @AuthenticationPrincipal OAuth2User userOAuth2) {
         Course course = courseService.getCourseById(courseId);
-        if(course.getCourseStatus() == CourseStatus.INACTIVE){
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
             return "redirect:/course";
         }
         model.addAttribute("course", course);
@@ -248,7 +249,7 @@ public class CourseController {
         }
 
 
-        if (role == Role.ADMIN || role == Role.MARKETING_TEAM || role == Role.TEACHER) {
+        if (role == Role.ADMIN || role == Role.ADMIN_COURSE_MANAGER || role == Role.ADMIN_USER_MANAGER || role == Role.MARKETING_TEAM || role == Role.TEACHER) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Collections.singletonMap("error3", "Register for a course only available with STUDENT"));
         }

@@ -1175,33 +1175,6 @@ p {
 .category-slide a {
     display: block;
 }
-.category-slide .slick-arrow {
-    position: absolute;
-    top: 50%;
-    right: -50px;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-.category-slide .prev.slick-arrow {
-    right: auto;
-    left: -50px;
-}
-.category-slide .slick-arrow i {
-    width: 35px;
-    height: 35px;
-    line-height: 35px;
-    border-radius: 50%;
-    background-color: #557495;
-    text-align: center;
-    font-size: 24px;
-    color: #fff;
-    cursor: pointer;
-    -webkit-transition: all 0.4s linear;
-    transition: all 0.4s linear;
-}
-.category-slide .slick-arrow i:hover {
-    background-color: #ffc600;
-}
 /*===== Index-4 =====*/
 
 .category-tow {
@@ -1221,7 +1194,7 @@ p {
     padding-bottom: 220px;
 }
 .about-bg {
-    width: 52%;
+    width: 100%;
     position: absolute;
     bottom: 0;
     right: 0;
@@ -1240,6 +1213,7 @@ p {
 }
 .about-cont p {
     padding-top: 30px;
+    width: 100%;
 }
 .about-event {
     -webkit-box-shadow: 0px 0px 191px 0px rgba(0, 0, 0, 0.06);
@@ -1919,6 +1893,56 @@ p {
 .testimonial-slide .slick-dots li.slick-active button {
     background-color: #ffc600;
 }
+#testimonial {
+    position: relative;
+    z-index: 0;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.vip-carousel {
+    max-width: 80%;
+    margin: auto;
+    z-index: 10;
+}
+
+.vip-carousel .slick-track {
+    display: flex;
+    gap: 30px;
+}
+
+.package {
+    height: 270px;
+    width: 300px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #2e8dfa;
+    z-index: 10;
+    gap: 30px;
+}
+
+.btn-pay {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+}
+
+.btn-pay:hover {
+    background: #2980b9;
+}
+
 /*=====================================================
     12. NEWS css 
 ======================================================*/
@@ -2074,8 +2098,8 @@ p {
 }
 .back-to-top {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
+    right: 31px;
+    bottom: 95px;
     width: 40px;
     height: 40px;
     line-height: 35px;

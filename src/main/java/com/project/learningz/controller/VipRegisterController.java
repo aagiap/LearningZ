@@ -139,6 +139,7 @@ public class VipRegisterController {
     @GetMapping("/momo-callback")
     public String handleCallbackMomo(
             @RequestParam(value = "resultCode", required = false) String resultCode,
+            @RequestParam(value = "message", required = false) String message,
             @RequestParam(value = "orderId", required = false) String orderId,
             @RequestParam(value = "orderInfo", required = false) String orderInfo,
             @RequestParam(value = "amount", required = false) String amount,
@@ -148,6 +149,7 @@ public class VipRegisterController {
             RedirectAttributes redirectAttributes) {
         try {
             System.out.println("MoMo Result Code: " + resultCode);
+            System.out.println("MoMo message: " + message);
             System.out.println("Received orderId in callback: " + orderId);
             System.out.println("MoMo Callback Triggered: orderId=" + orderId + ", resultCode=" + resultCode);
             Integer vipPackageId = (Integer) session.getAttribute("vipPackageId");
@@ -162,8 +164,9 @@ public class VipRegisterController {
             //if(1==1){
                 User userLoggin = userService.findByUsername(username);
                 VipPackage vipPackage = vipPackageService.getVipPackageById(vipPackageId);
-
-                userLoggin.setRole(Role.VIP_STUDENT);
+                if(userLoggin.getRole() == Role.STUDENT){
+                    userLoggin.setRole(Role.VIP_STUDENT);
+                }
                 userService.save(userLoggin);
                 UserMembership userMembership = new UserMembership();
                 userMembership.setUser(userLoggin);
@@ -177,6 +180,7 @@ public class VipRegisterController {
                 model.addAttribute("error", "Payment failed!");
             }
             model.addAttribute("orderId", orderId);
+            model.addAttribute("message", message);
             model.addAttribute("resultCode", resultCode);
             model.addAttribute("orderInfo", orderInfo);
             model.addAttribute("amount", amount);

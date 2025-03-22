@@ -4,15 +4,14 @@ import com.project.learningz.entity.User;
 import com.project.learningz.service.EmailService;
 import com.project.learningz.service.UserRegisterAccountService;
 import com.project.learningz.service.UserService;
+import com.project.learningz.utils.Utility;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,10 +40,6 @@ public class ForgotPasswordController {
 
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/home";
-        }
         return "auth/forgot_password_form";
     }
 

@@ -200,11 +200,18 @@ public class QuizzezForTeacherController {
     @PostMapping("/{quizId}/{questionId}/updateQuestion")
     public String updateQuestions(@PathVariable Integer quizId,
                                   @PathVariable Integer questionId,
+                                  @ModelAttribute QuestionDetailDTO question,
                                   RedirectAttributes redirectAttributes) {
 
-        QuestionBank question = questionService.getQuestionBankById(questionId);
+        QuestionBank updatedQuestion = questionService.getQuestionBankById(questionId);
+        updatedQuestion.setContent(question.getContent());
+        updatedQuestion.setCorrectOption(question.getCorrectOption());
+        updatedQuestion.setOption1(question.getOption1());
+        updatedQuestion.setOption2(question.getOption2());
+        updatedQuestion.setOption3(question.getOption3());
+        updatedQuestion.setOption4(question.getOption4());
         try {
-            questionService.updateQuestion(question);
+            questionService.updateQuestion(updatedQuestion);
             redirectAttributes.addFlashAttribute("successMessage", "Question updated successfully.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Question not found.");
@@ -297,6 +304,8 @@ public class QuizzezForTeacherController {
         Course course = chapter.getCourse();
         Grade grade = course.getGrade();
         Subject subject = course.getSubject();
+        Integer maxQuestionsInQuiz = questionService.getMaxQuestionsInQuiz();
+
         if (numQuizzes == quizService.getMaxQuizInLesson()) {
             attributes.addFlashAttribute("errorMessage", "This lesson has already reached the maximum number of quizzes. Cannot create a new one.");
             return "redirect:/teacher/" + lessonId + "/quizzes";
@@ -309,6 +318,7 @@ public class QuizzezForTeacherController {
         model.addAttribute("grade", grade);
         model.addAttribute("subject", subject);
         model.addAttribute("user", user1);
+            model.addAttribute("maxQuestionsInQuiz", maxQuestionsInQuiz);
 
         return "teacherPage/quizzesCreate";
     }
@@ -361,6 +371,58 @@ public class QuizzezForTeacherController {
         }
         attributes.addFlashAttribute("successMessage", "Quiz has created successfully");
         attributes.addFlashAttribute("lessonId", lessonId);
+        return "redirect:/teacher/" + lessonId + "/quizzes";
+    }
+
+    @GetMapping("/{lessonId}/{quizId}")
+    public String getDetailQuiz(@PathVariable Integer quizId,
+                                @PathVariable Integer lessonId,
+                                @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                @AuthenticationPrincipal OAuth2User userOAuth2,
+                                Model model) {
+        String username = null;
+
+        if (user != null) {
+            username = user.getUsername();
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userManagementService.findUserNameByEmail(email);
+        }
+        String avatarUrl = userManagementService.getAvtByUsername(username);
+        if (avatarUrl == null) {
+            avatarUrl = "/image/AvartaDefault.jpg";
+        }
+        User user1 = userManagementService.findUserByUsername(username);
+
+        QuizDetailDTO quizDetailDTO = quizService.getQuizDetailById(quizId);
+
+
+        model.addAttribute("username", username);
+        model.addAttribute("avatarUrl", avatarUrl);
+        model.addAttribute("quizId", quizId);
+        model.addAttribute("lessonId", lessonId);
+        model.addAttribute("quiz", quizDetailDTO);
+        model.addAttribute("user", user1);
+
+        return "teacherPage/quizDetail";
+    }
+
+    @PostMapping("/{lessonId}/{quizId}/updateQuiz")
+    public String updateQuizzes(@PathVariable Integer quizId,
+                                @PathVariable Integer lessonId,
+                                @ModelAttribute QuizDetailDTO quiz,
+                                RedirectAttributes redirectAttributes) {
+
+        Quiz updatedQuiz = quizService.getQuizById(quizId);
+        updatedQuiz.setTitle(quiz.getTitle());
+        updatedQuiz.setTimeLimit(quiz.getTimeLimit());
+        updatedQuiz.setTotalQuestions(quiz.getTotalQuestions());
+        try {
+            quizService.updateQuiz(updatedQuiz);
+            redirectAttributes.addFlashAttribute("successMessage", "Quiz updated successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Question not found.");
+        }
         return "redirect:/teacher/" + lessonId + "/quizzes";
     }
 

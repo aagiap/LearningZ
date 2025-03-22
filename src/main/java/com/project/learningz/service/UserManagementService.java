@@ -152,11 +152,17 @@ public class UserManagementService {
         return userRepository.countTeacherUsers();
     }
 
-    public List<User> getTenLatestUsers() {
-        return userRepository.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"))).getContent();
+    public List<User> getFiveLatestUsers() {
+        return userRepository.findAll(PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"))).getContent();
     }
 
+    public Long countActiveUsersByStatus() {
+        return userRepository.countActiveUsers();
+    }
 
+    public Long countInactiveUsersByStatus() {
+        return userRepository.countBannedUsers();
+    }
 
 
 }

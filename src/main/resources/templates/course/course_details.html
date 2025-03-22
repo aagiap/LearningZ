@@ -504,24 +504,35 @@
                             </div>
                         </div>
 
+                        <div class="container mt-2" th:if="${not #lists.isEmpty(course.chapters)
+                                   and not #lists.isEmpty(course.chapters[0].lessons)
+                                   and not #lists.isEmpty(course.chapters[0].lessons[0].videos)
+                                   and course.chapters[0].lessons[0].videos[0] != null}">
+                            <h4 class="mb-2 mt-3">Preview a material</h4>
+                            <main class="main-content" style="text-align: center; margin-top: 5px;">
+                                <div class="content-grid" id="videoContainer">
+                                    <iframe id="videoPlayer"
+                                            th:src="@{${course.chapters[0].lessons[0].videos[0].getFileUrl()}}"
+                                            width="800"
+                                            height="400"
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </main>
+                        </div>
 
                     </div>
 
-
                 </div>
-
 
             </div>
 
-
             <div class="col-lg-3 col-md-6 shadow wow fadeInUp" data-wow-delay="0.3s">
-
 
                 <div class="image text-center mt-3">
                     <img class="img-fluid" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
                 </div>
                 <br>
-
 
                 <div class="buttons">
                     <!--                    <div th:if="${!isEnrolled}">-->
@@ -586,8 +597,6 @@
                     <div class="list1 d-flex justify-content-between pt-2 border-bottom">
                         <p><i class="fa fa-star text-warning"></i> Rating</p>
                         <p th:text="${averageRatings[course.id] ?: 0} + '/5'">0.0/5</p>
-
-
                     </div>
                     <div class="list2 d-flex justify-content-between pt-2 border-bottom">
                         <p><i class="fa fa-brands fa-stack-overflow"></i> Chapters</p>
@@ -611,12 +620,12 @@
                     </div>
                     <div class="list5 d-flex justify-content-between pt-2 border-bottom">
                         <p><i class="fa fa-list"></i> Level</p>
-                        <div th:switch="${course.grade.id}">
-                            <p th:case="1">Grade 10</p>
-                            <p th:case="2">Grade 11</p>
-                            <p th:case="3">Grade 12</p>
-                            <p th:case="*">Liberty</p>
+                        <div>
+                            <p th:text="${course.grade.name}">Liberty</p>
                         </div>
+                    </div>
+                    <div class="button pt-4 text-center mb-4">
+                        <i class="fa fa-share mr-1"></i><a href="" onclick="copyToClipboard()"> Share this Course</a>
                     </div>
                 </div>
 
@@ -1092,9 +1101,32 @@
                 .catch(error => console.error("An error was happened", error));
         }
     }
+
 </script>
+<script>
+    function copyToClipboard() {
+        // Lấy đường link hiện tại
+        var url = window.location.href;
 
+        // Tạo một input ẩn để copy
+        var tempInput = document.createElement("input");
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
 
+        // Chọn và sao chép nội dung
+        tempInput.select();
+        tempInput.setSelectionRange(0, 99999); // Cho mobile
+
+        // Thực hiện copy
+        document.execCommand("copy");
+
+        // Xóa input tạm
+        document.body.removeChild(tempInput);
+
+        // Hiển thị thông báo
+        alert("The link was copied to clipboard: " + url);
+    }
+</script>
 </body>
 </html>
 

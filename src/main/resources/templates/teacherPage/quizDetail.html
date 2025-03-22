@@ -3,7 +3,7 @@
 <head>
     <!-- Title Meta -->
     <meta charset="utf-8"/>
-    <title>Create Question</title>
+    <title>Quiz Detail</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A fully responsive premium admin dashboard template"/>
     <meta name="author" content="Techzaa"/>
@@ -24,13 +24,8 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-        .btn {
-            border-radius: 8px;
-        }
-
-        .sub-navbar-nav li {
-            margin-left: 40px; /* Thụt vào từng mục */
-            list-style-type: none; /* Bỏ dấu chấm mặc định */
+        .form-group label {
+            padding-left: 10px; /* Đẩy label vào trong */
         }
 
         h3 {
@@ -327,103 +322,91 @@
     <!-- Start right Content here -->
     <!-- ==================================================== -->
     <div class="page-content">
-
-        <!-- Start Container Fluid -->
         <div class="container-fluid" style="padding-top: 50px">
+            <div class="form-wrapper">
+                <h2 class="text-center">Quiz Detail</h2>
 
-            <div th:if="${errorMessage}" class="alert alert-danger">
-                <span th:text="${errorMessage}"></span>
-            </div>
+                <form th:object="${quiz}" method="post"
+                      th:action="@{/teacher/{lessonId}/{quizId}/updateQuiz(quizId=${quizId}, lessonId=${lessonId})}"
+                      enctype="multipart/form-data">
 
-            <div th:if="${successMessage}" class="alert alert-success">
-                <span th:text="${successMessage}"></span>
-            </div>
-
-            <div class="add-user-form">
-                <h4 class="form-title">Add New User</h4>
-                <form th:action="@{/teacher/{quizId}/createQuestion(quizId=${currentQuiz.quizId})}" method="post">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="content" class="form-label">Content</label>
-                                <input type="text" class="form-control" id="content" name="content" required
-                                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                                       oninput="this.setCustomValidity('')">
+                            <div class="form-section">
+                                <div class="form-group mb-3">
+                                    <label>Title</label>
+                                    <input th:field="*{title}" type="text" class="form-control" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Time limit</label>
+                                    <input th:field="*{timeLimit}" type="text" class="form-control" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Total questions</label>
+                                    <input th:field="*{totalQuestions}" type="text" class="form-control" readonly
+                                           required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Lesson</label>
+                                    <input th:field="*{lessonTitle}" type="text" class="form-control" readonly required>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="option1" class="form-label">Correct Option</label>
-                                <input type="text" class="form-control" id="option1" name="option1" required
-                                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                                       oninput="this.setCustomValidity('')">
-                            </div>
-                            <div class="mb-3">
-                                <label for="option2" class="form-label">Option 2</label>
-                                <input type="text" class="form-control" id="option2" name="option2" required
-                                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                                       oninput="this.setCustomValidity('')">
-                            </div>
-                            <div class="mb-3">
-                                <label for="option3" class="form-label">Option 3</label>
-                                <input type="text" class="form-control" id="option3" name="option3" required
-                                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                                       oninput="this.setCustomValidity('')">
-                            </div>
-                            <div class="mb-3">
-                                <label for="option4" class="form-label">Option 4</label>
-                                <input type="text" class="form-control" id="option4" name="option4" required
-                                       oninvalid="this.setCustomValidity('Please fill in this field')"
-                                       oninput="this.setCustomValidity('')">
-                            </div>
-
                         </div>
 
+
+                        <!-- Cột Phải -->
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="lessonTitle" class="form-label">Lesson Title</label>
-                                <input type="text" class="form-control" th:value="${currentQuiz.lessonTitle}" id="lessonTitle" name="lessonTitle" readonly required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="chapterTitle" class="form-label">Chapter Title</label>
-                                <input type="text" class="form-control" th:value="${currentQuiz.chapterTitle}" id="chapterTitle" name="chapterTitle" readonly required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="courseTitle" class="form-label">Course Title</label>
-                                <input type="text" class="form-control" th:value="${currentQuiz.courseTitle}" id="courseTitle" name="courseTitle" readonly required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="grade" class="form-label">Grade</label>
-                                <input type="text" class="form-control" th:value="${currentQuiz.grade}" id="grade" name="grade" readonly required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="subject" class="form-label">Subject</label>
-                                <input type="text" class="form-control" th:value="${currentQuiz.subject}" id="subject" name="grade" readonly required>
+                            <div class="form-section">
+                                <div class="form-group mb-3">
+                                    <label>Chapter</label>
+                                    <input th:field="*{chapterTitle}" type="text" class="form-control" readonly
+                                           required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Subject</label>
+                                    <input th:field="*{subject}" type="text" class="form-control" readonly required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Grade</label>
+                                    <input th:field="*{grade}" type="text" class="form-control" readonly required>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>Course</label>
+                                    <input th:field="*{courseTitle}" type="text" class="form-control" required>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-actions text-center mt-4">
-                            <button type="button" class="btn btn-secondary"
-                                    style="background-color: #ccc; color: #ffc107"
-                                    th:onclick="history.back()">
-                                Cancel
-                            </button>
-                            <button type="submit" class="btn btn-info"
-                                    style="background-color: #ffc107; color:#fbf8f8;">Save
-                            </button>
-                        </div>
-
                     </div>
+
+                    <!-- Nút hành động -->
+                    <div class="form-actions text-center mt-4">
+                        <button type="button" class="btn btn-secondary" style="background-color: #ccc; color: #806412"
+                                th:onclick="window.history.back()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-info" style="background-color: #ffc107; color:#fbf8f8;">
+                            Save
+                        </button>
+                    </div>
+
                 </form>
             </div>
 
         </div>
-        <!-- End Container Fluid -->
-
     </div>
-    <!-- ==================================================== -->
-    <!-- End Page Content -->
-    <!-- ==================================================== -->
+
 
 </div>
+
+<!-- ==================================================== -->
+<!-- End Page Content -->
+<!-- ==================================================== -->
+
+
+</div>
+
+
 <!-- END Wrapper -->
 
 <script>
@@ -460,3 +443,4 @@
 
 </body>
 </html>
+

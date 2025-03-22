@@ -7,6 +7,8 @@ import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -170,5 +172,12 @@ public class UserService {
             return true;
         }
         return false;
+    }
+    public List<User> getTopTeachers() {
+        Pageable topFour = PageRequest.of(0, 4);
+        List<Object[]> results = userRepository.findTopTeachers(topFour);
+        return results.stream()
+                .map(result -> (User) result[0])
+                .toList();
     }
 }

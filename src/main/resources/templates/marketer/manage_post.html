@@ -3,7 +3,7 @@
 <head>
     <!-- Title Meta -->
     <meta charset="utf-8" />
-    <title>Slider List</title>
+    <title>Reported Post</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A fully responsive premium admin dashboard template" />
     <meta name="author" content="Techzaa" />
@@ -243,7 +243,24 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoupons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCoupons">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:leaf-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Coupons </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoupons">
+                        <ul class="nav sub-navbar-nav">
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/coupon">List</a>
+                            </li>
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/add_coupon">Add</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarInvoice" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoice">
                                    <span class="nav-icon">
@@ -280,10 +297,6 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center gap-1">
                             <h4 class="card-title flex-grow-1">All Slider List</h4>
-
-                            <a href="/marketer/add_slider" class="btn btn-sm btn-primary">
-                                Add Slider
-                            </a>
                         </div>
                         <div>
                             <div class="table-responsive">
@@ -342,27 +355,51 @@
                         </div>
 
                         <div class="card-footer border-top">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end mb-0">
-                                    <li class="page-item" th:if="${currentPage > 0}">
-                                        <a class="page-link" th:href="@{/marketer/report/post(page=${currentPage - 1})}">
-                                            Previous
-                                        </a>
-                                    </li>
+                            <div th:if="${hasResults}">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-end mb-0">
+                                        <!-- Nút "First" -->
+                                        <li class="page-item" th:if="${currentPage > 1}">
+                                            <a class="page-link" th:href="@{/marketer/report/post(page=0)}">
+                                                <<
+                                            </a>
+                                        </li>
 
-                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                        class="page-item"
-                                        th:classappend="${i == currentPage} ? 'active'">
-                                        <a class="page-link" th:href="@{/marketer/report/post(page=${i})}" th:text="${i + 1}"></a>
-                                    </li>
+                                        <!-- Nút "Previous" -->
+                                        <li class="page-item" th:if="${currentPage > 0}">
+                                            <a class="page-link" th:href="@{/marketer/report/post(page=${currentPage - 1})}">
+                                                <
+                                            </a>
+                                        </li>
 
-                                    <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                                        <a class="page-link" th:href="@{/marketer/report/post(page=${currentPage + 1})}">
-                                            Next
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                                        <!-- Hiển thị số trang (giới hạn 5 trang quanh trang hiện tại) -->
+                                        <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                                            th:if="${i >= 0 and i < totalPages}"
+                                            th:class="'page-item ' + (${i == currentPage} ? 'active' : '')">
+                                            <a class="page-link" th:href="@{/marketer/report/post(page=${i})}" th:text="${i + 1}"></a>
+                                        </li>
+
+                                        <!-- Nút "Next" -->
+                                        <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                                            <a class="page-link" th:href="@{/marketer/report/post(page=${currentPage + 1})}">
+                                                >
+                                            </a>
+                                        </li>
+
+                                        <!-- Nút "Last" -->
+                                        <li class="page-item" th:if="${currentPage < totalPages - 2}">
+                                            <a class="page-link" th:href="@{/marketer/report/post(page=${totalPages - 1})}">
+                                                >>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                            <!-- Hiển thị thông báo nếu không có bài viết nào bị report -->
+                            <div th:if="${not hasResults}" class="text-center text-muted py-3">
+                                No posts have been reported.
+                            </div>
                         </div>
                     </div>
                 </div>

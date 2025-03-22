@@ -3,6 +3,7 @@ package com.project.learningz.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import com.project.learningz.service.MonthlyStatisticService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.RequestCache;
@@ -17,11 +18,15 @@ public class LoginController {
     @Autowired
     private RequestCache requestCache;
 
+    @Autowired
+    private MonthlyStatisticService monthlyStatisticService;
+
     @GetMapping("/login")
     public String loginPage(Model model, HttpServletRequest request,
                             @RequestParam(value = "error", required = false) String error) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            monthlyStatisticService.updateMonthlyStatistic();
             return "redirect:/home";
         }
 
