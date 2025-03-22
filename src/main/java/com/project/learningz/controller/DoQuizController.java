@@ -99,7 +99,9 @@ public class DoQuizController {
     }
 
     @GetMapping("/DoQuiz")
-    public String doQuiz(@RequestParam("quizId") Integer quizId, Model model, HttpSession session) {
+    public String doQuiz(@RequestParam("quizId") Integer quizId, Model model, HttpSession session,
+                         @AuthenticationPrincipal User user,
+                         @AuthenticationPrincipal OAuth2User userOAuth2) {
 
         Quiz quiz = quizService.getQuizById(quizId);
         List<QuestionBank> questionBankList = quizQuestionBankService.findQuestionBankByQuizId(quizId);
@@ -109,6 +111,23 @@ public class DoQuizController {
         model.addAttribute("timeLimitSeconds", timeLimitSeconds);
         session.setAttribute("quiz", quiz);
 
+        String username = null;
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
+        }
+        Course course = quiz.getLesson().getChapter().getCourse();
+        Integer courseId = quiz.getLesson().getChapter().getCourse().getId();
+        Boolean isEnrolled = usersCourseService.checkUserEnrolled(username, courseId);
+        if (!isEnrolled) {
+            model.addAttribute("quiz", quiz);
+            model.addAttribute("course", course);
+            return "quiz/quiz-warning";
+        }
 //        if(session.getAttribute("questionBankList")!=null){
 //            model.addAttribute("questionBankList", (List<QuestionBank>) session.getAttribute("questionBankList"));
 //        }else{
@@ -209,6 +228,16 @@ public class DoQuizController {
         model.addAttribute("avatarUrl", avatarUrl);
         quizResultService.saveResult(userId, quiz.getId(), score);
 
+
+
+        Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
+        for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
+            if (entry.getKey().equals(quiz.getId())) {
+                quizHistory.remove(entry.getKey());
+                session.setAttribute("quizHistory", quizHistory);
+                break;
+            }
+        }
 
         model.addAttribute("score", score);
         model.addAttribute("correctAnswers", correctAnswers);

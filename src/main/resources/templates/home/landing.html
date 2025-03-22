@@ -913,7 +913,19 @@
 
 
 
+<script>
+  window.onload = function() {
+    myFunction();
+  };
 
+  function myFunction() {
+
+    localStorage.removeItem("quiz_answers");
+    localStorage.removeItem("selectedBoxes");
+    localStorage.removeItem("quizTimers");
+
+  }
+</script>
 
 
 
