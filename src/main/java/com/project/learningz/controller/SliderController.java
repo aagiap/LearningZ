@@ -100,6 +100,7 @@ public class SliderController {
             sliderPage = sliderService.searchSliders(keyword, page, size);
         }
 
+
         getAuthenticatedUserInfo(model);
         model.addAttribute("sliders", sliderPage.getContent());
         model.addAttribute("currentPage", page);
@@ -125,8 +126,13 @@ public class SliderController {
             @RequestParam("img") MultipartFile imgFile,
             @RequestParam("status") boolean status,
             @RequestParam(value = "backlink", required = false) String backlink,
+            RedirectAttributes redirectAttributes,
             Model model) {
         try {
+            if (status && sliderService.isSliderLimitExceeded()) {
+                redirectAttributes.addFlashAttribute("errorMessage1", "Không thể hiển thị slider, đã đạt giới hạn tối đa!");
+                return "redirect:/marketer/add_slider";
+            }
             String imageUrl = googleDriveService.uploadBannerFile(imgFile);
 
             Slider slider = new Slider();
@@ -140,7 +146,7 @@ public class SliderController {
             return REDIRECT_SLIDERS;
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
-            model.addAttribute("error", "Lỗi khi tải ảnh hoặc lưu slider!");
+            model.addAttribute("error", "Error when uploading image or edit slider");
             return "marketer/add_slider";
         }
     }
@@ -165,9 +171,15 @@ public class SliderController {
                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                              @RequestParam(value = "status", defaultValue = "false") boolean status,
                              @RequestParam(value = "backlink", required = false) String backlink,
-                             @RequestParam(value = "page", defaultValue = "1") int page) {
+                             @RequestParam(value = "page", defaultValue = "1") int page,
+                             RedirectAttributes redirectAttributes) {
         try {
             Slider existingSlider = sliderService.getSliderById(sliderId);
+            boolean isCurrentlyHidden = existingSlider.getStatus() == null || !existingSlider.getStatus();
+            if (isCurrentlyHidden && sliderService.isSliderLimitExceeded()) {
+                redirectAttributes.addFlashAttribute("errorMessage1", "Không thể hiển thị slider, đã đạt giới hạn tối đa!");
+                return "redirect:/marketer/slider?page=" + page;
+            }
             String oldImageUrl = existingSlider.getImageUrl();
 
             existingSlider.setTitle(title);
@@ -213,10 +225,24 @@ public class SliderController {
 
     // Ẩn/Hiện slider
     @GetMapping("/slider/toggleVisibility/{id}")
-    public String toggleSliderVisibility(@PathVariable Integer id, @RequestParam(defaultValue = "0") int page) {
+    public String toggleSliderVisibility(@PathVariable Integer id,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         RedirectAttributes redirectAttributes) {
+        Slider slider = sliderService.getSliderById(id);
+        if (slider == null) {
+            redirectAttributes.addFlashAttribute("errorMessage1", "Slider không tồn tại!");
+            return "redirect:/marketer/slider?page=" + page;
+        }
+        boolean isCurrentlyHidden = slider.getStatus() == null || !slider.getStatus();
+        if (isCurrentlyHidden && sliderService.isSliderLimitExceeded()) {
+            redirectAttributes.addFlashAttribute("errorMessage1", "Không thể hiển thị slider, đã đạt giới hạn tối đa!");
+            return "redirect:/marketer/slider?page=" + page;
+        }
         sliderService.toggleVisibility(id);
         return "redirect:/marketer/slider?page=" + page;
     }
+
+
     @GetMapping("/report/post")
     public String showReportedPosts(@RequestParam(defaultValue = "0") int page, Model model) {
         int size = 2;

@@ -1,7 +1,10 @@
 package com.project.learningz.service;
 
 import com.project.learningz.entity.Slider;
+import com.project.learningz.entity.SystemSetting;
+import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.SliderRepository;
+import com.project.learningz.repository.SystemSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ public class SliderService {
 
     @Autowired
     private SliderRepository sliderRepository;
+    @Autowired
+    private SystemSettingRepository systemSettingRepository;
 
     public List<Slider> getAllSliders() {
         return sliderRepository.findAll();
@@ -69,6 +74,15 @@ public class SliderService {
         }
 
         return sliderRepository.searchByTitleOrDescription(keyword, pageable);
+    }
+    public Integer getMaxVisibleSlider() {
+        SystemSetting systemSetting = systemSettingRepository.findBySettingName("Max ad show");
+        return systemSetting.getSettingValue();
+    }
+    public boolean isSliderLimitExceeded() {
+        int maxVisibleSlider = getMaxVisibleSlider();
+        long activeSliderCount = sliderRepository.countByStatus(true);
+        return activeSliderCount >= maxVisibleSlider;
     }
 
 }

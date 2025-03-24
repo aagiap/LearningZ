@@ -17,7 +17,7 @@ public interface SliderRepository extends JpaRepository<Slider, Integer> {
             "LOWER(s.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(s.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Slider> searchByTitleOrDescription(@Param("keyword") String keyword, Pageable pageable);
-
+    long countByStatus(boolean status);
 }
 
 

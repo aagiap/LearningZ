@@ -930,6 +930,7 @@ p {
     z-index: 5;
     overflow: hidden;
     margin-top: -62px;
+    margin-left: 60px;
 }
 .slider-cont h1 {
     font-size: 45px;
