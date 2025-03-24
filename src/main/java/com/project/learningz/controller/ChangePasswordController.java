@@ -74,16 +74,25 @@ public class ChangePasswordController {
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             model.addAttribute("error", "Incorrect current password");
+            model.addAttribute("username", username);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("user", user);
             return "/profile/change_password";
         }
 
         if (newPassword.length() < 6) {
             model.addAttribute("error", "Password must be at least 6 characters long");
+            model.addAttribute("username", username);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("user", user);
             return "/profile/change_password";
         }
 
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "New passwords do not match");
+            model.addAttribute("username", username);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("user", user);
             return "/profile/change_password";
         }
 
