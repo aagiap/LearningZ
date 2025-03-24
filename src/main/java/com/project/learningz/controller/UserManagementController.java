@@ -93,26 +93,21 @@ public class UserManagementController {
         if (avatarUrl == null) {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
-        long sumOfUsers = userManagementService.getNumberOfUsers();
-        long sumOfSuperAdmin = userManagementService.getNumberOfAdminSuperUsers();
-        long sumOfAdminUsers = userManagementService.getNumberOfAdminUserManageUsers();
-        long sumOfAdminCourses = userManagementService.getNumberOfAdminCourseManageUsers();
         long sumOfVipUsers = userManagementService.getNumberOfVipUsers();
         long sumOfCasualUsers = userManagementService.getNumberOfCasualStudentUsers();
-        long sumOfTeacherUsers = userManagementService.getNumberOfTeacherUsers();
-        long sumOfMarketerUsers = userManagementService.getNumberOfMarketerUsers();
-        List<User> usersLatest = userManagementService.getFiveLatestUsers();
+        long sumOfStudentUsers = sumOfVipUsers + sumOfCasualUsers;
+        long sumOfActiveUsers = userManagementService.countActiveStudents();
+        long sumOfInactiveUsers = userManagementService.countInactiveStudents();
+        List<User> usersLatest = userManagementService.getFiveLatestStudentUsers();
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
-        model.addAttribute("sumOfUsers", sumOfUsers);
+        model.addAttribute("sumOfStudentUsers", sumOfStudentUsers);
         model.addAttribute("users", usersLatest);
-        model.addAttribute("sumOfSuperAdmin", sumOfSuperAdmin);
         model.addAttribute("sumOfVipUsers", sumOfVipUsers);
         model.addAttribute("sumOfCasualUsers", sumOfCasualUsers);
-        model.addAttribute("sumOfTeacherUsers", sumOfTeacherUsers);
-        model.addAttribute("sumOfMarketerUsers", sumOfMarketerUsers);
-        model.addAttribute("sumOfAdminCourses", sumOfAdminCourses);
-        model.addAttribute("sumOfAdminUsers", sumOfAdminUsers);
+        model.addAttribute("sumOfActiveUsers", sumOfActiveUsers);
+        model.addAttribute("sumOfInactiveUsers", sumOfInactiveUsers);
+
         return "user_management/user_dashboard";
     }
 

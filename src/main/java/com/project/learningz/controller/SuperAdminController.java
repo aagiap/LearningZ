@@ -63,7 +63,7 @@ public class SuperAdminController {
             role = Role.valueOf(roleStr.toUpperCase());
             users = userManagementService.searchUsersSorted(role, keyword, sortField, order);
         } catch (IllegalArgumentException e) {
-            users = userManagementService.getAllUsersByKeyword(keyword, sortField, order);
+            users = userManagementService.getAllUsersByKeywordAdmin(keyword, sortField, order);
         }
 
 

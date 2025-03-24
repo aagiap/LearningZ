@@ -23,53 +23,6 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-
-        .warning-about-course {
-            background-color: #ffebcc; /* Màu nền cam nhạt */
-            color: #7a4100; /* Màu chữ cam đậm */
-            padding: 20px;
-            border: 2px solid #ff9800; /* Viền cam nổi bật */
-            border-radius: 10px; /* Bo góc mềm mại */
-            margin: 15px 0;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bóng đổ làm nổi khối */
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .warning-about-course:hover {
-            transform: scale(1.02); /* Hiệu ứng phóng to nhẹ khi hover */
-        }
-
-        .warning-about-course p {
-            margin: 10px 0;
-        }
-
-        .warning-about-course span {
-            font-size: 22px; /* Chữ to hơn */
-            font-weight: bold; /* In đậm */
-            color: #d84315; /* Màu đỏ cam nổi bật */
-        }
-
-        .warning-about-course a {
-            color: #d84315;
-            font-weight: bold;
-            text-decoration: none;
-            border-bottom: 2px solid #d84315; /* Gạch chân dạng viền dưới */
-            padding-bottom: 2px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .warning-about-course a:hover {
-            color: white;
-            background-color: #d84315; /* Màu nền cam khi hover */
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-
-
-
         /* Tổng container */
         .summary-container {
             display: flex;
@@ -103,17 +56,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 40px;
         }
 
         #userChartRole {
-            width: 500px !important;
-            height: 500px !important;
+            width: 300px !important;
+            height: 300px !important;
         }
 
-        #courseChart {
-            width: 450px !important;
-            height: 450px !important;
-        }
 
         /* Danh sách user, chiếm 1 phần */
         .detail-user {
@@ -121,7 +71,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding-top: 50px;
+            padding-top: 100px;
         }
 
         /* Thẻ user */
@@ -138,89 +88,18 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* Hover hiệu ứng nổi lên */
-        .detail-user a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Danh sách user, chiếm 1 phần */
-        .detail-course {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding-top: 170px;
-        }
-
-        /* Thẻ user */
-        .detail-course a {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            color: black;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        /* Hover hiệu ứng nổi lên */
-        .detail-course a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        }
-
         /* Màu nền cho từng loại user */
         .all-user {
-            background: #0fedc5;
+            background: #0f77ed;
             color: white;
         }
 
-        .role-1 {
+        .role-3 {
             background: #FFADAD;
         }
 
-        .role-2 {
-            background: #FDFFB6;
-        }
-
-        .role-admin {
-            background: #FFD6A5;
-        }
-
-        .role-3 {
-            background: #CAFFBF;
-        }
-
         .role-4 {
-            background: #9BF6FF;
-        }
-
-        .role-5 {
-            background: #A0C4FF;
-        }
-
-        .role-6 {
             background: #BDB2FF;
-        }
-
-        .all-course{
-            background: #8e7df4;
-        }
-
-        .inactive-course{
-            background: #d3c8c8;
-        }
-
-        .active-course{
-            background: #27e349;
-        }
-
-        .pending-course{
-            background: #f8d838;
         }
 
         /* ====== Tổng thể Container ====== */
@@ -283,35 +162,6 @@
             background: #eceff3;
         }
 
-        /* ====== Hover trên hàng ====== */
-        /*.table tbody tr:hover {*/
-        /*    background: rgba(0, 123, 255, 0.1);*/
-        /*    transition: 0.3s ease-in-out;*/
-        /*}*/
-
-        /* ====== Badge trạng thái ====== */
-        .badge {
-            padding: 6px 10px;
-            border-radius: 12px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .badge-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-warning {
-            background: #ffc107;
-            color: black;
-        }
-
-        .badge-danger {
-            background: #dc3545;
-            color: white;
-        }
-
 
         /* Responsive bảng trên màn hình nhỏ */
         @media screen and (max-width: 768px) {
@@ -324,7 +174,6 @@
                 padding: 8px;
             }
         }
-
 
 
     </style>
@@ -581,14 +430,15 @@
                                     <span class="nav-text">📋 List </span>
                                 </a>
                                 <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">All Users</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Super Admin</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Users Manager</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Courses Manager</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">VIP Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Casual Students</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Teachers</a></li>
-                                    <li><a class="sub-nav-link" th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}" style="color: rgba(216, 223, 13, 0.93);">Marketers</a></li>
+                                    <li><a class="sub-nav-link"
+                                           th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                           style="color: rgba(216, 223, 13, 0.93);">All Student Users</a></li>
+                                    <li><a class="sub-nav-link"
+                                           th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                           style="color: rgba(216, 223, 13, 0.93);">VIP Students</a></li>
+                                    <li><a class="sub-nav-link"
+                                           th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                           style="color: rgba(216, 223, 13, 0.93);">Casual Students</a></li>
                                 </ul>
                             </li>
 
@@ -614,7 +464,7 @@
             <div class="summary-container">
                 <div class="summary-card">
                     <div class="chart-container">
-                        <h3 style="margin-bottom: 40px">Pie chart for User Management</h3>
+                        <h3>Pie chart for Student Management</h3>
                         <canvas id="userChartRole"></canvas>
                     </div>
 
@@ -622,18 +472,7 @@
                     <div class="detail-user">
                         <a th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                            class="all-user">
-                            Total: <span th:text="${sumOfUsers}"></span>
-                        </a>
-                        <a th:href="@{/admin/users/dashboard}" class="role-card role-1">
-                            Admin: <span th:text="${sumOfSuperAdmin}"></span>
-                        </a>
-                        <a th:href="@{/admin/users/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           class="role-card role-admin">
-                            User Manager: <span th:text="${sumOfAdminUsers}"></span>
-                        </a>
-                        <a th:href="@{/admin/users/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           class="role-card role-2">
-                            Course Manager: <span th:text="${sumOfAdminCourses}"></span>
+                            Total: <span th:text="${sumOfStudentUsers}"></span>
                         </a>
                         <a th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                            class="role-card role-3">
@@ -643,21 +482,14 @@
                            class="role-card role-4">
                             Casual Student: <span th:text="${sumOfCasualUsers}"></span>
                         </a>
-                        <a th:href="@{/admin/users/userlist_role(role='TEACHER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           class="role-card role-5">
-                            Teacher: <span th:text="${sumOfTeacherUsers}"></span>
-                        </a>
-                        <a th:href="@{/admin/users/userlist_role(role='MARKETING_TEAM', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                           class="role-card role-6">
-                            Marketer: <span th:text="${sumOfMarketerUsers}"></span>
-                        </a>
                     </div>
+
                 </div>
             </div>
 
             <div class="summary-container-table">
                 <div class="latest-user">
-                    <p>The 5 most recently registered accounts</p>
+                    <p>The 5 most recently registered student accounts</p>
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
@@ -688,25 +520,20 @@
 <!-- END Wrapper -->
 
 <script th:inline="javascript">
-        var userDataRole = [
-        /*[[${sumOfSuperAdmin}]]*/ 0,
-        /*[[${sumOfAdminUsers}]]*/ 0,
-        /*[[${sumOfAdminCourses}]]*/ 0,
+    var userDataRole = [
         /*[[${sumOfVipUsers}]]*/ 0,
-        /*[[${sumOfCasualUsers}]]*/ 0,
-        /*[[${sumOfTeacherUsers}]]*/ 0,
-        /*[[${sumOfMarketerUsers}]]*/ 0
-        ];
+        /*[[${sumOfCasualUsers}]]*/ 0
+    ];
 </script>
 
 <script>
     var userChartRole = new Chart(document.getElementById('userChartRole').getContext('2d'), {
         type: 'pie',
         data: {
-            labels: ['Admin', 'User Manager', 'Course Manager', 'VIP Student', 'Casual Student', 'Teacher', 'Marketer'],
+            labels: ['VIP Student', 'Casual Student'],
             datasets: [{
                 data: userDataRole,
-                backgroundColor: ['#FFADAD', '#FFD6A5', '#FDFFB6', '#CAFFBF', '#9BF6FF', '#A0C4FF', '#BDB2FF']
+                backgroundColor: ['#FFADAD', '#BDB2FF']
             }]
         },
         options: {
@@ -730,7 +557,6 @@
             }
         }
     });
-
 </script>
 </script>
 <!-- Vendor Javascript (Require in all Page) -->

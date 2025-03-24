@@ -3,6 +3,7 @@ package com.project.learningz.repository;
 import com.project.learningz.constant.Role;
 import com.project.learningz.constant.UserStatus;
 import com.project.learningz.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -28,11 +29,17 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
                                            @Param("keyword") String keyword,
                                            Sort sort);
 
+    @Query("SELECT u FROM User u WHERE (u.role in :roles) AND (:keyword IS NULL OR :keyword = '' OR " +
+            "LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.phoneNum) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<User> getAllUsersByKeyword(@Param("keyword") String keyword, Sort sort, List<Role> roles);
+
     @Query("SELECT u FROM User u WHERE (:keyword IS NULL OR :keyword = '' OR " +
             "LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(u.phoneNum) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<User> getAllUsersByKeyword(@Param("keyword") String keyword, Sort sort);
+    List<User> getAllUsersByKeywordAdmin(@Param("keyword") String keyword, Sort sort);
 
 
     @Query("SELECT u.avtUrl FROM User u WHERE u.username = ?1")
@@ -68,11 +75,15 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'ADMIN_COURSE_MANAGER'")
     long countAdminCourseManageUsers();
 
-    @Query("SELECT COUNT(u) FROM User u WHERE u.userStatus = 'BANNED'")
-    long countBannedUsers();
+    @Query("SELECT COUNT(u) FROM User u WHERE u.userStatus = 'BANNED' AND u.role in :roles")
+    long countBannedUsers(List<Role> roles);
 
-    @Query("SELECT COUNT(u) FROM User u WHERE u.userStatus = 'ACTIVE'")
-    long countActiveUsers();
+    @Query("SELECT COUNT(u) FROM User u WHERE u.userStatus = 'ACTIVE' AND u.role in :roles")
+    long countActiveUsers(List<Role> roles);
+
+    @Query("SELECT u FROM User u WHERE u.role IN :roles")
+    List<User> findLatestStudents(List<Role> roles, Pageable pageable);
+
 
 
 }

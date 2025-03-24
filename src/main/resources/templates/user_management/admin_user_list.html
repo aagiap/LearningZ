@@ -63,6 +63,31 @@
             display: inline-block; /* Giữ nội dung gọn gàng */
         }
 
+        /* ====== Badge trạng thái ====== */
+        .badge {
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ffc107;
+            color: black;
+        }
+
+        .badge-danger {
+            background: #d50d31;
+            color: white;
+        }
+
+
+
     </style>
 </head>
 
@@ -470,33 +495,39 @@
 
                         <tbody>
                         <tr th:each="user, index : ${users}" th:if="${user.username != username}">
-                                <td th:text="${index.count}"></td>
-                                <td th:text="${user.username}"></td>
-                                <td th:text="${user.email}"></td>
-                                <td th:text="${user.phoneNum}"></td>
-                                <td th:text="${user.role.name()}"></td>
-                                <td th:text="${user.userStatus}"></td>
-                                <td>
-                                    <a th:href="@{/super_admin/{id}(id=${user.id})}" class="text-primary" title="View">
-                                        <i class="fas fa-eye" style="color: #0d47a1"></i>
-                                    </a>
-                                    <a th:href="@{/super_admin/{id}(id=${user.id})}" class="text-primary" title="Edit">
-                                        <i class="fas fa-pencil-alt" style="color: #0d47a1"></i>
-                                    </a>
-                                    <form action="/super_admin/ban" method="post" style="display:inline;"
-                                          onsubmit="return confirmDelete(this);">
-                                        <input type="hidden" name="id" th:value="${user.id}"/>
-                                        <input type="hidden" name="role" th:value="${role}"/>
-                                        <button type="submit" class="btn btn-link text-danger" title="Ban">
-                                            <i class="fas fa-ban" style="color: #0d47a1"></i>
-                                        </button>
-                                    </form>
-                                    <script>
-                                        function confirmDelete(form) {
-                                            return confirm("Are you sure you want to ban this user?");
-                                        }
-                                    </script>
-                                </td>
+                            <td th:text="${index.count}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.phoneNum}"></td>
+                            <td th:text="${user.role.name()}"></td>
+                            <td>
+                            <span class="badge"
+                                  th:classappend="${user.userStatus.name() == 'ACTIVE' ? 'badge-success' :
+                                                    (user.userStatus.name() == 'BANNED' ? 'badge-danger' : '')}"
+                                  th:text="${user.userStatus.name()}">
+                            </span>
+                            </td>
+                            <td>
+                                <a th:href="@{/super_admin/{id}(id=${user.id})}" class="text-primary" title="View">
+                                    <i class="fas fa-eye" style="color: #0d47a1"></i>
+                                </a>
+                                <a th:href="@{/super_admin/{id}(id=${user.id})}" class="text-primary" title="Edit">
+                                    <i class="fas fa-pencil-alt" style="color: #0d47a1"></i>
+                                </a>
+                                <form action="/super_admin/ban" method="post" style="display:inline;"
+                                      onsubmit="return confirmDelete(this);">
+                                    <input type="hidden" name="id" th:value="${user.id}"/>
+                                    <input type="hidden" name="role" th:value="${role}"/>
+                                    <button type="submit" class="btn btn-link text-danger" title="Ban">
+                                        <i class="fas fa-ban" style="color: #0d47a1"></i>
+                                    </button>
+                                </form>
+                                <script>
+                                    function confirmDelete(form) {
+                                        return confirm("Are you sure you want to ban this user?");
+                                    }
+                                </script>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

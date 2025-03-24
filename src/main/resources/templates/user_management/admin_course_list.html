@@ -71,6 +71,34 @@
             font-size: 28px; /* Icon dấu X đỏ */
         }
 
+        /* ====== Badge trạng thái ====== */
+        .badge {
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ffc107;
+            color: black;
+        }
+
+        .badge-danger {
+            background: #61616a;
+            color: white;
+        }
+
+        .badge-reject {
+            background: #d50d31;
+            color: white;
+        }
+
 
     </style>
 </head>
@@ -468,10 +496,15 @@
                         <td th:text="${course.grade.getName()}"></td>
                         <td th:text="${course.subject.getName()}"></td>
                         <td th:text="${course.createdBy.username}"></td>
-                        <td th:text="${course.courseStatus}"></td>
-                        <th:block th:if="${course.courseStatus.name() == 'REJECTED'}">
-                        <td th:text="${course.note}"></td>
-                        </th:block>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${course.courseStatus.name() == 'ACTIVE' ? 'badge-success' :
+                                                    (course.courseStatus.name() == 'PENDING' ? 'badge-warning' :
+                                                    (course.courseStatus.name() == 'REJECTED' ? 'badge-reject' :
+                                                    (course.courseStatus.name() == 'INACTIVE' ? 'badge-danger' : '')))}"
+                                  th:text="${course.courseStatus.name()}">
+                            </span>
+                        </td>
                         <td>
                             <a th:href="@{/super_admin/detail/{id}(id=${course.id})}" class="text-primary"
                                title="View">

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,17 @@ public class UserManagementService {
         } else {
             sort = Sort.by(sortField).ascending();
         }
-        return userRepository.getAllUsersByKeyword(keyword, sort);
+        return userRepository.getAllUsersByKeyword(keyword, sort, Arrays.asList(Role.STUDENT, Role.VIP_STUDENT));
+    }
+
+    public List<User> getAllUsersByKeywordAdmin(String keyword, String sortField, String sortOrder) {
+        Sort sort;
+        if (sortOrder.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortField).descending();
+        } else {
+            sort = Sort.by(sortField).ascending();
+        }
+        return userRepository.getAllUsersByKeywordAdmin(keyword, sort);
     }
 
     public void banUserById(Integer id) {
@@ -156,12 +167,18 @@ public class UserManagementService {
         return userRepository.findAll(PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id"))).getContent();
     }
 
-    public Long countActiveUsersByStatus() {
-        return userRepository.countActiveUsers();
+    public List<User> getFiveLatestStudentUsers() {
+        return userRepository.findLatestStudents(
+                Arrays.asList(Role.STUDENT, Role.VIP_STUDENT),
+                PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "id")));
     }
 
-    public Long countInactiveUsersByStatus() {
-        return userRepository.countBannedUsers();
+    public Long countActiveStudents() {
+        return userRepository.countActiveUsers(Arrays.asList(Role.STUDENT, Role.VIP_STUDENT));
+    }
+
+    public Long countInactiveStudents() {
+        return userRepository.countBannedUsers(Arrays.asList(Role.STUDENT, Role.VIP_STUDENT));
     }
 
 
