@@ -82,4 +82,10 @@ public class HomeController {
 
         return "home/home";
     }
+    @GetMapping("/about")
+    public String aboutPage(Model model) {
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+        return "home/about";
+    }
 }

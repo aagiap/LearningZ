@@ -295,6 +295,9 @@
                         <div class="card-header">
                             <h4 class="card-title">Edit Slider</h4>
                         </div>
+                        <div th:if="${errorMessage1}" class="alert alert-danger text-center" role="alert">
+                            <span th:text="${errorMessage1}"></span>
+                        </div>
                         <div class="card-body">
                             <form th:action="@{/marketer/slider/edit}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="sliderId" th:value="${slider.sliderId}">

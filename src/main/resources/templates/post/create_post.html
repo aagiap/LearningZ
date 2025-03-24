@@ -9,7 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!--====== Title ======-->
-    <title>POST</title>
+    <title>LearningZ</title>
+
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="/image/learningz.png" type="image/png">
 
     <!--====== Slick css ======-->
     <link rel="stylesheet" href="/css/slick.css">
@@ -42,78 +45,17 @@
     <link rel="stylesheet" href="/css/responsive.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        .avatar-container {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            overflow: hidden;
-            cursor: pointer;
-            margin-left: 40px;
-            z-index: 10;
-        }
-
-        .user-avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .user-menu {
-            display: none;
-            position: absolute;
-            top: 35px;
-            right: 20px;
-            width: 300px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 9999;
-        }
-        .user-menu ul {
-            list-style: none;
-            margin: 0;
-            padding: 10px;
-        }
-
-        .user-menu ul li {
-            padding: 8px 10px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .user-menu ul li:hover {
-            background-color: #f0f0f0;
-        }
-
-        .user-menu ul li a:hover {
-            color: #007bff;
-        }
-
-        .user-menu ul li:nth-child(2):hover {
-            background-color: #e0e0e0;/
-        }
 
 
-        .user-menu ul li:first-child {
-            cursor: default;
-            background-color: transparent;
-        }
 
-        .user-menu ul li:first-child:hover {
-            background-color: transparent;
-        }
-    </style>
+
+
 </head>
+
 <body>
-<script>
-    function toggleUserMenu() {
-        const userMenu = document.getElementById('userMenu');
-        userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
-    }
-</script>
+<th:block th:replace="~{common/chat-with-ai :: chat}"></th:block>
 <!--====== HEADER PART START ======-->
+
 <header id="header-part">
     <div class="header-top d-none d-lg-block">
         <div class="container">
@@ -135,42 +77,24 @@
                                 <li><a href="https://www.youtube.com/@HOCMAITHPT"><i class="fab fa-youtube"></i></a></li>
                             </ul>
                         </div> <!-- social -->
-                        <div th:if="${!isLoggedIn}" class="login-register">
+                        <div class="login-register">
                             <ul>
                                 <li><a href="/login">Login</a></li>
                                 <li><a href="/register">Register</a></li>
                             </ul>
                         </div>
-
-                        <div th:if="${isLoggedIn}" class="col-md-2">
-                            <div class="avatar-container">
-                                <ul>
-                                    <li>
-                                        <img th:src="@{${avatarUrl}}" alt="User Avatar" class="user-avatar" onclick="toggleUserMenu()" />
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="user-menu" id="userMenu">
-                                <ul>
-                                    <li>Hello, <span id="username" th:text="${username}"></span></li>
-                                    <li><a href="/home/profile">Profile</a></li>
-                                    <li><a href="/home/change_password">Change Password</a></li>
-                                    <li><a href="/logout">Sign Out</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    </div> <!-- header right -->
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- header top -->
 
     <div class="navigation">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <nav class="navbar navbar-expand-lg">
-                        <a class="navbar-brand" href="/home">
+                        <a class="navbar-brand" href="/">
                             <img src="/image/learningz.png" alt="Logo" width="100px">
                             <a style="font-size: 24px; font-weight: bold;">
                                 Learning<span style="font-size: 30px; color: blue;">Z</span>
@@ -179,13 +103,7 @@
                         <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a href="#">Pages</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="gallery.html">Gallery</a></li>
-                                        <li><a href="policy.html">Privacy Policy</a></li>
-                                        <li><a href="faq.html">FAQ</a></li>
-                                    </ul>
+                                    <a href="/about">About Us</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/course">Courses</a>
@@ -200,7 +118,7 @@
                                     <a href="/vip-packages">VIP Packages</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="active" href="/post">Post</a>
+                                    <a href="/post">Post</a>
                                 </li>
                                 <li class="nav-item">
                                     <a>Contact</a>
@@ -223,67 +141,23 @@
 
 <!--====== HEADER PART ENDS ======-->
 
-<!--====== PAGE BANNER PART START ======-->
+<!--====== SLIDER PART START ======-->
 
-<section id="page-banner" class="pt-105 pb-130 bg_cover" data-overlay="8" style="background-image: url(/image/page-banner-1.jpg)">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-banner-cont">
-                    <h2>Post</h2>
-                </div>  <!-- page banner cont -->
-            </div>
-        </div> <!-- row -->
-    </div> <!-- container -->
-</section>
-
-<!--====== PAGE BANNER PART ENDS ======-->
-
-<!--====== BLOG PART START ======-->
-
-<section id="blog-page" class="pt-90 pb-120 gray-bg">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="single-blog mt-30">
-                    <div class="blog-cont">
-                        <form th:action="@{/post/create}" method="post" enctype="multipart/form-data">
-
-                            <!-- Hiển thị lỗi nếu có -->
-                            <div th:if="${error}" class="alert alert-danger" role="alert">
-                                <span th:text="${error}"></span>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="content">Content:</label>
-                                <textarea id="content" name="content" class="form-control" rows="5"></textarea>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="grade">Grade:</label>
-                                <select id="grade" name="gradeId" class="form-control" required>
-                                    <option th:each="grade : ${grades}" th:value="${grade.id}" th:text="${grade.name}"></option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="subject">Subject:</label>
-                                <select id="subject" name="subjectId" class="form-control" required>
-                                    <option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.name}"></option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label for="postImg">Image:</label>
-                                <input type="file" id="postImg" name="postImg" class="form-control" style="height: 45px;">
-                            </div>
-
-                            <div class="d-flex justify-content-between" style="gap: 15px;">
-                                <a th:href="@{/post}" class="btn btn-secondary w-50">Cancel</a>
-                                <button type="submit" class="btn btn-primary w-50">Post</button>
-                            </div>
-
-                        </form>
+<section id="slider-part" class="slider-active">
+    <div th:each="slider : ${sliders}"
+         th:if="${slider.status}"
+         class="single-slider bg_cover pt-150"
+         th:style="'background-image: url(' + ${slider.imageUrl} + ')'"
+         data-overlay="4">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-9">
+                    <div class="slider-cont">
+                        <h1 data-animation="fadeInLeft" data-delay="1s" th:text="${slider.title}"></h1>
+                        <p data-animation="fadeInUp" data-delay="1.3s" th:text="${slider.description}"></p>
+                        <ul>
+                            <li><a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" th:href="${slider.backlink}">Read More</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -291,8 +165,283 @@
     </div>
 </section>
 
-<!--====== BLOG PART ENDS ======-->
+<!--====== SLIDER PART ENDS ======-->
 
+<!--====== CATEGORY PART START ======-->
+
+<section id="category-part">
+    <div class="container">
+        <div class="category pt-40 pb-80">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="category-text pt-40">
+                        <h2>Best platform to learn </h2>
+                    </div>
+                </div>
+                <div class="col-lg-6 offset-lg-1 col-md-8 offset-md-2 col-sm-8 offset-sm-2 col-8 offset-2">
+                    <div class="row category-slide">
+                        <div class="col-lg-4">
+                            <a href="/course?keyword=&gradeId=-1&subjectId=3">
+                                    <span class="single-category text-center color-1">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-1.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>English</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="/course?keyword=&gradeId=-1&subjectId=1">
+                                    <span class="single-category text-center color-2">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-2.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Mathematics</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="/course?keyword=&gradeId=-1&subjectId=2">
+                                    <span class="single-category text-center color-3">
+                                        <span class="icon">
+                                            <img src="/image/all-icon/ctg-3.png" alt="Icon">
+                                        </span>
+                                        <span class="cont">
+                                            <span>Literature</span>
+                                        </span>
+                                    </span> <!-- single category -->
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                        </div>
+                    </div> <!-- category slide -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- category -->
+    </div> <!-- container -->
+</section>
+
+<!--====== CATEGORY PART ENDS ======-->
+
+<!--====== ABOUT PART START ======-->
+
+<section id="about-part" class="pt-65">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title mt-50">
+                    <h5>About us</h5>
+                    <h2>Welcome to LearningZ </h2>
+                </div> <!-- section title -->
+                <div class="about-cont">
+                    <p>**LearningZ** is an online learning platform designed for high school students, offering a wide range of courses from Math, Physics, and Chemistry to Foreign Languages and Soft Skills. With high-quality, easy-to-understand content and a variety of practice exercises, LearningZ helps students master knowledge and gain confidence in their studies. The platform also provides in-depth VIP courses, a comment system for quick discussions and problem-solving, and special discount programs on various occasions. Join **LearningZ** today to enhance your knowledge and achieve academic success!</p>
+                </div>
+            </div> <!-- about cont -->
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== ABOUT PART ENDS ======-->
+
+<!--====== APPLY PART START ======-->
+
+<section id="testimonial" class="bg_cover pt-115 pb-115 position-relative" data-overlay="8"
+         style="background-image: url(/image/bg-2.jpg)">
+    <div class="container">
+        <div class="section-title" style="position: relative; z-index: 10; margin-bottom: 50px">
+            <h2 style="color: white">Choose VIP Package</h2>
+        </div>
+
+        <!-- Slick Carousel -->
+        <div class="testimonial-slide vip-carousel">
+            <div th:each="pkg : ${vipPackages}" th:if="${pkg.status}" class="package">
+                <h3 th:text="${pkg.packageName}"></h3>
+                <p>Duration: <span th:text="${pkg.duration}"></span> months</p>
+
+                <!-- Hiển thị giá -->
+                <div>
+                    <span th:if="${pkg.discountedPrice != null and pkg.discountedPrice > 0}"
+                          th:text="${#numbers.formatInteger(pkg.price, 0, 'COMMA') + ' VNĐ'}"
+                          style="text-decoration: line-through; color: red; display: block;"></span>
+                    <span th:text="${#numbers.formatInteger(pkg.getFinalPrice(), 0, 'COMMA') + ' VNĐ'}"
+                          style="font-weight: bold;"></span>
+                </div>
+
+                <form action="/vip-packages/momo-pay" method="post">
+                    <input type="hidden" name="id" th:value="${pkg.id}">
+                    <input type="hidden" name="amount" th:value="${pkg.getFinalPrice()}">
+                    <input type="hidden" name="packageName" th:value="${pkg.packageName}">
+                    <div class="payment-options">
+                        <label>
+                            <input type="radio" name="paymentMethod" value="QR" checked> Pay with QR Code
+                        </label>
+                        <br>
+                        <label>
+                            <input type="radio" name="paymentMethod" value="ATM"> Pay with ATM Card
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-pay">BUY NOW</button>
+                </form>
+            </div>
+        </div> <!-- End Carousel -->
+    </div>
+</section>
+
+
+<!--====== APPLY PART ENDS ======-->
+
+<!--====== COURSE PART START ======-->
+
+<section id="course-part" class="pt-115 pb-120 gray-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-title pb-45">
+                    <h5>Our course</h5>
+                    <h2>Featured courses </h2>
+                </div> <!-- section title -->
+            </div>
+        </div> <!-- row -->
+        <div class="row course-slide mt-30">
+            <div class="col-lg-3 col-md-6 wow fadeInUp mb-4" th:each="course : ${topCourses}">
+                <div class="course-item shadow">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1">
+                            <a th:href="@{/course/details/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course Title</a>
+                        </h5>
+                        <p th:text="${course.subject.name}">Course subject</p>
+                    </div>
+                    <div class="d-flex">
+                        <small class="flex-fill text-center py-1 px-2">
+                            <i class="fa fa-star text-warning me-2"></i>
+                            <span th:text="${averageRatings[course.id] ?: 0} + ' star'">0 star</span>
+                        </small>
+                        <small class="flex-fill text-center py-1 px-2">
+                            <i class="fa fa-user-graduate me-2"></i>
+                            <span th:text="'Teacher: ' + ${course.createdBy.username}">Teacher Name</span>
+                        </small>
+                    </div>
+                    <div class="d-flex flex-row-reverse">
+                        <small class="text-primary py-1 px-2 fw-bold fs-6" style="float:right;">
+                            <a style="color: #07294d" th:href="@{/course/details/{id}(id=${course.id})}">View Details</a>
+                            <i style="color: #07294d" class="fa fa-chevron-right me-2 fs-10 text-end"></i>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- container -->
+</section>
+
+<!--====== COURSE PART ENDS ======-->
+
+<!--====== VIDEO FEATURE PART START ======-->
+
+<section id="video-feature" class="bg_cover pt-60 pb-110" style="background-image: url(/image/bg-1.jpg)">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-last order-lg-first">
+                <div class="video text-lg-left text-center pt-50">
+                    <a class="Video-popup" href="https://www.youtube.com/watch?v=bRRtdzJH1oE"><i class="fa fa-play"></i></a>
+                </div> <!-- row -->
+            </div>
+            <div class="col-lg-5 offset-lg-1 order-first order-lg-last">
+                <div class="feature pt-50">
+                    <div class="feature-title">
+                        <h3>Our Facilities</h3>
+                    </div>
+                    <ul>
+                        <li>
+                            <div class="single-feature">
+                                <div class="icon">
+                                    <img src="/image/all-icon/f-1.png" alt="icon">
+                                </div>
+                                <div class="cont">
+                                    <h4>Global Certificate</h4>
+                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem quibibendum sem nibhutis.</p>
+                                </div>
+                            </div> <!-- single feature -->
+                        </li>
+                        <li>
+                            <div class="single-feature">
+                                <div class="icon">
+                                    <img src="/image/all-icon/f-2.png" alt="icon">
+                                </div>
+                                <div class="cont">
+                                    <h4>Alumni Support</h4>
+                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem quibibendum sem nibhutis.</p>
+                                </div>
+                            </div> <!-- single feature -->
+                        </li>
+                        <li>
+                            <div class="single-feature">
+                                <div class="icon">
+                                    <img src="/image/all-icon/f-3.png" alt="icon">
+                                </div>
+                                <div class="cont">
+                                    <h4>Books & Library</h4>
+                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem quibibendum sem nibhutis.</p>
+                                </div>
+                            </div> <!-- single feature -->
+                        </li>
+                    </ul>
+                </div> <!-- feature -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+    <div class="feature-bg"></div> <!-- feature bg -->
+</section>
+
+<!--====== VIDEO FEATURE PART ENDS ======-->
+
+<!--====== TEACHERS PART START ======-->
+
+<section id="teachers-part" class="pt-70 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="section-title mt-50">
+                    <h5>Featured Teachers</h5>
+                    <h2>Meet Our teachers</h2>
+                </div> <!-- section title -->
+                <div class="teachers-cont">
+                    <p>At <strong>LearningZ</strong>, we take pride in our team of highly skilled and dedicated instructors. Each teacher is not only an expert in their field but also passionate about delivering quality education.<br><br>
+                        With years of experience, they bring a structured and engaging approach to online learning, ensuring that every student receives the best possible guidance.<br><br>
+
+                        Our instructors continuously update their knowledge, incorporating the latest teaching methods and industry trends to provide up-to-date and practical lessons.<br><br>
+                        Whether through interactive courses, personalized feedback, or real-world applications, they are committed to fostering an enriching and effective learning experience.<br><br>
+                    </p>
+                </div> <!-- teachers cont -->
+            </div>
+            <div class="col-lg-6 offset-lg-1">
+                <div class="teachers mt-20">
+                    <div class="row">
+                        <div th:each="teacher : ${topTeachers}" class="col-sm-6">
+                            <div class="single-teachers mt-30 text-center">
+                                <div class="image">
+                                    <img th:src="@{${teacher.avtUrl}}" alt="Teacher">
+                                </div>
+                                <div class="cont">
+                                    <span th:text="${teacher.username}" class="disabled-text"></span>
+                                </div>
+                            </div> <!-- single teachers -->
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- teachers -->
+
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== TEACHERS PART ENDS ======-->
 <!--====== FOOTER PART START ======-->
 
 <footer id="footer-part">
@@ -316,14 +465,27 @@
 
 <!--====== FOOTER PART ENDS ======-->
 
-<!--====== BACK TO TOP PART START ======-->
+<!--====== BACK TO TP PART START ======-->
 
 <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
 
-<!--====== BACK TO TOP PART ENDS ======-->
+<!--====== BACK TO TP PART ENDS ======-->
 
 
 
+<script>
+    window.onload = function() {
+        myFunction();
+    };
+
+    function myFunction() {
+
+        localStorage.removeItem("quiz_answers");
+        localStorage.removeItem("selectedBoxes");
+        localStorage.removeItem("quizTimers");
+
+    }
+</script>
 
 
 
@@ -342,7 +504,7 @@
 <script src="/js/jquery.magnific-popup.min.js"></script>
 
 <!--====== Counter Up js ======-->
-<script src="/js/waypoints.min.js"></script>
+<script src="/js/waypoints1.min.js"></script>
 <script src="/js/jquery.counterup.min.js"></script>
 
 <!--====== Nice Select js ======-->
@@ -361,7 +523,7 @@
 <script src="/js/ajax-contact.js"></script>
 
 <!--====== Main js ======-->
-<script src="/js/main.js"></script>
+<script src="/js/main1.js"></script>
 
 <!--====== Map js ======-->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC3Ip9iVC0nIxC6V14CKLQ1HZNF_65qEQ"></script>
