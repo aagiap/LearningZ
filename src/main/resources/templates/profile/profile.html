@@ -169,6 +169,7 @@
                 <ul id="courseList">
                     <li th:each="course : ${courseList}" class="course-item">
                         <div class="course-title" ><b th:text="${course.getTitle()}"></b></div>
+                        <div class="course-status"><p th:text="${course.getCourseStatus()}"></p></div>
                         <div class="course-view">
                             <button onclick="viewCourseDetails(this)">View details</button>
                             <a hidden id="viewCourseDetailsRequest"
