@@ -193,7 +193,6 @@
                 <tr>
                     <th>Package Name</th>
                     <th>Duration</th>
-                    <th>Price</th>
                     <th>Registration Date</th>
                     <th>Expiration Date</th>
                     <th>Status</th>
@@ -203,7 +202,6 @@
                 <tr th:each="membership : ${userMemberships}">
                     <td th:text="${membership.vipPackage.packageName}"></td>
                     <td th:text="${membership.vipPackage.duration + ' months'}"></td>
-                    <td th:text="${#numbers.formatInteger(membership.vipPackage.price, 0, 'COMMA')} + ' VNĐ'"></td>
                     <td th:text="${membership.registrationDate}"></td>
                     <td th:text="${membership.expirationDate}"></td>
                     <td>

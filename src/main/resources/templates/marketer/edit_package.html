@@ -247,15 +247,15 @@
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:leaf-bold-duotone"></iconify-icon>
                                    </span>
-                        <span class="nav-text"> Coupons </span>
+                        <span class="nav-text"> VIP Package </span>
                     </a>
                     <div class="collapse" id="sidebarCoupons">
                         <ul class="nav sub-navbar-nav">
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/marketer/coupon">List</a>
+                                <a class="sub-nav-link" href="/marketer/vip_package">List</a>
                             </li>
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/marketer/add_coupon">Add</a>
+                                <a class="sub-nav-link" href="/marketer/vip_package/add_package">Add</a>
                             </li>
                         </ul>
                     </div>
@@ -292,7 +292,7 @@
                 <div class="col-xl-12 col-lg-11">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Edit Vip Package</h4>
+                            <h4 class="card-title">Edit VIP Package</h4>
                         </div>
                         <div class="card-body">
                             <!-- Thông báo -->
@@ -303,7 +303,7 @@
                                 <span th:text="${error}"></span>
                             </div>
 
-                            <form th:action="@{/marketer/coupon/update/{id}(id=${vipPackage.id})}" method="post">
+                            <form th:action="@{/marketer/vip_package/update/{id}(id=${vipPackage.id})}" method="post">
                                 <input type="hidden" name="id" th:value="${vipPackage.id}">
 
                                 <!-- ID Gói VIP -->
@@ -314,7 +314,7 @@
 
                                 <!-- Tên Gói VIP -->
                                 <div class="mb-3">
-                                    <label for="packageName" class="form-label">Vip Package Name</label>
+                                    <label for="packageName" class="form-label">Package Name</label>
                                     <input type="text" id="packageName" name="packageName" class="form-control"
                                            th:value="${vipPackage.packageName}" required>
                                 </div>
@@ -368,7 +368,7 @@
                                         <button type="submit" class="btn btn-primary w-100">Save</button>
                                     </div>
                                     <div class="col-lg-2">
-                                        <a href="/marketer/coupon" class="btn btn-outline-secondary w-100">Cancel</a>
+                                        <a href="/marketer/vip_package" class="btn btn-outline-secondary w-100">Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -398,13 +398,12 @@
 
         if (discountedPrice < 0) {
             errorDiv.style.display = "block";
-            event.preventDefault(); // Ngăn form gửi đi
+            event.preventDefault();
         } else {
             errorDiv.style.display = "none";
         }
     });
 
-    // Nút Reset để khôi phục giá trị ban đầu
     document.getElementById("resetButton").addEventListener("click", function() {
         document.getElementById("packageName").value = "[[${vipPackage.packageName}]]";
         document.getElementById("duration").value = "[[${vipPackage.duration}]]";
@@ -423,13 +422,13 @@
             let discountedPrice = parseFloat(discountedPriceInput.value);
 
             if (discountedPrice < 0) {
-                alert("Giá giảm không được âm!");
+                alert("The discounted price cannot be greater than the original price!");
                 event.preventDefault();
                 return;
             }
 
             if (discountedPrice > price) {
-                alert("Giá sau khi giảm không được lớn hơn giá gốc!");
+                alert("The discounted price cannot be greater than the original price!");
                 event.preventDefault();
             }
         });

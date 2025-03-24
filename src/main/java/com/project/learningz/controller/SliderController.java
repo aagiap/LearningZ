@@ -375,83 +375,80 @@ public class SliderController {
         return (current >= previous) ? "bx bxs-up-arrow text-success" : "bx bxs-down-arrow text-danger";
     }
 
-    @GetMapping("/coupon")
+    @GetMapping("/vip_package")
     public String listVipPackages(Model model) {
         getAuthenticatedUserInfo(model);
         model.addAttribute("vipPackages", vipPackageService.getAllVipPackages());
-        return "marketer/coupon";
+        return "marketer/vip_package";
     }
 
-    @GetMapping("/coupon/edit/{id}")
+    @GetMapping("/vip_package/edit/{id}")
     public String editVipPackage(@PathVariable Integer id, Model model) {
         getAuthenticatedUserInfo(model);
         VipPackage vipPackage = vipPackageService.getVipPackageById(id);
         if (vipPackage == null) {
-            return "redirect:/marketer/coupon";
+            return "redirect:/marketer/vip_package";
         }
         model.addAttribute("vipPackage", vipPackage);
-        return "marketer/edit_coupon";
+        return "marketer/edit_package";
     }
 
-    @PostMapping("/coupon/update/{id}")
+    @PostMapping("/vip_package/update/{id}")
     public String updateVipPackage(@PathVariable Integer id,
                                    @RequestParam String packageName,
                                    @RequestParam int duration,
                                    @RequestParam long price,
                                    @RequestParam(required = false) Long discountedPrice,
+                                   @RequestParam boolean status,
                                    RedirectAttributes redirectAttributes) {
         try {
             VipPackage vipPackage = vipPackageService.findById(id);
             if (vipPackage == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Gói VIP không tồn tại!");
-                return "redirect:/marketer/coupon/edit/" + id;
+                redirectAttributes.addFlashAttribute("errorMessage", "VIP package not found");
+                return "redirect:/marketer/vip_package/edit/" + id;
             }
 
             if (discountedPrice != null && (discountedPrice < 0 || discountedPrice > price)) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Giá sau khi giảm không hợp lệ!");
-                return "redirect:/marketer/coupon/edit/" + id;
+                redirectAttributes.addFlashAttribute("errorMessage", "Discounted price invalid");
+                return "redirect:/marketer/vip_package/edit/" + id;
             }
 
             vipPackage.setPackageName(packageName);
             vipPackage.setDuration(duration);
             vipPackage.setPrice(price);
             vipPackage.setDiscountedPrice(discountedPrice);
+            vipPackage.setStatus(status);
 
             vipPackageService.save(vipPackage);
-            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật gói VIP thành công!");
+            redirectAttributes.addFlashAttribute("successMessage", "Completed update VIP package");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi cập nhật gói VIP!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error updating VIP package");
         }
-        return "redirect:/marketer/coupon";
+        return "redirect:/marketer/vip_package";
     }
 
-    @GetMapping("/coupon/toggleVisibility/{id}")
+    @GetMapping("/vip_package/toggleVisibility/{id}")
     public String toggleVipPackageVisibility(@PathVariable Integer id) {
         vipPackageService.toggleVisibility(id);
-        return "redirect:/marketer/coupon";
+        return "redirect:/marketer/vip_package";
     }
-    @GetMapping("/coupon/delete/{id}")
-    public String deleteVipPackage(@PathVariable Integer id) {
-        vipPackageService.deleteById(id);
-        return "redirect:/marketer/coupon";
-    }
-    @GetMapping("/add_coupon")
+    @GetMapping("/vip_package/add_package")
     public String showAddForm(Model model) {
         getAuthenticatedUserInfo(model);
         model.addAttribute("vipPackage", new VipPackage());
-        return "marketer/add_coupon";
+        return "marketer/add_package";
     }
-    @PostMapping("/add_coupon")
+    @PostMapping("/vip_package/add_package")
     public String addVipPackage(@ModelAttribute VipPackage vipPackage, RedirectAttributes redirectAttributes) {
 
         if (vipPackage.getDiscountedPrice() != null && vipPackage.getDiscountedPrice() > vipPackage.getPrice()) {
-            redirectAttributes.addFlashAttribute("error", "Giá sau khi giảm không được lớn hơn giá gốc!");
-            return "redirect:/marketer/add_coupon";
+            redirectAttributes.addFlashAttribute("error", "Discounted price invalid");
+            return "redirect:/marketer/add_package";
         }
 
         vipPackageService.save(vipPackage);
-        redirectAttributes.addFlashAttribute("success", "Thêm gói VIP thành công!");
-        return "redirect:/marketer/coupon";
+        redirectAttributes.addFlashAttribute("success", "Added vip package successfully");
+        return "redirect:/marketer/vip_package";
     }
 }
 
