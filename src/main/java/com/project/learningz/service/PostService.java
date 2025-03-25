@@ -1,8 +1,10 @@
 package com.project.learningz.service;
 
 import com.project.learningz.entity.Post;
+import com.project.learningz.repository.CommentLikeRepository;
 import com.project.learningz.repository.CommentRepository;
 import com.project.learningz.repository.PostRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,18 +16,17 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+
 @Service
+@AllArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final GoogleDriveService googleDriveService;
+    private final CommentService commentService;
+    private final CommentLikeRepository commentLikeRepository;
 
-    public PostService(PostRepository postRepository, CommentRepository commentRepository, GoogleDriveService googleDriveService) {
-        this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
-        this.googleDriveService = googleDriveService;
-    }
 
     public Page<Post> getFilteredPosts(int page, int size, Integer gradeId, Integer subjectId) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
@@ -44,6 +45,10 @@ public class PostService {
     public void deletePost(Integer postId) {
         Post post = postRepository.findById(postId).orElse(null);
         if (post != null) {
+            List<Integer> commentIds = commentRepository.findCommentIdsByPost(post);
+            if (!commentIds.isEmpty()) {
+                commentLikeRepository.deleteByCommentIds(commentIds);
+            }
             commentRepository.deleteByPost_PostId(postId);
 
             if (post.getPostImgUrl() != null) {

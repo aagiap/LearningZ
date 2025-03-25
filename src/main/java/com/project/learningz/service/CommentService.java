@@ -24,8 +24,6 @@ public class CommentService {
     private CommentLikeRepository commentLikeRepository;
 
     public void createComment(Integer postId, Integer userId, String content) {
-        System.out.println("Nội dung nhận được: [" + content + "]");
-        System.out.println("Ký tự xuống dòng: " + content.contains("\n"));
 
         Post post = postRepository.findById(postId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
@@ -38,11 +36,7 @@ public class CommentService {
 
         comment.setPost(post);
         comment.setUser(user);
-
-        // Giữ nguyên xuống dòng khi lưu
         comment.setContent(content.replace("\r\n", "\n"));
-        System.out.println("Nội dung bình luận: [" + content + "]");
-
 
         comment.setCommentDate(LocalDateTime.now());
         commentRepository.save(comment);
@@ -57,7 +51,9 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public void deleteComment(Integer id) {
+        commentLikeRepository.deleteByCommentId(id);
         commentRepository.deleteById(id);
     }
 

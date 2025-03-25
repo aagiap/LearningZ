@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,4 +20,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     void deleteByPost_PostId(Integer postId);
     Page<Comment> findByReportedTrue(Pageable pageable);
     long countByReportedTrue();
+    @Query("SELECT c.id FROM Comment c WHERE c.post = :post")  // Không dùng c.post.id nữa
+    List<Integer> findCommentIdsByPost(@Param("post") Post post);
 }

@@ -37,6 +37,7 @@ public class LoginController {
         System.out.println("referrer: " + referrer);
         if (savedRequest != null && !savedRequest.getRedirectUrl().contains("/error")
                 && !savedRequest.getRedirectUrl().contains("/ws")
+                && !savedRequest.getRedirectUrl().contains("/comments")
                 && !savedRequest.getRedirectUrl().contains("/favicon.ico")) {
             request.getSession().setAttribute("prevPage", savedRequest.getRedirectUrl());
         } else if (referrer != null && !referrer.contains("/login") && !referrer.contains("/error")

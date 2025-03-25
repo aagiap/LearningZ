@@ -70,6 +70,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/Exam/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM", "ADMIN_USER_MANAGER", "ADMIN_COURSE_MANAGER")
                                 .requestMatchers("/course/**").permitAll()
                                 .requestMatchers("/post/**").permitAll()
+                                .requestMatchers("/about").permitAll()
                                 .anyRequest().authenticated()
                 ).formLogin(form -> form
                         .loginPage("/login")

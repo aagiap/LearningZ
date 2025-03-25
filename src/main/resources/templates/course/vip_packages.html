@@ -138,6 +138,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 2px solid #2e8dfa;
+            height: 330px;
         }
 
         .package:hover {
@@ -262,9 +263,24 @@
         </div>
     </div>
 </div>
-<div class="fixed-bottom">
-    <th:block th:replace="~{common/footer :: #footer-part}"></th:block>
-</div>
+<footer id="footer-part">
+    <div class="footer-copyright mt-30 pt-10 pb-25">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="copyright text-md-left text-center pt-15">
+                        <p>&copy; Copyrights 2025 LearningZ All rights reserved. </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="copyright text-md-right text-center pt-15">
+                        <p>Designed by <span>LearningZ</span> </p>
+                    </div>
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </div> <!-- footer copyright -->
+</footer>
 </body>
 <script>
     function toggleUserMenu() {
