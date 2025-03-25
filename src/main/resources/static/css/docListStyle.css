@@ -1,126 +1,118 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+body{
+    background-color: #f9f7f7;
 }
-
+p {
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+}
 .container {
-    max-width: 1500px;
-    background: white;
-    padding: 20px;
-    margin: auto;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
+    margin-top: 80px; /* Đẩy nội dung xuống dưới navbar */
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
-    color: #333;
 }
-
-.filter-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.filter-section input,
-.filter-section select,
-.filter-section button {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.filter-section button {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border: none;
-}
-
-.filter-section button:hover {
-    background-color: #0056b3;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
+    border-radius: 0px 0px 8px 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #7c6415; /* Màu nền header */
+    font-weight: bold;
+    text-align: center;
 }
 
 th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
     text-align: center;
 }
 
 th {
-    background-color: #007bff;
     color: white;
 }
 
-.edit-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-.delete-btn{
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-.view-btn{
-    background-color: #007bff;
-    color: #f4f4f4;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-.edit-btn:hover {
-    background-color: #218838;
+td {
+    color: #333;
 }
 
-.delete-btn:hover{
-    background-color: red;
+tr:last-child td {
+    border-bottom: none;
 }
-.view-btn:hover{
-    background-color: #0d47a1;
+
+button {
+    background-color: #ffc107; /* Màu vàng */
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
 }
-.pagination {
+
+button:hover {
+    background-color: #e0a800;
+}
+h2{
+    text-align: center;
+}
+.filter-section {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px 8px 0px 0px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.pagination button {
-    background-color: #007bff;
+.filter-section form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-section input[type="text"],
+.filter-section select,
+.filter-section input[type="submit"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.filter-section input[type="submit"] {
+    background-color: #ffc107;
     color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.filter-section input[type="submit"]:hover {
+    background-color: #927c3a;
+}
+
+#addCourse {
+    background-color: #ffc107;
     border: none;
     padding: 8px 12px;
-    margin: 0 5px;
+    border-radius: 6px;
+    color: black;
+    font-weight: bold;
     cursor: pointer;
-    border-radius: 4px;
 }
 
-.pagination button:hover {
-    background-color: #0056b3;
+#addCourse:hover {
+    background-color: #e0a800;
 }
-/* Ẩn popup mặc định */
 .hidden {
     display: none;
 }
-
-/* Thiết kế popup */
 .popup {
     position: fixed;
     top: 50%;
@@ -141,17 +133,99 @@ th {
     cursor: pointer;
     color: red;
 }
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Ẩn ban đầu */
+    width: 250px;
+    height: 100%;
+    background: #333;
+    color: white;
+    transition: left 0.3s ease-in-out;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+/* Overlay (lớp nền mờ) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Khi mở sidebar */
+.sidebar.active {
+    left: 0;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #444;
+}
+.sidebar button, #openSidebarBtn{
+    height: 50px;
+    width: 50px;
+}
+/* Đảm bảo cột Actions có chiều rộng cố định */
 .actions {
+    width: 150px; /* Điều chỉnh tùy theo giao diện */
+    text-align: center;
+}
+
+/* Định dạng nhóm nút trong cột Actions */
+.top-actions {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    gap: 5px; /* Khoảng cách giữa các nút */
 }
 
-.actions .top-actions {
+/* Đảm bảo các nút có cùng kích thước */
+.actions button {
     display: flex;
-    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    padding: 5px;
+    border-radius: 5px;
 }
 
-.actions .bottom-action {
-    margin-top: 5px;
+/* Căn chỉnh biểu tượng bên trong nút */
+.actions button i {
+    font-size: 16px;
+}
+.filter-section div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

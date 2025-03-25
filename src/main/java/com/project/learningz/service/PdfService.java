@@ -24,6 +24,9 @@ public class PdfService {
     @Autowired
     private GoogleDriveService googleDriveService;
 
+    @Autowired
+    private CourseService courseService;
+
     public PDF getPdfById(int id) {
         return pdfRepository.getPdfById(id);
     }
@@ -45,9 +48,15 @@ public class PdfService {
             errorList.add("empty file");
         }
         String error = "";
+        int countError = 0;
         if(!errorList.isEmpty()){
-            for(String s : errorList){
-                error += s + "\n";
+            for(int i = 0; i < errorList.size(); i++){
+                if(countError == errorList.size() - 1){
+                    error += errorList.get(i) + " ";
+                }else{
+                    error += errorList.get(i) + " and ";
+                }
+                countError++;
             }
         }
         return error;

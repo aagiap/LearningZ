@@ -107,6 +107,7 @@
   </style>
 </head>
 <body>
+<th:block th:replace="~{common/chat-with-ai :: chat}"></th:block>
 <script>
   function toggleUserMenu() {
     const userMenu = document.getElementById('userMenu');
@@ -153,6 +154,21 @@
               <div class="user-menu" id="userMenu">
                 <ul>
                   <li>Hello, <span id="username" th:text="${username}"></span></li>
+                  <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''MARKETING_TEAM'')')}">
+                    <a href="/marketer/dashboard">Marketer HomePage</a>
+                  </li>
+                  <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''TEACHER'')')}">
+                    <a href="/teacher">Teacher HomePage</a>
+                  </li>
+                  <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_USER_MANAGER'')')}">
+                    <a href="/admin/users/dashboard">Admin User HomePage</a>
+                  </li>
+                  <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_COURSE_MANAGER'')')}">
+                    <a href="/admin/courses/dashboard">Admin Course HomePage</a>
+                  </li>
+                  <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN'')')}">
+                    <a href="/super_admin/dashboard">Super Admin HomePage</a>
+                  </li>
                   <li><a href="/home/profile">Profile</a></li>
                   <li><a href="/home/change_password">Change Password</a></li>
                   <li><a href="/logout">Sign Out</a></li>
@@ -170,7 +186,7 @@
       <div class="row">
         <div class="col-lg-12">
           <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="index-4.html">
+            <a class="navbar-brand" href="/home">
               <img src="/image/learningz.png" alt="Logo" width="100px">
               <a style="font-size: 24px; font-weight: bold;">
                 Learning<span style="font-size: 30px; color: blue;">Z</span>
@@ -179,28 +195,19 @@
             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                  <a href="#">Pages</a>
-                  <ul class="sub-menu">
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                    <li><a href="policy.html">Privacy Policy</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                  </ul>
+                  <a href="/about">About Us</a>
                 </li>
                 <li class="nav-item">
                   <a href="/course">Courses</a>
                   <ul class="sub-menu">
-                    <li><a th:href="@{/course?keyword=Lớp+10&gradeId=-1}">Lớp 10</a></li>
-                    <li><a th:href="@{/course?keyword=Lớp+11&gradeId=-1}">Lớp 11</a></li>
-                    <li><a th:href="@{/course?keyword=Lớp+12&gradeId=-1}">Lớp 12</a></li>
+                    <li><a th:href="@{/course}">All Grade</a></li>
+                    <li th:each="grade : ${grades}">
+                      <a th:href="@{/course(gradeId=${grade.id})}" th:text="${grade.name}"></a>
+                    </li>
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a href="teachers.html">Experts</a>
-                  <ul class="sub-menu">
-                    <li><a href="teachers.html">expert 1</a></li>
-                    <li><a href="teachers-2.html">expert 2</a></li>
-                  </ul>
+                  <a href="/vip-packages">VIP Packages</a>
                 </li>
                 <li class="nav-item">
                   <a class="active" href="/post">Post</a>
@@ -247,10 +254,16 @@
 <section id="blog-page" class="pt-90 pb-120 gray-bg">
   <div class="container">
     <div class="row">
+      <!-- Danh sách bài viết -->
       <div class="col-lg-8">
+        <div th:if="${#lists.isEmpty(posts)}" class="no-posts-message">
+          <p style="color: red; font-weight: bold;">
+            No posts found
+          </p>
+        </div>
         <div th:each="post : ${posts}" class="single-blog mt-30">
           <div class="blog-cont">
-            <!-- Thông tin người đăng, ngày đăng, khóa học -->
+            <!-- Thông tin bài viết -->
             <ul class="post-info">
               <li>
                 <a href="#"><i class="fa fa-user"></i>
@@ -263,51 +276,85 @@
                 </a>
               </li>
               <li>
-                <a href="@{/post/{id}(id=${post.postId})}">
+                <a th:href="@{/post(gradeId=${post.grade.id})}">
                   <i class="fa fa-tags"></i>
-                  <span th:text="${post.course.title}"></span>
+                  <span th:text="${post.grade.name}"></span>
                 </a>
+              </li>
+              <li>
+                <a th:href="@{/post(subjectId=${post.subject.id})}">
+                  <i class="fa fa-tags"></i>
+                  <span th:text="${post.subject.name}"></span>
+                </a>
+              </li>
+
+              <li class="ellipsis-menu">
+                <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
+                <ul class="menu">
+
+                  <li th:if="${post.user.id == userId}">
+                    <a th:href="@{/post/edit/{id}(id=${post.postId})}">Edit</a>
+                  </li>
+
+                  <li th:if="${post.user.id == userId or userRole == 'ADMIN' or userRole == 'MARKETING_TEAM'}">
+                    <form th:action="@{/post/delete/{id}(id=${post.postId})}" method="post">
+                      <button type="submit" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                    </form>
+                  </li>
+
+                  <li th:if="${post.user.id != userId}">
+                    <a href="#" th:onclick="|reportPost(${post.postId})|">Report</a>
+                  </li>
+                </ul>
               </li>
             </ul>
 
-            <!-- Nội dung bài viết -->
-            <p class="post-content">
-              <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postContent}"></a>
-            </p>
-            <div class="blog-thum">
-              <img th:if="${post.postImgUrl != null}" th:src="${post.postImgUrl}" alt="Ảnh bài viết">
-            </div>
+            <a th:href="@{/post/{id}(id=${post.postId})}">
+              <p class="post-content" th:text="${post.postContent}"></p>
+              <div class="blog-them" th:if="${post.postImgUrl != null}">
+                <img th:src="${post.postImgUrl}" alt="">
+              </div>
+            </a>
           </div>
-
-          <!-- Ảnh bài viết -->
-
         </div>
 
-        <nav class="courses-pagination mt-50">
+        <nav th:if="${not #lists.isEmpty(posts)}" class="courses-pagination mt-50">
           <ul class="pagination justify-content-lg-end justify-content-center">
-            <!-- Nút Previous -->
+            <li class="page-item" th:if="${currentPage > 1}">
+              <a class="page-link" th:href="@{/post(page=0)}" aria-label="First">
+                <i class="fa fa-angle-double-left"></i>
+              </a>
+            </li>
+            <!-- Nút "Trang trước" -->
             <li class="page-item" th:if="${currentPage > 0}">
-              <a th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">
+              <a class="page-link" th:href="@{/post(page=${currentPage - 1})}" aria-label="Previous">
                 <i class="fa fa-angle-left"></i>
               </a>
             </li>
-
-            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            <!-- Hai trang trước trang hiện tại -->
+            <li th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+                th:if="${i >= 0 and i < totalPages}"
                 th:class="'page-item ' + (${i == currentPage} ? 'active' : '')">
               <a class="page-link" th:href="@{/post(page=${i})}" th:text="${i + 1}"></a>
             </li>
 
-
-            <!-- Nút Next -->
             <li class="page-item" th:if="${currentPage < totalPages - 1}">
-              <a th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">
+              <a class="page-link" th:href="@{/post(page=${currentPage + 1})}" aria-label="Next">
                 <i class="fa fa-angle-right"></i>
+              </a>
+            </li>
+            <!-- Nút "Đi tới trang cuối cùng" -->
+            <li class="page-item" th:if="${currentPage < totalPages - 1}">
+              <a class="page-link" th:href="@{/post(page=${totalPages - 1})}" aria-label="Last">
+                <i class="fa fa-angle-double-right"></i>
               </a>
             </li>
           </ul>
         </nav>
 
       </div>
+
+      <!-- Sidebar -->
       <div class="col-lg-4">
         <div class="sidebar">
           <div class="row">
@@ -318,26 +365,43 @@
                 </a>
               </div>
 
-              <div class="categories mt-30">
-                <h4>Subject</h4>
-                <ul>
-                  <li><a href="#">Fronted</a></li>
-                  <li><a href="#">Backend</a></li>
-                  <li><a href="#">Photography</a></li>
-                  <li><a href="#">Technology</a></li>
-                  <li><a href="#">GMET</a></li>
-                  <li><a href="#">Language</a></li>
-                  <li><a href="#">Science</a></li>
-                  <li><a href="#">Accounting</a></li>
-                </ul>
-              </div>
-            </div> <!-- categories -->
-          </div> <!-- row -->
-        </div> <!-- sidebar -->
+              <!-- Form lọc -->
+              <form th:action="@{/post}" method="get">
+                <div class="categories mt-30">
+                  <h4 class="mb-2">Grade</h4>
+                  <select name="gradeId" class="mb-3">
+                    <option value="">All</option>
+                    <option th:each="grade : ${grades}"
+                            th:value="${grade.id}"
+                            th:text="${grade.name}"
+                            th:selected="${selectedGrade == grade.id}">
+                    </option>
+                  </select>
+
+                  <h4 class="mb-2">Subject</h4>
+                  <select name="subjectId" class="mb-3">
+                    <option value="">All</option>
+                    <option th:each="subject : ${subjects}"
+                            th:value="${subject.id}"
+                            th:text="${subject.name}"
+                            th:selected="${selectedSubject == subject.id}">
+                    </option>
+                  </select>
+
+                  <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a th:href="@{/post}" class="btn btn-secondary">Reset</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div> <!-- row -->
   </div> <!-- container -->
 </section>
+
 
 <!--====== BLOG PART ENDS ======-->
 
@@ -349,12 +413,12 @@
       <div class="row">
         <div class="col-md-8">
           <div class="copyright text-md-left text-center pt-15">
-            <p>&copy; Copyrights 2020 Edubin All rights reserved. </p>
+            <p>&copy; Copyrights 2025 LearningZ All rights reserved. </p>
           </div>
         </div>
         <div class="col-md-4">
           <div class="copyright text-md-right text-center pt-15">
-            <p>Designed by <span>Pixelcurve</span> </p>
+            <p>Designed by <span>LearningZ</span> </p>
           </div>
         </div>
       </div> <!-- row -->
@@ -414,6 +478,26 @@
 <!--====== Map js ======-->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC3Ip9iVC0nIxC6V14CKLQ1HZNF_65qEQ"></script>
 <script src="/js/map-script.js"></script>
+<script>
+  function toggleMenu(element) {
+    event.preventDefault();
+    event.stopPropagation();
+    let menu = element.nextElementSibling;
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
 
+    document.addEventListener("click", function hideMenu(event) {
+      if (!element.contains(event.target) && !menu.contains(event.target)) {
+        menu.style.display = "none";
+        document.removeEventListener("click", hideMenu);
+      }
+    });
+  }
+  function reportPost(postId) {
+    fetch(`/reports/post/${postId}`, { method: "POST" })
+            .then(response => response.text())
+            .then(() => alert("Bài viết đã được báo cáo!"))
+            .catch(error => console.error("Lỗi:", error));
+  }
+</script>
 </body>
 </html>

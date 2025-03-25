@@ -65,10 +65,11 @@ public class LearningController {
         String progress = usersCourseService.progressStatus(userId, courseId);
         List<Course> courses = courseService.findCoursesByGradeId(course.getGrade().getId());
 
+        Integer minScoreToPass = quizResultService.getMinScoreToPass();
+        model.addAttribute("minScoreToPass", minScoreToPass);
         model.addAttribute("username", username);
-
-        String avt = userService.getAvtByUsername(username);
-        model.addAttribute("avt", avt);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("courses", courses);
         model.addAttribute("progress", progress);
         model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
@@ -106,8 +107,8 @@ public class LearningController {
         }
         model.addAttribute("username", username);
 
-        String avt = userService.getAvtByUsername(username);
-        model.addAttribute("avt", avt);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("firstLessonIdOfPreviousChapter", firstLessonIdOfPreviousChapter);
         model.addAttribute("firstLessonIdOfNextChapter", firstLessonIdOfNextChapter);
         model.addAttribute("chapters", chapters);
@@ -140,8 +141,8 @@ public class LearningController {
 
         model.addAttribute("username", username);
 
-        String avt = userService.getAvtByUsername(username);
-        model.addAttribute("avt", avt);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("video", video);
         model.addAttribute("chapters", chapters);
         model.addAttribute("lesson", lesson);
@@ -170,8 +171,8 @@ public class LearningController {
 
         model.addAttribute("username", username);
 
-        String avt = userService.getAvtByUsername(username);
-        model.addAttribute("avt", avt);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("pdf", pdf);
         model.addAttribute("chapters", chapters);
         model.addAttribute("lesson", lesson);

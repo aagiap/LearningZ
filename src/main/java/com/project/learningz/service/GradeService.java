@@ -24,4 +24,8 @@ public class GradeService {
         return gradeRepository.findById(gradeId);
     }
 
+    public List<String> getAllGradeInQuestions() {
+        return gradeRepository.getAllGrade();
+    }
+
 }

@@ -1,0 +1,117 @@
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    min-width: 250px;
+}
+
+/* Nút đóng popup */
+.close-btn {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+    color: red;
+}
+.hidden {
+    display: none;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.pendingCourseList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
+.rejectedCourseList{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
+.pendingCourse {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.pendingCourse:hover {
+    background-color: #e0e0e0;
+}
+
+.pendingCourse p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.rejectedCourse{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ea9e9e;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.rejectedCourse :hover{
+    background-color: #874b4b;
+}
+
+.rejectedCourse p{
+    font-size: 16px;
+    font-weight: bold;
+}
+.note-btn, .upload-btn, .fix-btn{
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+}
+
+.note-btn .fix-btn, .upload-btn:hover {
+    color: #000;
+}
+
+.note-text {
+    display: none;
+    position: absolute;
+    background: white;
+    padding: 8px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    top: 100%;
+    right: 0;
+    width: 200px;
+}
+
+.pendingCourse div, .rejectedCourse div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

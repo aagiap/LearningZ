@@ -100,26 +100,28 @@
 </head>
 <body>
 <div th:replace="common/header :: header"></div>
-
 <div class="container-">
     <aside class="sidebar">
         <div class="chapter-navigation">
-            <a th:href="@{/learning/lesson(lessonId=${firstLessonIdOfPreviousChapter}, chapterId=${chapter.id - 1})}"
+            <a th:if="${chapter.getChapterOrder() != 1}"
+                    th:href="@{/learning/lesson(lessonId=${firstLessonIdOfPreviousChapter}, chapterId=${chapter.id - 1})}"
                class="prev-chapter">
-                <i th:if="${chapter.getChapterOrder() != 1}" class="fas fa-arrow-left"></i>
+                <i  class="fas fa-arrow-left"></i>
             </a>
             <p th:text="'Chapter '+${chapter.getChapterOrder()}"></p>
-            <a th:href="@{/learning/lesson(lessonId=${firstLessonIdOfNextChapter}, chapterId=${chapter.id + 1})}"
+            <a th:if="${chapter.getChapterOrder() < chapters.size()}"
+                    th:href="@{/learning/lesson(lessonId=${firstLessonIdOfNextChapter}, chapterId=${chapter.id + 1})}"
                class="next-chapter">
-                <i th:if="${chapter.getChapterOrder() < chapters.size()}" class="fas fa-arrow-right"></i>
+                <i  class="fas fa-arrow-right"></i>
             </a>
         </div>
         <h2 class="sidebar-title"
             th:text="${chapter.getChapterTitle()}"></h2>
-        <ul class="sidebar-menu" th:each="lesson : ${chapter.getLessons()}">
+        <ul class="sidebar-menu" th:each="lessonItem : ${chapter.getLessons()}">
             <li style="border-top: 1px solid; border-image: linear-gradient(to right, transparent, #1C3B5C, transparent) 1;">
-                <a th:href="@{/learning/lesson(lessonId=${lesson.id}, chapterId=${chapter.id})}"
-                   th:text="${lesson.getTitle()}"></a>
+                <a th:href="@{/learning/lesson(lessonId=${lessonItem.id}, chapterId=${chapter.id})}"
+                   th:text="${lessonItem.getTitle()}"
+                   th:class="${lessonItem.id == lesson.id ? 'active' : ''}"></a>
             </li>
         </ul>
     </aside>

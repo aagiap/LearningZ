@@ -1,10 +1,17 @@
 package com.project.learningz.service;
 
 
+import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
+import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
+import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.repository.QuizRepository;
+import com.project.learningz.repository.SystemSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +21,8 @@ public class QuizService {
 
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private SystemSettingRepository systemSettingRepository;
 
     public Quiz getQuizById(Integer quizId) {
         return quizRepository.findById(quizId).orElse(null);
@@ -39,6 +48,31 @@ public class QuizService {
 
     public List<Quiz> getQuizzesByCourseId(int courseId) {
         return quizRepository.findByCourseId(courseId);
+    }
+
+    public Page<QuizDetailDTO> getQuizzesByLessonIdAndKey(Integer lessonId, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (lessonId != null && keyword != null) {
+            return quizRepository.findQuizzesByLessonIdAndKey(lessonId, keyword, pageable);
+        }
+        return quizRepository.getAllQuizzesDTO(lessonId, pageable);
+    }
+
+    public QuizDetailDTO getQuizDetailById(Integer quizId) {
+        return quizRepository.findQuizzesByQuizId(quizId);
+    }
+
+    public Integer getMaxQuizInLesson() {
+        SystemSetting systemSetting = systemSettingRepository.findBySettingName("Max quiz in lesson");
+        return systemSetting.getSettingValue();
+    }
+
+    public void updateQuiz(Quiz quiz) {
+        Quiz updatedQuiz = quizRepository.getQuizById(quiz.getId());
+        updatedQuiz.setTotalQuestions(quiz.getTotalQuestions());
+        updatedQuiz.setTimeLimit(quiz.getTimeLimit());
+        updatedQuiz.setTitle(quiz.getTitle());
+        quizRepository.save(updatedQuiz);
     }
 
 

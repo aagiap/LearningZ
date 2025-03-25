@@ -92,14 +92,6 @@
                             </a>
                         </div>
                     </div>
-
-                    <!-- App Search-->
-                    <form class="app-search d-none d-md-block ms-2">
-                        <div class="position-relative">
-                            <input type="search" class="form-control" placeholder="Search..." autocomplete="off" value="">
-                            <iconify-icon icon="solar:magnifer-linear" class="search-widget-icon"></iconify-icon>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -250,24 +242,38 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarCoupons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCoupons">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:leaf-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> VIP Package </span>
+                    </a>
+                    <div class="collapse" id="sidebarCoupons">
+                        <ul class="nav sub-navbar-nav">
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/vip_package">List</a>
+                            </li>
+                            <li class="sub-nav-item">
+                                <a class="sub-nav-link" href="/marketer/vip_package/add_package">Add</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarInvoice" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoice">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:bill-list-bold-duotone"></iconify-icon>
                                    </span>
-                        <span class="nav-text"> Invoices </span>
+                        <span class="nav-text"> Post management </span>
                     </a>
                     <div class="collapse" id="sidebarInvoice">
                         <ul class="nav sub-navbar-nav">
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="invoice-list.html">List</a>
+                                <a class="sub-nav-link" href="/marketer/report/post">Reported post</a>
                             </li>
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="invoice-details.html">Details</a>
-                            </li>
-                            <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="invoice-add.html">Create</a>
+                                <a class="sub-nav-link" href="/marketer/report/comment">Reported comment</a>
                             </li>
                         </ul>
                     </div>
@@ -289,11 +295,13 @@
                         <div class="card-header">
                             <h4 class="card-title">Edit Slider</h4>
                         </div>
+                        <div th:if="${errorMessage1}" class="alert alert-danger text-center" role="alert">
+                            <span th:text="${errorMessage1}"></span>
+                        </div>
                         <div class="card-body">
                             <form th:action="@{/marketer/slider/edit}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="sliderId" th:value="${slider.sliderId}">
                                 <input type="hidden" name="page" th:value="${page}">
-
 
                                 <div class="mb-3">
                                     <label class="form-label">ID Slider</label>
@@ -310,21 +318,32 @@
                                     <textarea id="description" name="description" class="form-control" th:text="${slider.description}" required></textarea>
                                 </div>
 
-                                <!-- File Upload -->
+                                <div class="mb-3">
+                                    <label for="backlink" class="form-label">Backlink</label>
+                                    <input type="url" id="backlink" name="backlink" class="form-control" th:value="${slider.backlink}" placeholder="Enter backlink URL">
+                                </div>
+
                                 <div class="mb-3">
                                     <label class="form-label">Image</label>
                                     <input type="file" name="imageFile" class="form-control">
 
-                                    <!-- Hiển thị ảnh hiện tại nếu có -->
                                     <div th:if="${slider.imageUrl}">
                                         <img th:src="${slider.imageUrl}" alt="Slider Image" class="img-fluid mt-3" style="max-width: 285px; height: auto;">
                                     </div>
                                 </div>
 
-
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" id="status" name="status" class="form-check-input" th:checked="${slider.status}">
-                                    <label for="status" class="form-check-label">Visible</label>
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <div class="form-check">
+                                        <input type="radio" id="status1" name="status" class="form-check-input"
+                                               value="1" th:field="*{slider.status}">
+                                        <label for="status1" class="form-check-label">Visible</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="radio" id="status0" name="status" class="form-check-input"
+                                               value="0" th:field="*{slider.status}">
+                                        <label for="status0" class="form-check-label">Hidden</label>
+                                    </div>
                                 </div>
 
                                 <div class="row justify-content-end g-2">
@@ -333,6 +352,9 @@
                                     </div>
                                     <div class="col-lg-2">
                                         <button type="submit" class="btn btn-primary w-100">Save</button>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <a href="/marketer/slider" class="btn btn-outline-secondary w-100">Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -358,13 +380,10 @@
 <!-- App Javascript (Require in all Page) -->
 <script src="/js/app.js"></script>
 <script>
-    document.getElementById("resetButton").addEventListener("click", function() {
-        document.getElementById("title").value = "";
-        document.getElementById("description").value = "";
+    document.getElementById("resetButton").addEventListener("click", function () {
+        this.closest("form").reset();
     });
 </script>
-
-
 </body>
 
 </html>

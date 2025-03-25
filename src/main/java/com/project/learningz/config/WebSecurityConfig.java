@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 
 @Configuration
 public class WebSecurityConfig {
-    private static final String[] STATIC_RESOURCE = {"/css/**", "/font/**", "/js/**", "/image/**"};
+    private static final String[] STATIC_RESOURCE = {"/css/**", "/font/**", "/js/**", "/image/**","/vendor/**"};
     private final LoginService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
 
@@ -55,7 +55,9 @@ public class WebSecurityConfig {
                         authorize.requestMatchers(STATIC_RESOURCE).permitAll()
                                 .requestMatchers("/", "/login").permitAll()
                                 .requestMatchers("/home/**").authenticated()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/comments/**").authenticated()
+                                .requestMatchers("/admin/**").hasAnyRole("ADMIN", "ADMIN_USER_MANAGER", "ADMIN_COURSE_MANAGER")
+                                .requestMatchers("/super_admin/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/marketer/**").hasRole("MARKETING_TEAM")
                                 .requestMatchers("/teacher/**").hasRole("TEACHER")
                                 .requestMatchers("/forgot_password").permitAll()
@@ -63,8 +65,12 @@ public class WebSecurityConfig {
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/verify").permitAll()
                                 .requestMatchers("/resend").permitAll()
-                                .requestMatchers("/learning/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM")
-                                .requestMatchers("/course/**", "/post/**").permitAll()
+                                .requestMatchers("/vip-packages").permitAll()
+                                .requestMatchers("/learning/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM", "ADMIN_USER_MANAGER", "ADMIN_COURSE_MANAGER")
+                                .requestMatchers("/Exam/**").hasAnyRole("VIP_STUDENT", "TEACHER", "ADMIN", "MARKETING_TEAM", "ADMIN_USER_MANAGER", "ADMIN_COURSE_MANAGER")
+                                .requestMatchers("/course/**").permitAll()
+                                .requestMatchers("/post/**").permitAll()
+                                .requestMatchers("/about").permitAll()
                                 .anyRequest().authenticated()
                 ).formLogin(form -> form
                         .loginPage("/login")
@@ -93,16 +99,6 @@ public class WebSecurityConfig {
     }
 
 
-    //old OAuth2Service, cannot user authorize, update at CustomOuth2User
-    /*public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
-        return new DefaultOAuth2UserService() {
-            @Override
-            public OAuth2User loadUser(OAuth2UserRequest userRequest) {
-                OAuth2User oAuth2User = super.loadUser(userRequest);
-                customUserDetailsService.processOAuthPostLogin(oAuth2User);
-                return oAuth2User;
-            }
-        };
-    }*/
+
 
 }

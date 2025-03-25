@@ -58,7 +58,7 @@ p {
     font-weight: 400;
     line-height: 28px;
     color: #505050;
-    margin: 0px;
+    margin: 0;
 }
 .bg_cover {
     background-position: center center;
@@ -923,24 +923,27 @@ p {
 
 .single-slider {
     padding-bottom: 300px;
+    height: 100px;
 }
 .slider-cont {
     position: relative;
     z-index: 5;
     overflow: hidden;
+    margin-top: -62px;
+    margin-left: 60px;
 }
 .slider-cont h1 {
-    font-size: 60px;
+    font-size: 45px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     color: #fff;
-    padding-bottom: 25px;
+    padding-bottom: 20px;
 }
 .slider-cont p {
     font-size: 18px;
     color: #fff;
     font-weight: 600;
-    padding-bottom: 50px;
+    padding-bottom: 30px;
 }
 .slider-cont ul {}
 .slider-cont ul li {
@@ -1143,15 +1146,17 @@ p {
 .category {
     background-color: #07294d;
     border-radius: 10px;
-    margin-top: -150px;
+    margin-top: -60px;
     position: relative;
     z-index: 5;
+    height:220px ;
 }
 .category-text {}
 .category-text h2 {
     font-size: 36px;
     color: #fff;
     padding: 0 50px;
+    margin-top: -40px;
 }
 .single-category {
     padding: 20px 0;
@@ -1171,36 +1176,11 @@ p {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
 }
-.category-slide {}
+.category-slide {
+    margin-top: -40px;
+}
 .category-slide a {
     display: block;
-}
-.category-slide .slick-arrow {
-    position: absolute;
-    top: 50%;
-    right: -50px;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-.category-slide .prev.slick-arrow {
-    right: auto;
-    left: -50px;
-}
-.category-slide .slick-arrow i {
-    width: 35px;
-    height: 35px;
-    line-height: 35px;
-    border-radius: 50%;
-    background-color: #557495;
-    text-align: center;
-    font-size: 24px;
-    color: #fff;
-    cursor: pointer;
-    -webkit-transition: all 0.4s linear;
-    transition: all 0.4s linear;
-}
-.category-slide .slick-arrow i:hover {
-    background-color: #ffc600;
 }
 /*===== Index-4 =====*/
 
@@ -1221,7 +1201,7 @@ p {
     padding-bottom: 220px;
 }
 .about-bg {
-    width: 52%;
+    width: 100%;
     position: absolute;
     bottom: 0;
     right: 0;
@@ -1240,6 +1220,7 @@ p {
 }
 .about-cont p {
     padding-top: 30px;
+    width: 100%;
 }
 .about-event {
     -webkit-box-shadow: 0px 0px 191px 0px rgba(0, 0, 0, 0.06);
@@ -1919,6 +1900,56 @@ p {
 .testimonial-slide .slick-dots li.slick-active button {
     background-color: #ffc600;
 }
+#testimonial {
+    position: relative;
+    z-index: 0;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.vip-carousel {
+    max-width: 80%;
+    margin: auto;
+    z-index: 10;
+}
+
+.vip-carousel .slick-track {
+    display: flex;
+    gap: 30px;
+}
+
+.package {
+    height: 270px;
+    width: 300px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #2e8dfa;
+    z-index: 10;
+    gap: 30px;
+}
+
+.btn-pay {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+}
+
+.btn-pay:hover {
+    background: #2980b9;
+}
+
 /*=====================================================
     12. NEWS css 
 ======================================================*/
@@ -2074,8 +2105,8 @@ p {
 }
 .back-to-top {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
+    right: 31px;
+    bottom: 95px;
     width: 40px;
     height: 40px;
     line-height: 35px;
@@ -2718,448 +2749,7 @@ p {
     color: #07294d;
 
 }
-/*=====================================================
-    23. COURSE SINGEl PAGE css 
-======================================================*/
 
-.courses-single-left {
-    padding: 45px 50px;
-    background-color: #fff;
-}
-.courses-single-left .title {}
-.courses-single-left .title h3 {
-    font-size: 30px;
-    color: #000;
-    font-weight: 600;
-    padding-bottom: 25px;
-}
-.courses-single-left .course-terms {}
-.courses-single-left .course-terms>ul>li {
-    display: inline-block;
-    margin-right: 60px;
-}
-.courses-single-left .course-terms>ul li:last-child {
-    margin-right: 0;
-}
-.courses-single-left .course-terms ul li .teacher-name {
-    position: relative;
-}
-.courses-single-left .course-terms ul li .teacher-name .thum {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    left: 0;
-}
-.courses-single-left .course-terms ul li .teacher-name .thum img {
-    border-radius: 50%;
-}
-.courses-single-left .course-terms ul li .teacher-name .name {
-    padding-left: 60px;
-}
-.courses-single-left .course-terms ul li .review span, .courses-single-left .course-terms ul li .teacher-name .name span, .courses-single-left .course-terms ul li .course-category span {
-    color: #8a8a8a;
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-}
-.courses-single-left .course-terms ul li .teacher-name .name h6, .courses-single-left .course-terms ul li .course-category h6 {
-    font-size: 16px;
-    color: #24486e;
-    font-weight: 700;
-}
-.courses-single-left .course-terms ul li .review {}
-.courses-single-left .course-terms ul li .review ul li {
-    display: inline-block;
-}
-.courses-single-left .course-terms ul li .review ul li a {
-    font-size: 14px;
-    color: #ffc600;
-}
-.courses-single-left .course-terms ul li .review ul li.rating {
-    font-size: 14px;
-    color: #000;
-    font-weight: 600;
-    margin-left: 13px;
-}
-.courses-single-image {}
-.courses-single-image img {
-    width: 100%;
-}
-.courses-tab {
-    border: 1px solid #edf0f2;
-    border-radius: 5px;
-}
-.courses-tab .nav {}
-.courses-tab .nav .nav-item {}
-.courses-tab .nav .nav-item a {
-    font-size: 16px;
-    color: #24486e;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-    padding: 20px 0;
-    display: block;
-    background-color: #edf0f2;
-}
-.courses-tab .nav .nav-item a.active {
-    background-color: #fff;
-}
-.overview-description {
-    padding: 0px 30px 25px;
-}
-.overview-description .single-description {}
-.overview-description .single-description h6 {
-    font-size: 18px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: #000;
-    padding-bottom: 10px;
-}
-.curriculum-cont {
-    padding: 25px 30px;
-}
-.curriculum-cont .title h6 {
-    font-size: 18px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: #000;
-    padding-bottom: 30px;
-}
-.curriculum-cont .accordion {
-    border: 0;
-}
-.curriculum-cont .accordion .card {
-    border: 0;
-    border-radius: 0;
-    border-bottom: 1px solid #cecece !important;
-}
-.curriculum-cont .accordion .card:last-child {
-    border-bottom: 0 !important;
-}
-.curriculum-cont .accordion .card .card-header {
-    padding: 0;
-    border-bottom: 0;
-}
-.curriculum-cont .accordion .card .card-header a {
-    overflow: hidden;
-    display: block;
-    padding: 15px 15px;
-    background-color: #edf0f2;
-}
-.curriculum-cont .accordion .card .card-header a.collapsed {
-    background-color: #fff;
-    border: none;
-}
-.curriculum-cont .accordion .card .card-header a::before, .curriculum-cont .accordion .card .card-header a.collapsed::before {
-    content: "\f107";
-    font-family: FontAwesome;
-    font-size: 18px;
-    color: #8a8a8a;
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
-    -webkit-transition: all 0.2s linear;
-    transition: all 0.2s linear;
-}
-.curriculum-cont .accordion .card .card-header a.collapsed:before {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-}
-.curriculum-cont .accordion .card .card-header a ul li {
-    display: inline-block;
-}
-.curriculum-cont .accordion .card .card-header a ul li:last-child {
-    float: right;
-}
-.curriculum-cont .accordion .card .card-header a ul li>i {
-    color: #ffc600;
-    font-size: 15px;
-    margin-right: 5px;
-}
-.curriculum-cont .accordion .card .card-header a ul li>.lecture {
-    font-size: 15px;
-    color: #8a8a8a;
-}
-.curriculum-cont .accordion .card .card-header a ul li>.head {
-    font-size: 16px;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-    margin-left: 15px;
-    color: #000;
-}
-.curriculum-cont .accordion .card .card-header a ul li>.time {
-    font-size: 15px;
-    color: #8a8a8a;
-    text-align: right;
-    padding-right: 30px;
-}
-.curriculum-cont .accordion .card .card-header a ul li>.time i {
-    margin-right: 5px;
-}
-.curriculum-cont .accordion .card .card-header a ul li>.time span {}
-.curriculum-cont .accordion .card .card-body {
-    background-color: #edf0f2;
-    padding: 0 25px 20px;
-}
-.instructor-cont {
-    padding: 30px 30px 25px;
-}
-.instructor-cont .instructor-author {
-    overflow: hidden;
-}
-.instructor-cont .instructor-author .author-thum {
-    float: left;
-    margin-right: 30px;
-}
-.instructor-cont .instructor-author .author-name {
-    float: left;
-}
-.instructor-cont .instructor-author .author-name a {
-    display: block;
-}
-.instructor-cont .instructor-author .author-name a h5 {
-    font-size: 18px;
-    font-weight: 600;
-}
-.instructor-cont .instructor-author .author-name span {
-    font-size: 15px;
-    color: #8a8a8a;
-}
-.instructor-cont .instructor-author .author-name .social {
-    padding-top: 25px;
-}
-.instructor-cont .instructor-author .author-name .social li {
-    display: inline-block;
-    margin-right: 8px;
-}
-.instructor-cont .instructor-author .author-name .social li a {
-    font-size: 16px;
-    width: 35px;
-    height: 35px;
-    line-height: 33px;
-    border: 1px solid #24486e;
-    background-color: #24486e;
-    color: #fff;
-    text-align: center;
-    -webkit-transition: all 0.4s linear;
-    transition: all 0.4s linear;
-}
-.instructor-cont .instructor-author .author-name .social li a:hover {
-    background-color: #fff;
-    color: #24486e;
-}
-.reviews-cont {
-    padding: 25px 30px 30px;
-}
-.reviews-cont .title h6 {
-    font-size: 18px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: #000;
-}
-.reviews-cont ul li .single-reviews {
-    padding-top: 30px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #d2d2d2;
-}
-.reviews-cont ul li:last-child .single-reviews {
-    border-bottom: 0;
-}
-.reviews-cont ul li .single-reviews .reviews-author {
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-.reviews-cont ul li .single-reviews .reviews-author .author-thum img {
-    border-radius: 5px;
-}
-.reviews-cont ul li .single-reviews .reviews-author .author-name {
-    padding-left: 20px;
-}
-.reviews-cont ul li .single-reviews .reviews-author .author-name h6 {
-    font-size: 16px;
-    font-weight: 600;
-}
-.reviews-cont ul li .single-reviews .reviews-author .author-name span {
-    font-size: 15px;
-    color: #8a8a8a;
-    font-weight: 400;
-    font-family: 'Poppins', sans-serif;
-}
-.reviews-cont ul li .single-reviews .reviews-description {}
-.reviews-cont ul li .single-reviews .reviews-description p {
-    padding-bottom: 17px;
-}
-.reviews-cont ul li .single-reviews .reviews-description .rating {
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-.reviews-cont ul li .single-reviews .reviews-description .rating ul li {
-    display: inline-block;
-    font-size: 15px;
-    color: #ffc600;
-}
-.reviews-cont ul li .single-reviews .reviews-description .rating span {
-    font-size: 15px;
-    color: #000;
-    margin-left: 10px;
-}
-.reviews-cont .reviews-form .form-single {
-    padding-top: 25px;
-}
-.reviews-cont .reviews-form .form-single input, .reviews-cont .reviews-form .form-single textarea {
-    width: 100%;
-    height: 45px;
-    border: 1px solid #cecece;
-    border-radius: 5px;
-    padding: 0 20px;
-}
-.reviews-cont .reviews-form .form-single textarea {
-    height: 160px;
-    padding-top: 20px;
-    resize: none;
-}
-.reviews-cont .reviews-form .form-single .rate-wrapper {
-    overflow: hidden;
-}
-.reviews-cont .reviews-form .form-single .rate-label {
-    float: left;
-    color: #000;
-    margin-right: 10px;
-    margin-left: 0;
-}
-.reviews-cont .reviews-form .form-single .rate {
-    float: left;
-    color: #cecece;
-    cursor: pointer;
-}
-.reviews-cont .reviews-form .form-single .rate-item {
-    float: left;
-    cursor: pointer;
-    margin: 0px 3px 0px 3px;
-}
-.reviews-cont .reviews-form .form-single .rate:hover, .reviews-cont .reviews-form .form-single .rate.selected {
-    color: #ffc600;
-}
-.reviews-cont .reviews-form .form-single .rate .rate-item:hover~.rate-item, .reviews-cont .reviews-form .form-single .rate .rate-item.active~.rate-item {
-    color: #cecece;
-}
-.related-courses .title h3 {
-    font-size: 30px;
-    color: #07294d;
-}
-.course-features {
-    background-color: #fff;
-    padding: 30px 35px;
-    border-radius: 5px;
-}
-.course-features h4, .You-makelike h4 {
-    font-size: 24px;
-    color: #07294d;
-    padding-bottom: 15px;
-}
-.course-features ul {}
-.course-features ul li {
-    font-size: 15px;
-    color: #8a8a8a;
-    overflow: hidden;
-    line-height: 45px;
-    border-bottom: 1px solid #d2d2d2;
-}
-.course-features ul li:last-child {
-    border-bottom: 0;
-}
-.course-features ul li i {
-    color: #ffc600;
-    margin-right: 8px;
-}
-.course-features ul li span {
-    float: right;
-}
-.course-features .price-button {
-    overflow: hidden;
-}
-.course-features .price-button span {
-    font-size: 18px;
-    color: #24486e;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    margin-top: 12px;
-}
-.course-features .price-button span b {
-    color: #ffc600;
-}
-.course-features .price-button .main-btn {
-    float: right;
-}
-.You-makelike {
-    background-color: #fff;
-    padding: 25px 30px 30px;
-    border-radius: 5px;
-}
-.You-makelike .single-makelike {
-    position: relative;
-    border-radius: 5px;
-    overflow: hidden;
-}
-.You-makelike .single-makelike .image {
-    position: relative;
-}
-.You-makelike .single-makelike .image::before {
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-color: rgba(7, 41, 77, 0.8);
-}
-.You-makelike .single-makelike .image img {
-    width: 100%;
-}
-.You-makelike .single-makelike .cont {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    padding: 0 30px;
-}
-.You-makelike .single-makelike .cont h4 {
-    font-size: 18px;
-    color: #fff;
-    font-weight: 600;
-    -webkit-transition: all 0.4s linear;
-    transition: all 0.4s linear;
-}
-.You-makelike .single-makelike .cont h4:hover {
-    color: #ffc600;
-}
-.You-makelike .single-makelike .cont ul li {
-    display: inline-block;
-    margin-right: 15px;
-    color: #ffc600;
-}
-.You-makelike .single-makelike .cont ul li a {
-    font-size: 14px;
-    color: #fff;
-}
-.You-makelike .single-makelike .cont ul li a i {
-    margin-right: 3px;
-}
 /*=====================================================
     24. EVENT PAGE css 
 ======================================================*/
@@ -3393,8 +2983,11 @@ p {
 ======================================================*/
 
 .single-blog {
-    overflow: hidden;
+
     border-radius: 5px;
+    overflow: visible;
+
+
 }
 .single-blog .blog-thum img {
     width: 100%;
@@ -3415,9 +3008,7 @@ p {
 .single-blog .blog-cont a:hover h3 {
     color: #ffc600;
 }
-.single-blog .blog-cont ul {
-    padding: 20px 0;
-}
+
 .single-blog .blog-cont ul li {
     display: inline-block;
     margin-right: 30px;
@@ -3433,7 +3024,9 @@ p {
     color: #ffc600;
     margin-right: 5px;
 }
-.single-blog .blog-cont p {}
+.single-blog .blog-cont p {
+    white-space: pre-line;
+}
 .sidebar {}
 .sidebar .sidebar-create {
     width: 100%;
@@ -3529,6 +3122,7 @@ p {
 .post-content a {
     color: black;
     text-decoration: none;
+    white-space: pre-line;
 }
 .post-content a:hover {
     color: black;
@@ -3545,7 +3139,6 @@ p {
     transition: all 0.4s linear;
 }
 .blog-details .cont ul {
-    padding: 20px 0;
 }
 .blog-details .cont ul li {
     display: inline-block;
@@ -3605,10 +3198,10 @@ p {
     color: #000;
 }
 .blog-details .cont .blog-comment ul {
-    padding: 0;
+
 }
 .blog-details .cont .blog-comment ul li {
-    margin-top: 30px;
+
     margin-right: 0;
 }
 .blog-details .cont .blog-comment ul li .replay {
@@ -3621,6 +3214,15 @@ p {
     position: relative;
     border-bottom: 1px solid #d2d2d2;
 }
+.blog-comment .comment .comment-description p {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+    display: block;
+    max-width: 100%;
+
+}
+
 .blog-comment .comment .comment-author {
     display: -moz-flex;
     display: -ms-flex;
@@ -3670,286 +3272,64 @@ p {
     resize: none;
     padding-top: 20px;
 }
-/*=====================================================
-    29. SHOP PAGE css 
-======================================================*/
-
-.shop-top-search {
-    background-color: #fff;
-    padding: 15px 30px;
-    border-radius: 5px;
-}
-.shop-top-search .shop-bar {
-    display: inline-block;
-}
-.shop-top-search .nav .nav-item {
-    margin-right: 15px;
-    font-size: 15px;
-    color: #8a8a8a;
-}
-.shop-top-search .nav .nav-item a {
-    font-size: 16px;
-    color: #8a8a8a;
-}
-.shop-top-search .nav .nav-item a.active {
-    color: #ffc600;
-}
-.shop-top-search .shop-select {
-    display: inline-block;
-    float: right;
-    margin-top: -3px;
-}
-.shop-top-search .shop-select .nice-select {
-    background-color: #f6f6f6;
-    border-radius: 5px;
-    border: 0;
-    font-size: 14px;
-    height: 30px;
-    width: 135px;
-    line-height: 30px;
-    color: #8a8a8a;
-}
-.shop-top-search .shop-select .nice-select.open .list {
-    width: 100%;
-    margin-top: 0;
-    background-color: #f6f6f6;
-    border: 0;
-}
-#shop-list .single-publication .cont {
-    display: block;
-    padding-top: 0;
-}
-#shop-list .single-publication .cont .name {
-    width: 100%;
-}
-#shop-list .single-publication .cont .name a h6 {
-    font-size: 18px;
-}
-#shop-list .single-publication .cont .name span {
-    font-size: 16px;
-    color: #8a8a8a;
-    padding-top: 15px;
-}
-#shop-list .single-publication .cont .button {
-    width: 100%;
-    padding-top: 10px;
-}
-#shop-list .single-publication .cont .button a {
-    padding: 0 20px;
-    font-size: 12px;
-    line-height: 35px;
-}
-/*=====================================================
-    30. SHOP SINGEL PAGE css 
-======================================================*/
-
-.shop-details {
-    background-color: #fff;
-    padding: 20px 50px 50px;
-    border-radius: 5px;
-}
-.shop-details .shop-left {
-    padding-right: 50px;
-}
-.shop-details .shop-left .shop-image a {
-    display: block;
-}
-.shop-details .shop-left .shop-image img {
-    width: 100%;
-    border-radius: 4px;
-}
-.shop-details .shop-left .nav .nav-item {
-    margin-right: 25px;
-}
-.shop-details .shop-left .nav .nav-item:last-child {
-    margin-right: 0;
-}
-.shop-details .shop-left .nav .nav-item a {
-    display: block;
-}
-.shop-details .shop-left .nav .nav-item a .shop-thum img {
-    width: 100%;
-    border-radius: 3px;
-}
-.shop-right {}
-.shop-right h6 {
-    font-size: 18px;
-    padding-bottom: 5px;
-}
-.shop-right span {
-    font-size: 15px;
-    color: #8a8a8a;
-}
-.shop-right p {
-    padding-bottom: 15px;
-}
-.nice-number {
+.post-info {
+    display: flex;
+    align-items: center;
     position: relative;
-    display: inline-block;
-    margin-right: 20px;
+    margin-bottom: 30px;
 }
-.nice-number input {
-    width: 50px !important;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid #aaa;
-    padding-right: 20px;
-}
-.nice-number button {
+
+.ellipsis-menu {
     position: absolute;
-    width: 25px;
-    padding: 0;
-    right: 2px;
-    top: 2px;
-    border: 0;
-    border-top-right-radius: 5px;
-    background: none;
+    right: 0;
     cursor: pointer;
 }
-.nice-number button:last-child {
-    top: auto;
-    bottom: 2px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 5px;
-}
-.nice-number button i {
-    font-size: 15px;
-    color: #000;
-}
-.add-btn {
-    display: inline-block;
-}
-.add-btn .main-btn {
-    line-height: 46px;
-}
-.shop-reviews .nav .nav-item {}
-.shop-reviews .nav .nav-item:first-child a {
-    border-top-left-radius: 5px;
-}
-.shop-reviews .nav .nav-item:last-child a {
-    border-top-right-radius: 5px;
-}
-.shop-reviews .nav .nav-item a {
-    width: 165px;
-    line-height: 55px;
-    background-color: #315377;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
-    text-align: center;
-    color: #fff;
-    -webkit-transition: all 0.4s linear;
-    transition: all 0.4s linear;
-}
-.shop-reviews .nav .nav-item a.active {
-    background-color: #fafafa;
-    color: #315377;
-}
-.shop-reviews .tab-content {
-    background-color: #fafafa;
-    padding: 0px 45px 40px;
-    border-radius: 5px;
-    border-top-left-radius: 0;
-}
-.shop-reviews .tab-content .reviews-cont {
-    padding: 0;
-}
-.related-item {}
-.related-item .title h3 {
-    font-size: 30px;
-    color: #07294d;
-}
-/*=====================================================
-    31. CONTACT PAGE css 
-======================================================*/
 
-.contact-from {
-    background-color: #fff;
-    padding: 50px;
+.ellipsis-icon {
+    font-size: 22px;
+    cursor: pointer;
+    padding: 10px;
+    user-select: none;
+    outline: none;
+
+}
+
+
+.menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    min-width: 150px;
+    z-index: 100;
+    overflow: hidden;
 }
-.contact-from .main-form {}
-.contact-from .main-form .single-form {
-    margin-top: 20px;
-}
-.contact-from .main-form .single-form input, .contact-from .main-form .single-form textarea {
+
+.menu li {
+    list-style: none;
     width: 100%;
-    height: 50px;
-    padding: 0 20px;
-    border: 1px solid #a1a1a1;
-    border-radius: 5px;
+}
+
+.menu li a, .menu li button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    text-align: left;
+    text-decoration: none;
     color: #8a8a8a;
-    font-size: 15px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
 }
-.contact-from .main-form .single-form textarea {
-    padding-top: 10px;
-    height: 100px;
-    resize: none;
+
+.menu li a:hover, .menu li button:hover {
+    background: #f0f0f0;
 }
-.form-group {
-    margin: 0;
-}
-.list-unstyled li {
-    font-size: 13px;
-    margin-left: 2px;
-    margin-top: 5px;
-    color: #f00;
-}
-p.form-message.success, p.form-message.error {
-    font-size: 16px;
-    color: #353535;
-    background: #ddd;
-    padding: 10px 15px;
-    margin-left: 15px;
-    margin-top: 15px;
-}
-.contact-address {
-    background-color: #fff;
-    padding: 20px 50px 50px;
-    border-radius: 5px;
-}
-.contact-address ul li {
-    padding-top: 30px;
-}
-.contact-address ul li .single-address {
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-.contact-address ul li .single-address .icon i {
-    width: 50px;
-    line-height: 50px;
-    border-radius: 50%;
-    border: 1px solid #07294d;
-    color: #07294d;
-    font-size: 24px;
-    text-align: center;
-}
-.contact-address ul li .single-address .cont {
-    padding-left: 20px;
-}
-.contact-address ul li .single-address .cont p {}
-.map {}
-.map #contact-map {
-    width: 100%;
-    height: 225px;
-}
-.map.map-big #contact-map {
-    width: 100%;
-    height: 415px;
-}
-.contact-address .contact-heading {
-    padding-top: 35px;
-}
-.contact-address .contact-heading h5 {
-    padding-bottom: 15px;
-}
+
 /*=====================================================
     32. TEACHER 2 PAGE css 
 ======================================================*/
@@ -4013,56 +3393,6 @@ p.form-message.success, p.form-message.error {
 .single-teacher-2 .teacher-content span {
     font-size: 14px;
     color: #8a8a8a;
-}
-/*=====================================================
-    33.ADMISSION  css 
-======================================================*/
-
-.admission-row {
-    position: relative;
-}
-.admission-info {
-    background-color: #07294d;
-    padding: 70px 40px;
-}
-.admission-info .admission-title {
-    font-size: 30px;
-    color: #fff;
-    font-weight: 700;
-    padding-bottom: 30px;
-}
-.admission-info p {
-    color: #fff;
-    padding-bottom: 20px;
-}
-.admission-info .help-line {
-    font-size: 24px;
-    font-weight: 600;
-    color: #fff;
-    padding-bottom: 5px;
-}
-.admission-info span {
-    font-size: 30px;
-    font-weight: 600;
-    color: #ffc600;
-}
-.admission-card {
-    background-color: #07294d;
-}
-.admission-card .card-image img {
-    width: 100%;
-}
-.admission-card .card-content {
-    padding: 40px;
-}
-.admission-card .card-content .card-titles {
-    font-size: 26px;
-    color: #fff;
-    font-weight: 700;
-    padding-bottom: 20px;
-}
-.admission-card .card-content p {
-    color: #fff;
 }
 /*=====================================================
     34.COURSE  css 
@@ -4290,102 +3620,4 @@ p.form-message.success, p.form-message.error {
 .faq-accordion-cont .accordion .card .card-body {
     padding: 30px;
 }
-/*=====================================================
-    33. PRIVACY POLICY
-======================================================*/
 
-.privacy-desc p {
-    margin-bottom: 25px;
-}
-.privacy-list ul {
-    list-style: disc;
-    padding-left: 20px;
-}
-.privacy-list ul li {
-    padding: 6px 0;
-}
-.privacy-list ul li a {
-    color: #07294d;
-    font-weight: 700;
-    transition: .3s;
-}
-.privacy-list ul li a:hover {
-    color: #ffc600;
-    transition: .3s;
-}
-/*=====================================================
-    34. LOGIN/REGISTER
-======================================================*/
-
-.signup-content {
-    background: #fff;
-    border-radius: 10px;
-    padding: 50px 55px;
-    margin: 0 50px;
-}
-.form-group {
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-.form-input {
-    width: 100%;
-    border: 1px solid #ebebeb;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    -ms-border-radius: 5px;
-    padding: 15px 20px;
-    box-sizing: border-box;
-    font-size: 14px;
-    font-weight: 500;
-    color: #07294d;
-}
-.main-btn.register-submit {
-    width: 170px;
-}
-.label-agree-term {
-    font-size: 15px;
-    color: #555;
-}
-.term-service {
-    color: #07294d;
-    transition: .3s;
-}
-a.term-service:hover {
-    color: #ffc600;
-    transition: .3s;
-}
-.loginhere {
-    color: #555;
-    font-weight: 500;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-.loginhere-link {
-    font-weight: 700;
-    color: #07294d;
-    transition: .3s;
-}
-a.loginhere-link:hover {
-    color: #ffc600;
-    transition: .3s;
-}
-.field-icon {
-    float: right;
-    margin-right: 17px;
-    margin-top: -32px;
-    position: relative;
-    z-index: 2;
-    color: #555;
-}
-@media screen and (max-width: 768px) {
-    .signup-content {
-        margin: 0;
-    }
-}
-@media screen and (max-width: 480px) {
-    .signup-content {
-        margin: 0;
-    }
-}

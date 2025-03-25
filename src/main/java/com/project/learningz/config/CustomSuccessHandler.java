@@ -64,8 +64,14 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
-            if (role.equals("ROLE_ADMIN")) {
-                redirectURL = "/admin/dashboard";
+            if (role.equals("ROLE_ADMIN_USER_MANAGER")) {
+                redirectURL = "/admin/users/dashboard";
+                break;
+            } else if (role.equals("ROLE_ADMIN_COURSE_MANAGER")) {
+                redirectURL = "/admin/courses/dashboard";
+                break;
+            }else if (role.equals("ROLE_ADMIN")) {
+                redirectURL = "/super_admin/dashboard";
                 break;
             } else if (role.equals("ROLE_TEACHER")) {
                 redirectURL = "/teacher";
@@ -75,11 +81,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 break;
             } else if (role.equals("ROLE_STUDENT") || role.equals("ROLE_VIP_STUDENT")) {
                 String prevPage = (String) request.getSession().getAttribute("prevPage");
+                System.out.println("prevPage:" + prevPage);
                 if (prevPage != null) {
                     request.getSession().removeAttribute("prevPage");
                     if (!prevPage.contains("/login")) {
                         redirectURL = prevPage;
-                        System.out.println("prevPage:" + prevPage);
                     }
                     break;
                 }

@@ -1,6 +1,10 @@
 package com.project.learningz.service;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.CourseDetailsDTO;
+import com.project.learningz.dto.TopCourseDTO;
+import com.project.learningz.dto.CourseLearnedStatsDTO;
+import com.project.learningz.dto.CourseStatsDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.repository.CourseRepository;
 import com.project.learningz.specification.CourseSpecification;
@@ -8,12 +12,15 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +30,7 @@ public class CourseService {
     private final GradeService gradeService;
     private final UserService userService;
     private final GoogleDriveService googleDriveService;
+    private final SubjectService subjectService;
 
     public Page<Course> getCoursesPagingByKeyword(String keyword, Pageable pageable) {
         Specification<Course> spec = CourseSpecification.getAllSpec();
@@ -66,8 +74,34 @@ public class CourseService {
         return courseRepository.allCoursesByUserID(userId);
     }
 
-    public List<CourseDetailsDTO> findCourses(int userId, String subject, String courseSearchKey) {
-        return courseRepository.findCourses(userId, subject, courseSearchKey);
+    public List<CourseDetailsDTO> findCourses(int userId, int subjectId, int gradeId, String courseSearchKey) {
+        if(subjectId != 0){
+            if(gradeId == 0){
+                if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                    return courseRepository.findCourses(userId, subjectId,courseSearchKey);
+                }else {
+                    return courseRepository.findCourses(userId, subjectId, "");
+                }
+            }else{
+                if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                    return courseRepository.findCourses(userId, subjectId, gradeId,courseSearchKey);
+                }else {
+                    return courseRepository.findCourses(userId, subjectId, gradeId,"");
+                }
+            }
+        }else if(gradeId == 0){
+            if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                return courseRepository.findCourses(userId, courseSearchKey);
+            }else{
+                return courseRepository.findCourses(userId, "");
+            }
+        }else{
+            if(courseSearchKey != null && !courseSearchKey.isEmpty()){
+                return courseRepository.findCoursesWithGrade(userId, gradeId, courseSearchKey);
+            }else{
+                return courseRepository.findCoursesWithGrade(userId, gradeId,"");
+            }
+        }
     }
 
     public Course findByCourseId(int courseId) {
@@ -75,17 +109,24 @@ public class CourseService {
     }
 
     @Transactional
-    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, String subject, int gradeId, MultipartFile courseImageUrl,String description) throws GeneralSecurityException, IOException {
+    public void updateCourse(int courseId, int createdByUseID, String courseDriveLink, String title, int subjectId, int gradeId, CourseStatus courseStatus, MultipartFile courseImageUrl, String description) throws GeneralSecurityException, IOException {
         Course course = courseRepository.findById(courseId).orElse(null);
         course.setTitle(title);
-        //course.setSubject(subject);
+        course.setSubject(subjectService.getSubjectById(subjectId));
+
+        if(courseDriveLink != null && !courseDriveLink.isEmpty()){
+            googleDriveService.renameFolder(courseDriveLink, title);
+        }
         course.setGrade(gradeService.findById(gradeId));
         course.setDescription(description);
+
         if(courseImageUrl != null && !courseImageUrl.isEmpty()) {
             if(course.getCourseImageUrl() != null){
                 if(course.getCourseImageUrl().contains("https://lh3.googleusercontent.com/d/")){
                     String[] oldCourseImageSplit = course.getCourseImageUrl().split("https://lh3.googleusercontent.com/d/");
-                    googleDriveService.deleteFile(oldCourseImageSplit[1]);
+                    if(googleDriveService.fiLeExists(oldCourseImageSplit[1])){
+                        googleDriveService.deleteFile(oldCourseImageSplit[1]);
+                    }
                 }
             }
             String newCourseImage = googleDriveService.uploadFileCourseImage(courseImageUrl);
@@ -94,16 +135,51 @@ public class CourseService {
         courseRepository.save(course);
     }
 
+    @Transactional
+    public void updateInactiveCourseNote(int courseId, String courseNote){
+        Course course = courseRepository.findById(courseId).orElse(null);
+        course.setNote(courseNote);
+        courseRepository.save(course);
+    }
+
+    @Transactional
+    public void uploadCourse(int courseId){
+        Course course = courseRepository.findById(courseId).orElse(null);
+        course.setCourseStatus(CourseStatus.PENDING);
+        courseRepository.save(course);
+    }
+
+    public boolean checkExistCourseTitleWhenEdit(String title, int courseId){
+        List<Course> courseList = courseRepository.findAll();
+        for(int i = 0; i < courseList.size(); i++){
+            if(title.trim().equalsIgnoreCase(courseList.get(i).getTitle()) && !getCourseById(courseId).getTitle().equalsIgnoreCase(title.trim())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkExistCourseTitleWhenAdd(String title){
+        List<Course> courseList = courseRepository.findAll();
+        for(int i = 0; i < courseList.size(); i++){
+            if(title.trim().equalsIgnoreCase(courseList.get(i).getTitle())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Course> findCoursesByGradeId(int gradeId) {
         return courseRepository.findCoursesByGradeId(gradeId);
     }
 
     @Transactional
-    public void createCourse(int createdByID, int gradeId, String subject, String title, String description, MultipartFile courseImageUrl) throws GeneralSecurityException, IOException {
+    public void createCourse(int createdByID, int gradeId, int subjectId, String title, CourseStatus courseStatus ,String description, MultipartFile courseImageUrl) throws GeneralSecurityException, IOException {
         Course newCourse = new Course();
         newCourse.setCreatedBy(userService.findById(createdByID));
         newCourse.setTitle(title);
-        //newCourse.setSubject(subject);
+        newCourse.setSubject(subjectService.getSubjectById(subjectId));
+        newCourse.setCourseStatus(courseStatus);
         newCourse.setGrade(gradeService.findById(gradeId));
         newCourse.setDescription(description);
         String courseDriveLink = googleDriveService.createFolder(title,googleDriveService.getCoursesFolderId());
@@ -112,6 +188,129 @@ public class CourseService {
             String imageUrl = googleDriveService.uploadFileCourseImage(courseImageUrl);
             newCourse.setCourseImageUrl(imageUrl);
         }
+        newCourse.setCourseStatus(CourseStatus.INACTIVE);
         courseRepository.save(newCourse);
+    }
+
+    public List<String> getAllCourseInQuestions() {
+        return courseRepository.getAllCourse();
+    }
+
+    public List<Course> inactiveCourseListByUserId(int userId){
+        return courseRepository.getCourseListByUserIdAndStatus(userId, CourseStatus.INACTIVE);
+    }
+
+    public List<Course> rejectedCourseListByUserId(int userId){
+        return courseRepository.getCourseListByUserIdAndStatus(userId, CourseStatus.REJECTED);
+    }
+
+    public List<Course> searchCourseByStatusAndKeyword(CourseStatus status, String keyword, String sortField, String sortOrder) {
+        Sort sort;
+        if (sortOrder.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortField).descending();
+        } else {
+            sort = Sort.by(sortField).ascending();
+        }
+        return courseRepository.searchCourseByStatusAndKeyword(status, keyword, sort);
+    }
+
+    public List<Course> getAllCoursesByKeyword(String keyword, String sortField, String sortOrder) {
+        Sort sort;
+        if (sortOrder.equalsIgnoreCase("desc")) {
+            sort = Sort.by(sortField).descending();
+        } else {
+            sort = Sort.by(sortField).ascending();
+        }
+        return courseRepository.getAllCoursesByKeyword(keyword, sort);
+    }
+
+    public void approveCourse(Integer courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course Not Found"));
+        course.setCourseStatus(CourseStatus.ACTIVE);
+        courseRepository.save(course);
+    }
+
+    public void rejectCourse(Integer courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("Course Not Found"));
+        course.setCourseStatus(CourseStatus.REJECTED);
+        courseRepository.save(course);
+    }
+
+    public Integer sumOfCourseByStatus(CourseStatus courseStatus) {
+        if(courseStatus == CourseStatus.ACTIVE){
+            return courseRepository.getAllCoursesByStatus(CourseStatus.ACTIVE).size();
+        } else if(courseStatus == CourseStatus.INACTIVE){
+            return courseRepository.getAllCoursesByStatus(CourseStatus.INACTIVE).size();
+        } else if (courseStatus == CourseStatus.PENDING){
+            return courseRepository.getAllCoursesByStatus(CourseStatus.PENDING).size();
+        } else {
+            return courseRepository.getAllCourse().size();
+        }
+    }
+
+    public List<TopCourseDTO> getTop5Courses() {
+        Pageable pageable = PageRequest.of(0, 5); // Lấy top 5 khóa học
+        List<Object[]> results = courseRepository.getTop5PopularCoursesWithEnrollments(pageable);
+
+        List<TopCourseDTO> topCourses = new ArrayList<>();
+        for (Object[] row : results) {
+            Course course = (Course) row[0];   // Lấy đối tượng Course
+            Long enrollmentCount = (Long) row[1];  // Lấy số lượng đăng ký
+
+            // Đưa vào DTO để trả về
+            topCourses.add(new TopCourseDTO(course, enrollmentCount));
+        }
+
+        return topCourses;
+    }
+
+    public void saveCourse(Course course) {
+        courseRepository.save(course);
+    }
+
+    public int getTotalCoursesByUserId(int userId) {
+        return courseRepository.getTotalCoursesByUserId(userId);
+    }
+
+    public int getTotalVideosByUserId(int userId) {
+        return courseRepository.getTotalVideosByUserId(userId);
+    }
+
+    public int getTotalDocsByUserId(int userId) {
+        return courseRepository.getTotalDocsByUserId(userId);
+    }
+
+    public int getTotalStudentsByUserId(int userId) {
+        return courseRepository.getTotalStudentsByUserId(userId);
+    }
+
+    public int getTotalCourseWithStatusByUserId(int userId, CourseStatus status) {
+        return courseRepository.getTotalCourseWithStatusByUserId(userId, status);
+    }
+
+    public List<Course> getTop3CoursesListByUserId(int userId){
+        return courseRepository.getTop3CoursesListByUserId(userId);
+    }
+
+    public List<CourseStatsDTO> getCourseAndScoreByUserId(int userId){
+        return courseRepository.getCourseAndScoreByUserId(userId);
+    }
+
+    public List<CourseLearnedStatsDTO> getCourseLearnedStatsByUserId(int userId){
+        return courseRepository.getCourseLearnedStatsByUserId(userId);
+    }
+
+    public List<Course> getPendingCourse(){
+        return courseRepository.getAllCoursesByStatus(CourseStatus.PENDING);
+    }
+
+    public Integer numberOfChapter(Integer courseId){
+        return courseRepository.numberOfChapter(courseId);
+    }
+    public Integer numberOfVideos(Integer courseId){
+        return courseRepository.numberOfVideos(courseId);
+    }
+    public Integer numberOfPDFs(Integer courseId){
+        return courseRepository.numberOfPDFs(courseId);
     }
 }

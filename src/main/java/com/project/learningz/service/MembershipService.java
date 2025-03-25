@@ -1,5 +1,6 @@
 package com.project.learningz.service;
 
+import com.project.learningz.constant.MembershipStatus;
 import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import com.project.learningz.entity.UserMembership;
@@ -9,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class MembershipService {
     private final UserRepository userRepository;
     private final UserMembershipRepository userMembershipRepository;
 
+
+    //@Scheduled(fixedRate = 60000)
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Ho_Chi_Minh")
     @Transactional
     public void downgradeExpiredVipUsers() {
@@ -35,9 +39,52 @@ public class MembershipService {
             if (latestMembership == null || latestMembership.getExpirationDate().isBefore(today)) {
                 user.setRole(Role.STUDENT);
                 userRepository.save(user);
-                System.out.println("Downgrade User: " + user.getId());
+                System.out.println("Downgrade User: " + user.getId() + "-" + user.getUsername());
             }
         }
         System.out.println("Scheduled Task done!");
     }
+
+    public void save(UserMembership userMembership) {
+        if (userMembership == null) {
+            throw new IllegalArgumentException("User Membership cannot be null");
+        }
+        userMembershipRepository.save(userMembership);
+    }
+
+    public UserMembership findByUserID(int userID) {
+        return userMembershipRepository.findTopByUserOrderByExpirationDateDesc(userRepository.findById(userID));
+    }
+
+    public List<UserMembership> findUserMembershipByUserId(Integer userId) {
+        return userMembershipRepository.findByUserId(userId);
+    }
+    public boolean hasActiveOrCancelableVIP(Integer userId) {
+        List<UserMembership> memberships = userMembershipRepository.findByUserId(userId);
+        for (UserMembership membership : memberships) {
+            if ((membership.getStatus() == MembershipStatus.ACTIVE || membership.getStatus() == MembershipStatus.CANCELED) &&
+                    membership.getExpirationDate().isAfter(LocalDate.now())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public UserMembership findById(Integer UserMembershipId){
+        return userMembershipRepository.findById(UserMembershipId).get();
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Ho_Chi_Minh")
+    @Transactional
+    public void changeMembershipStatus() {
+        List<UserMembership> userMembershipList = userMembershipRepository.findAll();
+        LocalDate today = LocalDate.now();
+        for (UserMembership userMembership : userMembershipList) {
+            if (userMembership.getExpirationDate().isBefore(today) && userMembership.getStatus() != MembershipStatus.EXPIRED) {
+                userMembership.setStatus(MembershipStatus.EXPIRED);
+                userMembershipRepository.save(userMembership);
+            }
+        }
+    }
+
 }
