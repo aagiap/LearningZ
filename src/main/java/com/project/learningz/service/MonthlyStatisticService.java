@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class MonthlyStatisticService {
@@ -84,6 +83,18 @@ public class MonthlyStatisticService {
     }
     public List<MonthlyStatistic> getStatisticsForYear(int year) {
         return monthlyStatisticRepository.findByYear(year);
+    }
+    public Map<Integer, BigDecimal> getDailyRevenue(int year, int month) {
+        List<Object[]> results = userMembershipRepository.getDailyRevenue(year, month);
+        Map<Integer, BigDecimal> revenueMap = new HashMap<>();
+
+        for (Object[] row : results) {
+            int day = (int) row[0];
+            BigDecimal revenue = BigDecimal.valueOf((Long) row[1]);
+            revenueMap.put(day, revenue);
+        }
+
+        return revenueMap;
     }
 
 }

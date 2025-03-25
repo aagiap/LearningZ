@@ -1,198 +1,178 @@
-/**
-* Theme: Larkon - Responsive Bootstrap 5 Admin Dashboard
-* Author: Techzaa
-* Module/App: Dashboard
-*/
 
-//
-// Conversions
-// 
-var options = {
-    chart: {
-        height: 292,
-        type: 'radialBar',
-    },
-    plotOptions: {
-        radialBar: {
-            startAngle: -135,
-            endAngle: 135,
-            dataLabels: {
-                name: {
-                    fontSize: '14px',
-                    color: "undefined",
-                    offsetY: 100
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/marketer/dashboard/registration-percentage")
+        .then(response => response.json())
+        .then(data => {
+            let totalUsersEl = document.getElementById("totalUsers");
+            let totalCoursesEl = document.getElementById("totalCourses");
+
+            totalUsersEl.innerText = data.totalUsers.toLocaleString();
+            totalCoursesEl.innerText = data.totalCourses.toLocaleString();
+
+            let options = {
+                chart: {
+                    height: 320,
+                    type: "radialBar"
                 },
-                value: {
-                    offsetY: 55,
-                    fontSize: '20px',
-                    color: undefined,
-                    formatter: function (val) {
-                        return val + "%";
+                series: [data.registrationPercentage],
+                labels: ["Course Enrollment Rate"],
+                colors: ["#ff6c2f"],
+                plotOptions: {
+                    radialBar: {
+                        startAngle: -135,
+                        endAngle: 135,
+                        hollow: { size: "70%" },
+                        dataLabels: {
+                            name: { fontSize: "16px" },
+                            value: {
+                                fontSize: "24px",
+                                formatter: function (val) {
+                                    return val.toFixed(1) + "%";
+                                }
+                            }
+                        }
                     }
                 }
-            },
-            track: {
-                background: "rgba(170,184,197, 0.2)",
-                margin: 0
-            },
-        }
-    },
-    fill: {
-        gradient: {
-            enabled: true,
-            shade: 'dark',
-            shadeIntensity: 0.2,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 65, 91]
-        },
-    },
-    stroke: {
-        dashArray: 4
-    },
-    colors: ["#ff6c2f", "#22c55e"],
-    series: [65.2],
-    labels: ['Returning Customer'],
-    responsive: [{
-        breakpoint: 380,
-        options: {
-            chart: {
-                height: 180
-            }
-        }
-    }],
-    grid: {
-        padding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        }
-    }
-}
+            };
 
-var chart = new ApexCharts(
-    document.querySelector("#conversions"),
-    options
-);
-
-chart.render();
-
-
-//
-//Performance-chart
-//
-document.addEventListener("DOMContentLoaded", function () {
-    var revenueElement = document.getElementById("revenueChart");
-    if (!revenueElement) {
-        console.error("Không tìm thấy phần tử #revenueChart!");
-        return;
-    }
-
-    var revenueData = revenueElement.getAttribute("data-revenue");
-    if (!revenueData) {
-        console.error("Không có dữ liệu doanh thu từ Thymeleaf!");
-        return;
-    }
-
-    try {
-        revenueData = JSON.parse(revenueData);
-    } catch (error) {
-        console.error("Lỗi khi parse dữ liệu doanh thu:", error);
-        return;
-    }
-
-    var chartOptions = {
-        series: [{
-            name: "Doanh thu",
-            type: "bar",
-            data: revenueData
-        }],
-        chart: {
-            height: 350,
-            type: "line",
-            toolbar: { show: false },
-            events: {
-                dataPointSelection: function (event, chartContext, config) {
-                    var selectedMonth = config.dataPointIndex + 1;
-                    loadDailyRevenue(selectedMonth);
-                    setActiveButton("1M");
-                }
-            }
-        },
-        stroke: { width: [0, 2], curve: "smooth" },
-        fill: { type: "gradient", gradient: { opacityFrom: 0.5, opacityTo: 0 } },
-        xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] },
-        yaxis: { min: 0 },
-        colors: ["#ff6c2f"]
-    };
-
-    var chart = new ApexCharts(document.querySelector("#revenueChart"), chartOptions);
-    chart.render();
-
-    function loadDailyRevenue(month) {
-        var dailyRevenue = Array.from({ length: 30 }, () => Math.floor(Math.random() * 5000));
-
-        chart.updateOptions({
-            series: [{ name: `Doanh thu Tháng ${month}`, type: "bar", data: dailyRevenue }],
-            xaxis: { categories: Array.from({ length: 30 }, (_, i) => `Ngày ${i + 1}`) }
-        });
-    }
-
-    document.getElementById("btn-1Y").addEventListener("click", function () {
-        chart.updateOptions(chartOptions);
-        setActiveButton("1Y");
-    });
-
-    function setActiveButton(active) {
-        document.getElementById("btn-1M").classList.toggle("active", active === "1M");
-        document.getElementById("btn-1Y").classList.toggle("active", active === "1Y");
-    }
+            let chart = new ApexCharts(document.querySelector("#conversions"), options);
+            chart.render();
+        })
+        .catch(error => console.error("Error while retrieving registration rate data", error));
 });
 
 
-class VectorMap {
+document.addEventListener("DOMContentLoaded", function () {
+    var revenueElement = document.getElementById("revenueChart");
 
+    fetch("/api/revenue/monthly")
+        .then(response => response.json())
+        .then(data => {
+            initRevenueChart(data.months, data.revenue);
+        })
+        .catch(error => console.error("Error when retrieving monthly revenue data:", error));
 
-    initWorldMapMarker() {
-        const map = new jsVectorMap({
-            map: 'world',
-            selector: '#world-map-markers',
-            zoomOnScroll: true,
-            zoomButtons: false,
-            markersSelectable: true,
-            markers: [
-                { name: "Canada", coords: [56.1304, -106.3468] },
-                { name: "Brazil", coords: [-14.2350, -51.9253] },
-                { name: "Russia", coords: [61, 105] },
-                { name: "China", coords: [35.8617, 104.1954] },
-                { name: "United States", coords: [37.0902, -95.7129] }
+    function initRevenueChart(categories, revenueData) {
+        var chartOptions = {
+            series: [
+                {
+                    name: "Revenue",
+                    type: "bar",
+                    data: revenueData
+                }
             ],
-            markerStyle: {
-                initial: { fill: "#7f56da" },
-                selected: { fill: "#22c55e" }
-            },
-            labels: {
-                markers: {
-                    render: marker => marker.name
+            chart: {
+                height: 350,
+                type: "line",
+                toolbar: { show: false },
+                zoom: { enabled: false },
+                animations: {
+                    enabled: true,
+                    easing: "easeout",
+                    speed: 800,
+                },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        var selectedMonth = config.dataPointIndex + 1;
+                        loadDailyRevenue(selectedMonth);
+                        setActiveButton("1M");
+                    }
                 }
             },
-            regionStyle: {
-                initial: {
-                    fill: 'rgba(169,183,197, 0.3)',
-                    fillOpacity: 1,
+            stroke: {
+                width: [0, 3],
+                curve: "smooth",
+                colors: ["#22c55e"]
+            },
+            fill: {
+                opacity: [1, 0.8],
+                type: ["solid", "gradient"],
+                gradient: {
+                    shade: "light",
+                    type: "vertical",
+                    opacityFrom: 0.6,
+                    opacityTo: 0,
+                    stops: [0, 100]
+                }
+            },
+            markers: {
+                size: [0, 5],
+                strokeWidth: 2,
+                hover: {
+                    size: 8,
                 },
             },
+            plotOptions: {
+                bar: {
+                    columnWidth: "35%",
+                    borderRadius: 5,
+                    barHeight: "80%",
+                }
+            },
+            grid: {
+                show: true,
+                strokeDashArray: 3,
+            },
+            xaxis: {
+                categories: categories,
+                axisTicks: { show: false },
+                axisBorder: { show: false },
+            },
+            yaxis: {
+                min: 0,
+                labels: {
+                    formatter: function (value) {
+                        return value.toLocaleString() + "đ";
+                    }
+                }
+            },
+            colors: ["#ff6c2f"],
+            tooltip: {
+                shared: true,
+                y: {
+                    formatter: function (value) {
+                        return value.toLocaleString() + "đ";
+                    }
+                }
+            },
+            legend: {
+                position: "top",
+                horizontalAlign: "center",
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#revenueChart"), chartOptions);
+        chart.render();
+
+        function loadDailyRevenue(month) {
+            const monthNames = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ];
+            const monthName = monthNames[month - 1];
+
+            fetch(`/api/revenue/daily?month=${month}`)
+                .then(response => response.json())
+                .then(data => {
+                    chart.updateOptions({
+                        series: [{ name: `${monthName} Revenue`, type: "bar", data: data.revenue }],
+                        xaxis: { categories: data.days }
+                    });
+                })
+                .catch(error => console.error("Error when retrieving daily revenue data:", error));
+        }
+
+        document.getElementById("btn-1Y").addEventListener("click", function () {
+            chart.updateOptions({
+                series: [{ name: "Revenue", type: "bar", data: revenueData }],
+                xaxis: { categories: categories }
+            });
+            setActiveButton("1Y");
         });
+
+        function setActiveButton(active) {
+            document.getElementById("btn-1Y").classList.toggle("active", active === "1Y");
+            document.getElementById("btn-1M").classList.toggle("active", active === "1M");
+        }
     }
-
-    init() {
-        this.initWorldMapMarker();
-    }
-
-}
-
-document.addEventListener('DOMContentLoaded', function (e) {
-    new VectorMap().init();
 });

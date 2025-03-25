@@ -21,12 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -342,68 +339,6 @@ public class SliderController {
 
         return "redirect:/marketer/report/comment?page=" + page;
     }
-
-    @GetMapping("/dashboard")
-    public String getDashboard(Model model) {
-        getAuthenticatedUserInfo(model);
-
-        int currentYear = LocalDate.now().getYear();
-        int currentMonth = LocalDate.now().getMonthValue();
-        int previousYear = (currentMonth == 1) ? currentYear - 1 : currentYear;
-        int previousMonth = (currentMonth == 1) ? 12 : currentMonth - 1;
-
-        MonthlyStatistic currentStat = monthlyStatisticService.getMonthlyStatistic(currentYear, currentMonth);
-        MonthlyStatistic previousStat = monthlyStatisticService.getMonthlyStatistic(previousYear, previousMonth);
-
-        model.addAttribute("usersChange", calculateChange(currentStat.getTotalUsersRegistered(), previousStat.getTotalUsersRegistered()));
-        model.addAttribute("coursesChange", calculateChange(currentStat.getTotalCoursesRegistered(), previousStat.getTotalCoursesRegistered()));
-        model.addAttribute("visitsChange", calculateChange(currentStat.getTotalVisits(), previousStat.getTotalVisits()));
-        model.addAttribute("revenueChange", calculateChange(currentStat.getTotalRevenue().intValue(), previousStat.getTotalRevenue().intValue()));
-
-        model.addAttribute("usersChangeIcon", getChangeIcon(currentStat.getTotalUsersRegistered(), previousStat.getTotalUsersRegistered()));
-        model.addAttribute("coursesChangeIcon", getChangeIcon(currentStat.getTotalCoursesRegistered(), previousStat.getTotalCoursesRegistered()));
-        model.addAttribute("visitsChangeIcon", getChangeIcon(currentStat.getTotalVisits(), previousStat.getTotalVisits()));
-        model.addAttribute("revenueChangeIcon", getChangeIcon(currentStat.getTotalRevenue().intValue(), previousStat.getTotalRevenue().intValue()));
-
-        model.addAttribute("currentStat", currentStat);
-        model.addAttribute("previousStat", previousStat);
-        System.out.println("Current Users: " + currentStat.getTotalUsersRegistered());
-        System.out.println("Previous Users: " + previousStat.getTotalUsersRegistered());
-
-        System.out.println("Current Courses: " + currentStat.getTotalCoursesRegistered());
-        System.out.println("Previous Courses: " + previousStat.getTotalCoursesRegistered());
-
-        System.out.println("Current Visits: " + currentStat.getTotalVisits());
-        System.out.println("Previous Visits: " + previousStat.getTotalVisits());
-
-        System.out.println("Current Revenue: " + currentStat.getTotalRevenue());
-        System.out.println("Previous Revenue: " + previousStat.getTotalRevenue());
-        List<MonthlyStatistic> statistics = monthlyStatisticService.getStatisticsForYear(currentYear);
-
-        Map<Integer, BigDecimal> revenueMap = new HashMap<>();
-        for (MonthlyStatistic stat : statistics) {
-            revenueMap.put(stat.getMonth(), stat.getTotalRevenue());
-        }
-
-        List<BigDecimal> revenueData = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            revenueData.add(revenueMap.getOrDefault(i, BigDecimal.ZERO));
-        }
-
-        model.addAttribute("revenueData", revenueData);
-        return "marketer/dashboard";
-    }
-
-    private String calculateChange(int current, int previous) {
-        if (previous == 0) return "+100%";
-        double change = ((double) (current - previous) / previous) * 100;
-        return String.format("%.1f%%", change);
-    }
-
-    private String getChangeIcon(int current, int previous) {
-        return (current >= previous) ? "bx bxs-up-arrow text-success" : "bx bxs-down-arrow text-danger";
-    }
-
     @GetMapping("/vip_package")
     public String listVipPackages(Model model) {
         getAuthenticatedUserInfo(model);

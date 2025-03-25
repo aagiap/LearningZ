@@ -41,6 +41,9 @@ public class UserMembership {
     @Column(name = "status", nullable = false)
     private MembershipStatus status;
 
+    @Column(name = "paid_price", nullable = false)
+    private long paidPrice;
+
 
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
@@ -48,5 +51,6 @@ public class UserMembership {
             this.expirationDate = registrationDate.plusMonths(vipPackage.getDuration());
         }
     }
+
 
 }

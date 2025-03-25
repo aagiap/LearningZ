@@ -25,9 +25,13 @@ public interface UserMembershipRepository extends JpaRepository<UserMembership, 
     @Query("SELECT DISTINCT YEAR(um.registrationDate), MONTH(um.registrationDate) FROM UserMembership um WHERE um.registrationDate IS NOT NULL")
     List<Object[]> findDistinctMonthsWithDataFromUserMemberships();
 
-    @Query("SELECT COALESCE(SUM(um.vipPackage.price), 0) " +
-            "FROM UserMembership um " +
-            "WHERE YEAR(um.registrationDate) = :year " +
-            "AND MONTH(um.registrationDate) = :month")
+    @Query("SELECT COALESCE(SUM(um.paidPrice), 0) FROM UserMembership um WHERE YEAR(um.registrationDate) = :year AND MONTH(um.registrationDate) = :month")
     BigDecimal calculateTotalRevenueInMonth(@Param("year") int year, @Param("month") int month);
+    @Query("SELECT DAY(u.registrationDate), SUM(u.paidPrice) " +
+            "FROM UserMembership u " +
+            "WHERE YEAR(u.registrationDate) = :year AND MONTH(u.registrationDate) = :month " +
+            "GROUP BY DAY(u.registrationDate) " +
+            "ORDER BY DAY(u.registrationDate)")
+    List<Object[]> getDailyRevenue(@Param("year") int year, @Param("month") int month);
+
 }

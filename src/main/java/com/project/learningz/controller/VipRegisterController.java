@@ -173,6 +173,8 @@ public class VipRegisterController {
                 userMembership.setVipPackage(vipPackage);
                 userMembership.setRegistrationDate(LocalDate.now());
                 userMembership.setStatus(MembershipStatus.ACTIVE);
+                long paidAmount = Long.parseLong(amount);
+                userMembership.setPaidPrice(paidAmount);
                 userMembershipService.save(userMembership);
                 updateAuthentication(userLoggin);
                 model.addAttribute("success", "Payment successfully!");
