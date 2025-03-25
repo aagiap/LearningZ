@@ -384,7 +384,9 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <p class="text-muted mb-0 text-truncate">Revenue</p>
-                                    <h3 class="text-dark mt-1 mb-0" th:text="${currentStat.totalRevenue} + ' VNĐ'"></h3>
+                                    <h3 class="text-dark mt-1 mb-0"
+                                        th:text="${#numbers.formatDecimal(currentStat.totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                                    </h3>
                                 </div>
                             </div>
                         </div>
