@@ -2,22 +2,21 @@ package com.project.learningz.controller;
 
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
+import com.project.learningz.service.UserManagementService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @Controller
-@SessionAttributes("user")
+@RequestMapping("/home")
 public class ChangePasswordController {
 
     @Autowired
@@ -26,28 +25,33 @@ public class ChangePasswordController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @GetMapping("/home/change_password")
-    public String changePasswordForm(Model model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-        String username;
-        if (principal instanceof OAuth2User) {
-            OAuth2User oauthUser = (OAuth2User) principal;
-            email = oauthUser.getAttribute("email");
-            User user = userRepository.findByEmail(email);
-            if (user != null) {
-                username = user.getUsername();
-            } else {
-                username = oauthUser.getAttribute("name");
-            }
-        } else {
-            username = SecurityContextHolder.getContext().getAuthentication().getName();
+    @Autowired
+    private UserManagementService userManagementService;
+
+    @GetMapping("/change_password")
+    public String changePasswordForm(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                     @AuthenticationPrincipal OAuth2User userOAuth2,
+                                     Model model) {
+        String username = null;
+
+        if (user != null) {
+            username = user.getUsername();
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userManagementService.findUserNameByEmail(email);
+        }
+        String avatarUrl = userManagementService.getAvtByUsername(username);
+        if (avatarUrl == null) {
+            avatarUrl = "/image/AvartaDefault.jpg";
         }
         model.addAttribute("username", username);
+        model.addAttribute("avatarUrl", avatarUrl);
+        System.out.println(username + " " + avatarUrl);
+        model.addAttribute("user", user);
         return "profile/change_password";
     }
 
-    @PostMapping("/home/change_password")
+    @PostMapping("/change_password")
     public String changePassword(@RequestParam("oldPassword") String oldPassword,
                                  @RequestParam("newPassword") String newPassword,
                                  @RequestParam("confirmPassword") String confirmPassword,
@@ -70,21 +74,30 @@ public class ChangePasswordController {
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             model.addAttribute("error", "Incorrect current password");
+            model.addAttribute("username", username);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("user", user);
             return "/profile/change_password";
         }
 
         if (newPassword.length() < 6) {
             model.addAttribute("error", "Password must be at least 6 characters long");
+            model.addAttribute("username", username);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("user", user);
             return "/profile/change_password";
         }
 
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "New passwords do not match");
+            model.addAttribute("username", username);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("user", user);
             return "/profile/change_password";
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
-        session.setAttribute("user", user);
+//        session.setAttribute("user", user);
         userRepository.save(user);
 
         model.addAttribute("message", "Password changed successfully");

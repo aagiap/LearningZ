@@ -1,7 +1,9 @@
 package com.project.learningz.repository;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.dto.UserDetailDTO;
 import com.project.learningz.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +42,28 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.id = :userId AND u.role = :role")
     boolean isNormalStudent(@Param("userId") Integer userId, @Param("role") Role role);
 
+    @Query("""
+    SELECT new com.project.learningz.dto.UserDetailDTO(
+        uc.user.id,
+        uc.user.username,
+        uc.course.title
+    )
+    FROM UsersCourse uc
+    WHERE uc.course.createdBy.id = ?1
+    ORDER BY uc.user.id DESC
+    LIMIT 3
+""")
+    List<UserDetailDTO> getTop3UserByTeacherId(int userId);
+    //moichinh
+    @Query("SELECT u, COUNT(c.id) AS courseCount " +
+            "FROM User u " +
+            "JOIN Course c ON u.id = c.createdBy.id " +
+            "WHERE u.role = 'TEACHER' " +
+            "GROUP BY u " +
+            "ORDER BY courseCount DESC")
+    List<Object[]> findTopTeachers(Pageable pageable);
+    @Query("SELECT COUNT(u) FROM User u WHERE YEAR(u.createdAt) = :year AND MONTH(u.createdAt) = :month")
+    int countUsersByMonth(@Param("year") int year, @Param("month") int month);
+    @Query("SELECT DISTINCT YEAR(u.createdAt), MONTH(u.createdAt) FROM User u WHERE u.createdAt IS NOT NULL")
+    List<Object[]> findDistinctMonthsWithDataFromUsers();
 }

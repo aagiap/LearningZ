@@ -36,4 +36,11 @@ public class QuizQuestionId implements java.io.Serializable {
         return Objects.hash(questionId, quizId);
     }
 
+    public QuizQuestionId(Integer quizId, Integer questionId) {
+        this.quizId = quizId;
+        this.questionId = questionId;
+    }
+
+    public QuizQuestionId() {
+    }
 }

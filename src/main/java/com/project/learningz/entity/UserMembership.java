@@ -1,5 +1,6 @@
 package com.project.learningz.entity;
 
+import com.project.learningz.constant.MembershipStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,6 +36,21 @@ public class UserMembership {
     @NotNull
     @Column(name = "expiration_date", nullable = false)
     private LocalDate expirationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private MembershipStatus status;
+
+    @Column(name = "paid_price", nullable = false)
+    private long paidPrice;
+
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+        if (vipPackage != null) {
+            this.expirationDate = registrationDate.plusMonths(vipPackage.getDuration());
+        }
+    }
 
 
 }

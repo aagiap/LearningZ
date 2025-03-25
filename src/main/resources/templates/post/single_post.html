@@ -105,6 +105,51 @@
         .user-menu ul li:first-child:hover {
             background-color: transparent;
         }
+        .like-container button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        .like-container button:focus {
+            outline: none;
+        }
+
+        .liked {
+            color: #007bff !important;
+        }
+
+        .unliked {
+            color: #888 !important;
+        }
+
+        .like-container button:active {
+            transform: scale(0.95);
+        }
+
+        .correct-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: inherit;
+        }
+
+
+        .like-count-wrapper {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .like-count-wrapper span {
+            margin-left: -1px;
+            margin-right: -1px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -154,6 +199,21 @@
                             <div class="user-menu" id="userMenu">
                                 <ul>
                                     <li>Hello, <span id="username" th:text="${username}"></span></li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''MARKETING_TEAM'')')}">
+                                        <a href="/marketer/dashboard">Marketer HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''TEACHER'')')}">
+                                        <a href="/teacher">Teacher HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_USER_MANAGER'')')}">
+                                        <a href="/admin/users/dashboard">Admin User HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_COURSE_MANAGER'')')}">
+                                        <a href="/admin/courses/dashboard">Admin Course HomePage</a>
+                                    </li>
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN'')')}">
+                                        <a href="/super_admin/dashboard">Super Admin HomePage</a>
+                                    </li>
                                     <li><a href="/home/profile">Profile</a></li>
                                     <li><a href="/home/change_password">Change Password</a></li>
                                     <li><a href="/logout">Sign Out</a></li>
@@ -171,7 +231,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <nav class="navbar navbar-expand-lg">
-                        <a class="navbar-brand" href="index-4.html">
+                        <a class="navbar-brand" href="/home">
                             <img src="/image/learningz.png" alt="Logo" width="100px">
                             <a style="font-size: 24px; font-weight: bold;">
                                 Learning<span style="font-size: 30px; color: blue;">Z</span>
@@ -180,28 +240,19 @@
                         <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a href="#">Pages</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="gallery.html">Gallery</a></li>
-                                        <li><a href="policy.html">Privacy Policy</a></li>
-                                        <li><a href="faq.html">FAQ</a></li>
-                                    </ul>
+                                    <a href="/about">About Us</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/course">Courses</a>
                                     <ul class="sub-menu">
-                                        <li><a th:href="@{/course?keyword=Lớp+10&gradeId=-1}">Lớp 10</a></li>
-                                        <li><a th:href="@{/course?keyword=Lớp+11&gradeId=-1}">Lớp 11</a></li>
-                                        <li><a th:href="@{/course?keyword=Lớp+12&gradeId=-1}">Lớp 12</a></li>
+                                        <li><a th:href="@{/course}">All Grade</a></li>
+                                        <li th:each="grade : ${grades}">
+                                            <a th:href="@{/course(gradeId=${grade.id})}" th:text="${grade.name}"></a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="teachers.html">Experts</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="teachers.html">expert 1</a></li>
-                                        <li><a href="teachers-2.html">expert 2</a></li>
-                                    </ul>
+                                    <a href="/vip-packages">VIP Packages</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="active" href="/post">Post</a>
@@ -254,50 +305,134 @@
                     <div class="cont">
                         <ul class="post-info">
                             <li>
-                                <a href="#"><i class="fa fa-user"></i>
+                                <a href="javascript:void(0);"><i class="fa fa-user"></i>
                                     <span th:text="${post.user.username}"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-calendar"></i>
+                                <a href="javascript:void(0);"><i class="fa fa-calendar"></i>
                                     <span th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
                                 </a>
                             </li>
                             <li>
-                                <a href="@{/post/{id}(id=${post.postId})}">
-                                    <i class="fa fa-tags"></i>
-                                    <span th:text="${post.course.title}"></span>
+                                <a href="javascript:void(0);"><i class="fa fa-tags"></i>
+                                    <span th:text="${post.grade.name}"></span>
                                 </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"><i class="fa fa-tags"></i>
+                                    <span th:text="${post.subject.name}"></span>
+                                </a>
+                            </li>
+
+                            <li class="ellipsis-menu">
+                                <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
+                                <ul class="menu">
+
+                                    <li th:if="${post.user.id == userId}">
+                                        <a th:href="@{/post/edit/{id}(id=${post.postId})}">Edit</a>
+                                    </li>
+
+                                    <li th:if="${post.user.id == userId or userRole == 'ADMIN' or userRole == 'MARKETING_TEAM'}">
+                                        <form th:action="@{/post/delete/{id}(id=${post.postId})}" method="post">
+                                            <button type="submit" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                                        </form>
+                                    </li>
+
+                                    <li th:if="${post.user.id != userId}">
+                                        <a href="#" th:onclick="|reportPost(${post.postId})|">Report</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                         <p class="post-content">
-                            <a th:text="${post.postContent}"></a>
+                            <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postContent}"></a>
                         </p>
-                        <div class="thum">
-                            <img src="/image/blog/b-1.jpg" alt="Blog Details">
+                        <div class="blog-them" th:if="${post.postImgUrl != null}">
+                            <img th:src="${post.postImgUrl}" alt="">
                         </div>
 
                         <ul class="share"></ul>
-
                         <div class="blog-comment pt-45">
                             <div class="title pb-15">
                                 <h3>Comments (<span th:text="${#lists.size(comments)}"></span>)</h3>
                             </div>
-                            <ul>
-                                <li th:each="comment : ${comments}">
+
+                            <ul id="commentList">
+                                <li th:each="comment : ${comments}" style="width: 100%; margin-bottom: 10px;">
                                     <div class="comment">
-                                        <div class="comment-author">
-                                            <div class="author-thum">
-                                                <img th:src="${comment.user.avtUrl}" alt="User Avatar">
-                                            </div>
-                                            <div class="comment-name">
-                                                <h6 th:text="${comment.user.username}"></h6>
-                                                <span th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                                        <div class="comment-header">
+                                            <div class="comment-author">
+                                                <div class="author-thum">
+                                                    <img th:src="${comment.user.avtUrl}" alt="User Avatar"
+                                                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                                </div>
+                                                <div class="comment-name">
+                                                    <h6 th:text="${comment.user.username}"></h6>
+                                                    <span th:text="${#temporals.format(comment.commentDate, 'dd/MM/yyyy HH:mm')}"></span>
+                                                </div>
+                                                <div class="ellipsis-menu">
+                                                    <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
+                                                    <ul class="menu">
+                                                        <li th:if="${comment.user.id == userId}">
+                                                            <button type="button"
+                                                                    th:attr="onclick=|editComment('${comment.id}')|"
+                                                                    th:data-content="${comment.content}">
+                                                                Edit
+                                                            </button>
+                                                        </li>
+                                                        <li th:if="${comment.user.id == userId or userRole == 'ADMIN' or userRole == 'MARKETING_TEAM'}">
+                                                            <form th:action="@{/comments/delete/{id}(id=${comment.id})}" method="post">
+                                                                <button type="submit" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                                                            </form>
+                                                        </li>
+                                                        <li th:if="${comment.user.id != userId}">
+                                                            <a href="#">Report</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="comment-description pt-20">
-                                            <p th:text="${comment.content}"></p>
+
+                                        <!-- Nội dung bình luận -->
+                                        <div class="comment-description pt-20" th:id="'comment-text-' + ${comment.id}">
+                                            <p th:utext="${#strings.replace(comment.content, '\n', '&lt;br/&gt;')}"></p>
                                         </div>
+
+                                        <!-- Nút Like -->
+                                        <div class="like-container">
+                                            <button th:id="'like-btn-' + ${comment.id}"
+                                                    th:class="${comment.isLiked ? 'liked' : 'unliked'}"
+                                                    th:attr="onclick='toggleLike(' + ${comment.id} + ')'">
+                                                <i class="fa-solid fa-thumbs-up"></i>
+                                                <span class="correct-text">Correct</span>
+                                                <span class="like-count-wrapper">
+            (<span th:id="'like-count-' + ${comment.id}" th:text="${comment.likeCount}"></span>)
+        </span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Form chỉnh sửa bình luận (ẩn mặc định) -->
+                                        <form th:id="'edit-box-' + ${comment.id}"
+                                              th:action="@{'/comments/edit/' + ${comment.id}}"
+                                              method="post"
+                                              style="display: none;">
+                                            <input type="hidden" name="postId" th:value="${comment.post.postId}">
+                                            <div style="margin-bottom: 15px;">
+                    <textarea th:id="'edit-content-' + ${comment.id}" name="content" required
+                              th:text="${comment.content}"
+                              style="width: 100%; height: 80px; padding: 10px; border-radius: 5px;"></textarea>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <button type="submit" class="main-btn flex-grow-1 mx-2">
+                                                    Cập nhật
+                                                </button>
+                                                <button type="button" class="main-btn cancel-btn flex-grow-1 mx-2"
+                                                        th:onclick="|cancelEdit('${comment.id}')|">
+                                                    Hủy
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </li>
                             </ul>
@@ -307,32 +442,21 @@
                                     <h3>Leave a Comment</h3>
                                 </div>
                                 <div class="comment-form">
-                                    <form th:action="@{/comments/create}" method="post">
+                                    <form id="commentForm" action="/comments/create" method="post">
                                         <input type="hidden" name="postId" th:value="${post.postId}">
-                                        <input type="hidden" name="userId" th:value="${userId}">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-single">
-                                                    <textarea name="content" placeholder="Your comment..." required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-single">
-                                                    <button type="submit" class="main-btn">Submit</button>
-                                                </div>
-                                            </div>
+                                        <div style="margin-bottom: 15px;">
+                    <textarea id="commentContent" name="content" placeholder="Your comment..." required
+                              style="width: 100%; height: 80px; padding: 10px; border-radius: 5px;"></textarea>
                                         </div>
+                                        <button type="submit" class="main-btn" style="width: 100%;">Submit</button>
                                     </form>
-
                                 </div>
                             </div>
 
-                            <!-- Nếu chưa đăng nhập, hiển thị thông báo -->
                             <div th:if="${!isLoggedIn}">
-                                <p><a th:href="@{/login}">Đăng nhập</a> để bình luận.</p>
+                                <p><a th:href="@{/login}">Login</a> to comment.</p>
                             </div>
                         </div>
-
                     </div> <!-- cont -->
                 </div> <!-- blog details -->
             </div>
@@ -345,19 +469,35 @@
                                     <span>Create Post</span>
                                 </a>
                             </div>
-                            <div class="categories mt-30">
-                                <h4>Categories</h4>
-                                <ul>
-                                    <li><a href="#">Fronted</a></li>
-                                    <li><a href="#">Backend</a></li>
-                                    <li><a href="#">Photography</a></li>
-                                    <li><a href="#">Technology</a></li>
-                                    <li><a href="#">GMET</a></li>
-                                    <li><a href="#">Language</a></li>
-                                    <li><a href="#">Science</a></li>
-                                    <li><a href="#">Accounting</a></li>
-                                </ul>
-                            </div>
+                            <!-- Form lọc -->
+                            <form th:action="@{/post}" method="get">
+                                <div class="categories mt-30">
+                                    <h4 class="mb-2">Grade</h4>
+                                    <select name="gradeId" class="mb-3">
+                                        <option value="">All</option>
+                                        <option th:each="grade : ${grades}"
+                                                th:value="${grade.id}"
+                                                th:text="${grade.name}"
+                                                th:selected="${selectedGrade == grade.id}">
+                                        </option>
+                                    </select>
+
+                                    <h4 class="mb-2">Subject</h4>
+                                    <select name="subjectId" class="mb-3">
+                                        <option value="">All</option>
+                                        <option th:each="subject : ${subjects}"
+                                                th:value="${subject.id}"
+                                                th:text="${subject.name}"
+                                                th:selected="${selectedSubject == subject.id}">
+                                        </option>
+                                    </select>
+
+                                    <div class="mt-3">
+                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                        <a th:href="@{/post}" class="btn btn-secondary">Reset</a>
+                                    </div>
+                                </div>
+                            </form>
                         </div> <!-- categories -->
                     </div> <!-- row -->
                 </div> <!-- sidebar -->
@@ -376,12 +516,12 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright text-md-left text-center pt-15">
-                        <p>&copy; Copyrights 2020 Edubin All rights reserved. </p>
+                        <p>&copy; Copyrights 2025 LearningZ All rights reserved. </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="copyright text-md-right text-center pt-15">
-                        <p>Designed by <span>Pixelcurve</span> </p>
+                        <p>Designed by <span>LearningZ</span> </p>
                     </div>
                 </div>
             </div> <!-- row -->
@@ -442,6 +582,84 @@
 <!--====== Map js ======-->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC3Ip9iVC0nIxC6V14CKLQ1HZNF_65qEQ"></script>
 <script src="/js/map-script.js"></script>
+<script>
+    function toggleMenu(element) {
+        event.preventDefault();
+        event.stopPropagation();
+        let menu = element.nextElementSibling;
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
 
+        document.addEventListener("click", function hideMenu(event) {
+            if (!element.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = "none";
+                document.removeEventListener("click", hideMenu);
+            }
+        });
+    }
+</script>
+<script>
+    window.addEventListener("beforeunload", function () {
+        localStorage.setItem("scrollPosition", window.scrollY);
+    });
+    window.addEventListener("load", function () {
+        let scrollPosition = localStorage.getItem("scrollPosition");
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition, 10));
+            localStorage.removeItem("scrollPosition");
+        }
+    });
+
+    function editComment(commentId) {
+        let button = document.querySelector(`button[onclick="editComment('${commentId}')"]`);
+        let content = button.getAttribute("data-content");
+
+        document.getElementById("comment-text-" + commentId).style.display = "none";
+        document.getElementById("edit-box-" + commentId).style.display = "block";
+        document.getElementById("edit-content-" + commentId).value = content;
+    }
+
+    function cancelEdit(commentId) {
+        document.getElementById("comment-text-" + commentId).style.display = "block";
+        document.getElementById("edit-box-" + commentId).style.display = "none";
+    }
+
+    function updateComment(commentId) {
+        let content = document.getElementById("edit-content-" + commentId).value;
+
+        fetch(`/comments/edit/${commentId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `content=${encodeURIComponent(content)}`
+        })
+            .then(response => response.text())
+            .then(() => {
+                document.getElementById("comment-text-" + commentId).innerHTML = content;
+                document.getElementById("comment-text-" + commentId).style.display = "block";
+                document.getElementById("edit-box-" + commentId).style.display = "none";
+            })
+            .catch(error => alert("Lỗi: " + error.message));
+    }
+    function toggleLike(commentId) {
+        fetch(`/comments/${commentId}/like`, {
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(data => {
+                let likeBtn = document.getElementById(`like-btn-${commentId}`);
+                let likeCount = document.getElementById(`like-count-${commentId}`);
+
+                if (data.isLiked) {
+                    likeBtn.classList.add("liked");
+                    likeBtn.classList.remove("unliked");
+                } else {
+                    likeBtn.classList.remove("liked");
+                    likeBtn.classList.add("unliked");
+                }
+
+                likeCount.textContent = data.likeCount;
+            })
+            .catch(error => console.error("Error:", error));
+    }
+</script>
 </body>
 </html>

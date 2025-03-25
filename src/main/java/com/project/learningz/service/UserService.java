@@ -1,10 +1,14 @@
 package com.project.learningz.service;
 
 import com.project.learningz.constant.Role;
+import com.project.learningz.constant.UserStatus;
+import com.project.learningz.dto.UserDetailDTO;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +19,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -145,5 +150,34 @@ public class UserService {
 
     public boolean isNormalStudent(Integer userId, Role role){
         return userRepository.isNormalStudent(userId, role);
+    }
+
+    public void save(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        userRepository.save(user);
+    }
+
+    public List<UserDetailDTO> getTop3UserByTeacherId(int userId) {
+        return userRepository.getTop3UserByTeacherId(userId);
+    }
+
+    public boolean banUserById(Integer userId){
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setUserStatus(UserStatus.BANNED);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+    public List<User> getTopTeachers() {
+        Pageable topFour = PageRequest.of(0, 4);
+        List<Object[]> results = userRepository.findTopTeachers(topFour);
+        return results.stream()
+                .map(result -> (User) result[0])
+                .toList();
     }
 }

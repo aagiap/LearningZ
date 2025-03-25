@@ -64,4 +64,17 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
         ORDER BY l.id
 """)
     List<LessonDetailDTO> findLessons(Integer chapterId, String keyword);
+
+    @Query("""
+        SELECT DISTINCT l.title
+        FROM QuestionBank q
+                JOIN QuizQuestion qq ON q.id = qq.question.id
+                JOIN Quiz qu ON qq.quiz.id = qu.id
+                JOIN qu.lesson l
+                JOIN l.chapter ch
+                JOIN ch.course co
+                JOIN co.subject s
+                JOIN co.grade g
+    """)
+    List<String> getAllLesson();
 }

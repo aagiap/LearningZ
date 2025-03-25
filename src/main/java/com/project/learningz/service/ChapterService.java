@@ -48,9 +48,15 @@ public class ChapterService {
             errorList.add("Order already exists");
         }
         String error = "";
+        int countError = 0;
         if(!errorList.isEmpty()){
             for(int i = 0; i < errorList.size(); i++){
-                error += errorList.get(i) + " ";
+                if(countError == errorList.size() - 1){
+                    error += errorList.get(i) + " ";
+                }else{
+                    error += errorList.get(i) + " and ";
+                }
+                countError++;
             }
         }
         return error;
@@ -61,13 +67,16 @@ public class ChapterService {
     }
 
     @Transactional
-    public void updateChapter(int chapterId, int order, String title, String description) throws GeneralSecurityException, IOException {
+    public void updateChapter(int chapterId, int order, String title, String description, String chapterDriveLink) throws GeneralSecurityException, IOException {
         Chapter chapter = getChapterById(chapterId);
         chapter.setChapterOrder(order);
         chapter.setChapterTitle(title);
         chapter.setDescription(description);
-        googleDriveService.renameFolder(getChapterById(chapterId).getChapterDriveLink(),
-                "Chapter " + order + ": " + title);
+
+        if(chapterDriveLink != null && !chapterDriveLink.trim().isEmpty()) {
+            googleDriveService.renameFolder(chapterDriveLink,
+                    "Chapter " + order + ": " + title);
+        }
         chapterRepository.save(chapter);
     }
 
@@ -80,9 +89,15 @@ public class ChapterService {
             errorList.add("Order already exists");
         }
         String error = "";
+        int countError = 0;
         if(!errorList.isEmpty()){
             for(int i = 0; i < errorList.size(); i++){
-                error += errorList.get(i) + " ";
+                if(countError == errorList.size() - 1){
+                    error += errorList.get(i) + " ";
+                }else{
+                    error += errorList.get(i) + " and ";
+                }
+                countError++;
             }
         }
         return error;
@@ -95,10 +110,18 @@ public class ChapterService {
         chapter.setChapterTitle(title);
         chapter.setDescription(description);
         chapter.setCourse(courseService.getCourseById(courseId));
-        String chapterDriveLink = googleDriveService
-                .createFolder("Chapter " + order + ": " + title,courseService.getCourseById(courseId).getCourseDriveLink());
-        chapter.setChapterDriveLink(chapterDriveLink);
+        if(courseService.getCourseById(courseId).getCourseDriveLink() != null
+                && !courseService.getCourseById(courseId).getCourseDriveLink().trim().isEmpty()) {
+            String chapterDriveLink = googleDriveService
+                    .createFolder("Chapter " + order + ": " + title,courseService.getCourseById(courseId).getCourseDriveLink());
+            chapter.setChapterDriveLink(chapterDriveLink);
+        }
         chapterRepository.save(chapter);
     }
+
+    public List<String> getAllChaptersInQuestions() {
+        return chapterRepository.getAllChaptersInQuestions();
+    }
+
 
 }

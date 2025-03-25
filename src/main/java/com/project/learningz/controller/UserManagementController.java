@@ -1,9 +1,13 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.Role;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
 import com.project.learningz.service.UserManagementService;
+import com.project.learningz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -14,8 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
+
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/users")
 
 public class UserManagementController {
     @Autowired
@@ -24,14 +29,19 @@ public class UserManagementController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserManagementRepository userManagementRepository;
+    @Autowired
+    private UserService userService;
 
-    @GetMapping("/user_list")
-    public String searchUsers(@RequestParam(value = "keyword", required = false) String keyword,
-                              @RequestParam(value = "sort", defaultValue = "id") String sortField,
-                              @RequestParam(value = "order", defaultValue = "asc") String order,
-                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-                              @AuthenticationPrincipal OAuth2User userOAuth2,
-                              Model model) {
+
+    @GetMapping("/userlist_role")
+    public String getUsers(@RequestParam(value = "role", required = false) String roleStr,
+                           @RequestParam(value = "keyword", required = false) String keyword,
+                           @RequestParam(value = "sort", defaultValue = "id") String sortField,
+                           @RequestParam(value = "order", defaultValue = "asc") String order,
+                           @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                           @AuthenticationPrincipal OAuth2User userOAuth2,
+                           Model model) {
+
         String username = null;
 
         if (user != null) {
@@ -46,27 +56,24 @@ public class UserManagementController {
         }
 
         List<User> users;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            users = userManagementService.searchUsersSorted(keyword, sortField, order);
-        } else {
-            users = userManagementService.getAllUsersSorted(sortField, order);
+        Role role;
+        try {
+            role = Role.valueOf(roleStr.toUpperCase());
+            users = userManagementService.searchUsersSorted(role, keyword, sortField, order);
+        } catch (IllegalArgumentException e) {
+            users = userManagementService.getAllUsersByKeyword(keyword, sortField, order);
         }
 
-        if (username != null) {
-            final String finalUsername = username;  // Tạo biến final copy
-            users.removeIf(u -> u.getUsername().equals(finalUsername));
-            User currentUser = userManagementService.findUserByUsername(finalUsername);
-            if (currentUser != null) {
-                users.add(0, currentUser);
-            }
-        }
 
+        // Gửi dữ liệu tới giao diện
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         model.addAttribute("users", users);
         model.addAttribute("keyword", keyword);
         model.addAttribute("sortField", sortField);
         model.addAttribute("order", order);
+        model.addAttribute("role", roleStr);
+
         return "user_management/user_list";
     }
 
@@ -86,35 +93,45 @@ public class UserManagementController {
         if (avatarUrl == null) {
             avatarUrl = "/image/AvartaDefault.jpg";
         }
-        long sumOfUsers = userManagementService.getNumberOfUsers();
-        long sumOfAdminUsers = userManagementService.getNumberOfAdminUsers();
         long sumOfVipUsers = userManagementService.getNumberOfVipUsers();
         long sumOfCasualUsers = userManagementService.getNumberOfCasualStudentUsers();
-        long sumOfTeacherUsers = userManagementService.getNumberOfTeacherUsers();
-        long sumOfMarketerUsers = userManagementService.getNumberOfMarketerUsers();
-        List<User> usersLatest = userManagementService.getTenLatestUsers();
+        long sumOfStudentUsers = sumOfVipUsers + sumOfCasualUsers;
+        long sumOfActiveUsers = userManagementService.countActiveStudents();
+        long sumOfInactiveUsers = userManagementService.countInactiveStudents();
+        List<User> usersLatest = userManagementService.getFiveLatestStudentUsers();
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
-        model.addAttribute("sumOfUsers", sumOfUsers);
+        model.addAttribute("sumOfStudentUsers", sumOfStudentUsers);
         model.addAttribute("users", usersLatest);
-        model.addAttribute("sumOfAdminUsers", sumOfAdminUsers);
         model.addAttribute("sumOfVipUsers", sumOfVipUsers);
         model.addAttribute("sumOfCasualUsers", sumOfCasualUsers);
-        model.addAttribute("sumOfTeacherUsers", sumOfTeacherUsers);
-        model.addAttribute("sumOfMarketerUsers", sumOfMarketerUsers);
+        model.addAttribute("sumOfActiveUsers", sumOfActiveUsers);
+        model.addAttribute("sumOfInactiveUsers", sumOfInactiveUsers);
+
         return "user_management/user_dashboard";
     }
 
     @PostMapping("/ban")
-    public String banUser(@RequestParam(value = "id") Integer id, RedirectAttributes redirectAttributes) {
+    public String banUser(
+            @RequestParam(value = "id") Integer id,
+            @RequestParam(value = "role", required = false) String role,
+            @RequestParam(value = "sort", required = false, defaultValue = "role") String sort,
+            @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            RedirectAttributes redirectAttributes) {
         try {
             userManagementService.banUserById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "User has banned successfully!");
-        } catch (Exception e){
+            redirectAttributes.addFlashAttribute("successMessage", "User has been banned successfully!");
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/admin/user_list";
+
+        return "redirect:/admin/users/userlist_role?role=" + (role != null ? role : "") +
+                "&sort=" + sort +
+                "&order=" + order +
+                "&keyword=" + (keyword != null ? keyword : "");
     }
+
 
     @GetMapping("/create")
     public String showCreateForm(@AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
@@ -143,20 +160,31 @@ public class UserManagementController {
                              @RequestParam("email") String email,
                              @RequestParam("phone") String phone,
                              @RequestParam("role") String role,
+                             @RequestParam(value = "sort", required = false, defaultValue = "role") String sort,
+                             @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
+                             @RequestParam(value = "keyword", required = false) String keyword,
                              RedirectAttributes redirectAttributes) {
         try {
             userManagementService.createUser(username, email, password, phone, role);
             redirectAttributes.addFlashAttribute("successMessage", "User has created successfully!");
-            return "redirect:/admin/user_list";
+            return "redirect:/admin/users/userlist_role?role=" + (role != null ? role : "") +
+                    "&sort=" + sort +
+                    "&order=" + order +
+                    "&keyword=" + (keyword != null ? keyword : "");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/admin/create";
+            return "redirect:/admin/users/create";
         }
     }
 
 
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+    public String updateUser(@RequestParam(value = "role", required = false) String role,
+                             @RequestParam(value = "sort", required = false, defaultValue = "role") String sort,
+                             @RequestParam(value = "order", required = false, defaultValue = "asc") String order,
+                             @RequestParam(value = "keyword", required = false) String keyword,
+                             @ModelAttribute User user,
+                             RedirectAttributes redirectAttributes) {
         Optional<User> userOpt = userManagementService.getUserById(user.getId());
         if (userOpt.isPresent()) {
             User updatedUser = userOpt.get();
@@ -164,10 +192,11 @@ public class UserManagementController {
             updatedUser.setEmail(user.getEmail());
             updatedUser.setPhoneNum(user.getPhoneNum());
             updatedUser.setRole(user.getRole());
+            updatedUser.setUserStatus(user.getUserStatus());
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
                 if (user.getPassword().length() < 6) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Password must be at least 6 characters");
-                    return "redirect:/admin/user_list" + user.getId();
+                    return "redirect:/admin/users/" + user.getId();
                 }
                 updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
             } else {
@@ -175,9 +204,11 @@ public class UserManagementController {
             }
             userManagementService.updateUser(updatedUser);
         }
-        return "redirect:/admin/user_list";
+        return "redirect:/admin/users/userlist_role?role=" + (role != null ? role : "") +
+                "&sort=" + sort +
+                "&order=" + order +
+                "&keyword=" + (keyword != null ? keyword : "");
     }
-
 
     @GetMapping("/{id}")
     public String showUserDetail(@PathVariable Integer id,
@@ -207,9 +238,19 @@ public class UserManagementController {
             return "user_management/user_detail";
         } else {
             model.addAttribute("error", "User not found");
-            return "redirect:/admin/user_list";
+            return "redirect:/admin/users/dashboard";
         }
     }
 
+    @PutMapping("/ban")
+    public ResponseEntity<String> banUser(@RequestParam("userId") Integer userId) {
+        boolean banned = userService.banUserById(userId);
+        User user = userService.getUserById(userId);
+        if (banned) {
+            return ResponseEntity.ok("Banned User " + user.getUsername() + " successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot banned this User!");
+        }
+    }
 
 }

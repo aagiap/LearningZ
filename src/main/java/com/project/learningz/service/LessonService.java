@@ -85,14 +85,19 @@ public class LessonService {
         }
         return lessons.get(0).getId();
     }
+
     @Transactional
     public void updateLesson(int lessonId, int chapterId, String lessonDriveLink,
                              String documentFolderLink, String videoFolderLink, String quizImageLink,
-                             String lessonTitle, QuizType quizType, String description) {
+                             String lessonTitle, QuizType quizType, String description) throws GeneralSecurityException, IOException {
         Lesson lesson = lessonRepository.findLessonById(lessonId);
         lesson.setTitle(lessonTitle);
         lesson.setQuizType(quizType);
         lesson.setDescription(description);
+
+        if(lessonDriveLink!= null && !lessonDriveLink.isEmpty()){
+            googleDriveService.renameFolder(lessonDriveLink, lessonTitle);
+        }
         lessonRepository.save(lesson);
     }
 
@@ -103,15 +108,18 @@ public class LessonService {
         lesson.setQuizType(quizType);
         lesson.setDescription(description);
         lesson.setChapter(chapterRepository.findChapterById(chapterId));
-        String lessonDriveLink = googleDriveService.createFolder(lessonTitle,
-                chapterRepository.findChapterById(chapterId).getChapterDriveLink());
-        lesson.setLessonDriveLink(lessonDriveLink);
-        String documentFolderLink = googleDriveService.createFolder("Documents",lessonDriveLink);
-        lesson.setDocumentFolderLink(documentFolderLink);
-        String videoFolderLink = googleDriveService.createFolder("Videos",lessonDriveLink);
-        lesson.setVideoFolderLink(videoFolderLink);
-        String quizImageLink = googleDriveService.createFolder("Quiz Images",lessonDriveLink);
-        lesson.setQuizImageLink(quizImageLink);
+        if(chapterRepository.findChapterById(chapterId).getChapterDriveLink() != null
+                && !chapterRepository.findChapterById(chapterId).getChapterDriveLink().isEmpty()){
+            String lessonDriveLink = googleDriveService.createFolder(lessonTitle,
+                    chapterRepository.findChapterById(chapterId).getChapterDriveLink());
+            lesson.setLessonDriveLink(lessonDriveLink);
+            String documentFolderLink = googleDriveService.createFolder("Documents",lessonDriveLink);
+            lesson.setDocumentFolderLink(documentFolderLink);
+            String videoFolderLink = googleDriveService.createFolder("Videos",lessonDriveLink);
+            lesson.setVideoFolderLink(videoFolderLink);
+            String quizImageLink = googleDriveService.createFolder("Quiz Images",lessonDriveLink);
+            lesson.setQuizImageLink(quizImageLink);
+        }
         lessonRepository.save(lesson);
     }
 
@@ -127,5 +135,9 @@ public class LessonService {
             return null;
         }
         return lessons.get(0).getId();
+    }
+
+    public List<String> getAllLessonInQuestions() {
+        return lessonRepository.getAllLesson();
     }
 }

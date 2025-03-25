@@ -26,7 +26,7 @@
             <div id="prev">
                 <button class="btn btn-primary" onclick="window.history.back();">Back</button>
             </div>
-            <form method="post" action="/Exam/SubmitQuiz">
+            <form method="post" action="/Exam/SubmitQuiz" onsubmit="removeTimeLimit()">
             <div class="ml-auto mr-sm-5">
                 <button class="btn btn-success">Submit</button>
             </div>
@@ -35,7 +35,7 @@
 
 </div>
 <div>
-    <th:block th:each="question, questionStat : ${session.questionBankList}">
+    <th:block th:each="question, questionStat : ${questionBankList}">
         <div class="container- mt-sm-5 my-1" th:id="'question-' + ${questionStat.index}">
             <span th:text="'Question ' + ${questionStat.index + 1}"></span>
 
@@ -88,6 +88,30 @@
 </div>
 
 </div>
+<script>
+    document.querySelector("form").addEventListener("submit", function () {
+        const quizId = "[[${quizId}]]";
+        let storedData = JSON.parse(localStorage.getItem("quiz_answers")) || {};
+
+        if (storedData[quizId]) {
+            delete storedData[quizId]; // Xóa dữ liệu quiz này
+        }
+
+        localStorage.setItem("quiz_answers", JSON.stringify(storedData));
+
+
+        // Xóa selectedBoxes của quiz hiện tại
+        let savedSelections = JSON.parse(localStorage.getItem("selectedBoxes")) || {};
+        delete savedSelections[quizId];
+        localStorage.setItem("selectedBoxes", JSON.stringify(savedSelections));
+
+        // Xóa thời gian của quiz hiện tại
+        let storedTimes = JSON.parse(localStorage.getItem("quizTimers")) || {};
+        delete storedTimes[quizId];
+        localStorage.setItem("quizTimers", JSON.stringify(storedTimes));
+    });
+
+</script>
 
 </body>
 </html>

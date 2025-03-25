@@ -24,6 +24,9 @@ public class VideoService {
     @Autowired
     private LessonService lessonService;
 
+    @Autowired
+    private CourseService courseService;
+
     public Video getVideoById(int videoId) {
         return videoRepository.getVideoById(videoId);
     }
@@ -45,9 +48,15 @@ public class VideoService {
             errorList.add("empty file");
         }
         String error = "";
+        int countError = 0;
         if(!errorList.isEmpty()){
-            for(String s : errorList){
-                error += s + "\n";
+            for(int i = 0; i < errorList.size(); i++){
+                if(countError == errorList.size() - 1){
+                    error += errorList.get(i) + " ";
+                }else{
+                    error += errorList.get(i) + " and ";
+                }
+                countError++;
             }
         }
         return error;
@@ -80,6 +89,7 @@ public class VideoService {
         video.setLesson(lessonService.getLessonById(lessonId));
         videoRepository.save(video);
     }
+
     public Video findByVideoId(Integer videoId) {
         return videoRepository.findByVideoId(videoId);
     }

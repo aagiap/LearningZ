@@ -131,16 +131,35 @@
     <div class="profileInfo">
         <div class="profileInfo-avatar">
             <img th:src="@{${avatarUrl}}" alt="Avatar">
-            <h3 id="username" th:text="${username}"></h3>
-            <p id="role" th:text="${role}"></p>
+            <h3 id="username"><b th:text="${username}"></b></h3>
+            <p id="role"><b th:text="${role}"></b></p>
         </div>
         <div class="profileInfo-info">
             <h2>Personal Information</h2>
-            <p id="email" th:text="'Email:' + ${email}"></p>
-            <p id="phoneNumber"
-               th:text="'Phone number:' + (${phoneNumber != null} ? ${phoneNumber} : 'Not uploaded')"></p>
-            <p id="vip_status">VIP: Còn lại 1 ngày</p>
+            <table>
+                <tr>
+                    <td><b>Email</b></td>
+                    <td th:text="${email}"></td>
+                </tr>
+                <tr>
+                    <td><b>Phone Number</b></td>
+                    <td th:text="(${phoneNumber != null} ? ${phoneNumber} : 'Not uploaded')"></td>
+                </tr>
+                <tr th:if="${membership != null}">
+                    <td><b>VIP Package</b></td>
+                    <td>
+                        <span th:text="${membership.getVipPackage().getPackageName()}"></span>
+                        <span><b th:text="'(Days remain: ' + ${dayMembershipRemain} + ')'"></b></span>
+                    </td>
+                </tr>
+                <tr th:if="${membership == null}">
+                    <td><b>VIP Package</b></td>
+                    <td>Not registered</td>
+                </tr>
+            </table>
+            <a href="/vip-packages" id="vipRegister" hidden>Register VIP Membership</a>
             <button class="edit-profile-btn" onclick="location.href='/home/profile/profile_edit'">Edit Profile</button>
+            <button th:if="${membership == null}" id="vipButton" onclick="vipRegister(this)">Register VIP</button>
         </div>
     </div>
     <div class="course-list">
@@ -149,10 +168,12 @@
             <div class="course-list-container">
                 <ul id="courseList">
                     <li th:each="course : ${courseList}" class="course-item">
-                        <div class="course-title" th:text="${course.getTitle()}"></div>
+                        <div class="course-title" ><b th:text="${course.getTitle()}"></b></div>
+                        <div class="course-status"><p th:text="${course.getCourseStatus()}"></p></div>
                         <div class="course-view">
                             <button onclick="viewCourseDetails(this)">View details</button>
-                            <a hidden id="viewCourseDetailsRequest" th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
+                            <a hidden id="viewCourseDetailsRequest"
+                               th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
                         </div>
                     </li>
                 </ul>
@@ -163,6 +184,37 @@
             <p>Courses List Empty <a th:href="@{/course}">Register course now!</a></p>
         </div>
     </div>
+
+    <br>
+    <div class="course-list">
+        <h2 class="text-center mb-4">My VIP Membership Package</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-center">
+                <thead class="table-primary">
+                <tr>
+                    <th>Package Name</th>
+                    <th>Duration</th>
+                    <th>Registration Date</th>
+                    <th>Expiration Date</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="membership : ${userMemberships}">
+                    <td th:text="${membership.vipPackage.packageName}"></td>
+                    <td th:text="${membership.vipPackage.duration + ' months'}"></td>
+                    <td th:text="${membership.registrationDate}"></td>
+                    <td th:text="${membership.expirationDate}"></td>
+                    <td>
+                        <span class="btn btn-success btn-sm" th:if="${membership.status.name() == 'ACTIVE'}">Active</span>
+                        <span class="btn btn-warning text-dark btn-sm" th:if="${membership.status.name() == 'CANCELED'}">Canceled</span>
+                        <span class="btn btn-danger btn-sm" th:if="${membership.status.name() == 'EXPIRED'}">Expired</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <script>
     function toggleDropdown() {
@@ -171,18 +223,22 @@
     }
 
     // Đóng dropdown khi click ra ngoài
-    document.addEventListener("click", function(event) {
+    document.addEventListener("click", function (event) {
         var avatarContainer = document.querySelector(".avatar-container");
         var dropdown = document.getElementById("dropdownMenu");
         if (!avatarContainer.contains(event.target)) {
             dropdown.style.display = "none";
         }
     });
+
     function viewCourseDetails(button) {
         let link = button.parentElement.querySelector("#viewCourseDetailsRequest");
         if (link) {
             link.click();
         }
+    }
+    function vipRegister(e){
+        document.querySelector("#vipRegister").click();
     }
 </script>
 </body>

@@ -24,38 +24,6 @@
     <!-- Theme Config js (Require in all Page) -->
     <script src="/js/config.js"></script>
     <style>
-        .add-user-form {
-            display: none;
-        }
-
-        #addUserCheck:checked + .add-user-form {
-            display: block;
-        }
-
-        #addUserCheck:checked ~ .user-list {
-            margin-top: 250px; /* Điều chỉnh khoảng cách khi form hiển thị */
-        }
-
-        .add-user-form {
-            position: relative; /* Để h4 có thể đặt chồng lên viền */
-            border: 2px solid #0d47a1; /* Viền xanh đậm */
-            border-radius: 10px; /* Bo góc */
-            padding: 20px;
-            margin: 20px auto;
-            width: 400px; /* Điều chỉnh độ rộng */
-            background-color: #ffffff;
-        }
-
-        .form-title {
-            position: absolute;
-            top: -15px; /* Dịch lên trên viền */
-            left: 20px;
-            background: white; /* Giữ nền trắng để đè lên viền */
-            padding: 0 10px; /* Tạo khoảng cách 2 bên */
-            font-weight: bold;
-            color: #0d47a1;
-            font-size: 18px;
-        }
 
         h3 {
             text-align: center; /* Căn giữa */
@@ -69,6 +37,27 @@
             display: inline-block; /* Giữ nội dung gọn gàng */
         }
 
+        .btn {
+            border-radius: 8px;
+        }
+
+        /* ====== Badge trạng thái ====== */
+        .badge {
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-danger {
+            background: #d50d31;
+            color: white;
+        }
     </style>
 </head>
 
@@ -276,12 +265,12 @@
     <div class="main-nav">
         <!-- Sidebar Logo -->
         <div class="logo-box">
-            <a href="index.html" class="logo-dark">
+            <a href="/home" class="logo-dark">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
 
             </a>
-            <a href="index.html" class="logo-light">
+            <a href="/home" class="logo-light">
                 <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
                 <img src="/image/learningz.png" class="logo-lg" alt="logo light">
             </a>
@@ -298,7 +287,7 @@
                 <li class="menu-title">General</li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/dashboard">
+                    <a class="nav-link" href="/admin/users/dashboard">
                                    <span class="nav-icon">
                                         <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                                    </span>
@@ -307,20 +296,36 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button"
-                       aria-expanded="false" aria-controls="sidebarProducts">
-                                   <span class="nav-icon">
-                                       <iconify-icon icon="solar:user-bold"></iconify-icon>
-                                   </span>
-                        <span class="nav-text"> Users list </span>
+                    <a class="nav-link menu-arrow" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarUsers">
+       <span class="nav-icon">
+           <iconify-icon icon="solar:user-bold"></iconify-icon>
+       </span>
+                        <span class="nav-text"> Users List </span>
                     </a>
-                    <div class="collapse" id="sidebarProducts">
+                    <div class="collapse show" id="sidebarUsers">
                         <ul class="nav sub-navbar-nav">
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/admin/user_list">List</a>
+                                <a class="sub-nav-link menu-arrow" href="#sidebarList" data-bs-toggle="collapse"
+                                   role="button"
+                                   aria-expanded="false" aria-controls="sidebarList">
+                                    <span class="nav-text">📋 List </span>
+                                </a>
+                                <ul class="nav sub-navbar-nav collapse ms-3" id="sidebarList">
+                                    <li><a class="sub-nav-link"
+                                           th:href="@{/admin/users/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                           style="color: rgba(216, 223, 13, 0.93);">All Student Users</a></li>
+                                    <li><a class="sub-nav-link"
+                                           th:href="@{/admin/users/userlist_role(role='VIP_STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                           style="color: rgba(216, 223, 13, 0.93);">VIP Students</a></li>
+                                    <li><a class="sub-nav-link"
+                                           th:href="@{/admin/users/userlist_role(role='STUDENT', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                           style="color: rgba(216, 223, 13, 0.93);">Casual Students</a></li>
+                                </ul>
                             </li>
+
                             <li class="sub-nav-item">
-                                <a class="sub-nav-link" href="/admin/create">Create</a>
+                                <a class="sub-nav-link" href="/admin/users/create">➕ Create</a>
                             </li>
                         </ul>
                     </div>
@@ -349,34 +354,37 @@
                     <span th:text="${successMessage}"></span>
                 </div>
 
-                <!--add-->
-                <button class="btn btn-success mb-3" style="background-color: #0d47a1; display: block; width: 120px; color: whitesmoke"
-                        onclick="window.location.href='/admin/create'">
-                    Add User
-                </button>
-
                 <div class="user-list">
-                    <!--search-->
-                    <form method="get" action="/admin/user_list" class="mb-3 d-flex justify-content-start"
-                          style="max-width: 400px; margin: 0 auto;">
-                        <input type="text" name="keyword" id="keyword" th:value="${keyword}" class="form-control me-2"
-                               placeholder="Search users...">
-                        <button type="submit" class="btn btn-primary" style="background-color: #0d47a1; color: whitesmoke">Search</button>
-                    </form>
+                    <div class="row mb-3 justify-content-between" style="max-width: 800px; margin: 0 auto;">
+                        <div class="col-auto">
+                            <button class="btn btn-success"
+                                    style="background-color: #0d47a1; width: 120px; color: whitesmoke"
+                                    onclick="window.location.href='/admin/users/create'">
+                                Add User
+                            </button>
+                        </div>
+
+                        <div class="col">
+                            <form method="get" action="/admin/users/userlist_role" class="d-flex"
+                                  style="max-width: 400px; margin-left: auto;">
+                                <input type="text" name="keyword" id="keyword" th:value="${keyword}"
+                                       class="form-control me-2"
+                                       placeholder="Search users...">
+                                <input type="hidden" name="role" th:value="${role}">
+                                <button type="submit" class="btn btn-primary"
+                                        style="background-color: #0d47a1; color: whitesmoke">
+                                    Search
+                                </button>
+                            </form>
+                        </div>
+                    </div>
 
                     <table class="table table-bordered table-striped">
                         <thead style="background-color: #0d47a1; color: white;">
                         <tr>
                             <th style="color: whitesmoke">#</th>
                             <th>
-                                <a th:href="@{/admin/user_list(sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
-                                   style="color: whitesmoke">
-                                    ID <span th:text="${sortField == 'id' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
-                                             style="color: whitesmoke"></span>
-                                </a>
-                            </th>
-                            <th>
-                                <a th:href="@{/admin/user_list(sort='username', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                <a th:href="@{/admin/users/userlist_role(role=${role}, sort='username', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                    style="color: whitesmoke">
                                     UserName <span
                                         th:text="${sortField == 'username' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
@@ -384,14 +392,14 @@
                                 </a>
                             </th>
                             <th>
-                                <a th:href="@{/admin/user_list(sort='email', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                <a th:href="@{/admin/users/userlist_role(role=${role}, sort='email', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                    style="color: whitesmoke">
                                     Email <span th:text="${sortField == 'email' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
                                                 style="color: whitesmoke"></span>
                                 </a>
                             </th>
                             <th>
-                                <a th:href="@{/admin/user_list(sort='phoneNum', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                <a th:href="@{/admin/users/userlist_role(role=${role}, sort='phoneNum', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                    style="color: whitesmoke">
                                     Phone Number <span
                                         th:text="${sortField == 'phoneNum' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
@@ -399,14 +407,14 @@
                                 </a>
                             </th>
                             <th>
-                                <a th:href="@{/admin/user_list(sort='role', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                <a th:href="@{/admin/users/userlist_role(role=${role}, sort='role', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                    style="color: whitesmoke">
                                     Role <span th:text="${sortField == 'role' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
                                                style="color: whitesmoke"></span>
                                 </a>
                             </th>
                             <th>
-                                <a th:href="@{/admin/user_list(sort='userStatus', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                                <a th:href="@{/admin/users/userlist_role(role=${role}, sort='userStatus', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                    style="color: whitesmoke">
                                     Status <span
                                         th:text="${sortField == 'userStatus' ? (order == 'asc' ? '▲' : '▼') : '⇅'}"
@@ -418,25 +426,34 @@
                         </thead>
 
                         <tbody>
-                        <tr th:each="user, index : ${users}" th:classappend="${index.count == 1} ? 'table-primary fw-bold' : ''">
+                        <tr th:each="user, index : ${users}" th:if="${user.username != username}">
                             <td th:text="${index.count}"></td>
-                            <td th:text="${user.id}"></td>
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.email}"></td>
                             <td th:text="${user.phoneNum}"></td>
-                            <td th:text="${user.role}"></td>
-                            <td th:text="${user.userStatus}"></td>
+                            <td th:text="${user.role.name()}"></td>
                             <td>
-                                <th:block th:if="${user.username != username}">
-                                    <a th:href="@{/admin/{id}(id=${user.id})}" class="text-primary" title="View">
+                            <span class="badge"
+                                  th:classappend="${user.userStatus.name() == 'ACTIVE' ? 'badge-success' :
+                                                    (user.userStatus.name() == 'BANNED' ? 'badge-danger' : '')}"
+                                  th:text="${user.userStatus.name()}">
+                            </span>
+                            </td>
+                            <td>
+                                <th:block
+                                        th:if="${user.role.name() != 'ADMIN_USER_MANAGER' and user.role.name() != 'ADMIN_COURSE_MANAGER' and user.role.name() != 'ADMIN'}">
+                                    <a th:href="@{/admin/users/{id}(id=${user.id})}" class="text-primary"
+                                       title="View">
                                         <i class="fas fa-eye" style="color: #0d47a1"></i>
                                     </a>
-                                    <a th:href="@{/admin/{id}(id=${user.id})}" class="text-primary" title="Edit">
+                                    <a th:href="@{/admin/users/{id}(id=${user.id})}" class="text-primary"
+                                       title="Edit">
                                         <i class="fas fa-pencil-alt" style="color: #0d47a1"></i>
                                     </a>
-                                    <form action="/admin/ban" method="post" style="display:inline;"
+                                    <form action="/admin/users/ban" method="post" style="display:inline;"
                                           onsubmit="return confirmDelete(this);">
                                         <input type="hidden" name="id" th:value="${user.id}"/>
+                                        <input type="hidden" name="role" th:value="${role}"/>
                                         <button type="submit" class="btn btn-link text-danger" title="Ban">
                                             <i class="fas fa-ban" style="color: #0d47a1"></i>
                                         </button>

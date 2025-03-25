@@ -11,6 +11,8 @@ import com.project.learningz.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,6 +34,9 @@ public class UsersCourseService {
     private QuizRepository quizRepository;
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private QuizResultService quizResultService;
 
     public Map<Integer, Double> getAverageRatingByCourse() {
         List<Object[]> results = userCourseRepository.findAverageRatingByCourse();
@@ -80,7 +85,7 @@ public class UsersCourseService {
         int count = 0;
         List<QuizResult> quizResults = quizResults(userId);
         for (QuizResult quizResult : quizResults) {
-            if (quizResult.getMaxScore() >= 8) {
+            if (quizResult.getMaxScore() >= quizResultService.getMinScoreToPass()) {
                 count++;
             }
         }
@@ -96,7 +101,7 @@ public class UsersCourseService {
         //List<QuizResult> quizResults = quizResults(userId);
         List<QuizResult> quizResults = quizResultRepository.getQuizResultInCourse(userId, courseId);
         for (QuizResult quizResult : quizResults) {
-            if (quizResult.getMaxScore() >= 8) {
+            if (quizResult.getResultStatus().equals("Pass")) {
                 count++;
             }
         }
@@ -175,5 +180,14 @@ public class UsersCourseService {
 
     public List<Integer> courseIdListByUserId(Integer userId){
         return userCourseRepository.courseIdListByUserId(userId);
+    }
+
+    public List<Course> getTopCourses() {
+        Pageable topFive = PageRequest.of(0, 5);
+        List<Object[]> results = userCourseRepository.findTopCourses(topFive);
+
+        return results.stream()
+                .map(obj -> (Course) obj[0])
+                .toList();
     }
 }

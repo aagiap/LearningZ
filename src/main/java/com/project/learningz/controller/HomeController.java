@@ -1,13 +1,8 @@
 package com.project.learningz.controller;
 
-import com.project.learningz.entity.Course;
-import com.project.learningz.entity.User;
-import com.project.learningz.entity.Grade;
-import com.project.learningz.entity.Slider;
+import com.project.learningz.entity.*;
 import com.project.learningz.repository.CourseRepository;
-import com.project.learningz.service.GradeService;
-import com.project.learningz.service.SliderService;
-import com.project.learningz.service.UserService;
+import com.project.learningz.service.*;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +13,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HomeController {
 
     @Autowired
     private GradeService gradeService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CourseRepository courseRepository;
-
     @Autowired
     private SliderService sliderService;
+    @Autowired
+    private UsersCourseService usersCourseService;
+    @Autowired
+    private VipPackageService vipPackageService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/home")
     public String homePage(Model model, HttpSession session) {
@@ -70,16 +65,27 @@ public class HomeController {
             session.invalidate();
         }
 
-        List<Grade> grades = gradeService.getAllGrades();
-        List<Course> courses = courseRepository.findAll();
-        List<Slider> sliders = sliderService.getAllSliders();
-
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
-        model.addAttribute("grades", grades);
-        model.addAttribute("courses", courses);
+        List<User> topTeachers = userService.getTopTeachers();
+        model.addAttribute("topTeachers", topTeachers);
+        Map<Integer, Double> averageRatings = usersCourseService.getAverageRatingByCourse();
+        model.addAttribute("averageRatings", averageRatings);
+        List<Slider> sliders = sliderService.getAllSliders();
         model.addAttribute("sliders", sliders);
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+        List<Course> topCourses = usersCourseService.getTopCourses();
+        model.addAttribute("topCourses", topCourses);
+        List<VipPackage> packages = vipPackageService.getAllVipPackages();
+        model.addAttribute("vipPackages", packages);
 
         return "home/home";
+    }
+    @GetMapping("/about")
+    public String aboutPage(Model model) {
+        List<Grade> grades = gradeService.getAllGrades();
+        model.addAttribute("grades", grades);
+        return "home/about";
     }
 }

@@ -7,10 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
-public class QuestionBank {
+public class QuestionBank implements Serializable {
     @Id
     @Column(name = "question_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

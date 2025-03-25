@@ -26,6 +26,7 @@ public class GoogleDriveService {
     private static final String COURSES_FOLDER_ID = "1VPA7JP72n0qjdp2tObhnjW49m5ypzh7_";
     private static final String SLIDE_FOLDER_ID = "1SUXO6c-VHXVo_1lhf0NHoAUwD5nDAUzz";
     private static final String COURSE_LOGO_FOLDER_ID = "1OmNEeRfUV16knh6ONH1x6OdQjQhBtP6N";
+    private static final String POST_IMAGE_FOLDER_ID = "16KOxhheevyHN5Z5w4x-fzy0xQDIQVtah";
 
     private Drive getDriveService() throws GeneralSecurityException, IOException {
         InputStream in = getClass().getResourceAsStream("/learningz-450206-bee3f9a78097.json");
@@ -197,5 +198,23 @@ public class GoogleDriveService {
         return null;
     }
 
+    public String uploadPostImage(MultipartFile file) throws IOException, GeneralSecurityException {
+        Drive driveService = getDriveService();
+        File fileMetadata = new File();
+        fileMetadata.setName(file.getOriginalFilename());
+        fileMetadata.setParents(Collections.singletonList(POST_IMAGE_FOLDER_ID));
+
+        InputStreamContent content = new InputStreamContent(file.getContentType(), file.getInputStream());
+        File uploadedFile = driveService.files().create(fileMetadata, content)
+                .setFields("id,webViewLink")
+                .execute();
+
+        Permission permission = new Permission();
+        permission.setType("anyone");
+        permission.setRole("reader");
+        driveService.permissions().create(uploadedFile.getId(), permission).execute();
+
+        return "https://lh3.googleusercontent.com/d/" + uploadedFile.getId();
+    }
 
 }

@@ -1,31 +1,36 @@
 package com.project.learningz.service;
 
 import com.project.learningz.entity.Post;
+import com.project.learningz.repository.CommentLikeRepository;
+import com.project.learningz.repository.CommentRepository;
 import com.project.learningz.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
+
 @Service
+@AllArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final GoogleDriveService googleDriveService;
+    private final CommentService commentService;
+    private final CommentLikeRepository commentLikeRepository;
 
-    @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-    }
-
-    public Page<Post> getAllPostsPaginated(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postRepository.findAll(pageable);
+    public Page<Post> getFilteredPosts(int page, int size, Integer gradeId, Integer subjectId) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
+        return postRepository.findByGradeAndSubject(gradeId, subjectId, pageable);
     }
 
     public void savePost(Post post) {
@@ -36,9 +41,30 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public void deletePost(Integer id) {
-        postRepository.deleteById(id);
+    @Transactional
+    public void deletePost(Integer postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post != null) {
+            List<Integer> commentIds = commentRepository.findCommentIdsByPost(post);
+            if (!commentIds.isEmpty()) {
+                commentLikeRepository.deleteByCommentIds(commentIds);
+            }
+            commentRepository.deleteByPost_PostId(postId);
+
+            if (post.getPostImgUrl() != null) {
+                String fileId = googleDriveService.getGoogleDriveFileId(post.getPostImgUrl());
+                if (fileId != null) {
+                    try {
+                        googleDriveService.deleteFile(fileId);
+                    } catch (IOException | GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            postRepository.deleteById(postId);
+        }
     }
-
-
+    public long countReportedPosts() {
+        return postRepository.countByReportedTrue();
+    }
 }

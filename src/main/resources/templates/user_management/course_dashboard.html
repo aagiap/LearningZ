@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Title Meta -->
+    <meta charset="utf-8"/>
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully responsive premium admin dashboard template"/>
+    <meta name="author" content="Techzaa"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <!-- Vendor css (Require in all Page) -->
+    <link href="/css/vendor.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Icons css (Require in all Page) -->
+    <link href="/css/icons.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- App css (Require in all Page) -->
+    <link href="/css/app.min.css" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" href="/css/UserManagement.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Theme Config js (Require in all Page) -->
+    <script src="/js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .btn {
+            border-radius: 8px;
+        }
+
+        .sub-navbar-nav {
+            padding-left: 20px; /* Đẩy toàn bộ danh sách sang phải */
+        }
+
+        .sub-navbar-nav li {
+            margin-left: 40px; /* Thụt vào từng mục */
+            list-style-type: none; /* Bỏ dấu chấm mặc định */
+        }
+
+        .sub-nav-link {
+            display: block;
+            padding: 5px 10px;
+            color: rgba(216, 223, 13, 0.93);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .sub-nav-link:hover {
+            color: #176e0e;
+            font-weight: bold;
+        }
+
+        .warning-about-course {
+            background-color: #ffebcc; /* Màu nền cam nhạt */
+            color: #7a4100; /* Màu chữ cam đậm */
+            padding: 20px;
+            border: 2px solid #ff9800; /* Viền cam nổi bật */
+            border-radius: 10px; /* Bo góc mềm mại */
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bóng đổ làm nổi khối */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .warning-about-course:hover {
+            transform: scale(1.02); /* Hiệu ứng phóng to nhẹ khi hover */
+        }
+
+        .warning-about-course p {
+            margin: 10px 0;
+        }
+
+        .warning-about-course span {
+            font-size: 22px; /* Chữ to hơn */
+            font-weight: bold; /* In đậm */
+            color: #d84315; /* Màu đỏ cam nổi bật */
+        }
+
+        .warning-about-course a {
+            color: #d84315;
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 2px solid #d84315; /* Gạch chân dạng viền dưới */
+            padding-bottom: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .warning-about-course a:hover {
+            color: white;
+            background-color: #d84315; /* Màu nền cam khi hover */
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        /* Chart lớn hơn, chiếm 2 phần */
+        .chart-container {
+            flex: 2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #courseChart {
+            width: 450px !important;
+            height: 450px !important;
+        }
+
+
+        /* Tổng container */
+        .summary-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .summary-container:hover {
+            transform: scale(1.02);
+        }
+
+        /* Bố cục chính: chart 2 phần - user 1 phần */
+        .summary-card {
+            display: flex;
+            flex-direction: row;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        /* Chart lớn hơn, chiếm 2 phần */
+        .chart-container {
+            flex: 2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #userChartRole {
+            width: 500px !important;
+            height: 500px !important;
+        }
+
+        /* Danh sách user, chiếm 1 phần */
+
+        /* Thẻ user */
+        .detail-user a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Hover hiệu ứng nổi lên */
+        .detail-user a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Danh sách user, chiếm 1 phần */
+        .detail-course {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 170px;
+        }
+
+        /* Thẻ user */
+        .detail-course a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Hover hiệu ứng nổi lên */
+        .detail-course a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .all-course{
+            background: #8e7df4;
+        }
+
+        .inactive-course{
+            background: #d3c8c8;
+        }
+
+        .active-course{
+            background: #27e349;
+        }
+
+        .pending-course{
+            background: #f8d838;
+        }
+
+        /* ====== Tổng thể Container ====== */
+        .summary-container-table {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            margin-left: 140px;
+            margin-right: 140px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+
+        }
+
+        .summary-container-table:hover {
+            transform: scale(1.02);
+        }
+
+        /* ====== Tiêu đề bảng ====== */
+        .latest-user p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* ====== Bảng ====== */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* ====== Tiêu đề bảng (thead) ====== */
+        .table thead {
+            background: linear-gradient(45deg, #083768, #00c6ff);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .table th {
+            padding: 12px;
+            text-align: center;
+        }
+
+        /* ====== Ô dữ liệu (td) ====== */
+        .table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* ====== Màu nền xen kẽ ====== */
+        .table tbody tr:nth-child(even) {
+            background: #eceff3;
+        }
+
+        /* ====== Hover trên hàng ====== */
+        /*.table tbody tr:hover {*/
+        /*    background: rgba(0, 123, 255, 0.1);*/
+        /*    transition: 0.3s ease-in-out;*/
+        /*}*/
+
+        /* ====== Badge trạng thái ====== */
+        .badge {
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ffc107;
+            color: black;
+        }
+
+        .badge-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+
+        /* Responsive bảng trên màn hình nhỏ */
+        @media screen and (max-width: 768px) {
+            .table {
+                font-size: 12px;
+            }
+
+            .table thead th,
+            .table tbody td {
+                padding: 8px;
+            }
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<!-- START Wrapper -->
+<div class="wrapper">
+
+    <!-- ========== Topbar Start ========== -->
+    <header class="topbar" style="box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="d-flex align-items-center">
+                    <!-- Menu Toggle Button -->
+                    <div class="topbar-item">
+                        <button type="button" class="button-toggle-menu me-2">
+                            <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Menu Toggle Button -->
+                    <a class="navbar-brand" href="/home">
+                        <img src="/image/learningz.png" alt="Logo" width="60px">
+                        <a style="font-size: 24px; font-weight: bold;">
+                            Learning<span style="font-size: 30px; color: blue;">Z</span>
+                        </a>
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+
+                    <!-- Theme Color (Light/Dark) -->
+                    <div class="topbar-item">
+                        <button type="button" class="topbar-button" id="light-dark-mode">
+                            <iconify-icon icon="solar:moon-bold-duotone" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Theme Setting -->
+                    <div class="topbar-item d-none d-md-flex">
+                        <button type="button" class="topbar-button" id="theme-settings-btn" data-bs-toggle="offcanvas"
+                                data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
+                            <iconify-icon icon="solar:settings-bold-duotone" class="fs-24 align-middle"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- User -->
+                    <div class="dropdown topbar-item">
+                        <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+    <span class="d-flex align-items-center">
+        <img class="rounded-circle" width="32" th:src="@{${avatarUrl}}" alt="User Avatar">
+    </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- Hiển thị tên người dùng -->
+                            <h6 class="dropdown-header">Welcome <span th:text="${username}">User</span>!</h6>
+
+                            <a class="dropdown-item" href="/home/profile">
+                                <i class="bx bx-user-circle text-muted fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="/home/change_password">
+                                <i class="bx bx-key text-muted fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Change Password</span>
+                            </a>
+
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <i class="bx bx-log-out fs-18 align-middle me-1"></i>
+                                <span class="align-middle">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Right Sidebar (Theme Settings) -->
+    <div>
+        <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
+            <div class="d-flex align-items-center bg-primary p-3 offcanvas-header">
+                <h5 class="text-white m-0">Theme Settings</h5>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body p-0">
+                <div data-simplebar class="h-100">
+                    <div class="p-3 settings-bar">
+
+                        <div>
+                            <h5 class="mb-3 font-16 fw-semibold">Color Scheme</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-bs-theme"
+                                       id="layout-color-light" value="light">
+                                <label class="form-check-label" for="layout-color-light">Light</label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-dark"
+                                       value="dark">
+                                <label class="form-check-label" for="layout-color-dark">Dark</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Topbar Color</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-topbar-color"
+                                       id="topbar-color-light" value="light">
+                                <label class="form-check-label" for="topbar-color-light">Light</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-topbar-color"
+                                       id="topbar-color-dark" value="dark">
+                                <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Menu Color</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-color"
+                                       id="leftbar-color-light" value="light">
+                                <label class="form-check-label" for="leftbar-color-light">
+                                    Light
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-color"
+                                       id="leftbar-color-dark" value="dark">
+                                <label class="form-check-label" for="leftbar-color-dark">
+                                    Dark
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="my-3 font-16 fw-semibold">Sidebar Size</h5>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-default" value="default">
+                                <label class="form-check-label" for="leftbar-size-default">
+                                    Default
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small" value="condensed">
+                                <label class="form-check-label" for="leftbar-size-small">
+                                    Condensed
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size" id="leftbar-hidden"
+                                       value="hidden">
+                                <label class="form-check-label" for="leftbar-hidden">
+                                    Hidden
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small-hover-active" value="sm-hover-active">
+                                <label class="form-check-label" for="leftbar-size-small-hover-active">
+                                    Small Hover Active
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="data-menu-size"
+                                       id="leftbar-size-small-hover" value="sm-hover">
+                                <label class="form-check-label" for="leftbar-size-small-hover">
+                                    Small Hover
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="offcanvas-footer border-top p-3 text-center">
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-danger w-100" id="reset-layout">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========== Topbar End ========== -->
+
+    <!-- ========== App Menu Start ========== -->
+    <div class="main-nav">
+        <!-- Sidebar Logo -->
+        <div class="logo-box">
+            <a href="/home" class="logo-dark">
+                <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
+                <img src="/image/learningz.png" class="logo-lg" alt="logo dark">
+
+            </a>
+            <a href="/home" class="logo-light">
+                <img src="/image/learningz.png" class="logo-sm" alt="logo sm">
+                <img src="/image/learningz.png" class="logo-lg" alt="logo light">
+            </a>
+        </div>
+
+        <!-- Menu Toggle Button (sm-hover) -->
+        <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
+            <iconify-icon icon="solar:double-alt-arrow-right-bold-duotone" class="button-sm-hover-icon"></iconify-icon>
+        </button>
+
+        <div class="scrollbar" data-simplebar>
+            <ul class="navbar-nav" id="navbar-nav">
+
+                <li class="menu-title">General</li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/courses/dashboard">
+                                   <span class="nav-icon">
+                                        <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
+                                   </span>
+                        <span class="nav-text"> Dashboard </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarUsers">
+                        <span class="nav-text">📋 Course List </span>
+                    </a>
+                    <div class="collapse show" id="sidebarUsers">
+                        <ul class="nav sub-navbar-nav">
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Active
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Inactive
+                                courses</a></li>
+                            <li><a class="sub-nav-link"
+                                   th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Pending
+                                courses</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- ========== App Menu End ========== -->
+
+    <!-- ==================================================== -->
+    <!-- Start right Content here -->
+    <div class="page-content">
+        <div class="container-fluid-content" style="padding-top: 30px">
+
+            <th:block th:if="${sumOfPendingCourses > 0}">
+                <div class="warning-about-course">
+                    <p>There are <span th:text="${sumOfPendingCourses}"></span> courses needing approval!</p>
+                    <p>Please click <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">HERE</a> to navigate to the course approval page.</p>
+                </div>
+            </th:block>
+
+            <div class="summary-container">
+                <div class="summary-card">
+                    <div class="chart-container">
+                        <h3 style="margin-bottom: 40px">Pie chart for Course Management</h3>
+                        <canvas id="courseChart"></canvas>
+                    </div>
+
+                    <div class="detail-course">
+
+                        <a th:href="@{/admin/courses/view(status='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card all-course">Total: <span
+                                th:text="${totalCourses}"></span></a>
+
+                        <a th:href="@{/admin/courses/view(status='ACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card active-course">Active Courses<span
+                                th:text="${sumOfActiveCourses}"></span></a>
+
+                        <a th:href="@{/admin/courses/view(status='INACTIVE', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card inactive-course">Inactive
+                            Courses<span
+                                    th:text="${sumOfInactiveCourses}"></span></a></td>
+
+                        <a th:href="@{/admin/courses/view(status='PENDING', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                           style="text-decoration: none; color: black;" class="status-card pending-course">Pending
+                            Courses: <span
+                                    th:text="${sumOfPendingCourses}"></span></a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-container-table">
+                <div class="latest-user">
+                    <p>Top 5 courses with the most student enrollments</p>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Grade</th>
+                            <th>Subject</th>
+                            <th>Created By</th>
+                            <th>Status</th>
+                            <th>Enrollment Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="course, index : ${courses}">
+                            <td th:text="${index.count}"></td>
+                            <td th:text="${course.course.title}"></td>
+                            <td th:text="${course.course.grade.name}"></td>
+                            <td th:text="${course.course.subject.name}"></td>
+                            <td th:text="${course.course.createdBy.username}"></td>
+                            <td th:text="${course.course.courseStatus.name()}"></td>
+                            <td th:text="${course.enrollmentCount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- end row -->
+            </div>
+
+            <!-- End Container Fluid -->
+
+        </div>
+        <!-- End Page Content -->
+        <!-- ==================================================== -->
+    </div>
+</div>
+<!-- END Wrapper -->
+
+<script th:inline="javascript">
+    var courseData = [
+        /*[[${sumOfActiveCourses}]]*/ 0,
+        /*[[${sumOfInactiveCourses}]]*/ 0,
+        /*[[${sumOfPendingCourses}]]*/ 0,
+    ];
+</script>
+
+<script>
+    var courseChart = new Chart(document.getElementById('courseChart').getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: ['Active', 'Inactive', 'Pending'],
+            datasets: [{
+                data: courseData,
+                backgroundColor: ['#27e349', '#616161', '#f8d838']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 30, // Tăng khoảng cách giữa chart và legend
+                        boxWidth: 25, // Giảm kích thước ô vuông màu
+                        font: {
+                            size: 14 // Điều chỉnh kích thước font
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: t => t.raw + " users"
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Vendor Javascript (Require in all Page) -->
+<script src="/js/vendor.js"></script>
+
+<!-- App Javascript (Require in all Page) -->
+<script src="/js/app.js"></script>
+
+<!-- Vector Map Js -->
+<script src="/vendor/jsvectormap/js/jsvectormap.min.js"></script>
+<script src="/vendor/jsvectormap/maps/world-merc.js"></script>
+<script src="/vendor/jsvectormap/maps/world.js"></script>
+
+<!-- Dashboard Js -->
+<script src="/js/pages/dashboard.js"></script>
+
+</body>
+</html>
+

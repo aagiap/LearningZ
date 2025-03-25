@@ -19,8 +19,13 @@ public class Post {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    @JoinColumn(name = "grade_id", nullable = false)
+    private Grade grade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id", nullable = false)
+    private Subject subject;
+
 
     @Column(name = "post_content", columnDefinition = "NVARCHAR(MAX)")
     private String postContent;
@@ -38,4 +43,7 @@ public class Post {
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    private boolean reported = false;
+
 }

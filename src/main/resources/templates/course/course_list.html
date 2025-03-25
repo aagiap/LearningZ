@@ -257,66 +257,42 @@
 
         <div class="row g-4 py-2">
             <!-- Lặp qua danh sách khóa học -->
-            <div class="col-lg-3 col-md-6" th:each="course : ${courses}">
-
-
+            <div class="col-lg-3 col-md-6 wow fadeInUp" th:each="course : ${courses}">
                 <div class="course-item shadow">
                     <div class="position-relative overflow-hidden text-light image">
                         <img class="img-fluid" th:src="@{${course.courseImageUrl}}" alt="Grade Image">
                     </div>
-
-                    <div style="position:absolute;top: 15px;left: 16px; font-size:12px; border-radius:3px; background-color:#fb873f;"
-                         class="px-2 py-1 fw-bold text-uppercase">
-                        <span>PAID</span>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1">
+                            <a th:href="@{/course/details/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course
+                                Title</a>
+                        </h5>
+                        <p th:text="${course.subject.name}">Course subject</p>
                     </div>
-                </div>
+                    <div class="d-flex">
+                        <small class="flex-fill text-center py-1 px-2">
+                            <i class="fa fa-star text-warning me-2"></i>
+                            <span th:text="${averageRatings[course.id] ?: 0} + ' star'">0 star</span>
+                        </small>
+                        <small class="flex-fill text-center py-1 px-2">
+                            <i class="fa fa-user-graduate me-2"></i>
+                            <span th:text="'Teacher: ' + ${course.createdBy.username}">Teacher Name</span>
+                        </small>
+                    </div>
 
-
-
-
-                <div class="p-2 pb-0">
-                    <h5 class="mb-1">
-                        <a th:href="@{/course/details/{id}(id=${course.id})}" class="text-dark" th:text="${course.title}">Course
-                            Title</a>
-                    </h5>
-                    <p th:text="${course.subject.name}">Course subject</p>
-                </div>
-
-
-
-
-                <div class="d-flex">
-
-
-                    <small class="flex-fill text-center py-1 px-2">
-                        <i class="fa fa-star text-warning me-2"></i>
-                        <span th:text="${averageRatings[course.id] ?: 0} + ' star'">0 star</span>
-                    </small>
-
-
-
-
-                    <small class="flex-fill text-center py-1 px-2">
-                        <i class="fa fa-user-graduate me-2"></i>
-                        <span th:text="'Teacher: ' + ${course.createdBy.username}">Teacher Name</span>
-                    </small>
-                </div>
-
-
-
-
-                <div class="d-flex flex-row-reverse">
-                    <small class="text-primary py-1 px-2 fw-bold fs-6" style="float:right;">
-                        <a style="color: #07294d" th:href="@{/course/details/{id}(id=${course.id})}">View Details</a>
-                        <i style="color: #07294d" class="fa fa-chevron-right me-2 fs-10 text-end"></i>
-                    </small>
+                    <div class="d-flex flex-row-reverse">
+                        <small class="text-primary py-1 px-2 fw-bold fs-6" style="float:right;">
+                            <a style="color: #07294d" th:href="@{/course/details/{id}(id=${course.id})}">View Details</a>
+                            <i style="color: #07294d" class="fa fa-chevron-right me-2 fs-10 text-end"></i>
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 
-
+    <th:block th:replace="~{common/chat-with-ai :: chat}"></th:block>
 
     <!-- Pagination Bar -->
     <div class='pagination justify-content-center'>
