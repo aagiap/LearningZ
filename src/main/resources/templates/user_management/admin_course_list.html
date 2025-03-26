@@ -348,7 +348,7 @@
                                    th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
                                 Users</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_STUDENT_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User
                                 Manager</a></li>
                             <li><a class="sub-nav-link"
                                    th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course
@@ -474,6 +474,7 @@
                                     style="color: whitesmoke"></span>
                             </a>
                         </th>
+                        <th style="color: whitesmoke">Note</th>
                         <th>
                             <a th:href="@{/super_admin/view(status=${status}, sort='courseStatus', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                                style="color: whitesmoke">
@@ -482,9 +483,6 @@
                                     style="color: whitesmoke"></span>
                             </a>
                         </th>
-                        <th:block th:if="${status == 'REJECTED'}">
-                        <th style="color: whitesmoke">Note</th>
-                        </th:block>
                         <th style="color: whitesmoke">Action</th>
                     </tr>
                     </thead>
@@ -496,6 +494,7 @@
                         <td th:text="${course.grade.getName()}"></td>
                         <td th:text="${course.subject.getName()}"></td>
                         <td th:text="${course.createdBy.username}"></td>
+                        <td th:text="${course.note}"></td>
                         <td>
                             <span class="badge"
                                   th:classappend="${course.courseStatus.name() == 'ACTIVE' ? 'badge-success' :

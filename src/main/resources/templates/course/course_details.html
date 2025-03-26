@@ -853,7 +853,7 @@
         </span>
 
                         <!-- Dropdown -->
-                        <div th:if="${#authorization.expression('isAuthenticated() and (hasRole(''ADMIN'') or hasRole(''MARKETING_TEAM'') or hasRole(''ADMIN_USER_MANAGER'') or hasRole(''ADMIN_COURSE_MANAGER'') )')}" class="dropdown">
+                        <div th:if="${#authorization.expression('isAuthenticated() and (hasRole(''ADMIN'') or hasRole(''MARKETING_TEAM'') or hasRole(''ADMIN_STUDENT_MANAGER'') or hasRole(''ADMIN_COURSE_MANAGER'') )')}" class="dropdown">
                             <button class="btn btn-link btn-sm rounded" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-bars fa-lg"></i>
                             </button>

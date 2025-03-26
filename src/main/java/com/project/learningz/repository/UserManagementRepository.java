@@ -69,7 +69,7 @@ public interface UserManagementRepository extends JpaRepository<User, Integer>, 
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'MARKETING_TEAM'")
     long countMarketerUsers();
 
-    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'ADMIN_USER_MANAGER'")
+    @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'ADMIN_STUDENT_MANAGER'")
     long countAdminUserManageUsers();
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.role = 'ADMIN_COURSE_MANAGER'")

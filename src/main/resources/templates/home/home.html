@@ -162,7 +162,7 @@
                                     <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''TEACHER'')')}">
                                         <a href="/teacher">Teacher HomePage</a>
                                     </li>
-                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_USER_MANAGER'')')}">
+                                    <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_STUDENT_MANAGER'')')}">
                                         <a href="/admin/users/dashboard">Admin User HomePage</a>
                                     </li>
                                     <li th:if="${#authorization.expression('isAuthenticated() and hasRole(''ADMIN_COURSE_MANAGER'')')}">

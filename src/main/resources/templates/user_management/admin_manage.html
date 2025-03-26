@@ -596,7 +596,7 @@
                                    th:href="@{/super_admin/userlist_role(role='ALL', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">All
                                 Users</a></li>
                             <li><a class="sub-nav-link"
-                                   th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User
+                                   th:href="@{/super_admin/userlist_role(role='ADMIN_STUDENT_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">User
                                 Manager</a></li>
                             <li><a class="sub-nav-link"
                                    th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}">Course
@@ -691,9 +691,9 @@
                     <a th:href="@{/super_admin/dashboard}" class="role-card role-1">
                         Admin: <span th:text="${sumOfSuperAdmin}"></span>
                     </a>
-                    <a th:href="@{/super_admin/userlist_role(role='ADMIN_USER_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
+                    <a th:href="@{/super_admin/userlist_role(role='ADMIN_STUDENT_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                        class="role-card role-admin">
-                        User Manager: <span th:text="${sumOfAdminUsers}"></span>
+                        Student Manager: <span th:text="${sumOfAdminUsers}"></span>
                     </a>
                     <a th:href="@{/super_admin/userlist_role(role='ADMIN_COURSE_MANAGER', sort='id', order=${order == 'asc' ? 'desc' : 'asc'}, keyword=${keyword})}"
                        class="role-card role-2">
@@ -846,7 +846,7 @@
     var userChartRole = new Chart(document.getElementById('userChartRole').getContext('2d'), {
         type: 'pie',
         data: {
-            labels: ['Admin', 'User Manager', 'Course Manager', 'VIP Student', 'Casual Student', 'Teacher', 'Marketer'],
+            labels: ['Admin', 'Student Manager', 'Course Manager', 'VIP Student', 'Casual Student', 'Teacher', 'Marketer'],
             datasets: [{
                 data: userDataRole,
                 backgroundColor: ['#FFADAD', '#FFD6A5', '#FDFFB6', '#CAFFBF', '#9BF6FF', '#A0C4FF', '#BDB2FF']
