@@ -441,7 +441,7 @@
                             </td>
                             <td>
                                 <th:block
-                                        th:if="${user.role.name() != 'ADMIN_USER_MANAGER' and user.role.name() != 'ADMIN_COURSE_MANAGER' and user.role.name() != 'ADMIN'}">
+                                        th:if="${user.role.name() != 'ADMIN_STUDENT_MANAGER' and user.role.name() != 'ADMIN_COURSE_MANAGER' and user.role.name() != 'ADMIN'}">
                                     <a th:href="@{/admin/users/{id}(id=${user.id})}" class="text-primary"
                                        title="View">
                                         <i class="fas fa-eye" style="color: #0d47a1"></i>
