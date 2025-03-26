@@ -1,5 +1,6 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.dto.QuizSubmitionDTO;
 import com.project.learningz.dto.QuizSubmitionListDTO;
@@ -60,6 +61,9 @@ public class DoQuizController {
         Integer userId = userService.getUserIdByUsername(username);
         Quiz quiz = quizService.getQuizById(quizId);
         Course course = quiz.getLesson().getChapter().getCourse();
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         Integer courseId = quiz.getLesson().getChapter().getCourse().getId();
         Boolean isEnrolled = usersCourseService.checkUserEnrolled(username, courseId);
         if (!isEnrolled) {
@@ -121,6 +125,9 @@ public class DoQuizController {
             model.addAttribute("user", userOAuth2);
         }
         Course course = quiz.getLesson().getChapter().getCourse();
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         Integer courseId = quiz.getLesson().getChapter().getCourse().getId();
         Boolean isEnrolled = usersCourseService.checkUserEnrolled(username, courseId);
         if (!isEnrolled) {
@@ -233,6 +240,7 @@ public class DoQuizController {
         Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
         for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
             if (entry.getKey().equals(quiz.getId())) {
+                session.setAttribute("questionBankList", entry.getValue());
                 quizHistory.remove(entry.getKey());
                 session.setAttribute("quizHistory", quizHistory);
                 break;
@@ -279,6 +287,16 @@ public class DoQuizController {
             session.setAttribute("quizHistorySubmit", quizHistorySubmit);
         }
         quizHistorySubmit.put(quiz.getId(), quizSubmitionListDTO);
+
+        Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
+        for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
+            if (entry.getKey().equals(quiz.getId())) {
+                session.setAttribute("questionBankList", entry.getValue());
+                quizHistory.remove(entry.getKey());
+                session.setAttribute("quizHistory", quizHistory);
+                break;
+            }
+        }
         return "/quiz/QuizResult";
     }
 
@@ -315,19 +333,10 @@ public class DoQuizController {
 
         List<QuizSubmitionDTO> quizSubmitionList = quizReviewService.setWrongSelections(quizSubmitionListDTO.getAnswers());
         List<String> resultQuestions = quizReviewService.getResultQuestion(quizSubmitionListDTO.getAnswers());
+        
+        List<QuestionBank> questionBankList = (List<QuestionBank>) session.getAttribute("questionBankList");
+        model.addAttribute("questionBankList", questionBankList);
 
-        Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
-        for (Map.Entry<Integer, List<QuestionBank>> entry : quizHistory.entrySet()) {
-            if (entry.getKey().equals(quiz.getId())) {
-                model.addAttribute("questionBankList", entry.getValue());
-            }
-        }
-
-
-        //session.invalidate();
-//        session.removeAttribute("questionBankList");
-//        session.removeAttribute("quiz");
-//        session.removeAttribute("quizSubmitionListDTO");
         int correctAnswers = quizReviewService.countCorrectAnswers(quizSubmitionListDTO.getAnswers());
         int totalQuestions = quizReviewService.countTotalQuestions(quizSubmitionListDTO.getAnswers());
         float score = quizReviewService.calculateScore(totalQuestions, correctAnswers);

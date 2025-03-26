@@ -1,6 +1,7 @@
 package com.project.learningz.repository;
 
 import com.project.learningz.dto.CourseReviewDTO;
+import com.project.learningz.dto.TopCourseDTO;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.UsersCourse;
 import com.project.learningz.entity.UsersCourseId;
@@ -82,4 +83,12 @@ public interface UserCourseRepository extends JpaRepository<UsersCourse, UsersCo
             "GROUP BY uc.course " +
             "ORDER BY enrollCount DESC")
     List<Object[]> findTopCourses(Pageable pageable);
+
+    @Query("SELECT new  com.project.learningz.dto.TopCourseDTO( uc.course, COUNT(uc.course.id)) AS enrollCount " +
+            "FROM UsersCourse uc " +
+            "WHERE uc.course.courseStatus = 'ACTIVE' " +
+            "GROUP BY uc.course ")
+    List<TopCourseDTO> findPopularCourses(Pageable pageable);
+
+
 }

@@ -16,10 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +55,7 @@ public class UsersCourseService {
     public List<CourseReviewDTO> getCourseReviews(int courseId) {
         return userCourseRepository.findReviewsByCourseId(courseId);
     }
+
     public boolean checkUserEnrolled(String userName, int courseId) {
         return userCourseRepository.isUserEnrolled(userName, courseId);
     }
@@ -108,6 +106,24 @@ public class UsersCourseService {
         return count + "/" + numberOfQuiz;
     }
 
+    public List<String> getStudentProgressForAI(Integer userId) {
+        List<String> progress = new ArrayList<>();
+        if(userId !=null){
+            List<UsersCourse> usersCourses = userCourseRepository.getCourseByUserId(userId);
+            for (UsersCourse usersCourse : usersCourses) {
+                String progressStatus = progressStatus(userId, usersCourse.getCourse().getId());
+                progress.add(usersCourse.getCourse().getTitle() + ": " + progressStatus + " quizzes passed");
+            }
+            if(progress.isEmpty()){
+                progress.add("You have not enrolled in any course yet, so i cannot check your progress");
+            }
+        } else{
+            progress.add("You are not logged in, please log in and I will check for you");
+        }
+
+        return progress;
+    }
+
     public boolean checkIsFeeback(Integer userId, Integer courseId) {
         UsersCourse usersCourse = userCourseRepository.findUsersCourseBy(userId, courseId);
         if (usersCourse == null) {
@@ -153,11 +169,12 @@ public class UsersCourseService {
 
         userCourseRepository.save(usersCourse);
     }
-    public int countReviewByCourseId(int courseId){
+
+    public int countReviewByCourseId(int courseId) {
         return userCourseRepository.countReviewByCourseId(courseId);
     }
 
-    public List<UsersCourse> getUserCourseByUserId(int userId){
+    public List<UsersCourse> getUserCourseByUserId(int userId) {
         return userCourseRepository.getCourseByUserId(userId);
     }
 
@@ -178,7 +195,7 @@ public class UsersCourseService {
         userCourseRepository.save(usersCourse);
     }
 
-    public List<Integer> courseIdListByUserId(Integer userId){
+    public List<Integer> courseIdListByUserId(Integer userId) {
         return userCourseRepository.courseIdListByUserId(userId);
     }
 

@@ -6,6 +6,7 @@ import com.project.learningz.entity.Chapter;
 import com.project.learningz.entity.Lesson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -77,4 +78,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
                 JOIN co.grade g
     """)
     List<String> getAllLesson();
+
+    @Query("SELECT COUNT(l) from Lesson l join l.chapter c join c.course co where co.title = :courseTitle")
+    Integer countNumberOfLesson(@Param("courseTitle") String courseTitle);
 }

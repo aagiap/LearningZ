@@ -1,6 +1,7 @@
 package com.project.learningz.controller;
 
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.entity.*;
 import com.project.learningz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class LearningController {
                                     @AuthenticationPrincipal OAuth2User userOAuth2) {
         List<Chapter> chapters = lessonService.getChaptersByCourseId(courseId);
         Course course = courseService.getCourseById(courseId);
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         String username = null;
 
         if (user != null) {
@@ -96,6 +100,10 @@ public class LearningController {
         Integer userId = userService.getUserIdByUsername(username);
 
         Chapter chapter = chapterService.getChapterById(chapterId);
+        Course course = courseService.getCourseById(chapter.getCourse().getId());
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         List<Chapter> chapters = lessonService.getChaptersByCourseId(chapter.getCourse().getId());
         Integer firstLessonIdOfPreviousChapter = lessonService.getFirstLessonIdOfPreviousChapter(chapter,chapters);
         Integer firstLessonIdOfNextChapter = lessonService.getFirstLessonIdOfNextChapter(chapter,chapters);
@@ -136,6 +144,10 @@ public class LearningController {
 
         Video video = videoService.findByVideoId(videoId);
         Chapter chapter = video.getLesson().getChapter();
+        Course course = courseService.getCourseById(chapter.getCourse().getId());
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         List<Chapter> chapters = lessonService.getChaptersByCourseId(chapter.getCourse().getId());
         Lesson lesson = lessonService.getLessonById(video.getLesson().getId());
 
@@ -166,6 +178,10 @@ public class LearningController {
 
         PDF pdf = pdfService.getPdfById(pdfId);
         Chapter chapter = pdf.getLesson().getChapter();
+        Course course = courseService.getCourseById(chapter.getCourse().getId());
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         List<Chapter> chapters = lessonService.getChaptersByCourseId(chapter.getCourse().getId());
         Lesson lesson = lessonService.getLessonById(pdf.getLesson().getId());
 
