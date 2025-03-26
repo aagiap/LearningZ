@@ -85,6 +85,42 @@ public class QuizListController {
         model.addAttribute("course", course);
         return "quiz/quizzes-course";
     }
+    @GetMapping("/history")
+    public String getQuizHistory(@RequestParam int courseId, Model model,
+                                     @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+                                     @AuthenticationPrincipal OAuth2User userOAuth2) {
+        Course course = courseService.getCourseById(courseId);
+        String username = null;
 
+        if (user != null) {
+            username = user.getUsername();
+            model.addAttribute("user", user);
+        } else if (userOAuth2 != null) {
+            String email = userOAuth2.getAttribute("email");
+            username = userService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
+        }
+        Integer userId = userService.getUserIdByUsername(username);
+        model.addAttribute("username", username);
+        String avatarUrl = userService.getAvtByUsername(username);
+        model.addAttribute("avatarUrl", avatarUrl);
+
+        boolean checkConditionFeedBack = usersCourseService.checkConditionFeedback(userId, course.getId());
+        List<String> completionStatus = lessonService.isLessonCompleted(userId, courseId);
+        String progress = usersCourseService.progressStatus(userId, courseId);
+
+        List<Quiz> quizzes = quizService.getQuizzHistory(courseId);
+        LinkedHashMap<Quiz, String> quizInfores = new LinkedHashMap<>();
+        for (Quiz quiz : quizzes) {
+            quizInfores.put(quiz, quizResultService.isPass(userId, quiz.getId()));
+        }
+
+        model.addAttribute("quizInfores", quizInfores);
+        model.addAttribute("progress", progress);
+        model.addAttribute("checkConditionFeedBack", checkConditionFeedBack);
+        model.addAttribute("completionStatus", completionStatus);
+        model.addAttribute("course", course);
+        return "quiz/quiz-history";
+    }
 
 }

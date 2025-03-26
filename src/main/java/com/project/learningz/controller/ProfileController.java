@@ -105,6 +105,8 @@ public class ProfileController {
                 model.addAttribute("dayMembershipRemain", dayMemberShipRemain);
             }
         }
+        boolean isNormalStudent = userService.isNormalStudent(user.getId(), Role.STUDENT);
+        model.addAttribute("isNormalStudent", isNormalStudent);
 
         model.addAttribute("membership", membershipService.findByUserID(user.getId()));
         model.addAttribute("courseIdList", courseIdList);

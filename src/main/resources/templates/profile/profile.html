@@ -169,11 +169,17 @@
                 <ul id="courseList">
                     <li th:each="course : ${courseList}" class="course-item">
                         <div class="course-title" ><b th:text="${course.getTitle()}"></b></div>
-                        <div class="course-status"><p th:text="${course.getCourseStatus()}"></p></div>
-                        <div class="course-view">
-                            <button onclick="viewCourseDetails(this)">View details</button>
+                        <span class="btn btn-success btn" th:if="${course.getCourseStatus().name() == 'ACTIVE'}">ACTIVE</span>
+                        <span class="btn btn-danger btn" th:if="${course.getCourseStatus().name() != 'ACTIVE'}" th:text="${course.courseStatus}">Expired</span>
+                        <div th:if="${course.courseStatus.name() == 'ACTIVE'}">
+                            <button onclick="viewCourseDetails(this)" class="btn btn-info btn">View details</button>
                             <a hidden id="viewCourseDetailsRequest"
                                th:href="@{/course/details/{id}(id=${course.getId()})}"></a>
+                        </div>
+                        <div th:if="${course.courseStatus.name() != 'ACTIVE' or isNormalStudent}" class="course-view">
+                            <button onclick="viewCourseHistory(this)">View Archived Course Progress</button>
+                            <a hidden id="viewCourseHistory"
+                               th:href="@{/QuizList/history(courseId=${course.getId()})}"></a>
                         </div>
                     </li>
                 </ul>
@@ -187,12 +193,13 @@
 
     <br>
     <div class="course-list">
-        <h2 class="text-center mb-4">My VIP Membership Package</h2>
+        <h2 class="text-center mb-4">My Purchase History</h2>
         <div class="table-responsive">
             <table class="table table-bordered table-hover text-center">
                 <thead class="table-primary">
                 <tr>
                     <th>Package Name</th>
+                    <th>Price</th>
                     <th>Duration</th>
                     <th>Registration Date</th>
                     <th>Expiration Date</th>
@@ -202,6 +209,7 @@
                 <tbody>
                 <tr th:each="membership : ${userMemberships}">
                     <td th:text="${membership.vipPackage.packageName}"></td>
+                    <td th:text="${membership.paidPrice}"></td>
                     <td th:text="${membership.vipPackage.duration + ' months'}"></td>
                     <td th:text="${membership.registrationDate}"></td>
                     <td th:text="${membership.expirationDate}"></td>
@@ -233,6 +241,12 @@
 
     function viewCourseDetails(button) {
         let link = button.parentElement.querySelector("#viewCourseDetailsRequest");
+        if (link) {
+            link.click();
+        }
+    }
+    function viewCourseHistory(button) {
+        let link = button.parentElement.querySelector("#viewCourseHistory");
         if (link) {
             link.click();
         }

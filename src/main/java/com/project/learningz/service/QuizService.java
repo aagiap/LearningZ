@@ -8,6 +8,7 @@ import com.project.learningz.entity.Quiz;
 import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.SystemSettingRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,6 +75,9 @@ public class QuizService {
         updatedQuiz.setTitle(quiz.getTitle());
         quizRepository.save(updatedQuiz);
     }
-
+    @Transactional
+    public List<Quiz> getQuizzHistory(int courseId) {
+        return quizRepository.getQuizHistory(courseId);
+    }
 
 }
