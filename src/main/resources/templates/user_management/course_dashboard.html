@@ -652,7 +652,15 @@
                             <td th:text="${course.course.grade.name}"></td>
                             <td th:text="${course.course.subject.name}"></td>
                             <td th:text="${course.course.createdBy.username}"></td>
-                            <td th:text="${course.course.courseStatus.name()}"></td>
+                            <td>
+                            <span class="badge"
+                                  th:classappend="${course.course.courseStatus.name() == 'ACTIVE' ? 'badge-success' :
+                                                    (course.course.courseStatus.name() == 'PENDING' ? 'badge-warning' :
+                                                    (course.course.courseStatus.name() == 'REJECTED' ? 'badge-reject' :
+                                                    (course.course.courseStatus.name() == 'INACTIVE' ? 'badge-danger' : '')))}"
+                                  th:text="${course.course.courseStatus.name()}">
+                            </span>
+                            </td>
                             <td th:text="${course.enrollmentCount}"></td>
                         </tr>
                         </tbody>
