@@ -1,6 +1,7 @@
 package com.project.learningz.controller;
 
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.Quiz;
 import com.project.learningz.service.*;
@@ -49,7 +50,12 @@ public class QuizListController {
     public String getQuizzesInCourse(@RequestParam int courseId, Model model,
                                      @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                                      @AuthenticationPrincipal OAuth2User userOAuth2) {
+
+
         Course course = courseService.getCourseById(courseId);
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         String username = null;
 
         if (user != null) {

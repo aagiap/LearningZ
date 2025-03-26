@@ -41,6 +41,7 @@
     <!-- Input area -->
     <form id="chat-form" class="chat-input">
         <div class="image-preview" id="image-preview">
+            <img id="preview-img" src="" alt="Preview">
             <button type="button" class="remove-image" id="remove-image">×</button>
         </div>
         <div class="input-container">
@@ -310,9 +311,11 @@
             // Scroll to bottom
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
+
             // Prepare data for sending - include the entire chat history
             const jsonData = {
                 question: question,
+                image: imageData,
                 chatHistory: chatHistory.map(msg => ({
                     role: msg.role,
                     content: msg.content

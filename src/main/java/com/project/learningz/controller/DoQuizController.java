@@ -1,5 +1,6 @@
 package com.project.learningz.controller;
 
+import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.dto.QuizSubmitionDTO;
 import com.project.learningz.dto.QuizSubmitionListDTO;
@@ -60,6 +61,9 @@ public class DoQuizController {
         Integer userId = userService.getUserIdByUsername(username);
         Quiz quiz = quizService.getQuizById(quizId);
         Course course = quiz.getLesson().getChapter().getCourse();
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         Integer courseId = quiz.getLesson().getChapter().getCourse().getId();
         Boolean isEnrolled = usersCourseService.checkUserEnrolled(username, courseId);
         if (!isEnrolled) {
@@ -121,6 +125,9 @@ public class DoQuizController {
             model.addAttribute("user", userOAuth2);
         }
         Course course = quiz.getLesson().getChapter().getCourse();
+        if(course.getCourseStatus() != CourseStatus.ACTIVE){
+            return "redirect:/course";
+        }
         Integer courseId = quiz.getLesson().getChapter().getCourse().getId();
         Boolean isEnrolled = usersCourseService.checkUserEnrolled(username, courseId);
         if (!isEnrolled) {

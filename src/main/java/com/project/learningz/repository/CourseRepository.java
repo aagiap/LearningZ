@@ -282,4 +282,11 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     WHERE c.createdBy.id = ?1 AND c.courseStatus = ?2
 """)
     List<Course> getCourseListByUserIdAndStatus(int userId, CourseStatus status);
+
+
+    Course findCourseByTitle(String title);
+
+
+    @Query("select c from Course c join c.grade g where g.name = :grade and c.courseStatus = 'ACTIVE'")
+    List<Course> findCoursesByGrade(@Param("grade") String grade);
 }
