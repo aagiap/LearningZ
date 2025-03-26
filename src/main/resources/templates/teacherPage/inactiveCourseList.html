@@ -333,7 +333,18 @@
     <!-- ==================================================== -->
     <div class="page-content">
         <div class="container">
+            <span id="notification" th:if="${notification}" th:text="${notification}" hidden></span>
             <h3 style="text-align: center;">Inactive/Rejected Course List</h3>
+            <div class="course-status">
+                <div class="status-item">
+                    <span class="label">Inactive</span>
+                    <span class="status-bar inactive"></span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Rejected</span>
+                    <span class="status-bar rejected"></span>
+                </div>
+            </div>
             <div class="pendingCourseList" th:if="${inactiveCourseList}">
                 <div class="pendingCourse" th:each="course:${inactiveCourseList}">
                     <p th:text="${course.getTitle()}"></p>
@@ -435,6 +446,12 @@
         let form = document.querySelector('#formInactiveCourseList');
         form.submit();
     }
+    document.addEventListener("DOMContentLoaded", function () {
+        let notificationElement = document.getElementById("notification");
+        if (notificationElement && notificationElement.textContent.trim() !== "") {
+            alert(notificationElement.textContent);
+        }
+    });
 </script>
 </body>
 </html>
