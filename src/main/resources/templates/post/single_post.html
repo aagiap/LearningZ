@@ -153,6 +153,7 @@
     </style>
 </head>
 <body>
+<th:block th:replace="~{common/chat-with-ai :: chat}"></th:block>
 <script>
     function toggleUserMenu() {
         const userMenu = document.getElementById('userMenu');
@@ -325,7 +326,7 @@
                                 </a>
                             </li>
 
-                            <li class="ellipsis-menu">
+                            <li class="ellipsis-menu" th:if="${isLoggedIn}">
                                 <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
                                 <ul class="menu">
 
@@ -371,7 +372,7 @@
                                                     <h6 th:text="${comment.user.username}"></h6>
                                                     <span th:text="${#temporals.format(comment.commentDate, 'dd/MM/yyyy HH:mm')}"></span>
                                                 </div>
-                                                <div class="ellipsis-menu">
+                                                <div class="ellipsis-menu" th:if="${isLoggedIn}">
                                                     <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
                                                     <ul class="menu">
                                                         <li th:if="${comment.user.id == userId}">
