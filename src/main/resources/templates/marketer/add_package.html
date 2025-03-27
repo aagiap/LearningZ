@@ -294,7 +294,6 @@
                         </div>
                         <div class="card-body">
                             <form th:action="@{/marketer/vip_package/add_package}" method="post" class="bg-white p-4 rounded shadow-sm">
-
                                 <!-- Tên Gói VIP -->
                                 <div class="mb-3">
                                     <label for="packageName" class="form-label">Package Name</label>
@@ -361,6 +360,28 @@
 <!-- END Wrapper -->
 <script src="/js/vendor.js"></script>
 <script src="/js/app.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let priceInput = document.getElementById("price");
+        let discountedPriceInput = document.getElementById("discountedPrice");
+        let form = document.querySelector("form");
 
+        form.addEventListener("submit", function (event) {
+            let price = parseFloat(priceInput.value);
+            let discountedPrice = parseFloat(discountedPriceInput.value);
+
+            if (discountedPrice < 0) {
+                alert("The discounted price cannot be greater than the original price!");
+                event.preventDefault();
+                return;
+            }
+
+            if (discountedPrice > price) {
+                alert("The discounted price cannot be greater than the original price!");
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 </body>
 </html>

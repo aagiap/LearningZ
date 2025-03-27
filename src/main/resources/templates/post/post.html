@@ -122,7 +122,7 @@
         <div class="col-md-6">
           <div class="header-contact">
             <ul>
-              <li><i class="fa fa-envelope"></i><a href="#">khanhlghe186844@fpt.edu.vn</a></li>
+              <li><i class="fa fa-envelope"></i><a>khanhlghe186844@fpt.edu.vn</a></li>
               <li><i class="fa fa-phone"></i><span>0985104969</span></li>
             </ul>
           </div> <!-- header contact -->
@@ -287,8 +287,7 @@
                   <span th:text="${post.subject.name}"></span>
                 </a>
               </li>
-
-              <li class="ellipsis-menu">
+              <li class="ellipsis-menu" th:if="${isLoggedIn}">
                 <span class="ellipsis-icon" onclick="toggleMenu(this)">⋮</span>
                 <ul class="menu">
 
@@ -495,8 +494,8 @@
   function reportPost(postId) {
     fetch(`/reports/post/${postId}`, { method: "POST" })
             .then(response => response.text())
-            .then(() => alert("Bài viết đã được báo cáo!"))
-            .catch(error => console.error("Lỗi:", error));
+            .then(() => alert("The post has been reported!"))
+            .catch(error => console.error("Error:", error));
   }
 </script>
 </body>

@@ -83,6 +83,7 @@ public class RegisterAccountController {
             }
             if (code.equals(codeSystem)) {
                 userService.register(user);
+                model.addAttribute("message", "Registration successful!");
                 return "/auth/login";
             } else {
                 model.addAttribute("message", "Incorrect confirmation code!");

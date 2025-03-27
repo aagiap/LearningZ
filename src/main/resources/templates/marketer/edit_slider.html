@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Slider Edit</title>
+    <title>Edit Slider</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A fully responsive premium admin dashboard template" />
     <meta name="author" content="Techzaa" />
@@ -295,8 +295,8 @@
                         <div class="card-header">
                             <h4 class="card-title">Edit Slider</h4>
                         </div>
-                        <div th:if="${errorMessage1}" class="alert alert-danger text-center" role="alert">
-                            <span th:text="${errorMessage1}"></span>
+                        <div th:if="${error}" class="alert alert-danger text-center" role="alert">
+                            <span th:text="${error}"></span>
                         </div>
                         <div class="card-body">
                             <form th:action="@{/marketer/slider/edit}" method="post" enctype="multipart/form-data">

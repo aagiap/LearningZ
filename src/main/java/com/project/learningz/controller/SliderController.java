@@ -127,7 +127,7 @@ public class SliderController {
             Model model) {
         try {
             if (status && sliderService.isSliderLimitExceeded()) {
-                redirectAttributes.addFlashAttribute("errorMessage1", "Cannot display slider, maximum limit reached!");
+                redirectAttributes.addFlashAttribute("error", "Can't display slider, maximum limit reached!");
                 return "redirect:/marketer/add_slider";
             }
             String imageUrl = googleDriveService.uploadBannerFile(imgFile);
@@ -140,6 +140,7 @@ public class SliderController {
             slider.setBacklink(backlink);
 
             sliderService.addSlider(slider);
+            redirectAttributes.addFlashAttribute("success", "Slider added successfully!");
             return REDIRECT_SLIDERS;
         } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
@@ -168,13 +169,14 @@ public class SliderController {
                              @RequestParam(value = "status", defaultValue = "false") boolean status,
                              @RequestParam(value = "backlink", required = false) String backlink,
                              @RequestParam(value = "page", defaultValue = "0") int page,
+                             RedirectAttributes redirectAttributes,
                              Model model) {
         try {
             Slider existingSlider = sliderService.getSliderById(sliderId);
             boolean isCurrentlyHidden = existingSlider.getStatus() == null || !existingSlider.getStatus();
             if (isCurrentlyHidden && status && sliderService.isSliderLimitExceeded()) {
                 model.addAttribute("slider", existingSlider);
-                model.addAttribute("errorMessage1", "Cannot display slider, maximum limit reached!");
+                model.addAttribute("error", "Can't display slider, maximum limit reached!");
                 return "marketer/edit_slider";
             }
 
@@ -198,6 +200,7 @@ public class SliderController {
             }
 
             sliderService.updateSlider(existingSlider);
+            redirectAttributes.addFlashAttribute("success", "Slider edited successfully!");
             return "redirect:/marketer/slider?page=" + page;
 
         } catch (IOException | GeneralSecurityException e) {
@@ -230,12 +233,12 @@ public class SliderController {
                                          RedirectAttributes redirectAttributes) {
         Slider slider = sliderService.getSliderById(id);
         if (slider == null) {
-            redirectAttributes.addFlashAttribute("errorMessage1", "Slider does not exist!");
+            redirectAttributes.addFlashAttribute("error", "Slider doesn't exist!");
             return "redirect:/marketer/slider?page=" + page;
         }
         boolean isCurrentlyHidden = slider.getStatus() == null || !slider.getStatus();
         if (isCurrentlyHidden && sliderService.isSliderLimitExceeded()) {
-            redirectAttributes.addFlashAttribute("errorMessage1", "Cannot display slider, maximum limit reached!");
+            redirectAttributes.addFlashAttribute("error", "Can't display slider, maximum limit reached!");
             return "redirect:/marketer/slider?page=" + page;
         }
         sliderService.toggleVisibility(id);
@@ -368,12 +371,12 @@ public class SliderController {
         try {
             VipPackage vipPackage = vipPackageService.findById(id);
             if (vipPackage == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "VIP package not found");
+                redirectAttributes.addFlashAttribute("error", "VIP package not found");
                 return "redirect:/marketer/vip_package/edit/" + id;
             }
 
             if (discountedPrice != null && (discountedPrice < 0 || discountedPrice > price)) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Discounted price invalid");
+                redirectAttributes.addFlashAttribute("error", "Discounted price invalid");
                 return "redirect:/marketer/vip_package/edit/" + id;
             }
 
@@ -384,9 +387,9 @@ public class SliderController {
             vipPackage.setStatus(status);
 
             vipPackageService.save(vipPackage);
-            redirectAttributes.addFlashAttribute("successMessage", "Completed update VIP package");
+            redirectAttributes.addFlashAttribute("success", "Completed update VIP package");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error updating VIP package");
+            redirectAttributes.addFlashAttribute("error", "Error updating VIP package");
         }
         return "redirect:/marketer/vip_package";
     }
@@ -407,7 +410,7 @@ public class SliderController {
 
         if (vipPackage.getDiscountedPrice() != null && vipPackage.getDiscountedPrice() > vipPackage.getPrice()) {
             redirectAttributes.addFlashAttribute("error", "Discounted price invalid");
-            return "redirect:/marketer/add_package";
+            return "redirect:/marketer/vip_package/add_package";
         }
 
         vipPackageService.save(vipPackage);
