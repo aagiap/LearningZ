@@ -105,14 +105,14 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
 
     Quiz getQuizById(Integer quizId);
 
-    @Query("SELECT q " +
-            "FROM Quiz q " +
-            "JOIN q.lesson l " +
-            "JOIN l.chapter c " +
-            "JOIN c.course co " +
-            "LEFT JOIN q.quizResults r " +
-            "WHERE co.id = :courseId")
-    List<Quiz> getQuizHistory(@Param("courseId") int courseId);
+@Query("SELECT q, r " +
+        "FROM Quiz q " +
+        "LEFT JOIN q.lesson l " +
+        "LEFT JOIN l.chapter c " +
+        "LEFT JOIN c.course co " +
+        "LEFT JOIN q.quizResults r ON r.user.id = :userId " +
+        "WHERE co.id = :courseId")
+List<Object[]> getQuizHistory(@Param("courseId") int courseId, @Param("userId") int userId);
 
     @Query("SELECT COUNT(q) from Quiz  q join  q.lesson l join l.chapter c join c.course co where co.title = :courseTitle")
     Integer countNumberOfQuizzes(@Param("courseTitle") String courseTitle);

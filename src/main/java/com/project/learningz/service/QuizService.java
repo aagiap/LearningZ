@@ -5,6 +5,7 @@ import com.project.learningz.dto.QuizDetailDTO;
 import com.project.learningz.dto.QuizJoinToGradeDTO;
 import com.project.learningz.entity.QuestionBank;
 import com.project.learningz.entity.Quiz;
+import com.project.learningz.entity.QuizResult;
 import com.project.learningz.entity.SystemSetting;
 import com.project.learningz.repository.QuizRepository;
 import com.project.learningz.repository.SystemSettingRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -75,9 +77,18 @@ public class QuizService {
         updatedQuiz.setTitle(quiz.getTitle());
         quizRepository.save(updatedQuiz);
     }
-    @Transactional
-    public List<Quiz> getQuizzHistory(int courseId) {
-        return quizRepository.getQuizHistory(courseId);
+
+public LinkedHashMap<Quiz, QuizResult> getQuizHistory(int courseId, int userId) {
+    List<Object[]> rawResults = quizRepository.getQuizHistory(courseId, userId);
+    LinkedHashMap<Quiz, QuizResult> quizInfo = new LinkedHashMap<>();
+
+    for (Object[] row : rawResults) {
+        Quiz quiz = (Quiz) row[0];
+        QuizResult quizResult = (QuizResult) row[1];
+        quizInfo.put(quiz, quizResult);
     }
+
+    return quizInfo;
+}
 
 }
