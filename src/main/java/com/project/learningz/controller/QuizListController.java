@@ -4,6 +4,7 @@ package com.project.learningz.controller;
 import com.project.learningz.constant.CourseStatus;
 import com.project.learningz.entity.Course;
 import com.project.learningz.entity.Quiz;
+import com.project.learningz.entity.QuizResult;
 import com.project.learningz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -115,11 +116,7 @@ public class QuizListController {
         List<String> completionStatus = lessonService.isLessonCompleted(userId, courseId);
         String progress = usersCourseService.progressStatus(userId, courseId);
 
-        List<Quiz> quizzes = quizService.getQuizzHistory(courseId);
-        LinkedHashMap<Quiz, String> quizInfores = new LinkedHashMap<>();
-        for (Quiz quiz : quizzes) {
-            quizInfores.put(quiz, quizResultService.isPass(userId, quiz.getId()));
-        }
+        LinkedHashMap<Quiz, QuizResult> quizInfores = quizService.getQuizHistory(courseId, userId);
 
         model.addAttribute("quizInfores", quizInfores);
         model.addAttribute("progress", progress);

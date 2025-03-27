@@ -1,24 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${course.title}"></title>
-    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
-    <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    <link rel="stylesheet" href="/css/chapter-lesson.css">
-    <style>
-        <!--
-        -->
-        <!--
-        -->
-        <!--
-        -->
-        <!--
-        -->
-        <!--
-        -->
 
+    <!-- CSS libraries -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/chapter-lesson.css}">
+    <link rel="stylesheet" th:href="@{/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="shortcut icon" th:href="@{/image/learningz.png}" type="image/png">
+
+    <!-- JavaScript libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <style>
         .avatar-container {
             width: 30px;
             height: 30px;
@@ -63,169 +65,127 @@
         .user-menu ul li:hover {
             background-color: #f0f0f0;
         }
-
-        .user-menu ul li a:hover {
-            color: #007bff;
-        }
-
-        .user-menu ul li:nth-child(2):hover {
-            background-color: #e0e0e0;
-        }
-
-
-        .user-menu ul li:first-child {
-            cursor: default;
-            background-color: transparent;
-        }
-
-        .user-menu ul li:first-child:hover {
-            background-color: transparent;
-        }
     </style>
-    <!--====== Header CSS ======-->
-    <link rel="shortcut icon" th:href="@{/image/learningz.png}" type="image/png">
 
-    <link rel="stylesheet" th:href="@{/css/slick.css}">
-
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script>
         function toggleUserMenu() {
             const userMenu = document.getElementById('userMenu');
             userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
         }
-
     </script>
 </head>
 <body>
+
 <div th:replace="common/header :: header"></div>
+
 <div class="course-header">
     <div class="col-lg-3"></div>
     <div>
-        <img src="/image/grade10.jpg" alt="Toán lớp 5" class="course-image">
+        <img src="/image/book.png" alt="Course Image" class="course-image">
     </div>
     <div class="course-info col-lg-6">
-        <h1 class="course-title-" th:text="${course.title}"></h1>
-        <p class="course-description-" th:text="${course.description}">
-        </p>
+        <h1 class="course-title text-white" th:text="${course.title}"></h1>
+        <p class="course-description text-white" th:text="${course.description}"></p>
     </div>
 </div>
+
 <div style="display: flex">
+    <!-- Sidebar Left -->
     <div class="col-lg-3">
         <div class="sideLeft">
-            <div>
-                <h4 style="text-align: center; color: #1C3B5C">Your archived Course Progress</h4>
-            </div>
-            <div>
-                <p th:text="'Pass quiz: '+${progress}"
-                   th:style="${checkConditionFeedBack} ? 'color: green' : 'color: red'"></p>
-            </div>
-            <div>
-                <a th:href="@{/home/profile}" class="hover-underline">Back to your
-                    Profile</a>
-            </div>
+            <h4 style="text-align: center; color: #1C3B5C">Your Archived Course Progress</h4>
+            <p th:text="'Pass quiz: ' + ${progress}"
+               th:style="${checkConditionFeedBack} ? 'color: green' : 'color: red'"></p>
+            <a th:href="@{/home/profile}" class="hover-underline">Back to your Profile</a>
         </div>
     </div>
 
-
+    <!-- Quiz Table -->
     <div class="col-lg-6" style="margin-top: 48px">
         <table class="table table-bordered table-striped">
             <tbody>
             <tr th:each="quiz : ${quizInfores}">
                 <td style="display: flex; justify-content: space-between">
                     <div class="test-item">
-                        <p class="test-title"
-                           style="color:#1C3B5C;" onmouseover="this.style.color='#007bff'"
+                        <p class="test-title text-primary" onmouseover="this.style.color='#007bff'"
                            onmouseout="this.style.color='#1C3B5C'">
                             <i class="fas fa-file-alt"></i>
-                            <span th:text="${quiz.key.getLesson().getTitle() + ': ' + quiz.key.getTitle()}"></span>
+                            <span th:if="${quiz.key != null}"
+                                  th:text="${quiz.key.lesson != null ? quiz.key.lesson.title : 'Unknown Lesson'} + ': ' +
+                                       ${quiz.key.getTitle() != null ? quiz.key.getTitle() : 'Unknown Quiz'}"></span>
                         </p>
-                        <div class="test-info" style="display: flex;justify-content: space-between;">
-                            <span class="duration">
-                                <i class="fa fa-solid fa-bookmark"></i>
-                                <span th:text="'Chapter: ' + ${quiz.key.lesson.chapter.chapterTitle}"></span>
-                            </span>
+                        <div class="test-info d-flex justify-content-between">
+                        <span class="duration">
+                            <i class="fa fa-solid fa-bookmark"></i>
+                            <span th:if="${quiz.key.lesson != null and quiz.key.lesson.chapter != null}"
+                                  th:text="'Chapter: ' + ${quiz.key.lesson.chapter.chapterTitle}"></span>
+                            <span th:if="${quiz.key.lesson == null or quiz.key.lesson.chapter == null}" class="text-danger">Unknown Chapter</span>
+                        </span>
                             <span class="total-questions">
-                                <i class="fas fa-question-circle ml-2"></i>
-                                <span th:text="${quiz.key.getTotalQuestions() + ' questions'} "></span>
-                            </span>
-
+                            <i class="fas fa-question-circle ml-2"></i>
+                            <span th:if="${quiz.key != null}"
+                                  th:text="${quiz.key.getTotalQuestions() != null ? quiz.key.getTotalQuestions() + ' questions' : 'N/A'}"></span>
+                        </span>
                         </div>
-                        <div class="test-info" style="display: flex;justify-content: space-between;">
-                            <span class="duration me-2">
-                                <i class="far fa-clock"></i>
-                                <span th:text="${'Time: ' + quiz.key.getTimeLimit() + ' minutes'} "></span>
+                        <div class="test-info d-flex justify-content-between">
+                        <span class="duration">
+                            <i class="far fa-clock"></i>
+                            <span th:if="${quiz.key != null}"
+                                  th:text="${quiz.key.timeLimit != null ? 'Time: ' + quiz.key.timeLimit + ' minutes' : 'N/A'}"></span>
+                        </span>
+                            <th:block th:if="${quiz.value != null}">
+                            <span class="duration">
+                                <i class="fa fa-solid fa-crosshairs"></i>
+                                <span th:text="'Highest Score: ' + ${quiz.value.numAtempts != null ? quiz.value.maxScore + ' points' : 'N/A'}"></span>
                             </span>
-                            <th:block th:if="${not #lists.isEmpty(quiz.key.quizResults)}">
-                                <span class="duration me-2">
-                                  <i class="fa fa-solid fa-crosshairs"></i>
-                                    <span th:text="'Highest Score: ' + ${quiz.key.quizResults[0].maxScore + ' point'}"></span>
-                                </span>
-
                             </th:block>
-                            <th:block th:if="${#lists.isEmpty(quiz.key.quizResults)}">
+                            <th:block th:if="${quiz.value == null}">
                                 <span class="text-danger">Not done!</span>
                             </th:block>
                         </div>
-                        <div class="test-info" style="display: flex;justify-content: space-between;">
-                            <th:block th:if="${not #lists.isEmpty(quiz.key.quizResults)}">
-                                <span class="duration me-2">
-                                  <i class="fa-solid fa-tag"></i>
-                                  <span th:text="${'Attempts: ' + quiz.key.quizResults[0].numAtempts}"></span>
+                        <div class="test-info d-flex justify-content-between">
+                            <th:block th:if="${quiz.value != null}">
+                            <span class="duration">
+                                <i class="fa-solid fa-tag"></i>
+                                <span th:text="'Attempts: ' + ${quiz.value.numAtempts != null ? quiz.value.numAtempts : 0}"></span>
                             </span>
-                                <span class="duration me-2">
-                                  <i class="fa fa-solid fa-crosshairs"></i>
-                                  <span th:text="${'Result: ' + quiz.key.quizResults[0].resultStatus}"></span>
-                                </span>
+                                <span class="duration">
+                                <i class="fa fa-solid fa-crosshairs"></i>
+                                <span th:text="'Result: ' + ${quiz.value.resultStatus != null ? quiz.value.resultStatus : 'Unmarked'}"></span>
+                            </span>
                             </th:block>
-                            <th:block th:if="${#lists.isEmpty(quiz.key.quizResults)}">
-                                <span class="duration me-2">
-                                  <i class="fa-solid fa-tag text-danger"></i>
-                                  <span class="text-danger">Attempts: 0</span>
-                                </span>
-                                <span class="duration me-2">
-                                  <i class="fa fa-solid fa-crosshairs text-danger"></i>
-                                  <span class="text-danger">Result: Unmake</span>
-                                </span>
-
+                            <th:block th:if="${quiz.value == null}">
+                            <span class="text-danger">
+                                <i class="fa-solid fa-tag"></i> Attempts: 0
+                            </span>
+                                <span class="text-danger">
+                                <i class="fa fa-solid fa-crosshairs"></i> Result: Unmarked
+                            </span>
                             </th:block>
                         </div>
                     </div>
-                    <span th:classappend="${quiz.value.equals('Pass') ? 'text-success' : 'text-danger'}"
-                          style="margin-block: auto;border: 2px solid;border-radius: 6px;">
-                        <span th:text="${quiz.value}"></span>
-                    </span>
+                    <span th:classappend="${quiz.value != null and quiz.value.numAtempts != null and quiz.value.resultStatus == 'Pass' ? 'text-success' : 'text-danger'}"
+                          style="margin-block: auto; border: 2px solid; border-radius: 6px; padding: 4px 8px;">
+                    <span th:text="${quiz.value != null and quiz.value.numAtempts != null and quiz.value.resultStatus == 'Pass' ? 'Pass' : 'Not Pass'}"></span>
+                </span>
+
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
 </div>
-
 
 <button id="scrollTopBtn" class="scroll-to-top">↑</button>
 <script>
-    // Lấy nút cuộn lên
     const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-    // Hiện nút cuộn lên khi người dùng cuộn trang xuống
     window.onscroll = function () {
-        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-            scrollTopBtn.style.display = 'block'; // Hiện nút
-        } else {
-            scrollTopBtn.style.display = 'none'; // Ẩn nút
-        }
+        scrollTopBtn.style.display = document.documentElement.scrollTop > 100 ? 'block' : 'none';
     };
-
-    // Khi nhấn nút, cuộn lên đầu trang
     scrollTopBtn.onclick = function () {
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
-
 </script>
+
 </body>
 </html>
