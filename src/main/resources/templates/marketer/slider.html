@@ -316,8 +316,11 @@
                             </a>
                         </div>
                         <div>
-                            <div th:if="${errorMessage1}" class="alert alert-danger text-center" role="alert">
-                                <span th:text="${errorMessage1}"></span>
+                            <div th:if="${error}" class="alert alert-danger text-center" role="alert">
+                                <span th:text="${error}"></span>
+                            </div>
+                            <div th:if="${success}" class="alert alert-danger text-center" role="alert">
+                                <span th:text="${success}"></span>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-middle mb-0 table-hover table-centered">

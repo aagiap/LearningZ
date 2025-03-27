@@ -119,7 +119,8 @@ public class PostController {
         User user = getCurrentUser();
 
         if (post == null || user == null || !post.getUser().getId().equals(user.getId())) {
-            return "redirect:/post?error=Bạn không có quyền chỉnh sửa bài viết này!";
+            model.addAttribute("error", "You don't have permission to edit this post");
+            return "post/post";
         }
 
         model.addAttribute("post", post);
@@ -184,7 +185,7 @@ public class PostController {
             postService.savePost(post);
             return "redirect:/post";
         } catch (Exception e) {
-            return "redirect:/post?error=Đã xảy ra lỗi khi chỉnh sửa bài viết!";
+            return "redirect:/post?error=There was an error editing the post!";
         }
     }
 

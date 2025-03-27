@@ -295,14 +295,6 @@
                             <h4 class="card-title">Edit VIP Package</h4>
                         </div>
                         <div class="card-body">
-                            <!-- Thông báo -->
-                            <div th:if="${message}" class="alert alert-success">
-                                <span th:text="${message}"></span>
-                            </div>
-                            <div th:if="${error}" class="alert alert-danger">
-                                <span th:text="${error}"></span>
-                            </div>
-
                             <form th:action="@{/marketer/vip_package/update/{id}(id=${vipPackage.id})}" method="post">
                                 <input type="hidden" name="id" th:value="${vipPackage.id}">
 
