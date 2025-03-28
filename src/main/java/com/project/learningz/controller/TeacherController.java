@@ -735,11 +735,11 @@ public class TeacherController {
                 pdfService.createDoc(lessonId,docTitle,docUrl);
             }catch(Exception e){
                 model.addAttribute("lessonId",lessonId);
-                model.addAttribute("error","Document Creation Failed");
+                model.addAttribute("error","Create document failed");
                 model.addAttribute("user", userService.getUserById(userId));
                 return "/teacherPage/addDoc";
             }
-            model.addAttribute("notification","Document Creation is now pending approval from the admin");
+            model.addAttribute("notification","Create document successfully");
         }else{
             model.addAttribute("error",error);
         }
