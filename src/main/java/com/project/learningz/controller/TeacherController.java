@@ -391,7 +391,7 @@ public class TeacherController {
                 courseService.findByCourseId(courseId).getTitle());
 
         String error = chapterService.checkCreate(courseId,order,title);
-        if(error.equals("")){
+        if(error.equals("") && courseList.get(0).getNumberOfChapters() < systemSettingService.getAllSystemSetting().get(2).getSettingValue()){
             try{
                 chapterService.createChapter(courseId, order, title, description);
             }catch(Exception e){
