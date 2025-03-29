@@ -3,6 +3,7 @@ package com.project.learningz.controller;
 import com.project.learningz.entity.User;
 import com.project.learningz.repository.UserManagementRepository;
 import com.project.learningz.service.UserManagementService;
+import com.project.learningz.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,9 @@ import java.util.Optional;
 public class ChangePasswordController {
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     UserManagementRepository userRepository;
 
     @Autowired
@@ -33,12 +37,13 @@ public class ChangePasswordController {
                                      @AuthenticationPrincipal OAuth2User userOAuth2,
                                      Model model) {
         String username = null;
-
         if (user != null) {
             username = user.getUsername();
+            model.addAttribute("user", user);
         } else if (userOAuth2 != null) {
             String email = userOAuth2.getAttribute("email");
             username = userManagementService.findUserNameByEmail(email);
+            model.addAttribute("user", userOAuth2);
         }
         String avatarUrl = userManagementService.getAvtByUsername(username);
         if (avatarUrl == null) {
@@ -47,7 +52,6 @@ public class ChangePasswordController {
         model.addAttribute("username", username);
         model.addAttribute("avatarUrl", avatarUrl);
         System.out.println(username + " " + avatarUrl);
-        model.addAttribute("user", user);
         return "profile/change_password";
     }
 
@@ -61,6 +65,11 @@ public class ChangePasswordController {
 
         if (principal instanceof OAuth2User) {
             model.addAttribute("error", "Google accounts cannot change passwords.");
+            String email = ((OAuth2User) principal).getAttribute("email");
+            User user = userService.findByEmail(email);
+            model.addAttribute("user", user);
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("username", user.getUsername());
             return "profile/change_password";
         } else {
             username = SecurityContextHolder.getContext().getAuthentication().getName();
