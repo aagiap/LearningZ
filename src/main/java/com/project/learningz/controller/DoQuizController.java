@@ -124,6 +124,8 @@ public class DoQuizController {
             username = userService.findUserNameByEmail(email);
             model.addAttribute("user", userOAuth2);
         }
+        Integer userId = userService.getUserIdByUsername(username);
+
         Course course = quiz.getLesson().getChapter().getCourse();
         if(course.getCourseStatus() != CourseStatus.ACTIVE){
             return "redirect:/course";
@@ -141,6 +143,16 @@ public class DoQuizController {
 //            model.addAttribute("questionBankList", questionBankList);
 //            session.setAttribute("questionBankList", questionBankList);
 //        }
+        QuizResult quizResult = quizResultService.findQuizResultsByQuizIdAndUserId(userId, quizId);
+        Integer numAtempts;
+        if (quizResult == null) {
+            numAtempts = 0;
+        } else {
+            numAtempts = quizResult.getNumAtempts();
+        }
+        if(numAtempts == quizResultService.getMaxAttempts()){
+            return "redirect:/Exam/StartQuiz?quizId=" + quizId;
+        }
 
         Map<Integer, List<QuestionBank>> quizHistory = (Map<Integer, List<QuestionBank>>) session.getAttribute("quizHistory");
 
