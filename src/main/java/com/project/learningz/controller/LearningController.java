@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,6 +70,17 @@ public class LearningController {
         String progress = usersCourseService.progressStatus(userId, courseId);
         List<Course> courses = courseService.findCoursesByGradeId(course.getGrade().getId());
 
+
+        List<Integer> lessonOffsets = new ArrayList<>(); // Danh sách tổng số bài học trước mỗi chương
+        int totalLessonsBefore = 0;
+
+        for (Chapter chapter : chapters) {
+            lessonOffsets.add(totalLessonsBefore); // Lưu lại tổng số bài học trước chương hiện tại
+            totalLessonsBefore += chapter.getLessons().size();
+        }
+
+
+model.addAttribute("lessonOffsets", lessonOffsets);
         Integer minScoreToPass = quizResultService.getMinScoreToPass();
         model.addAttribute("minScoreToPass", minScoreToPass);
         model.addAttribute("username", username);

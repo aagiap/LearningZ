@@ -129,24 +129,22 @@
     </div>
 
 
-    <div class="col-lg-6" style="margin-top: 48px"
-         th:with="previousLessonCount=0">
-        <table class="table table-bordered table-striped" th:each="chapter : ${chapters}"
-               th:with="currentLessonCount=${#lists.size(chapter.getLessons())}">
+    <div class="col-lg-6" style="margin-top: 48px">
+        <table class="table table-bordered table-striped" th:each="chapter, chapterStat : ${chapters}">
             <tbody>
             <tr>
                 <td>
                     <a class="test-title">
                         <i class="fas fa-file-alt" style="color: darkblue"></i>
-                        <span th:text="${'Chapter '+ chapter.getChapterOrder() +': '+ chapter.getChapterTitle()}"
+                        <span th:text="${'Chapter ' + chapter.getChapterOrder() + ': ' + chapter.getChapterTitle()}"
                               style="font-size: larger; color: darkblue; font-weight: bolder"></span>
                     </a>
                 </td>
             </tr>
             <tr th:each="lesson, lessonStat : ${chapter.getLessons()}">
-                <!-- Tính var: tổng số bài trước đó + index hiện tại -->
+                <!-- Tính globalLessonIndex để lấy trạng thái chính xác -->
                 <td style="display: flex; justify-content: space-between"
-                    th:with="var=${previousLessonCount + lessonStat.index}">
+                    th:with="globalLessonIndex=${lessonOffsets[chapterStat.index] + lessonStat.index}">
                     <form method="get" action="/learning/lesson">
                         <button type="submit" class="subject btn btn-link" style="color: black">
                             <span th:text="${lesson.getTitle()}"></span>
@@ -154,18 +152,18 @@
                             <input type="hidden" name="chapterId" th:value="${chapter.getId()}">
                         </button>
                     </form>
-                    <span th:if="${!completionStatus.get(var).equals('null')}"
-                          th:classappend="${completionStatus.get(var).equals('Completed') ? 'text-success' : 'text-danger'}"
+                    <span th:if="${!completionStatus.get(globalLessonIndex).equals('null')}"
+                          th:classappend="${completionStatus.get(globalLessonIndex).equals('Completed') ? 'text-success' : 'text-danger'}"
                           style="margin-block: auto;">
-                        <span th:text="${completionStatus.get(var)}"></span>
+                        <span th:text="${completionStatus.get(globalLessonIndex)}"></span>
                     </span>
                 </td>
             </tr>
             </tbody>
-            <!-- Cập nhật tổng số bài học trước đó -->
-            <th:block th:with="previousLessonCount=${previousLessonCount + currentLessonCount}"></th:block>
         </table>
     </div>
+
+
 
     <div class="col-lg-3" style="margin-top: 48px;padding: inherit;">
         <div class="related-courses" >
