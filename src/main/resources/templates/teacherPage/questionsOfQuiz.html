@@ -396,19 +396,17 @@
                                     <i class="fas fa-eye" style="color: #ffc107"></i>
                                 </a>
 
-                                <a href="javascript:void(0);" class="text-danger" title="Delete"
-                                   th:onclick="'confirmDelete(' + ${question.questionId} + ', ' + ${quizId} + ')'">
-                                    <i class="fas fa-trash" style="color: #c82333; margin-left: 10px;"></i>
-                                </a>
-
+<!--                                <a href="javascript:void(0);" class="text-danger" title="Delete"-->
+<!--                                   th:onclick="'confirmDelete(' + ${question.questionId} + ', ' + ${quizId} + ')'">-->
+<!--                                    <i class="fas fa-trash" style="color: #c82333; margin-left: 10px;"></i>-->
+<!--                                </a>-->
                                 <!-- Form xóa riêng cho từng câu hỏi -->
-                                <form th:id="'deleteForm-' + ${question.questionId}"
-                                      th:action="@{/teacher/{quizId}/{questionId}/deleteQuestion(quizId=${quizId}, questionId=${question.questionId})}"
-                                      method="post">
-                                    <input type="hidden" name="questionId" th:value="${question.questionId}">
-                                    <input type="hidden" name="quizId" th:value="${quizId}">
-                                </form>
-
+<!--                                <form th:id="'deleteForm-' + ${question.questionId}"-->
+<!--                                      th:action="@{/teacher/{quizId}/{questionId}/deleteQuestion(quizId=${quizId}, questionId=${question.questionId})}"-->
+<!--                                      method="post">-->
+<!--                                    <input type="hidden" name="questionId" th:value="${question.questionId}">-->
+<!--                                    <input type="hidden" name="quizId" th:value="${quizId}">-->
+<!--                                </form>-->
                             </td>
                         </tr>
                         </tbody>

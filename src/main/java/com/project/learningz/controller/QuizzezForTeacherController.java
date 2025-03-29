@@ -328,12 +328,12 @@ public class QuizzezForTeacherController {
                              @RequestParam(value = "quizTitle", required = false) String quizTitle,
                              @RequestParam(value = "timeLimit", required = false) Integer timeLimit,
                              @RequestParam(value = "totalQuestions", required = false) Integer totalQuestions,
-                             @RequestParam(value = "question", required = false) List<String> question,
-                             @RequestParam(value = "correctAnswer", required = false) List<String> correctAnswer,
-                             @RequestParam(value = "optionA", required = false) List<String> optionA,
-                             @RequestParam(value = "optionB", required = false) List<String> optionB,
-                             @RequestParam(value = "optionC", required = false) List<String> optionC,
-                             @RequestParam(value = "optionD", required = false) List<String> optionD,
+                             @RequestParam(value = "question[]", required = false) List<String> question,
+                             @RequestParam(value = "correctAnswer[]", required = false) List<String> correctAnswer,
+                             @RequestParam(value = "optionA[]", required = false) List<String> optionA,
+                             @RequestParam(value = "optionB[]", required = false) List<String> optionB,
+                             @RequestParam(value = "optionC[]", required = false) List<String> optionC,
+                             @RequestParam(value = "optionD[]", required = false) List<String> optionD,
                              RedirectAttributes attributes) {
 
         System.out.println("question no" + question.size());

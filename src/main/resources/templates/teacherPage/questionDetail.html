@@ -393,25 +393,25 @@
                         <button type="submit" class="btn btn-info" style="background-color: #ffc107; color:#fbf8f8;">
                             Save
                         </button>
-                        <button type="button" class="btn btn-danger" style="background-color: #c82333; color: #fff;"
-                                th:onclick="confirmDelete()">
-                            Delete
-                        </button>
+<!--                        <button type="button" class="btn btn-danger" style="background-color: #c82333; color: #fff;"-->
+<!--                                th:onclick="confirmDelete()">-->
+<!--                            Delete-->
+<!--                        </button>-->
                     </div>
 
                 </form>
             </div>
-            <script>
-                function confirmDelete() {
-                    if (confirm("Are you sure you want to delete this item?")) {
-                        document.getElementById("deleteForm").submit();
-                    }
-                }
-            </script>
-            <form id="deleteForm" th:action="@{/teacher/{quizId}/{questionId}/deleteQuestion(quizId=${quizId}, questionId=${question.questionId})}" method="post">
-                <input type="hidden" name="questionId" th:value="${question.questionId}">
-                <input type="hidden" name="quizId" th:value="${quizId}">
-            </form>
+<!--            <script>-->
+<!--                function confirmDelete() {-->
+<!--                    if (confirm("Are you sure you want to delete this item?")) {-->
+<!--                        document.getElementById("deleteForm").submit();-->
+<!--                    }-->
+<!--                }-->
+<!--            </script>-->
+<!--            <form id="deleteForm" th:action="@{/teacher/{quizId}/{questionId}/deleteQuestion(quizId=${quizId}, questionId=${question.questionId})}" method="post">-->
+<!--                <input type="hidden" name="questionId" th:value="${question.questionId}">-->
+<!--                <input type="hidden" name="quizId" th:value="${quizId}">-->
+<!--            </form>-->
         </div>
     </div>
 
