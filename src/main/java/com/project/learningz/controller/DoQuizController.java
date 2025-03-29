@@ -150,7 +150,7 @@ public class DoQuizController {
         } else {
             numAtempts = quizResult.getNumAtempts();
         }
-        if(numAtempts == quizResultService.getMaxAttempts()){
+        if(numAtempts == quizResultService.getMaxAttempts() && quiz.getLesson().getQuizType().equals("EXAM")){
             return "redirect:/Exam/StartQuiz?quizId=" + quizId;
         }
 
