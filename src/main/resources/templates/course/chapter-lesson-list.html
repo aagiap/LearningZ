@@ -129,8 +129,10 @@
     </div>
 
 
- <div class="col-lg-6" style="margin-top: 48px" >
-        <table class="table table-bordered table-striped" th:each="chapter : ${chapters}">
+    <div class="col-lg-6" style="margin-top: 48px"
+         th:with="previousLessonCount=0">
+        <table class="table table-bordered table-striped" th:each="chapter : ${chapters}"
+               th:with="currentLessonCount=${#lists.size(chapter.getLessons())}">
             <tbody>
             <tr>
                 <td>
@@ -141,8 +143,10 @@
                     </a>
                 </td>
             </tr>
-            <tr th:each="lesson : ${chapter.getLessons()}" th:with="var=${chapterStat.index * chapter.getLessons().size() + lessonStat.index}">
-                <td style="display: flex; justify-content: space-between">
+            <tr th:each="lesson, lessonStat : ${chapter.getLessons()}">
+                <!-- Tính var: tổng số bài trước đó + index hiện tại -->
+                <td style="display: flex; justify-content: space-between"
+                    th:with="var=${previousLessonCount + lessonStat.index}">
                     <form method="get" action="/learning/lesson">
                         <button type="submit" class="subject btn btn-link" style="color: black">
                             <span th:text="${lesson.getTitle()}"></span>
@@ -150,14 +154,19 @@
                             <input type="hidden" name="chapterId" th:value="${chapter.getId()}">
                         </button>
                     </form>
-                    <span th:classappend="${completionStatus.get(var).equals('Completed') ? 'text-success' : 'text-danger'}" style="margin-block: auto;">
-                        <span th:text="${completionStatus.get(var)}" ></span>
+                    <span th:if="${!completionStatus.get(var).equals('null')}"
+                          th:classappend="${completionStatus.get(var).equals('Completed') ? 'text-success' : 'text-danger'}"
+                          style="margin-block: auto;">
+                        <span th:text="${completionStatus.get(var)}"></span>
                     </span>
                 </td>
             </tr>
             </tbody>
+            <!-- Cập nhật tổng số bài học trước đó -->
+            <th:block th:with="previousLessonCount=${previousLessonCount + currentLessonCount}"></th:block>
         </table>
     </div>
+
     <div class="col-lg-3" style="margin-top: 48px;padding: inherit;">
         <div class="related-courses" >
             <div class="related-header" style="width: 100%; text-align: center">

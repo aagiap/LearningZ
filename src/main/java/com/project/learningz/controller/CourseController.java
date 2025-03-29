@@ -57,7 +57,7 @@ public class CourseController {
                              @RequestParam(name = "gradeId", defaultValue = "-1") int gradeId,
                              @RequestParam(name = "subjectId", defaultValue = "-1") int subjectId,
                              @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-                             @RequestParam(name = "pageSize", defaultValue = "8") int pageSize,
+                             @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
                              @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
                              @AuthenticationPrincipal OAuth2User userOAuth2) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("title").ascending());

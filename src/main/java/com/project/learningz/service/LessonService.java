@@ -49,15 +49,19 @@ public class LessonService {
         List<Lesson> lessons = lessonRepository.findByCourseId(courseId);
         for (Lesson lesson : lessons) {
             List<Quiz> quizzes = lesson.getQuizzes();
-            boolean allQuizzesCompleted = true;
+            if(quizzes.isEmpty() || quizzes == null) {
+                completionStatus.add("null");
+                continue;
+            }
+            String allQuizzesCompleted = "Completed";
             for (Quiz quiz : quizzes) {
                 String quizResult = quizResultService.isPass(userId, quiz.getId());
                 if (quizResult.equals("Not done yet") || quizResult.equals("Not pass")) {
-                    allQuizzesCompleted = false;
+                    allQuizzesCompleted = "Not complete";
                     break;
                 }
             }
-            if (allQuizzesCompleted) {
+             if (allQuizzesCompleted.equals("Completed")) {
                 completionStatus.add("Completed");
             } else {
                 completionStatus.add("Not complete");
