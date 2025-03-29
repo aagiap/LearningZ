@@ -242,7 +242,7 @@ public class QuizzezForTeacherController {
 
         QuizDetailDTO currentQuiz = quizService.getQuizDetailById(quizId);
         Integer numQuestionInQuiz = currentQuiz.getTotalQuestions();
-        if (numQuestionInQuiz == questionService.getMaxQuestionsInQuiz()) {
+        if (numQuestionInQuiz >= questionService.getMaxQuestionsInQuiz()) {
             attributes.addFlashAttribute("errorMessage", "This quiz has already reached the maximum number of questions. Cannot create a new one.");
             return "redirect:/teacher/questions/" + quizId;
         }
