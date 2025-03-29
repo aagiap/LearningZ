@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class QuestionExpertService {
@@ -33,7 +30,7 @@ public class QuestionExpertService {
     }
 
     public QuestionDetailDTO getQuestionDetail(Integer questionId) {
-        return questionExpertRepository.getDetailQuestions(questionId);
+        return questionExpertRepository.getDetailQuestions(questionId).getFirst();
     }
 
     public void deleteQuestion(Integer questionId) {

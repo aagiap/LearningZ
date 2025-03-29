@@ -92,6 +92,23 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
     Page<QuestionDetailDTO> getQuestionsByQuizId(@Param("quizId") Integer quizId,
                                                  Pageable pageable);
 
+//    @Query("""
+//                SELECT new com.project.learningz.dto.QuestionDetailDTO(
+//                    q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4,
+//                    co.title, s.name, ch.chapterTitle, l.title, g.name
+//                )
+//                FROM QuestionBank q
+//                JOIN QuizQuestion qq ON q.id = qq.question.id
+//                JOIN Quiz qu ON qq.quiz.id = qu.id
+//                JOIN qu.lesson l
+//                JOIN l.chapter ch
+//                JOIN ch.course co
+//                JOIN co.subject s
+//                JOIN co.grade g
+//                WHERE (q.id = :questionId)
+//            """)
+//    QuestionDetailDTO getDetailQuestions(@Param("questionId") Integer questionId);
+
     @Query("""
                 SELECT new com.project.learningz.dto.QuestionDetailDTO(
                     q.id, q.content, q.correctOption, q.option1, q.option2, q.option3, q.option4,
@@ -105,9 +122,11 @@ public interface QuestionExpertRepository extends JpaRepository<QuestionBank, In
                 JOIN ch.course co
                 JOIN co.subject s
                 JOIN co.grade g
-                WHERE (q.id = :questionId)            
+                WHERE (q.id = :questionId)
+                ORDER BY q.id ASC
             """)
-    QuestionDetailDTO getDetailQuestions(@Param("questionId") Integer questionId);
+    List<QuestionDetailDTO> getDetailQuestions(@Param("questionId") Integer questionId);
+
 
     QuestionBank getQuestionBankById(@Param("questionId") Integer questionId);
 
