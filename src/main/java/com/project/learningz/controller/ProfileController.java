@@ -175,15 +175,12 @@ public class ProfileController {
         errors = userService.userCheck(id, username, phoneNumber, avatarFile);
         if (!errors.isEmpty()) {
             model.addAttribute("errors", errors);
-            model.addAttribute("username", username);
-            model.addAttribute("phoneNumber", phoneNumber);
             model.addAttribute("userId", id);
-            if (avatarFile != null) {
-                model.addAttribute("avatarUrl", avatarFile.getOriginalFilename());
-            } else {
-                User user = userService.findById(id);
-                model.addAttribute("avatarUrl", user.getAvtUrl());
-            }
+            User user = userService.findById(id);
+            model.addAttribute("user",user);
+            model.addAttribute("username", user.getUsername());
+            model.addAttribute("phoneNumber", user.getPhoneNum());
+            model.addAttribute("avatarUrl", user.getAvtUrl());
         } else {
             if (!avatarFile.isEmpty()) {
                 User user = userService.findById(id);
@@ -207,11 +204,12 @@ public class ProfileController {
             model.addAttribute("grades", grades);
 
             model.addAttribute("notification", "Update success");
-            model.addAttribute("username", username);
-            model.addAttribute("phoneNumber", phoneNumber);
-            model.addAttribute("userId", id);
-            model.addAttribute("avatarUrl", userService.getUserById(id).getAvtUrl());
-            model.addAttribute("user",userService.getUserById(id));
+            User user = userService.findById(id);
+            model.addAttribute("user",user);
+            model.addAttribute("username", user.getUsername());
+            model.addAttribute("avatarUrl", user.getAvtUrl());
+            model.addAttribute("phoneNumber", user.getPhoneNum());
+            model.addAttribute("userId", user.getId());
         }
         return "profile/profile_edit";
     }
