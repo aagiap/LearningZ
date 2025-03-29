@@ -145,21 +145,21 @@
                     <td><b>Phone Number</b></td>
                     <td th:text="(${phoneNumber != null} ? ${phoneNumber} : 'Not uploaded')"></td>
                 </tr>
-                <tr th:if="${membership != null}">
+                <tr th:if="${dayMembershipRemain != null}">
                     <td><b>VIP Package</b></td>
                     <td>
                         <span th:text="${membership.getVipPackage().getPackageName()}"></span>
                         <span><b th:text="'(Days remain: ' + ${dayMembershipRemain} + ')'"></b></span>
                     </td>
                 </tr>
-                <tr th:if="${membership == null}">
+                <tr th:if="${dayMembershipRemain == null}">
                     <td><b>VIP Package</b></td>
                     <td>Not registered</td>
                 </tr>
             </table>
             <a href="/vip-packages" id="vipRegister" hidden>Register VIP Membership</a>
             <button class="edit-profile-btn" onclick="location.href='/home/profile/profile_edit'">Edit Profile</button>
-            <button th:if="${membership == null}" id="vipButton" onclick="vipRegister(this)">Register VIP</button>
+            <button th:if="${dayMembershipRemain == null}" id="vipButton" onclick="vipRegister(this)">Register VIP</button>
         </div>
     </div>
     <div class="course-list">
