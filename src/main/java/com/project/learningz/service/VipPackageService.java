@@ -36,11 +36,8 @@ public class VipPackageService {
     public void toggleVisibility(Integer id) {
         vipPackageRepository.findById(id)
                 .ifPresent(vipPackage -> {
-                    vipPackage.setStatus(!vipPackage.getStatus()); // Đảo trạng thái
+                    vipPackage.setStatus(!vipPackage.getStatus());
                     vipPackageRepository.save(vipPackage);
                 });
-    }
-    public void deleteById(Integer id) {
-        vipPackageRepository.deleteById(id);
     }
 }

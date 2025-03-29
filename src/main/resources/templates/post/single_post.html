@@ -388,7 +388,7 @@
                                                             </form>
                                                         </li>
                                                         <li th:if="${comment.user.id != userId}">
-                                                            <a href="#">Report</a>
+                                                            <a href="#" th:onclick="|reportComment(${comment.id})|">Report</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -659,6 +659,18 @@
 
                 likeCount.textContent = data.likeCount;
             })
+            .catch(error => console.error("Error:", error));
+    }
+    function reportPost(postId) {
+        fetch(`/reports/post/${postId}`, { method: "POST" })
+            .then(response => response.text())
+            .then(() => alert("The post has been reported!"))
+            .catch(error => console.error("Error:", error));
+    }
+    function reportComment(commentId) {
+        fetch(`/reports/comment/${commentId}`, { method: "POST" })
+            .then(response => response.text())
+            .then(() => alert("The comment has been reported!"))
             .catch(error => console.error("Error:", error));
     }
 </script>
