@@ -29,8 +29,8 @@ import java.util.List;
 
 @Controller
 public class ProfileController {
-    int countUpdate = 0;
-    int idReload = 0;
+//    int countUpdate = 0;
+//    int idReload = 0;
     @Autowired
     private UserService userService;
 
@@ -74,13 +74,13 @@ public class ProfileController {
                 role = user.getRole();
             }
         }
-        if (countUpdate != 0 && idReload != 0) {
-            user = userService.findById(idReload);
-            username = user.getUsername();
-            avatarUrl = user.getAvtUrl();
-            email = user.getEmail();
-            phoneNumber = user.getPhoneNum();
-        }
+//        if (countUpdate != 0 && idReload != 0) {
+//            user = userService.findById(idReload);
+//            username = user.getUsername();
+//            avatarUrl = user.getAvtUrl();
+//            email = user.getEmail();
+//            phoneNumber = user.getPhoneNum();
+//        }
 
         List<Integer> courseIdList = new ArrayList<>();
         courseIdList = usersCourseService.courseIdListByUserId(user.getId());
@@ -145,14 +145,14 @@ public class ProfileController {
                 phoneNumber = user.getPhoneNum();
             }
         }
-        if (countUpdate != 0 && idReload != 0) {
-            user = userService.findById(idReload);
-            userId = user.getId();
-            username = user.getUsername();
-            avatarUrl = user.getAvtUrl();
-            email = user.getEmail();
-            phoneNumber = user.getPhoneNum();
-        }
+//        if (countUpdate != 0 && idReload != 0) {
+//            user = userService.findById(idReload);
+//            userId = user.getId();
+//            username = user.getUsername();
+//            avatarUrl = user.getAvtUrl();
+//            email = user.getEmail();
+//            phoneNumber = user.getPhoneNum();
+//        }
         List<Grade> grades = gradeService.getAllGrades();
         model.addAttribute("grades", grades);
 
@@ -194,11 +194,11 @@ public class ProfileController {
             }else{
                 userService.updateUser(id, username, phoneNumber);
             }
-            countUpdate++;
-            idReload = id;
-
-            session.setAttribute("countUpdate", countUpdate);
-            session.setAttribute("idReload", idReload);
+//            countUpdate++;
+//            idReload = id;
+//
+//            session.setAttribute("countUpdate", countUpdate);
+//            session.setAttribute("idReload", idReload);
 
             List<Grade> grades = gradeService.getAllGrades();
             model.addAttribute("grades", grades);
